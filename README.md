@@ -17,5 +17,5 @@ Para comprobar si tienes acceso, abre una terminal y ejecuta: "ssh -T git@github
    -Copia su contenido.
    -Ve a GitHub → Settings → SSH and GPG keys y haz clic en New SSH key.
    -Pega la clave y guarda.
-4. Prueba la conexión desde tu terminal con el comando ssh -T git@github.com
+3. Prueba la conexión desde tu terminal con el comando ssh -T git@github.com
 

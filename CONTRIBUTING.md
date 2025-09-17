@@ -1,13 +1,13 @@
 # Guía para contribuir al proyecto
 Este documento establece las normas para el uso correcto de las ramas en este repositorio, con el objetivo de mantener un flujo de trabajo ordenado, minimizar conflictos y facilitar la colaboración entre los miembros del equipo.
-_______________________________________________________________________________________________________________________________________________________
+__________________________________________________________________________________________________________________________________________
 
 ## Estrategia de ramas
 Este proyecto sigue la estrategia de ramas GitFlow, una metodología ampliamente utilizada para gestionar el desarrollo colaborativo en equipos. A continuación se detallan las ramas utilizadas y su propósito específico:
 ### main
 - Rama principal.
 - Contiene el código listo para producción, es decir, código probado, estable y preparado para ser desplegado.
-- Contiene la versión estable de la app que los usuarios descargan o usan
+- Contiene la versión estable de la app que los usuarios descargan o usan.
 - Solo se actualiza con versiones listas **(release)** o correcciones urgentes **(hotfix)**.
 
 #### develop
@@ -27,7 +27,7 @@ Este proyecto sigue la estrategia de ramas GitFlow, una metodología ampliamente
 
 ### bugfix
 - Rama para corregir errores detectados en develop.
-- Ejemplo de uso: **bugfix/error-de-actualización**, Se usa si por ejemplo se detecta que los planes no se actualizan bien.
+- Ejemplo de uso: **bugfix/error-de-actualización**. Se usa si por ejemplo se detecta que los planes no se actualizan bien.
 - Se crea esta rama desde **develop**, se corrige el error, y se fusiona de nuevo en **develop**.
 
 ### hotfix
@@ -40,11 +40,11 @@ Este proyecto sigue la estrategia de ramas GitFlow, una metodología ampliamente
 - Se crea desde develop, se hacen pruebas finales y ajustes.
 - Se fusiona en main y develop.
 
-_______________________________________________________________________________________________________________________________________________________
+__________________________________________________________________________________________________________________________________________
 
 ## Normas básicas para contribuir
--No trabajar directamente en main ni develop. Usa ramas feature, bugfix, hotfix o release.
--Nombrar las ramas de forma clara: feature/nombre, bugfix/nombre, etc.
--Testear antes de fusionar: todas las ramas deben estar probadas antes de hacer pull request.
--Usar pull requests para fusionar ramas. No hacer merge directo.
--Comentar los cambios en los pull requests para que el equipo entienda qué se ha hecho.
+- No trabajar directamente en main ni develop. Usa ramas feature, bugfix, hotfix o release.
+- Nombrar las ramas de forma clara: feature/nombre, bugfix/nombre, etc.
+- Testear antes de fusionar: todas las ramas deben estar probadas antes de hacer pull request.
+- Usar pull requests para fusionar ramas. No hacer merge directo.
+- Comentar los cambios en los pull requests para que el equipo entienda qué se ha hecho.
