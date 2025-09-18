@@ -10,4 +10,4 @@ BACKUP DATABASE UP2PlayDB
 TO DISK = 'C:\Backups\UP2PlayDB_FULL.bak'
 WITH DIFFERENTIAL, INIT, ENCRYPTION(ALGORITHM = AES_256, SERVER CERTIFICATE = CertificadoTDE);
 
--- Verificar que los backups se han realizado correctamente y que se encuentran en la ubicación especificada
+-- Verificar que los backups se han realizado correctamente y que se encuentran en la ubicación especificada.
