@@ -1,5 +1,4 @@
 [
-    
     {
         "id": "311080724",
         "nombre": "DOMINGO ⚽ PARTIDO FÚTBOL F7 MIXTO⚽NEW PLAYERS WELCOME ⚽CAMPO RODRÍGUEZ SAHAGÚN ⚽",
@@ -400,7 +399,7 @@
         "hora": null,
         "ubicacion": "Bola en Mano, Valencia, ES",
         "nivel": null,
-        "num_pers_inscritas": 10,
+        "num_pers_inscritas": 13,
         "num_pers_totales": 50,
         "estado": null,
         "precio": null,
@@ -554,7 +553,7 @@
         "hora": null,
         "ubicacion": null,
         "nivel": null,
-        "num_pers_inscritas": 8,
+        "num_pers_inscritas": 9,
         "num_pers_totales": 22,
         "estado": null,
         "precio": null,
