@@ -7,6 +7,7 @@ Aquí encontrarás el flujo de trabajo recomendado, las reglas básicas para con
 **Es fundamental leer y comprender este documento antes de comenzar a trabajar en el repositorio.**
 
 ---
+--
 
 ## Flujo **de trabajo con protección de ramas:**
 
