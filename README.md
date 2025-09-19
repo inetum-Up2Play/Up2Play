@@ -82,7 +82,7 @@ Un **changelog** (o registro de cambios) es un documento que **resume los cam
 
 Suele estar en un archivo llamado **CHANGELOG.md** en la raíz del repositorio. Un ejemplo de estructura básico sería:
 
-```
+
 # Changelog
 
 Todas las versiones importantes de este proyecto se documentan aquí.
@@ -103,7 +103,7 @@ Todas las versiones importantes de este proyecto se documentan aquí.
 ### Corregido
 - Problema con la navegación en dispositivos móviles
 
-```
+
 
 ---
 
