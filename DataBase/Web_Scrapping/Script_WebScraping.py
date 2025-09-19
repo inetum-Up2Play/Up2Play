@@ -3,7 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="C:/Users/daniel.villalba.ext/Proyectazo/Up2Play/DataBase/Web_Scrapping/.env")
+load_dotenv(dotenv_path="C:/Users/daniel.villalba.ext/.env")
 # Cargar el token desde una variable de entorno
 APIFY_TOKEN = os.getenv("APIFY_TOKEN")
 print("Token cargado:", APIFY_TOKEN)
