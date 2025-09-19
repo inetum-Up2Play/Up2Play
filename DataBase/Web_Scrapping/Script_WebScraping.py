@@ -11,7 +11,7 @@ print("Token cargado:", APIFY_TOKEN)
 if not APIFY_TOKEN:
     raise ValueError("La variable de entorno 'APIFY_TOKEN' no está definida.")
 
-client = ApifyClient(APIFY_TOKEN)
+client = ApifyClient()
 
 ciudades = ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao"]
 search_keyword = "deportes"
