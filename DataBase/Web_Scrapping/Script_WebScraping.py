@@ -1,10 +1,12 @@
 from apify_client import ApifyClient
 import json
 import os
+from dotenv import load_dotenv
 
+load_dotenv(dotenv_path="C:/Users/daniel.villalba.ext/.env")
 # Cargar el token desde una variable de entorno
 APIFY_TOKEN = os.getenv("APIFY_TOKEN")
-
+print("Token cargado:", APIFY_TOKEN)
 # Verificar que el token existe
 if not APIFY_TOKEN:
     raise ValueError("La variable de entorno 'APIFY_TOKEN' no está definida.")
@@ -42,7 +44,7 @@ for ciudad in ciudades:
         }
         todos_los_eventos.append(evento_filtrado)
 
-with open("DataBase/Web_Scrapping/eventos_meetup_varias_ciudades.json", "w", encoding="utf-8") as f:
+with open("Up2Play/DataBase/Web_Scrapping/eventos_meetup_varias_ciudades.json", "w", encoding="utf-8") as f:
     json.dump(todos_los_eventos, f, ensure_ascii=False, indent=4)
 
-print("Eventos combinados guardados en 'DataBase/Web_Scrapping/eventos_meetup_varias_ciudades.json'.")
+print("Eventos combinados guardados en 'Up2Play/DataBase/Web_Scrapping/eventos_meetup_varias_ciudades.json'.")
