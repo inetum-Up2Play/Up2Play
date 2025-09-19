@@ -7,23 +7,36 @@ Aquí encontrarás el flujo de trabajo recomendado, las reglas básicas para con
 **Es fundamental leer y comprender este documento antes de comenzar a trabajar en el repositorio.**
 
 ---
---
 
 ## Flujo **de trabajo con protección de ramas:**
 
-1. Crear una nueva rama a partir de develop, por ejemplo: feature/nueva-funcionalidad. **(Nunca se debe trabajar directamente en develop ni en main)**
+
+
+1. Partimos de la rama develop y creamos rama feature
+    1.1 git checkout develop -> para posicionarte en rama develop
+    1.2 git fetch , git pull origin develop -> para actualizar datos del repositorio remoto
+    1.3 git checkout -b feature/funcionalidad -> crear y posicionarse en rama feature
+
 2. Realizar los cambios.
-3. Ejecutar tests.
-4. Hacer git push de la rama.
-5. Crear un **Pull Request** hacia develop, incluyendo una descripción clara de los cambios realizados. 
-6. El equipo revisa el Pull Request y se ejecutan pruebas automáticas
-7. Solo se realiza el **merge** si las pruebas pasan y hay aprobación.
-8. La rama feature/nueva-funcionalidad puede eliminarse si ya no es necesaria.
+    2.1 Realizar cambios en el código
+    2.2 git add . -> para marcar los cambios que van a ser incluidos para commitear
+    2.3 git commit -m "Descripción clara del cambio"
+    2.3 git push origin feature/funcionalidad -> Subir cambios que se van realizando de la rama feature al repositorio remoto.
+
+3. Crear Pull Request hacia develop
+    Una vez la funcionalidad de la rama esté acabada y testeada, se hace un Pull Request desde feature a develop.
+
+4. Otra persona del equipo revisará el código y una vez aprovado se hará un merge a develop.
+
+5. La rama feature/funcionalidad puede eliminarse si ya no es necesaria.
+
+6. Cuanto la applicación esté lista para desplegarse y ser usada por clientes reales, dse hará un merge de develop a main.
 
 ---
 
 ## **Normas básicas para contribuir**
-
+- Hacer todos los días un push para que el repositorio remoto este actualizado y no se pierda información.
+- Antes de empezar a trabajar cada dia hacer un git fetch y git pull para trabajar sobre código acutalizado
 - No trabajar directamente en las ramas main ni develop.
 - Se recomienda utilizar la terminal de Git Bash para tener mayor control sobre la rama activa.
 - Mantener el repositorio local actualizado con la versión remota para evitar conflictos o sobrescribir código.
