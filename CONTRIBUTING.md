@@ -13,15 +13,15 @@ Aquí encontrarás el flujo de trabajo recomendado, las reglas básicas para con
 
 
 1. Partimos de la rama **develop** y creamos rama **feature**.
-    1.1 **git checkout develop** -> para posicionarte en rama develop.
-    1.2 **git fetch** , **git pull origin develop** -> para actualizar datos del repositorio remoto.
-    1.3 **git checkout -b feature/funcionalidad** -> crear y posicionarse en rama feature.
+    1. **git checkout develop** -> para posicionarte en rama develop.
+    1. **git fetch** , **git pull origin develop** -> para actualizar datos del repositorio remoto.
+    1. **git checkout -b feature/funcionalidad** -> crear y posicionarse en rama feature.
 
 2. Realizar los cambios.
-    2.1 Realizar cambios en el código.
-    2.2 **git add .** -> para marcar los cambios que van a ser incluidos para commitear.
-    2.3 **git commit -m** "Descripción clara del cambio".
-    2.3 **git push origin feature/funcionalidad** -> Subir cambios que se van realizando de la rama feature al repositorio remoto.
+    1. Realizar cambios en el código.
+    2. **git add .** -> para marcar los cambios que van a ser incluidos para commitear.
+    3. **git commit -m** "Descripción clara del cambio".
+    4. **git push origin feature/funcionalidad** -> Subir cambios que se van realizando de la rama feature al repositorio remoto.
 
 3. Crear Pull Request hacia develop
     Una vez la funcionalidad de la rama esté acabada y testeada, se hace un **Pull Request** desde feature a develop.
