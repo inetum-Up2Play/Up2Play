@@ -24,7 +24,7 @@ Organizamos por **features** (funcionalidades) y dos zonas transversales: `core`
 
 "Core" será para componentes universales del proyecto (header, footer...)
 
-"Shared" son componentes comunes en algún punto del proyecto pero que no aparecene en cada página (card común, botones comunes). 
+"Shared" son componentes comunes en algún punto del proyecto pero que no aparecene en cada página (card común, botones comunes).
 
 ```
 src/
@@ -57,6 +57,7 @@ src/
 ```
 
 **Qué va en cada zona (en lenguaje simple):**
+
 - **core/**: lo que “enciende” la app y cosas transversales (interceptores, layout, config).
 - **shared/**: piezas de UI y utilidades que sirven en cualquier parte.
 - **features/**: cada “módulo de negocio” (Actividad, Usuario…) con sus páginas, componentes y servicios propios.
@@ -91,28 +92,31 @@ src/
 
 ---
 
-
-## 5) Dónde crear cosas nuevas (y comandos)
+## 4) Dónde crear cosas nuevas (y comandos)
 
 > Usamos Angular CLI (standalone + SCSS). Ejecuta estos comandos desde la raíz:
 
 - **Componente (standalone) en una feature**
+  
   ```bash
   ng g c features/activity/pages/activity-list
   ```
 
 - **Servicio en la feature**
+  
   ```bash
   ng g s features/activity/data/activity
   ```
 
 - **Directiva/Pipe reutilizable en shared**
+  
   ```bash
   ng g d shared/directives/auto-focus
   ng g p shared/pipes/pretty-date
   ```
 
 - **Guard / Interceptor (si hace falta)**
+
   ```bash
   ng g g core/guards/auth
   ng g interceptor core/interceptors/auth-token
@@ -120,7 +124,7 @@ src/
 
 ---
 
-## 6) Rutas (incluye rutas con parámetros)
+## 5) Rutas (incluye rutas con parámetros)
 
 - **Rutas raíz** en `app.routes.ts` → cada feature debería ser una vista (ruta).
 - **Rutas de feature** en `features/<nombre>/<nombre>.routes.ts`.
@@ -129,7 +133,7 @@ src/
 
 ---
 
-## 7) Formularios y validación (paso a paso)
+## 6) Formularios y validación (paso a paso)
 
 1. Crea un `FormGroup` con los campos.  
 2. Añade validadores (`required`, `minLength`, etc.).  
@@ -140,7 +144,7 @@ src/
 
 ---
 
-## 8)  Cómo ejecutar, comprobar y compilar
+## 7)  Cómo ejecutar, comprobar y compilar
 
 ```bash
 # Arrancar la app en local
@@ -149,6 +153,26 @@ ng serve
 # Build producción
 ng build 
 ```
+
+---
+
+## 8) Pluggins para Angular y configuración de VS Code
+
+Los pluggins que se muestran y las configuracions de VS Code son solo recomendaciones y no son obligatorias. Todas las recomendaciones están probadas y pensadas para facilitar y mejorar el flujo de trabajo.
+
+### - Configuración VS Code:
+
+- **Autocompletar comandos en la terminal**. Acceder a `settings` >> buscar `terminal integrated suggest` >> marcar el check `Enable...`
+
+- **Linked editting**. Ayuda sobretodo en la escritura de etiquetas como HTML, pero funciona para más lenguajes. Por ejemplo, cuando modificas una etiqueta, también se modifica la de cierre. Acceder a `settings` >> buscar `linked editting` >> marcar el check `Controls...`
+
+### - Extensiones para Angular:
+
+- **Angular Language Service**. Esta extensión es la única prácticamente obligatoria. Recomendada por el propio Angular, agiliza la escritura de código en proyectos Angular.
+
+- **Angular Files**. Permite la generación de elementos Angular mediante interfaz. Sustituye los comandos comunes de "ng g..." por un /click derecho sobre la carpeta del proyecto en la que quieras generar el archivo.
+
+- **Angular2.switcher**. Sirve para navegar entre archivos desde el código. Cuando se hace import de algún comoponente, o se llama a alguna clase, haciendo click sobre el código te redirige al archivo sin necesidad de buscarlo manualmente.
 
 ---
 
@@ -167,11 +191,11 @@ ng build
 
 ## 10) Referencias rápidas
 
-- Zoneless (qué es y cómo activarlo): https://angular.dev/guide/zoneless
-- Control de flujo en plantillas: https://angular.dev/guide/templates/control-flow
-- Signals (estado reactivo): https://angular.dev/guide/signals
+- Zoneless (qué es y cómo activarlo): <https://angular.dev/guide/zoneless>
+- Control de flujo en plantillas: <https://angular.dev/guide/templates/control-flow>
+- Signals (estado reactivo): <https://angular.dev/guide/signals>
 - Rutas (definir rutas, lazy, parámetros) y binding a inputs:  
-  https://angular.dev/guide/routing/define-routes  
-  https://angular.dev/guide/routing/common-router-tasks
-- Reactive Forms (formularios y validación): https://angular.dev/guide/forms/reactive-forms
-- CLI para generar componentes standalone: https://angular.dev/cli/generate/component
+  <https://angular.dev/guide/routing/define-routes>  
+  <https://angular.dev/guide/routing/common-router-tasks>
+- Reactive Forms (formularios y validación): <https://angular.dev/guide/forms/reactive-forms>
+- CLI para generar componentes standalone: <https://angular.dev/cli/generate/component>
