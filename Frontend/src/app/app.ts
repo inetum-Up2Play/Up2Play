@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PruebaPrimeNGComponent } from "./features/pruebaPrimeNG/pruebaPrimeNG/pruebaPrimeNG.component";
+import { PruebaPrimeNGComponent } from "./features/pruebaPrimeNG/pruebaPrimeNG.component";
 
 @Component({
   selector: 'app-root',
