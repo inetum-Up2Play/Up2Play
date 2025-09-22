@@ -58,7 +58,7 @@ src/
 
 **Qué va en cada zona (en lenguaje simple):**
 
-- **core/**: lo que “enciende” la app y cosas transversales (interceptores, layout, config).
+- **core/**: lo que “enciende” la app y cosas transversales (interceptores, layout, config). Lógica que no tiene interfaz de usuario.
 - **shared/**: piezas de UI y utilidades que sirven en cualquier parte.
 - **features/**: cada “módulo de negocio” (Actividad, Usuario…) con sus páginas, componentes y servicios propios.
 
