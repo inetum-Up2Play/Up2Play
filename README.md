@@ -4,62 +4,6 @@ Aplicación que ofrece una comunidad de deportistas con los que poder organizar 
 
 ---
 
-## Convención de nombres
-
-Las convenciones de nombres son esenciales para mantener la organización y claridad en los proyectos, facilitando la colaboración y el seguimiento de cambios.
-
-### Ramas:
-
-- **feature** → feature/nombre-descriptivo-funcionalidad.
-    
-    Ejemplos: feature/login-usuario, feature/mejoras-ui
-    
-- **hotfix** → hotfix/descripcion-arreglo.
-    
-    Ejemplo: hotfix/error-login
-    
-- **release** → release/vX.Y.Z o release/nombre-version
-    
-    Ejemplo: release/v1.2.0
-    
-
-### Commits:
-
-- **feat**: Nueva funcionalidad. **Ejemplo** → feat: añadir pantalla de registro
-- **fix**: Corrección de errores. **Ejemplo** → fix: corregir validación de email
-- **docs**: Cambios en documentación. **Ejemplo** → docs: actualizar README con instrucciones de instalación
-- **refactor**: Reestructuración del código sin cambiar funcionalidad. **Ejemplo →** refactor: simplificar lógica de autenticación
-- **style**: Cambios de formato, no afectan la lógica del código, solo su presentación.  **Ejemplo →**  style: eliminar espacios innecesarios en funciones
-- **test**: Añadir o modificar pruebas.   **Ejemplo** → test: añadir pruebas unitarias para el componente Login
-- **chore**: Tareas menores (actualizar dependencias, configuración, etc.). **Ejemplo** → chore: actualizar dependencias en package.json
-- **perf**: Mejoras de rendimiento. **Ejemplo** → perf: reducir tiempo de carga en la pantalla de inicio
-- **ci**: Cambios en scripts, workflows o configuración de CI/CD. **Ejemplo** → ci: añadir workflow de GitHub Actions para test
-    
-    **Importante**:
-    
-    - Usa el **modo imperativo**: “añadir” en lugar de “añadido”.
-    - Sé **breve pero claro**: máximo 50 caracteres en el título.
-    - Si necesitas más detalle, añade una descripción en el cuerpo del commit.
-
-### **Comentarios en el código**
-
-- Comenta el código de manera clara y directa explicando el porqué de esa acción.
-- Evita comentarios innecesarios como // incrementa x en 1 si el código ya lo dice.
-- Ejemplo:
-    
-    // Este método se usa para validar tokens expirados antes de renovar sesión
-    function validarToken() { ... }
-    
-
-### Generales
-
-- **Usar Guiones**: Se recomienda usar guiones para separar palabras en lugar de espacios.
-- **Mantenerlo Corto y Descriptivo**: Los nombres deben ser fáciles de escribir y entender, transmitiendo la información necesaria.
-- **Minúsculas**: Usar letras minúsculas para evitar confusiones, ya que Git distingue entre mayúsculas y minúsculas.
-- **Evita caracteres especiales.**
-
----
-
 ## Tags
 
 Una etiqueta sirve para identificar commits particulares. El uso más normal de los tags es poder etiquetar las diferentes versiones de un proyecto. Ejemplo de tag: **v0.2.0**
@@ -82,25 +26,25 @@ Un **changelog** (o registro de cambios) es un documento que **resume los cam
 
 Suele estar en un archivo llamado **CHANGELOG.md** en la raíz del repositorio. Un ejemplo de estructura básico sería:
 
-
-# Changelog
+---
+### Changelog
 
 Todas las versiones importantes de este proyecto se documentan aquí.
 
-## [1.2.0] - 2025-09-19
-### Añadido
+#### [1.2.0] - 2025-09-19
+**Añadido**
 - Pantalla de perfil de usuario
 - Validación de campos en el formulario de registro
-### Corregido
+**Corregido**
 - Error al iniciar sesión con redes sociales
 
-### Mejorado
+**Mejorado**
 - Rendimiento en la carga de la pantalla principal
-## [1.1.0] - 2025-09-10
-### Añadido
+#### [1.1.0] - 2025-09-10
+**Añadido**
 - Integración con API externa para estadísticas
 
-### Corregido
+**Corregido**
 - Problema con la navegación en dispositivos móviles
 
 
