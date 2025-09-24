@@ -89,6 +89,17 @@
             margin-right: 8px;
             animation: pulse 2s infinite;
         }
+        button{
+
+            background-color: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
         
         @keyframes pulse {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7); }
@@ -129,6 +140,10 @@
         <div class="description">
             <p style="margin-top: 10px;">Your application is up and running smoothly</p>
         </div>
-    </div>
+
+        <div style="margin-top: 20px;">
+        <button onclick="window.location.href='http://localhost:4200/'">Ver App</button>
+
+        </div>
 </body>
 </html>
