@@ -33,7 +33,7 @@ CREATE TABLE ACTIVIDAD (
     nivel VARCHAR(50) CHECK (nivel IN('Iniciado', 'Principiante', 'Intermedio', 'Avanzado', 'Experto')),
     num_pers_inscritas INT DEFAULT 1,
     num_pers_totales INT,
-    estado VARCHAR(50) CHECK (estado IN('Completada', 'En curso', 'Pendiendte', 'Cancelada')),
+    estado VARCHAR(50) CHECK (estado IN('Completada', 'En curso', 'Pendiente', 'Cancelada')),
     precio DECIMAL(10,2),
     id_usuario_creador INT NOT NULL,
     FOREIGN KEY (id_usuario_creador) REFERENCES USUARIO(id)
