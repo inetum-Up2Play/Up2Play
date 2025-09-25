@@ -11,7 +11,7 @@ Creación de todas las tablas de la base de datos para el desarrollo del proyect
 
 ## Descripción Técnica
 - Script ejecutado: `Creacion_Tablas.sql`
-- Ubicación: `C:\Users\joan.juncosa.ext\Desktop\Up2PlayDB\Scripts.sql`
+- Ubicación: `Up2PlayDB\DataBase\Scripts sql\Creación_Tablas.sql`
 - Afecta a: `UP2PlayDB`
 
 ## Pruebas

@@ -11,7 +11,7 @@ Se crea la Base de Datos de UP2Play para desarrollar el proyecto.
 
 ## Descripción Técnica
 - Script ejecutado: `Creacion_UP2Play.sql`
-- Ubicación: `C:\Users\joan.juncosa.ext\Desktop\Up2PlayDB`
+- Ubicación: `Up2PlayDB\DataBase\Scripts sql\Creación_UP2Play.sql`
 - Afecta a: `UP2PlayDB`
 
 ## Pruebas

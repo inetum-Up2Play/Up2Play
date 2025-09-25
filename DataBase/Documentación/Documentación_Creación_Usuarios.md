@@ -11,7 +11,7 @@ Se crean los usuarios para cada miembro del proyecto para que puedan acceder a l
 
 ## Descripción Técnica
 - Script ejecutado: `Roles_Usuarios.sql`
-- Ubicación: `C:\Users\joan.juncosa.ext\Desktop\Up2PlayDB`
+- Ubicación: `Up2PlayDB\DataBase\Scripts sql\Roles_Usuarios.sql`
 - Afecta a: `UP2PlayDB`
 
 ## Pruebas
