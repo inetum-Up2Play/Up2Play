@@ -16,6 +16,34 @@ Aplicación que ofrece una comunidad de deportistas con los que poder organizar 
 
 ---
 
+
+## Comandos Útiles
+
+### **Comandos básicos del sistema:**
+
+- **ls**: Lista los archivos y carpetas del directorio actual
+- **pwd**: Muestra la ruta del directorio en el que te encuentras.
+- **cd <nombre_carpeta>**: Cambia al directorio indicado.
+- **mkdir <nombre_carpeta>**: Crea una nueva carpeta.
+
+### **Comandos de Git**:
+
+- **git pull:**  Descarga la última versión del repositorio remoto y actualiza tu copia local.
+- **git branch**: Muestra todas las ramas disponibles en el repositorio.
+- **git branch <nombre_rama>**: Crea una nueva rama con el nombre especificado.
+- **git checkout <nombre_rama>**:Cambia a la rama indicada.
+- **git push origin <nombre_rama>**: Sube la rama actual al repositorio remoto. (Asegúrate de estar ubicado en la rama que deseas subir).
+- **git diff <rama1> <rama2>**: Muestra las diferencias entre dos ramas.
+
+### **Estados:**
+
+- **Modified**: El archivo ha sido modificado localmente.
+- **Staged**: Los cambios han sido preparados para ser confirmados. → Usa **git add .** para añadir todos los archivos modificados, o **git add <archivo>** para añadir uno específico.
+- **Committed**:  Los cambios han sido confirmados localmente. → Usa **git commit -m "Descripción del cambio"** para registrar los cambios.
+- **Pushed**: Los cambios han sido enviados al repositorio remoto.→ Usa **git push** para subir los commits.
+
+---
+
 ## Tags
 
 Una etiqueta sirve para identificar commits particulares. El uso más normal de los tags es poder etiquetar las diferentes versiones de un proyecto. Ejemplo de tag: **v0.2.0**
@@ -59,34 +87,6 @@ Todas las versiones importantes de este proyecto se documentan aquí.
 **Corregido**
 - Problema con la navegación en dispositivos móviles
 
-
-
----
-
-## Comandos Útiles
-
-### **Comandos básicos del sistema:**
-
-- **ls**: Lista los archivos y carpetas del directorio actual
-- **pwd**: Muestra la ruta del directorio en el que te encuentras.
-- **cd <nombre_carpeta>**: Cambia al directorio indicado.
-- **mkdir <nombre_carpeta>**: Crea una nueva carpeta.
-
-### **Comandos de Git**:
-
-- **git pull:**  Descarga la última versión del repositorio remoto y actualiza tu copia local.
-- **git branch**: Muestra todas las ramas disponibles en el repositorio.
-- **git branch <nombre_rama>**: Crea una nueva rama con el nombre especificado.
-- **git checkout <nombre_rama>**:Cambia a la rama indicada.
-- **git push origin <nombre_rama>**: Sube la rama actual al repositorio remoto. (Asegúrate de estar ubicado en la rama que deseas subir).
-- **git diff <rama1> <rama2>**: Muestra las diferencias entre dos ramas.
-
-### **Estados:**
-
-- **Modified**: El archivo ha sido modificado localmente.
-- **Staged**: Los cambios han sido preparados para ser confirmados. → Usa **git add .** para añadir todos los archivos modificados, o **git add <archivo>** para añadir uno específico.
-- **Committed**:  Los cambios han sido confirmados localmente. → Usa **git commit -m "Descripción del cambio"** para registrar los cambios.
-- **Pushed**: Los cambios han sido enviados al repositorio remoto.→ Usa **git push** para subir los commits.
 
 ---
 
