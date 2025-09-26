@@ -4,6 +4,18 @@ Aplicación que ofrece una comunidad de deportistas con los que poder organizar 
 
 ---
 
+## Instalar dependencias y paquetes para la ejecución del proyecto
+
+- Instalar java 17 (liberika jdk, version 21 funciona).
+- Instalar java extension pack en VScode.
+- Ejecutar java (símbolo de botón de "play")
+- npm install en la terminal del Frontend del proyecto.
+- ng build
+- ng serve
+**Cada vez que se modifica el package.json, se avisará al equipo porqué se deberá hacer npm install y ng build de nuevo para actualizar las dependencias.**
+
+---
+
 ## Tags
 
 Una etiqueta sirve para identificar commits particulares. El uso más normal de los tags es poder etiquetar las diferentes versiones de un proyecto. Ejemplo de tag: **v0.2.0**
