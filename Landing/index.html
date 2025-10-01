@@ -1,106 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
-    <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Work+Sans:wght@400;700&display=swaps "
+        rel="stylesheet">
+    <link rel="icon" href="/Up2Play/Landing/Assets/Images/simbolo-fondoBlanco.png" type="image/x-icon">
+    <link rel="stylesheet" href="/Up2Play/Landing/Assets/CSS/style.css">
+    <title>UP2Play</title>
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #B1DF75 0%, #3D6C3F 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            overflow: hidden;
-        }
-
-        /* Add some subtle animation or particles if desired, but keep it simple */
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        /* Main container */
-        .container {
-            text-align: center;
-            padding: 2rem;
-            max-width: 600px;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
-        }
-
-        /* Button styling */
-        button {
-            background: linear-gradient(45deg, #48bb78, #48bb78);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
-        }
-
-        button:active {
-            transform: translateY(-1px);
-        }
-
-        /* Fade in animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            button {
-                padding: 0.8rem 1.5rem;
-                font-size: 1rem;
-            }
-        }
-    </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>¡Bienvenido a la Landing Page!</h1>
-        <button onclick="window.location.href='http://localhost:4200/'">Ver App</button>
-        <button onclick="window.location.href='http://localhost:8080/'">Spring Boot</button>
-    </div>
+    <header>
+        <section class="header-section">
+
+            <a href=""><img src="/Up2Play/Landing/Assets/Images/logo.png" alt="Logo de Up2Play"
+                    style="width: 170px; height: auto;"></a>
+
+            <nav>
+                <ul>
+                    <li>¿Que es UP2Play?</li>
+                    <li>Actividades</li>
+                    <li>Sobre Nosotros</li>
+                    <li>Equipo</li>
+                    <li><button class="iniciar-sesion">Iniciar Sesión</button></li>
+                    <li><button class="registrarse">Registrarse</button></li>
+                </ul>
+            </nav>
+        </section>
+
+        <section class="Activa">
+            <div class="activa-content">
+                <h1 class="activa-title"><i>Activa tu vida, <br> conecta con gente</i></h1>
+                <div class="activa-button">
+                    <button>Únete ahora</button>
+                </div>
+            </div>
+        </section>
+
+    </header>
+    <section>
+        <div>
+            <h2>¿Que es UP2Play?</h2>
+
+            <p>UP2Play es una aplicación que te conecta con otros deportistas para organizar y disfrutar actividades
+                como
+                futbol, senderismo y más.</p>
+
+            <ul>
+                <li>Crea o únete a planes fácilmemte.</li>
+                <li>Gestiona tus eventos desde un calendario personalizado.</li>
+                <li>Coordina todo con mapas, notificaciones y pagos integrados.</li>
+            </ul>
+
+            <button>¡Haz deporte, conoce gente y diviértete!</button>
+
+        </div>
+
+    </section>
+
+    <section>
+
+        <div>
+
+            <h1>Actividades</h1>
+
+            slider
+
+        </div>
+
+    </section>
+
+    <section>
+
+        <div>
+
+            <div>
+                <h1>Misión</h1>
+                <p>Conectar personas a tráves del deporte, fomentando un estilo de vida activo, accesible y social.</p>
+            </div>
+
+            <div>
+                <img src="" alt="Simbolo de misión">
+            </div>
+
+
+            <div>
+                <img src="" alt="Simbolo de visión">
+            </div>
+
+            <div>
+                <h1>Visión</h1>
+                <p>Ser la plataforma de referencia para conectar personas a travès del deporte, promoviendo una
+                    cominidad
+                    inclusiva activa y positiva.</p>
+            </div>
+
+            <div>
+                <h1>Valores</h1>
+                <ul>
+                    <li>Comunidad</li>
+                    <li>Compromiso</li>
+                    <li>Vitalidad</li>
+                    <li>Respeto</li>
+                    <li>Inclusión</li>
+                    <li>Colaboración</li>
+                </ul>
+            </div>
+
+            <div>
+                <img src="" alt="Simbolo de valores">
+            </div>
+        </div>
+
+    </section>
+
+    <section>
+        <div>
+            <h2>SOBRE NOSOTROS</h2>
+
+            <p>En<strong>UP2Play</strong>creemos que el deporte tiene el poder de unir a las personas. Por eso creamos
+                una plataforma que facilita encontrar con quién jugar, entrenar o simplemente compartir una actividad
+                física. Ya seas principiante o experto, aquí tienes un espacio para moverte, conectar y disfrutar.</p>
+            <p>Somos un punto de encuentro para quienes viven el deporte como una forma de bienestar, diversión y
+                conexión. En UP2Play, ganar es compartir.</p>
+        </div>
+    </section>
+
+    <section>
+        <div>
+            <h2>Nuestro Equipo</h2>
+
+            <div>
+                <img src="" alt="Foto de Daniel Villalba">
+                <h3>Daniel Villalba Marin</h3>
+                <p>Backend Developer</p>
+                <p>INETUM ESPAÑA S.A</p>
+            </div>
+            <div>
+                <img src="" alt="Foto de Marc Balagué Torrens">
+                <h3>Marc Balagué Torrens</h3>
+                <p>Frontend Developer | Tester</p>
+                <p>INETUM ESPAÑA S.A</p>
+            </div>
+            <div>
+                <img src="" alt="Foto de Alexandre Vilchez Peña">
+                <h3>Alexandre Vilchez Peña</h3>
+                <p>Frontend Developer</p>
+                <p>INETUM ESPAÑA S.A</p>
+            </div>
+            <div>
+                <img src="" alt="Foto de Joan Juncosa Vilaplana">
+                <h3>Joan Juncosa Vilaplana</h3>
+                <p>DB Developer</p>
+                <p>INETUM ESPAÑA S.A</p>
+            </div>
+            <div>
+                <img src="" alt="Foto de África Rodríguez Micó">
+                <h3>África Rodríguez Micó</h3>
+                <p>Backend Developer | DevOps</p>
+                <p>INETUM ESPAÑA S.A</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+
+        <div>
+            <h4>Compañia</h4>
+            <p>INETUM ESPAÑA S.A</p>
+            <p>Up2Play@gmail.com</p>
+            <p>+3467792315</p>
+            <p>Moll de Lleida, 43004, Tarragona</p>
+        </div>
+        <div>
+            <h4>Recursos</h4>
+            <li>¿Que es UP2Play?</li>
+            <li>Actividades</li>
+            <li>Sobre Nosotros</li>
+            <li>Equipo</li>
+        </div>
+        <div>
+            <h4>Comunidad</h4>
+            <p>Instragram</p>
+            <p>X</p>
+        </div>
+        <div>
+            <h4>Legal</h4>
+            <p>Politica de Privacidad</p>
+            <p>Terminos y Condiciones</p>
+        </div>
+
+        <p>Copyright© 2025 Up2Play. Todos los derechos reservados.</p>
+
+        <img src="" alt="Logo de Up2Play">
+
+    </footer>
+
 </body>
+
 </html>

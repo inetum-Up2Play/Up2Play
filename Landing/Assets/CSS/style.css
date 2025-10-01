@@ -1,0 +1,79 @@
+        header {
+
+            background-image: url('/Up2Play/Landing/Assets/Images/deporte.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            border: 1px solid green;
+            background-size: cover;
+            height: 100vh
+        }
+
+        div {
+
+            border: 1px solid red;
+            margin: 10px;
+        }
+
+        section {
+            border: 2px solid blue;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .Activa {
+            display: flex;
+            justify-content: center;
+            margin: auto;
+            width: auto;
+            height: 50vh;
+        }
+
+        .activa-content {
+            text-align: center;
+            margin: auto;
+        }
+
+        button{
+
+            background-color: #B1DF75;
+            border-radius: 20px;
+            border: none;
+            padding: 20px 10px 20px 20px;
+        }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: transparent;
+        }
+
+        .activa-title {
+            text-align: center;
+            color: #F7F7F7;
+            font-size: 60px;
+        }
+
+        h1,h2,h3,h4{
+
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        p{
+
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        ul{
+
+            list-style: none;
+            display: flex;
+        }
+
+        .activa-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
