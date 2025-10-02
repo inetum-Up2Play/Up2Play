@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Up2Play.backend.Model.UsuarioModel;
+import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Service.UsuarioService;
 
 @RestController
@@ -29,18 +29,18 @@ public class UsuarioController {
         }
 
     @GetMapping
-    public List<UsuarioModel> getAllUsuarios(){
+    public List<Usuario> getAllUsuarios(){
 
         return usuarioService.getAllUsuarios();
     }
 
     @PostMapping
-    public UsuarioModel saveUsuario(@RequestBody UsuarioModel usuario){
+    public Usuario saveUsuario(@RequestBody Usuario usuario){
         return usuarioService.saveUsuario(usuario);
     }
 
     @PutMapping("/{id}")
-    public UsuarioModel updateUsuario(@PathVariable Long id, @RequestBody UsuarioModel usuario){
+    public Usuario updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
         usuario.setId(id);
         return usuarioService.saveUsuario(usuario);
     }

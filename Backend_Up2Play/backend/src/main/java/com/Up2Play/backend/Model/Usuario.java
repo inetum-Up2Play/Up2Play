@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "USUARIO")
-public class UsuarioModel {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -25,7 +25,7 @@ public class UsuarioModel {
     private String rol;
     private String nombre_usuario;
 
-    public UsuarioModel(Long id, String email, String contraseña, String rol, String nombre_usuario) {
+    public Usuario(Long id, String email, String contraseña, String rol, String nombre_usuario) {
         this.id = id;
         this.email = email;
         this.contraseña = contraseña;
@@ -33,14 +33,14 @@ public class UsuarioModel {
         this.nombre_usuario = nombre_usuario;
     }
 
-    public UsuarioModel(String email, String contraseña, String rol, String nombre_usuario) {
+    public Usuario(String email, String contraseña, String rol, String nombre_usuario) {
         this.email = email;
         this.contraseña = contraseña;
         this.rol = rol;
         this.nombre_usuario = nombre_usuario;
     }
 
-    public UsuarioModel() {
+    public Usuario() {
     }
 
     public Long getId() {
