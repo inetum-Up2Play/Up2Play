@@ -1,22 +1,9 @@
-INSERT INTO actividad (
-    nombre,
-    descripcion,
-    fecha,
-    hora,
-    ubicacion,
-    nivel,
-    num_pers_inscritas,
-    num_pers_totales,
-    estado,
-    precio,
-    id_usuario_creador
-)
-VALUES
-(
+INSERT ALL
+  INTO ACTIVIDAD (nombre, descripcion, fecha, hora, ubicacion, nivel, num_pers_inscritas, num_pers_totales, estado, precio, id_usuario_creador) VALUES (
     'DOMINGO ⚽ PARTIDO FÚTBOL F7 MIXTO⚽NEW PLAYERS WELCOME ⚽CAMPO RODRÍGUEZ SAHAGÚN ⚽',
     NULL,
-    '2025-09-21',
-    '20:00:00',
+    TO_DATE('2025-09-21', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     NULL,
     'Iniciado',
     14,
@@ -24,12 +11,12 @@ VALUES
     'Pendiente',
     0.00,
     1
-),
-(
+  )
+  INTO ACTIVIDAD VALUES (
     'Iniciación al running en el Retiro (martes y jueves)',
-    'Cansad@ de correr sol@? Te gustaría entrenar con un grupo de gente sana como tú que quiere ponerse en forma al aire libre? Ven a correr con nosotr@s al pulmón de Madrid.\n\nCon nuestras quedadas, además de mejorar tu condición física, te lo vas a pasar genial entrenando en grupo, vas a conocer gente nueva y no te vas a aburrir ya que hacemos entrenamientos divertidos y variados que comprenden: Calentamiento - Técnica de carrera - Ejercicios de prevención de lesiones - Series - Tonificación - Juegos - Estiramientos\n\nTanto si ya corres como si es tu primera vez, no te preocupes ya que segmentamos por niveles: - Iniciación (siempre hay gente nueva) - Intermedio\n\nQué necesitas:\nSesiones de los martes: zapatillas y ropa de deporte\nSesiones de los jueves: zapatillas, ropa de deporte y colchoneta\n\nEntrenamos aunque haya pocos apuntados por Meet Up ya que viene gente también por otros canales\n\nPrecio:\n1 CLASE: 5€ (efectivo, Bizum o transferencia) Se abonan al final de la clase\nBONO 5 CLASES: 20€\nFULL PASS: 35€/mes\n\nCLASES:\n20:00 Lunes Cross HIIT\n20:00 Martes Running\n20:00 Jueves Running\n10:00 Sábados Pilates\n\nConoce más sobre nosotros en: www.desafiopersonal.es',
-    '2025-09-23',
-    '20:00:00',
+    'Cansad@ de correr sol@? Te gustaría entrenar con un grupo de gente sana como tú que quiere ponerse en forma al aire libre?...',
+    TO_DATE('2025-09-23', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     'Parque del Retiro, Madrid, es',
     'Principiante',
     1,
@@ -37,12 +24,12 @@ VALUES
     'Completada',
     10.00,
     2
-),
-(
+  )
+  INTO ACTIVIDAD VALUES (
     '🏐🏐PACHANGA VOLLEYGRASS + 🍻PICNIC TIME!! -WINTER TIME',
-    '**ENGLISH BELLOW**\n\n**Eres nuev@ en Madrid , o te gustaría ampliar tu círculo de amig@s?**\n\nTe invitamos a **echar unas risas** y un **buen rato conociendo a personas internacionales** para **jugar** a lo que tanto nos gusta y apasiona el **VOLLEY.🏐🏐**\n\n\\*\\*Siempre buen rollo con música, picnic y deporte!\\*\\*🍻🍻\n**No te quedes en casa, anímate!!!💪🏽💪🏽💪🏽**\n\n📍**Dirección del evento: FUERA DE POLIDEPORTIVO LA BOMBILLA**\nhttps://goo.gl/maps/Zp29wNpJCs5TAruQ7\n\n📌**Link del Grupo de Pachangas VolleyGrass🏐🏐!!**\nhttps://chat.whatsapp.com/ExAGhNcwyRk6PQ1dadmOL4\n\n💶**Precio :**\n✅ 7 € (Partido puntual, por Bizum/Revolut/Wise al Organizador)\n✅ 28€ (Mensual-4 Partidos al Mes, por Bizum/Revolut/Wise al Organizador)\n⚠️ No son acumulables, y se reprograma en caso de lluvia o fuerza mayor\n➡️IMPORTANTE: Confirmar asistencia lo antes posible para la organización (confirmación debe ser por aquí o Grupo de Whatsapp), tu plaza es reservada una vez hecho el Bizum a la organizadora\n⚠️📋 REGLAS\n✅ CANCELACIÓN 24HS ANTES, DEBERÁ ABONAR EL PRECIO COMO SI PARTICIPARA DE LA ACTIVIDAD.\n✅ NO SE HACEN DEVOLUCIONES €\n✅ EN CASO DE LLUVIA SE CANCELA EL EVENTO\n✅ EN CASO DE ROTURA O DAÑO DE MATERIAL DE JUEGO SE DEBE ABONAR 12 EUROS\n\nAre you new to Madrid, or would you like to expand your circle of friends?\nWe invite you to have a laugh and have a good time meeting international people to play what we love and are passionate about VOLLEYBALL.🏐🏐\nAlways good vibes with music, picnics and sports!🍻🍻\nDon''t stay at home, cheer up!!!💪🏽💪🏽💪🏽\n📍Event address: OUTSIDE LA BOMBILLA SPORTS CENTER\nhttps://goo.gl/maps/Zp29wNpJCs5TAruQ7\n📌Link of the Pachangas VolleyGrass Group🏐🏐!!\nhttps://chat.whatsapp.com/ExAGhNcwyRk6PQ1dadmOL4\n💶Price:\n✅ 7 € (Punctual match, por Bizum/Revolut/Wise to the Organiser)\n✅ 28€ (Monthly 4 Matches per Month by Bizum/Revolut/Wise to the organizer)\n⚠️ They are not cumulative, and they are rescheduled in case of rain or force majeure\n➡️IMPORTANT: Confirm attendance as soon as possible for the organization (confirmation must be here or WhatsApp Group), your place is reserved once the Bizum is made to the organizer\n⚠️📋 RULES\n✅ CANCELLATION 24 HS BEFORE, YOU MUST PAY THE PRICE AS IF YOU WERE PARTICIPATING IN THE ACTIVITY.\n✅ NO RETURNS €\n✅ IN CASE OF RAIN THE EVENT IS CANCELED\n✅ IN CASE OF BREAKAGE OR DAMAGES TO THE GAME EQUIPMENT, YOU MUST PAY 12 EUROS\n\nThank you and HAPPY DAY!!\nSee you soon 😃\nCecy',
-    '2025-09-19',
-    '16:30:00',
+    'Eres nuev@ en Madrid , o te gustaría ampliar tu círculo de amig@s?...',
+    TO_DATE('2025-09-19', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('16:30:00', 'HH24:MI:SS'),
     'Polideportivo Municipal La Bombilla, Madrid, MD, es',
     'Intermedio',
     1,
@@ -50,12 +37,12 @@ VALUES
     'Completada',
     12.00,
     3
-)
-(
+  )
+  INTO ACTIVIDAD VALUES (
     'PLAY SOCCER & MAKE FRIENDS (MONDAYS & THURSDAYS)',
-    'Join our Monday Indoor Soccer 5-a-side event, where the passion for soccer is lived to the fullest. You don''t need to bring equipment, just your desire to play and have a great time. [Sign up in our WhatsApp group](https://chat.whatsapp.com/GLTEVz2YjVTAq7F6JgXPeO), and get on the field! Perfect for soccer lovers of all levels who want to enjoy an intense match and a friendly atmosphere.\n\nDate: Every Monday & Thursdays\nTime: From 21:00 to 22:00\nTicket: Sign up for the WhatsApp group: [WHATSAPP GROUP](https://chat.whatsapp.com/GLTEVz2YjVTAq7F6JgXPeO)\n\nLocation: Polideportivo Virgen del Carmen, Beteró, Valencia',
-    '2025-09-25',
-    '20:00:00',
+    'Join our Monday Indoor Soccer 5-a-side event...',
+    TO_DATE('2025-09-25', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     'Polideportivo Virgen del Carmen Betero, Valencia, es',
     'Principiante',
     1,
@@ -63,12 +50,12 @@ VALUES
     'En curso',
     0.00,
     30
-),
-(
+  )
+  INTO ACTIVIDAD VALUES (
     'Baloncesto en parque Miraflores',
-    'Todos los lunes intentaremos quedar a las 20:00 (mientras sea verano) con idea de conodernos y de que el grupo crezca para echar un buen rato jugando al baloncesto y conociendo a nuevas personas. Ahora en los meses de julio y agosto estará todo más tranquilo pero mientras tanto todos los lunes de julio se mantienen y a la hora antes indicada (20:00) en las canchas de baloncesto del parque miraflores, que son de libre acceso. La pelota la tengo yo y no volveré ya hasta septiembre, así que recordad que si os unís para jugar al baloncesto durante el mes de julio, alguien debe llevar una pelota. El nivel de juego es básico (hay que ir conociendo a la gente y las ganas de jugar) después de cada partido nos podemos comprometer con algo de esfuerzo a una cruzcampo... o varias ;-). Hay un grupo además de whatsapp (el que se quiera unir que me mande un mensaje privado por esta plataforma (soy Antonio Pineda)',
-    '2025-09-22',
-    '20:00:00',
+    'Todos los lunes intentaremos quedar a las 20:00...',
+    TO_DATE('2025-09-22', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     NULL,
     'Principiante',
     1,
@@ -76,12 +63,12 @@ VALUES
     'En curso',
     0.00,
     43
-),
-(
+  )
+  INTO ACTIVIDAD VALUES (
     'Acantilados de Barbate- Torre del Tajo-Playa de la Hierbabuena',
-    'IMPORTANTE: confirmar asistencia mediante whatsapp al 655 52 40 21. Distancia: 8 km. Dificultad: fácil-moderado. Desnivel: 134 m. Tiempo de ruta: 2h30m. Tipo de ruta: circular. Incluye playa si el tiempo lo permite. Punto de encuentro: metro Blas Infante a las 8:00h. Aportación: 10€ efectivo. Transporte: 15€ (gastos compartidos). Conductores pagan 5€ menos. Organización: Asociación Camínate. Guía: Rocío Iglesias.',
-    '2025-09-20',
-    '20:00:00',
+    'IMPORTANTE: confirmar asistencia mediante whatsapp al 655 52 40 21...',
+    TO_DATE('2025-09-20', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     'PARKING Estación Blas Infante, Seville, AN, es',
     'Principiante',
     1,
@@ -89,12 +76,12 @@ VALUES
     'En curso',
     0.00,
     19
-),
-(
+  )
+  INTO ACTIVIDAD VALUES (
     'Walking Club: Paseos, encuentros',
-    '🚨 Para participar en este evento y conocer la ubicación exacta, es obligatorio descargarse la nueva app de WeRoad, WEMEET y apuntarse en el EVENTO correspondiente 🚨',
-    '2025-09-21',
-    '20:00:00',
+    '🚨 Para participar en este evento y conocer la ubicación exacta...',
+    TO_DATE('2025-09-21', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     NULL,
     'Principiante',
     9,
@@ -102,12 +89,12 @@ VALUES
     'En curso',
     0.00,
     34
-),
-(
+  )
+  INTO ACTIVIDAD VALUES (
     '⛰️ Santurtzi - Serantes 😍 Intermedio 9km 💪🏾💰15€',
     '⭐️⭐️⭐️⭐️⭐️',
-    '2025-09-21',
-    '20:00:00',
+    TO_DATE('2025-09-21', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     'Bar La Capi Gourmet, Santurtzi, es',
     'Principiante',
     27,
@@ -115,12 +102,12 @@ VALUES
     'En curso',
     15.00,
     22
-),
-(
+  )
+  INTO ACTIVIDAD VALUES (
     'Bilbo, Mungia – Elordui, Gaztelugatxe, Sollube, Morga – Gernika, Bilbo',
-    'Climbs: Elordui (1.3km al 6.7%), Gaztelugatxe (3.6km al 7.7%), Sollube (7.7km al 8.7%), Morga (6.5km al 4.3%). Ruta: 112km, 2190m desnivel. Salida: 8:00AM. Info: Grupo WhatsApp https://chat.whatsapp.com/EsnKaeYVwRMExcKmwNnAqC',
-    '2025-09-20',
-    '20:00:00',
+    'Climbs: Elordui (1.3km al 6.7%), Gaztelugatxe (3.6km al 7.7%)...',
+    TO_DATE('2025-09-20', 'YYYY-MM-DD'),
+    TO_TIMESTAMP('20:00:00', 'HH24:MI:SS'),
     NULL,
     'Principiante',
     3,
@@ -128,4 +115,5 @@ VALUES
     'En curso',
     0.00,
     39
-);
+  )
+SELECT * FROM DUAL;
