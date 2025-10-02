@@ -3,47 +3,85 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Work+Sans:wght@400;700&display=swaps "
         rel="stylesheet">
-    <link rel="icon" href="/Up2Play/Landing/Assets/Images/simbolo-fondoBlanco.png" type="image/x-icon">
-    <link rel="stylesheet" href="/Up2Play/Landing/Assets/CSS/style.css">
+    <link rel="icon" href="assets/images/logo/simbolo-fondoBlanco.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/style.css">
     <title>UP2Play</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
 </head>
 
 <body>
-    <header>
-        <section class="header-section">
+    <header id="header" class="text-white p-4 md:h-screen" >
+        <section id="header-section" class="header-section flex justify-between relative">
+            <div class="">
+                <a href=""><img src="assets/images/logos/logo.png" alt="Logo de Up2Play"
+                        style="width: 170px; height: auto;"></a>
+            </div>
+            <nav id="menu" class="hidden md:flex md:flex-row md:space-x-4 md:items-center md:hidden:desplegable">
+                <a href="#" class="">¿Qué es UP2Play?</a>
+                <a href="#" class="">Actividades</a>
+                <a href="#" class="">Sobre Nosotros</a>
+                <a href="#" class="">Equipo</a>
+                <div class="hidden md:flex md:space-x-2">
+                    
+                    <button class="iniciar-sesion" >
+                        <a href="#">Iniciar Sesión</a>
 
-            <a href=""><img src="/Up2Play/Landing/Assets/Images/logo.png" alt="Logo de Up2Play"
-                    style="width: 170px; height: auto;"></a>
+                    </button>
 
-            <nav>
-                <ul>
-                    <li>¿Que es UP2Play?</li>
-                    <li>Actividades</li>
-                    <li>Sobre Nosotros</li>
-                    <li>Equipo</li>
-                    <li><button class="iniciar-sesion">Iniciar Sesión</button></li>
-                    <li><button class="registrarse">Registrarse</button></li>
-                </ul>
+                    <button class="registrarse">
+                        <a href="#">Registrarse</a>
+                    </button>
+
+                </div>
+
             </nav>
+
+            <div class="md:hidden">
+                
+                <button class="md:hidden focus:outline-none">
+                    <a href="#">
+                        <img src="assets/images/header/avatar.png" alt="Avatar de usuario" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" 
+                            viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    </a>
+                </button>
+                <button id="btn-menu" class="md:hidden focus:outline-none">
+                    <a href="#">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" 
+                            viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </a>
+                </button>
+            </div>
         </section>
 
-        <section class="Activa">
-            <div class="activa-content">
-                <h1 class="activa-title"><i>Activa tu vida, <br> conecta con gente</i></h1>
+        <section id="Activa" class="flex flex-col justify-center items-center bg-center md:bg-top bg-no-repeat bg-cover h-96">
+            <div class="text-center">
+                <h1 class="text-center text-white text-4xl md:text-5xl lg:text-6xl">
+                    <i>Activa tu vida, <br> conecta con gente</i>
+                </h1>
                 <div class="activa-button">
                     <button>Únete ahora</button>
                 </div>
             </div>
         </section>
-
     </header>
-    <section>
-        <div>
+    <section class="flex flex-col md:flex-row">
+        <div class="order-2 md:order-1 md:w-1/2">
+            <img src="assets/images/up2play/banner_UP2Play.png" alt="Imagen Representativa de Up2Play">
+
+        </div>
+        <div class="order-1 md:order-2 md:w-1/2">
+
             <h2>¿Que es UP2Play?</h2>
 
             <p>UP2Play es una aplicación que te conecta con otros deportistas para organizar y disfrutar actividades
@@ -199,6 +237,7 @@
         <img src="" alt="Logo de Up2Play">
 
     </footer>
+    <script src="assets/js/header.js"></script>
 
 </body>
 

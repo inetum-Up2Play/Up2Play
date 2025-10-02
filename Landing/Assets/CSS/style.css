@@ -1,79 +1,58 @@
-        header {
+h1,h2,h3,h4 {
 
-            background-image: url('/Up2Play/Landing/Assets/Images/deporte.png');
-            background-repeat: no-repeat;
-            background-position: center center;
-            border: 1px solid green;
-            background-size: cover;
-            height: 100vh
-        }
+    font-family: 'Montserrat', sans-serif;
+}
 
-        div {
+p {
 
-            border: 1px solid red;
-            margin: 10px;
-        }
+    font-family: 'Work Sans', sans-serif;
+}
 
-        section {
-            border: 2px solid blue;
-        }
+button {
+    background-color: #B1DF75;
+    border-radius: 20px;
+    padding: 0.5em;
+    color:  #152614;
+}
 
-        body {
-            margin: 0;
-        }
+header {
+    background-image: url('../images/header/deporte.png');
+    background-position: center center;
+    border: 1px solid green;
+    background-size: cover;
+}
 
-        .Activa {
-            display: flex;
-            justify-content: center;
-            margin: auto;
-            width: auto;
-            height: 50vh;
-        }
+.desplegable {
+    background-color: #B1DF75;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    color: #152614;
+    text-align: center;
+}
 
-        .activa-content {
-            text-align: center;
-            margin: auto;
-        }
+.desplegable a {
+    padding: 0.5em;
+    border-bottom: 1px solid #152614;
+}
 
-        button{
+div {
 
-            background-color: #B1DF75;
-            border-radius: 20px;
-            border: none;
-            padding: 20px 10px 20px 20px;
-        }
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: transparent;
-        }
+    border: 1px solid red;
+}
 
-        .activa-title {
-            text-align: center;
-            color: #F7F7F7;
-            font-size: 60px;
-        }
+section {
+    border: 2px solid blue;
+}
 
-        h1,h2,h3,h4{
+nav {
+    border: 2px solid yellow;
+} 
 
-            font-family: 'Montserrat', sans-serif;
-        }
+body {
+    border: 2px solid rgb(0, 0, 0);
 
-        p{
-
-            font-family: 'Work Sans', sans-serif;
-        }
-
-        ul{
-
-            list-style: none;
-            display: flex;
-        }
-
-        .activa-button {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+}
