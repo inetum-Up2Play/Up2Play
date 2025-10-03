@@ -20,6 +20,7 @@ public class Usuario {
 
     @NotBlank
     @Email
+    //@Column(unique = true) ?
     private String email;
     private String contraseña;
     private String rol;
