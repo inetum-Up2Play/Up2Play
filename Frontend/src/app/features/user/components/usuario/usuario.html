@@ -9,11 +9,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let usuario of usuarios">
+    @for(usuario of usuarios; track "usuario.id"){
+    <tr>
       <td>{{ usuario.id }}</td>
       <td>{{ usuario.email }}</td>
       <td>{{ usuario.nombre_usuario }}</td>
       <td>{{ usuario.rol }}</td>
     </tr>
+  }
   </tbody>
 </table>
