@@ -17,41 +17,38 @@
 </head>
 
 <body>
-    <header id="header" class="text-white p-4 md:h-screen" >
+    <header id="header" class="text-white py-4 px-4 md:h-screen md:px-8 lg:px-16">
         <section id="header-section" class="header-section flex justify-between relative">
             <div class="">
                 <a href=""><img src="assets/images/logos/logo.png" alt="Logo de Up2Play"
-                        style="width: 170px; height: auto;"></a>
+                        style="width: 220px; height: auto;"></a>
             </div>
-            <nav id="menu" class="hidden md:flex md:flex-row md:space-x-4 md:items-center md:hidden:desplegable">
-                <a href="#" class="">¿Qué es UP2Play?</a>
-                <a href="#" class="">Actividades</a>
-                <a href="#" class="">Sobre Nosotros</a>
-                <a href="#" class="">Equipo</a>
-                <div class="hidden md:flex md:space-x-2">
-                    
-                    <button class="iniciar-sesion" >
-                        <a href="#">Iniciar Sesión</a>
-
-                    </button>
-
-                    <button class="registrarse">
-                        <a href="#">Registrarse</a>
-                    </button>
-
+            <nav id="menu" class="hidden md:flex md:flex-row md:space-x-4 md:items-center">
+                <div class="flex flex-col md:flex-row font-extrabold md:space-x-4">
+                    <a href="#" class="text-sm md:p-4">¿Qué es UP2Play?</a>
+                    <a href="#" class="text-sm md:p-4">Actividades</a>
+                    <a href="#" class="text-sm md:p-4">Sobre Nosotros</a>
+                    <a href="#" class="text-sm md:p-4">Equipo</a>
                 </div>
+                <div class="hidden md:flex md:flex-row md:space-x-4">
+                    <button class="iniciar-sesion" >
+                        <a href="#" class="">Iniciar Sesión</a>
 
+                    </button>
+                    <button style="background-color: black;" class="registrarse" >
+                        <a href="#" class=" md:p-4 text-white">Registrarse</a>
+                    </button>
+                </div>
             </nav>
 
-            <div class="md:hidden">
-                
+            <div class="md:hidden flex space-x-4 items-center"> 
                 <button class="md:hidden focus:outline-none">
                     <a href="#">
                         <img src="assets/images/header/avatar.png" alt="Avatar de usuario" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" 
                             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                     </a>
                 </button>
-                <button id="btn-menu" class="md:hidden focus:outline-none">
+                <button id="btn-menu" class="md:hidden focus:outline-none relative">
                     <a href="#">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" 
                             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -64,96 +61,326 @@
             </div>
         </section>
 
-        <section id="Activa" class="flex flex-col justify-center items-center bg-center md:bg-top bg-no-repeat bg-cover h-96">
+        <section id="Activa" class="flex flex-col justify-center items-center bg-center md:bg-top bg-no-repeat bg-cover h-96 md:h-screen">
             <div class="text-center">
-                <h1 class="text-center text-white text-4xl md:text-5xl lg:text-6xl">
+                <h1 class="text-center text-white text-4xl md:text-9xl">
                     <i>Activa tu vida, <br> conecta con gente</i>
                 </h1>
-                <div class="activa-button">
-                    <button>Únete ahora</button>
+                <div class="activa-button p-6 ">
+                    <button class="md:text-2xl">Únete ahora</button>
                 </div>
             </div>
         </section>
     </header>
-    <section class="flex flex-col md:flex-row">
-        <div class="order-2 md:order-1 md:w-1/2">
-            <img src="assets/images/up2play/banner_UP2Play.png" alt="Imagen Representativa de Up2Play">
 
-        </div>
-        <div class="order-1 md:order-2 md:w-1/2">
 
-            <h2>¿Que es UP2Play?</h2>
 
-            <p>UP2Play es una aplicación que te conecta con otros deportistas para organizar y disfrutar actividades
-                como
-                futbol, senderismo y más.</p>
+    <section id="section-UP2Play" class=" py-16 md:py-20 lg:py-28 scroll-mt-24">
+    <div class="
+        container mx-auto max-w-7xl
+        px-4 sm:px-6 lg:px-8
+        grid grid-cols-1 md:grid-cols-2 md:grid-rows-[auto_1fr]
+        gap-8 md:gap-10
+        "
+    >
+        <!-- TÍTULO (móvil 1º) | md: col 2, fila 1 -->
+        <h2 id="up2play-title" class="
 
-            <ul>
-                <li>Crea o únete a planes fácilmemte.</li>
-                <li>Gestiona tus eventos desde un calendario personalizado.</li>
-                <li>Coordina todo con mapas, notificaciones y pagos integrados.</li>
-            </ul>
+      md:col-start-2 md:row-start-1
+      text-3xl md:text-4xl font-semibold tracking-tight leading-tight
+      text-gray-900 dark:text-white
+      text-center md:text-left
 
-            <button>¡Haz deporte, conoce gente y diviértete!</button>
+        "
+        >
+            ¿Qué es UP2Play?
+        </h2>
 
-        </div>
-
-    </section>
-
-    <section>
-
-        <div>
-
-            <h1>Actividades</h1>
-
-            slider
-
+        <!-- IMAGEN (móvil 2º) | md: col 1, filas 1-2 -->
+        <div class="md:col-start-1 md:row-start-1 md:row-span-2">
+            <img src="assets/images/up2play/banner_UP2Play.png" alt="Imagen de UP2Play">
         </div>
 
-    </section>
+        <!-- CONTENIDO (móvil 3º) | md: col 2, fila 2 -->
+        <div class="
+            md:col-start-2 md:row-start-2
+            flex flex-col md:grid md:grid-rows-[1fr_auto]
+            gap-6 md:gap-8
+        "
+        >
+            <div class="space-y-4">
+                <p class="font-extrabold">
+                    UP2Play es una aplicación que te conecta con otros deportistas para organizar y
+                    disfrutar actividades como fútbol, senderismo y más.
+                </p>
 
-    <section>
-
-        <div>
-
-            <div>
-                <h1>Misión</h1>
-                <p>Conectar personas a tráves del deporte, fomentando un estilo de vida activo, accesible y social.</p>
-            </div>
-
-            <div>
-                <img src="" alt="Simbolo de misión">
-            </div>
-
-
-            <div>
-                <img src="" alt="Simbolo de visión">
-            </div>
-
-            <div>
-                <h1>Visión</h1>
-                <p>Ser la plataforma de referencia para conectar personas a travès del deporte, promoviendo una
-                    cominidad
-                    inclusiva activa y positiva.</p>
-            </div>
-
-            <div>
-                <h1>Valores</h1>
-                <ul>
-                    <li>Comunidad</li>
-                    <li>Compromiso</li>
-                    <li>Vitalidad</li>
-                    <li>Respeto</li>
-                    <li>Inclusión</li>
-                    <li>Colaboración</li>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Crea o únete a planes fácilmente.</li>
+                    <li>Gestiona tus eventos desde un calendario personalizado.</li>
+                    <li>Coordina todo con mapas, notificaciones y pagos integrados.</li>
                 </ul>
+
+                <button type="button"
+                    class="
+                    p-4 flex items-center justify-center
+                    w-auto md:w-max
+                    mx-auto md:mx-0
+                    mt-6 md:mt-12">
+                    ¡Haz deporte, conoce gente y diviértete!
+                </button>
+
             </div>
 
-            <div>
-                <img src="" alt="Simbolo de valores">
+
+        </div>
+    </div>
+    </section>
+
+    <section id="section-carousel" class="relative scroll-mt-24 py-12 md:py-16 lg:py-20">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-semibold text-white mb-6 tracking-tight text-center">
+                Activitats destacades
+            </h2>
+
+            <div data-carousel id="carousel-activitats" class="relative">
+                <div data-carousel-viewport class="overflow-x-auto scroll-smooth snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-2">
+                    <!-- Track -->
+                    <ul data-carousel-track class="flex gap-4 lg:gap-6 pr-4 sm:pr-6 lg:pr-8 pl-4 sm:pl-6 lg:pl-8">
+                    <!-- Slide -->
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                            </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                        </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                            </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                            </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                            </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                        </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                            </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                            </article>
+                        </li>
+                        <li class="snap-start shrink-0 basis-full sm:basis-2/3 lg:basis-1/3">
+                            <article class="h-64 lg:h-80 rounded-xl overflow-hidden shadow ring-1 ring-slate-200 bg-white grid grid-rows-3">
+                                <div class="row-span-2 relative rounded-xxl overflow-hidden shadow ring-1 ring-slate-200 ">
+                                    <img src="assets/images/carousel/Imagen1.png" alt="Ioga al parc" class="w-full h-full object-fill" />
+                                </div>
+                                <div class="row-span-1 p-4 flex-col items-center">
+                                    <h3 class="text-slate-900 font-medium text-base">Ioga al parc</h3>
+                                    <p>Gratis</p>
+                                    <button>¡Apúntate!</button>
+                                </div>
+                            </article>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Controls als extrems -->
+                <div class="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between">
+                    <button data-carousel-prev type="button" aria-label="Anterior"
+                                class="pointer-events-auto ml-2 sm:ml-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow ring-1 ring-slate-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        <!-- Icona esquerra -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button data-carousel-next type="button" aria-label="Següent"
+                            class="pointer-events-auto mr-2 sm:mr-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow ring-1 ring-slate-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        <!-- Icona dreta -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Punts de paginació -->
+                <div class="mt-6 flex items-center justify-center gap-2" data-carousel-dots aria-label="Paginació del carrusel"></div>
+                    <!-- Estat (per a lectors de pantalla) -->
+                    <p class="sr-only" aria-live="polite" data-carousel-status></p>
+                </div>
+            </div> 
+        </div>
+    </section>
+ 
+    <section class="py-16">
+        <div class="max-w-5xl mx-auto px-4">
+        <!-- Rectángulo principal -->
+            <div class="overflow-hidden">
+                
+                <!-- ===== Fila 1 ===== -->
+                <div class="grid grid-cols-1 md:grid-cols-2 py-4">
+                <!-- Texto -->
+                    <div id="mision-content" class="
+                    relative overflow-hidden rounded-xl ring-1 ring-neutral-200/60
+                    p-8 flex flex-col justify-center gap-3 min-h-56 md:min-h-72
+                    md:bg-none
+                    before:content-[''] before:absolute before:inset-y-0
+                    before:right-[-8%]         
+                    before:w-[60%]             
+                    before:bg-[url('assets/images/mision-vision-valores/icono_mision_responsivo.png')]
+                    before:bg-no-repeat before:bg-right
+                    before:bg-[length:100%_auto] /* la imagen llena la capa */
+                    before:opacity-[.26] before:pointer-events-none
+                    md:before:hidden           
+                    ">
+                        <h1 class="text-4xl font-semibold">Misión</h1>
+                        <p class="text-xl">
+                            Conectar personas a través del deporte, fomentando un estilo de vida activo, accesible y social.
+                        </p>
+                    </div>
+                <!-- Imagen -->
+                    <div class="min-h-56 md:min-h-72 hidden md:flex items-center justify-center">
+                        <img src="assets/images/mision-vision-valores/icono_mision.png" alt="Icono de misión">
+                    </div>
+                </div>
+
+                <!-- ===== Fila 2 ===== -->
+                <div class="grid grid-cols-1 md:grid-cols-2 py-4">
+                <!-- Texto (en móvil va primero; en md+ lo enviamos a la segunda columna) -->
+                    <!-- Imagen (en md+ la colocamos en la primera columna) -->
+                    <div class="min-h-56 md:min-h-72 hidden md:flex items-center justify-center">
+                        <img src="assets/images/mision-vision-valores/icono_vision.png" alt="Icono de visión">
+                    </div>
+                    <div id="vision-content" class="
+                    relative overflow-hidden rounded-xl ring-1 ring-neutral-200/60
+                    p-8 flex flex-col justify-center gap-3 min-h-56 md:min-h-72
+                    md:bg-none
+                    before:content-[''] before:absolute before:inset-y-0
+                    before:right-[-8%]         
+                    before:w-[60%]             
+                    before:bg-[url('assets/images/mision-vision-valores/icono_vision_responsivo.png')]
+                    before:bg-no-repeat before:bg-right
+                    before:bg-[length:100%_auto] /* la imagen llena la capa */
+                    before:opacity-[.12] before:pointer-events-none
+                    md:before:hidden
+                    ">
+                        <h1 class="text-4xl font-semibold ">Visión</h1>
+                        <p class="text-xl">
+                            Ser la plataforma de referencia para conectar personas a través del deporte,
+                            promoviendo una comunidad inclusiva, activa y positiva.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ===== Fila 3 ===== -->
+                <div class="grid grid-cols-1 md:grid-cols-2 py-4">
+                <!-- Texto -->
+                    <div id="valores-content" class="
+                    relative overflow-hidden rounded-xl ring-1 ring-neutral-200/60
+                    p-8 flex flex-col justify-center gap-3 min-h-56 md:min-h-72
+                    md:bg-none
+                    before:content-[''] before:absolute before:inset-y-0
+                    before:right-[-8%]         
+                    before:w-[60%]             
+                    before:bg-[url('assets/images/mision-vision-valores/icono_valores_responsivo.png')]
+                    before:bg-no-repeat before:bg-right
+                    before:bg-[length:100%_auto] /* la imagen llena la capa */
+                    before:opacity-[.12] before:pointer-events-none
+                    md:before:hidden
+                    ">
+                        <h1 class="text-4xl font-semibold">Valores</h1>
+
+                        <ul class="list-disc grid grid-cols-2 gap-x-6 gap-y-2 p-4 text-xl">
+                            <li>Inclusión</li>
+                            <li>Respeto</li>
+                            <li>Comunidad</li>
+                            <li>Compromiso</li>
+                            <li>Vitalidad</li>
+                            <li>Colaboración</li>
+                        </ul>
+                    </div>
+
+                    <!-- Imagen -->
+                    <div class="min-h-56 md:min-h-72 hidden md:flex items-center justify-center">
+                        <img src="assets/images/mision-vision-valores/icono_valores.png" alt="Icono de valores">
+                    </div>
+
+                </div>
             </div>
         </div>
-
     </section>
 
     <section>
@@ -238,6 +465,8 @@
 
     </footer>
     <script src="assets/js/header.js"></script>
+    <script src="assets/js/carousel.js"></script>
+
 
 </body>
 

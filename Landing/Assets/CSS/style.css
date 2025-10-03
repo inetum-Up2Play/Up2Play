@@ -13,6 +13,8 @@ button {
     border-radius: 20px;
     padding: 0.5em;
     color:  #152614;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: bold;
 }
 
 header {
@@ -27,7 +29,6 @@ header {
     width: 100%;
     position: absolute;
     top: 100%;
-    
     display: flex;
     flex-direction: column;
     color: #152614;
@@ -39,7 +40,35 @@ header {
     border-bottom: 1px solid #152614;
 }
 
-div {
+#section-UP2Play {
+    background-color: #F7F7F7;
+}
+
+#section-carousel {
+    background-color: #152614;
+}
+
+#mision-content {
+    background-color: #B1DF75;
+}
+
+#vision-content {
+    background-color: #3D6C3F;
+    h3, p {
+        color: #F7F7F7;
+    }
+}
+
+#valores-content {
+    background-color: #152614;
+    h1, li, ul {
+        color: #F7F7F7;
+    }
+
+}
+
+
+/* div {
 
     border: 1px solid red;
 }
@@ -55,4 +84,4 @@ nav {
 body {
     border: 2px solid rgb(0, 0, 0);
 
-}
+}  */
