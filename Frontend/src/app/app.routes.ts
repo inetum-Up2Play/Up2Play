@@ -8,7 +8,7 @@ import { Actividades } from './features/actividades/pages/actividades/actividade
 
 export const routes: Routes = [
     {
-        path: '',
+        path: 'home',
         component: Home
     },
     {
