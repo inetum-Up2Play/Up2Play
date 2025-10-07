@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Work+Sans:wght@400;700;800&display=swap');
+@import 'styles/variables';
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.25rem 1.5rem;
-    background-color: #3D6C3F; // Fondo verde oscuro
+    background-color: $verde-oliva;
     color: white;
 }
 
@@ -29,7 +29,7 @@
         text-decoration: none;
         font-weight: 700;
         font-size: 1rem;
-        font-family: 'Montserrat', sans-serif;
+        font-family: $montserrat; //Fuente de títulos
 
         &:hover {
             transform: scale(1.05);
@@ -46,19 +46,19 @@
         padding: 0.75rem 1rem;
         border: none;
         border-radius: 16px;
-        font-family: 'Work Sans', sans-serif;
+        font-family: $work-sans; //Fuente de cuerpo de texto
         font-weight: 700;
         font-size: 0.9rem;
         cursor: pointer;
     }
 
     .login {
-        background-color: #B1DF75; // Verde claro
-        color: #152614;
+        background-color: $verde-claro; 
+        color: $verde-oscuro; 
     }
 
     .register {
-        background-color: #152614; // Verde más oscuro
-        color: #F7F7F7; // Blanco corporativo
+        background-color: $verde-oscuro; 
+        color: $blanco; // Blanco corporativo
     }
 }
