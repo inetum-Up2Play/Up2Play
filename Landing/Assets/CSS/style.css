@@ -1,4 +1,10 @@
-h1,h2,h3,h4 {
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Work+Sans:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap%27');
+
+h1,
+h2,
+h3,
+h4 {
 
     font-family: 'Montserrat', sans-serif;
 }
@@ -8,13 +14,19 @@ p {
     font-family: 'Work Sans', sans-serif;
 }
 
+.navBar {
+    font-family: 'Montserrat', sans-serif;
+
+}
+
 button {
     background-color: #B1DF75;
-    border-radius: 20px;
-    padding: 0.5em;
-    color:  #152614;
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    color: #152614;
     font-family: 'Work Sans', sans-serif;
     font-weight: bold;
+    cursor: pointer;
 }
 
 header {
@@ -54,14 +66,19 @@ header {
 
 #vision-content {
     background-color: #3D6C3F;
-    h3, p {
+
+    h3,
+    p {
         color: #F7F7F7;
     }
 }
 
 #valores-content {
     background-color: #152614;
-    h1, li, ul {
+
+    h1,
+    li,
+    ul {
         color: #F7F7F7;
     }
 }
@@ -72,12 +89,15 @@ header {
     background-size: cover;
 }
 
-#Daniel_Villalba, #Alexandre_Vilchez, #Africa_Rodriguez {
+#Daniel_Villalba,
+#Alexandre_Vilchez,
+#Africa_Rodriguez {
     background-color: #3D6C3F;
     border-radius: 10px;
 }
 
-#Marc_Balague, #Joan_Juncosa {
+#Marc_Balague,
+#Joan_Juncosa {
     background-color: #F7F7F7;
     border-radius: 10px;
 }

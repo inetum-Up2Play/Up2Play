@@ -21,31 +21,32 @@
         <section id="header-section" class="header-section flex justify-between relative">
             <div class="">
                 <a href=""><img src="assets/images/logos/logo.png" alt="Logo de Up2Play"
-                        style="width: 220px; height: auto;"></a>
+                    style="width: 220px; height: auto;">
+                </a>
             </div>
-            <nav id="menu" class="hidden md:flex md:flex-row md:space-x-4 md:items-center">
-                <div class="flex flex-col md:flex-row font-extrabold md:space-x-4">
-                    <a href="#" class="text-sm md:p-4">¿Qué es UP2Play?</a>
-                    <a href="#" class="text-sm md:p-4">Actividades</a>
-                    <a href="#" class="text-sm md:p-4">Sobre Nosotros</a>
-                    <a href="#" class="text-sm md:p-4">Equipo</a>
-                </div>
-                <div class="hidden md:flex md:flex-row md:space-x-4">
-                    <button class="iniciar-sesion" >
-                        <a href="#" class="">Iniciar Sesión</a>
-
-                    </button>
-                    <button style="background-color: black;" class="registrarse" >
-                        <a href="#" class=" md:p-4 text-white">Registrarse</a>
-                    </button>
+            <nav id="menu" class="hidden md:flex md:flex-row md:space-x-8 md:items-center justify-center flex-1">
+                <div class="flex flex-col md:flex-row font-extrabold md:space-x-8 text-2xl md:p-4 navBar">
+                    <a href="#">¿Qué es UP2Play?</a>
+                    <a href="#">Actividades</a>
+                    <a href="#">Sobre Nosotros</a>
+                    <a href="#">Equipo</a>
                 </div>
             </nav>
+
+            <div class="hidden md:flex md:flex-row md:space-x-4 pr-6">
+                <button class="iniciar-sesion px-4 py-2 text-sm" >
+                    <a href="#" class="">Iniciar Sesión</a>
+                </button>
+                <button style="background-color: black;" class="registrarse px-4 py-2 text-sm" >
+                    <a href="#" class=" md:p-4 text-white">Registrarse</a>
+                </button>
+            </div>
 
             <div class="md:hidden flex space-x-4 items-center"> 
                 <button class="md:hidden focus:outline-none">
                     <a href="#">
-                        <img src="assets/images/header/avatar.png" alt="Avatar de usuario" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" 
-                            viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <img src="assets/images/header/avatar.png" alt="Avatar de usuario" class="w-6 h-6 focus:outline-none relative" fill="none" 
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                     </a>
                 </button>
                 <button id="btn-menu" class="md:hidden focus:outline-none relative">
@@ -61,13 +62,14 @@
             </div>
         </section>
 
-        <section id="Activa" class="flex flex-col justify-center items-center bg-center md:bg-top bg-no-repeat bg-cover h-96 md:h-screen">
-            <div class="text-center">
-                <h1 class="text-center text-white leading-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl">
-                    <i>Activa tu vida, <br> conecta con gente</i>
+        <section id="Activa" class="flex flex-col md:py-75 items-center bg-center md:bg-top 
+        bg-no-repeat bg-cover h-96 md:h-screen">
+            <div class="text-center ">
+                <h1 class="italic leading-tight text-center text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl">
+                    Activa tu vida, <br> conecta con gente
                 </h1>
                 <div class="activa-button p-6 ">
-                    <button class="md:text-2xl">Únete ahora</button>
+                    <button class="md:text-2xl "><i>Únete ahora</i></button>
                 </div>
             </div>
         </section>
