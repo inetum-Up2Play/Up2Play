@@ -66,21 +66,22 @@ header {
     }
 }
 
-#section-sobre_nosotros {
-    background-image: url('../images/sobreNosotros/Fondo_Sobre_Nosotros.png');
-    background-position: center center;
-    background-size: cover;
+
+
+#titulo_nuestro_equipo {
+    color: #3D6C3F;
 }
 
 #Daniel_Villalba, #Alexandre_Vilchez, #Africa_Rodriguez {
     background-color: #3D6C3F;
-    border-radius: 10px;
+    border-radius: 30px;
 }
 
 #Marc_Balague, #Joan_Juncosa {
     background-color: #F7F7F7;
-    border-radius: 10px;
+    border-radius: 30px;
 }
+
 
 /* div {
 

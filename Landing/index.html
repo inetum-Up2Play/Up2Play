@@ -391,107 +391,106 @@
 
     <section
     id="section-sobre_nosotros"
-    class="min-h-[70vh] md:h-screen h-96 bg-center md:bg-top bg-cover bg-no-repeat flex flex-col items-center p-4 sm:p-8 justify-end"
+    class="
+        bg-[url('Assets/images/sobreNosotros/Fondo_Sobre_Nosotros.png')] min-h-screen md:h-screen h-96 
+        bg-cover bg-no-repeat bg-[position:60%center]
+        flex flex-col items-center p-6 sm:p-8 justify-end"    
     >
-        <div class="max-w-[120ch] text-white  p-4 sm:p-6 rounded-lg">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">SOBRE NOSOTROS</h2>
-            
-            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased">En <strong>UP2Play</strong> creemos que el deporte tiene el poder de unir a las personas. Por eso creamos
+        <div class="max-w-[150ch] text-white py-9 p-4  sm:p-8 rounded-lg">
+            <h2 class="text-5xl sm:text-6xl md:text-5xl lg:text-6xl xl:text-7xl font-bold py-6">SOBRE <br> NOSOTROS</h2>
+            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased text-justify">En <strong>UP2Play</strong> creemos que el deporte tiene el poder de unir a las personas. Por eso creamos
             una plataforma que facilita encontrar con quién jugar, entrenar o simplemente compartir una actividad
             física. Ya seas principiante o experto, aquí tienes un espacio para moverte, conectar y disfrutar.</p>
             <br>
-            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased">Somos un punto de encuentro para quienes viven el deporte como una forma de bienestar, diversión y
-            conexión. En UP2Play, ganar es compartir.</p>
+            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased text-justify">Somos un punto de encuentro para quienes viven el deporte como una forma de bienestar, diversión y
+            conexión. En UP2Play, <strong>ganar es compartir.</strong></p>
         </div>
     </section>
 
-<section class="py-8">
-  <h2 class="
-    text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
-    font-semibold text-white mb-8 tracking-tight text-center">
-    NUESTRO EQUIPO
-  </h2>
+    <section class="py-8">
+        <h2 id="titulo_nuestro_equipo" class="
+            text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
+            font-semibold text-white mb-8 tracking-tight text-center">
+            NUESTRO EQUIPO
+        </h2>
 
-  <div class="flex flex-col space-y-8">
+        <div class="flex flex-col gap-8 items-center">
+            <!-- 1) Daniel — texto blanco a la izquierda, imagen a la derecha -->
+            <div id="Daniel_Villalba" class="md:w-full md:min-w-[65em] lg:max-w-5xl md:min-h-72 mx-auto flex flex-col md:flex-row-reverse rounded-3xl overflow-hidden">
+            <!-- Imagen -->
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <img src="Assets/images/nuestroEquipo/Daniel.webp" alt="Foto de Daniel Villalba Marin" class="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover object-center" />
+                </div>
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <div class="text-white max-w-md">
+                    <h3 class="text-xl md:text-4xl font-extrabold">Daniel Villalba Marin</h3>
+                    <p class="text-xl md:text-2xl font-semibold">Backend Developer</p>
+                    <p>INETUM ESPAÑA S.A</p>
+                    </div>
+                </div>
+            </div>
 
-    <!-- 1) Daniel — texto blanco a la izquierda, imagen a la derecha -->
-    <div id="Daniel_Villalba" class="flex flex-col md:flex-row-reverse rounded-xl overflow-hidden shadow-lg">
-      <!-- Imagen -->
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <img src="Assets/images/nuestroEquipo/Daniel.webp" alt="Foto de Daniel Villalba Marin" class="w-32 h-32 md:w-48 md:h-48 rounded-full" />
-      </div>
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div class="text-center text-white max-w-md">
-          <h3 class="text-xl md:text-2xl font-semibold">Daniel Villalba Marin</h3>
-          <p class="text-sm md:text-base opacity-90">Backend Developer</p>
-          <p class="text-sm md:text-base opacity-60">INETUM ESPAÑA S.A</p>
+            <!-- 2) Alex — imagen a la izquierda, texto negro a la derecha -->
+            <div id="Marc_Balague" class="md:w-full md:min-w-[65em] lg:max-w-5xl md:min-h-72 mx-auto flex flex-col md:flex-row rounded-3xl overflow-hidden">
+                <!-- Imagen -->
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <img src="Assets/images/nuestroEquipo/Marc.webp" alt="Foto de Marc Balague" class="w-48 h-48 rounded-full object-cover object-center" />
+                </div>
+                <!-- Texto -->
+                <div class="w-full md:w-1/2 flex items-center p-6">
+                    <div class="max-w-md">
+                    <h3 class="text-xl md:text-4xl font-extrabold text-[#152614]">Marc Balague Torrens</h3>
+                    <p class="text-xl md:text-2xl font-semibold text-[#152614]">Frontend Developer | Tester</p>
+                    <p class="text-[#152614]">INETUM ESPAÑA S.A</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Alexandre_Vilchez" class="md:w-full md:min-w-[65em] lg:max-w-5xl md:min-h-72 mx-auto flex flex-col md:flex-row-reverse rounded-3xl overflow-hidden">
+            <!-- Imagen -->
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <img src="Assets/images/nuestroEquipo/Alex.webp" alt="Foto de Alexandre Vilchez" class="w-48 h-48 rounded-full object-cover object-center" />
+                </div>
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <div class="text-white max-w-md">
+                    <h3 class="text-xl md:text-4xl font-extrabold">Alexandre Vilchez Peña</h3>
+                    <p class="text-xl md:text-2xl font-semibold">Frontend Developer</p>
+                    <p>INETUM ESPAÑA S.A</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2) Marc — imagen a la izquierda, texto negro a la derecha -->
+            <div id="Joan_Juncosa" class="md:w-full md:min-w-[65em] lg:max-w-5xl md:min-h-72 mx-auto flex flex-col md:flex-row rounded-3xl overflow-hidden">
+                <!-- Imagen -->
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <img src="Assets/images/nuestroEquipo/Joan.webp" alt="Foto de Joan Juncosa Vilaplana" class="w-48 h-48 rounded-full object-cover object-center" />
+                </div>
+                <!-- Texto -->
+                <div class="w-full md:w-1/2 flex items-center p-6">
+                    <div class="max-w-md">
+                    <h3 class="text-xl md:text-4xl font-extrabold text-[#152614]">Joan Juncosa Vilaplana</h3>
+                    <p class="text-xl md:text-2xl font-semibold text-[#152614]">DB Developer</p>
+                    <p class="text-[#152614]">INETUM ESPAÑA S.A</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Africa_Rodriguez" class="md:w-full md:min-w-[65em] sm:p-9 lg:max-w-5xl md:min-h-72 mx-auto flex flex-col md:flex-row-reverse rounded-3xl overflow-hidden">
+            <!-- Imagen -->
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <img src="Assets/images/nuestroEquipo/Africa.webp" alt="Foto de Africa Rodriguez" class="w-48 h-48 rounded-full object-cover object-center" />
+                </div>
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+                    <div class="text-white max-w-md">
+                    <h3 class="text-xl md:text-4xl font-extrabold">África Rodríguez Micó</h3>
+                    <p class="text-xl md:text-2xl font-semibold">Backend Developer | DevOps</p>
+                    <p>INETUM ESPAÑA S.A</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-
-    <!-- 2) Marc — imagen a la izquierda, texto negro a la derecha -->
-    <div id="Marc_Balague" class="flex flex-col md:flex-row rounded-xl overflow-hidden shadow-lg">
-      <!-- Imagen -->
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <img src="Assets/images/nuestroEquipo/Marc.webp" alt="Foto de Marc Balagué Torrens" class="w-32 h-32 md:w-48 md:h-48 rounded-full" />
-      </div>
-      <!-- Texto -->
-      <div class="w-full md:w-1/2 flex items-center p-6">
-        <div class="mx-auto max-w-md text-black md:text-left text-center">
-          <h3 class="text-xl md:text-2xl font-semibold">Marc Balagué Torrens</h3>
-          <p class="text-sm md:text-base opacity-90">Frontend Developer | Tester</p>
-          <p class="text-sm md:text-base opacity-60">INETUM ESPAÑA S.A</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3) Alexandre — texto blanco a la izquierda, imagen a la derecha -->
-    <div id="Alexandre_Vilchez" class="flex flex-col md:flex-row-reverse rounded-xl overflow-hidden shadow-lg">
-      <!-- Imagen -->
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <img src="Assets/images/nuestroEquipo/Alex.webp" alt="Foto de Alexandre Vilchez Peña" class="w-32 h-32 md:w-48 md:h-48 rounded-full" />
-      </div>
-      <!-- Texto -->
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div class="text-center text-white max-w-md">
-          <h3 class="text-xl md:text-2xl font-semibold">Alexandre Vilchez Peña</h3>
-          <p class="text-sm md:text-base opacity-90">Frontend Developer</p>
-          <p class="text-sm md:text-base opacity-60">INETUM ESPAÑA S.A</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4) Joan — imagen a la izquierda, texto negro a la derecha -->
-    <div id="Joan_Juncosa" class="flex flex-col md:flex-row rounded-xl overflow-hidden shadow-lg">
-      <!-- Imagen -->
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <img src="Assets/images/nuestroEquipo/Joan.webp" alt="Foto de Joan Juncosa Vilaplana" class="w-32 h-32 md:w-48 md:h-48 rounded-full" />
-      </div>
-      <!-- Texto -->
-      <div class="mx-auto max-w-md text-black md:text-left text-center">
-        <h3 class="text-xl md:text-2xl font-semibold">Joan Juncosa Vilaplana</h3>
-        <p class="text-sm md:text-base opacity-90">DB Developer</p>
-        <p class="text-sm md:text-base opacity-60">INETUM ESPAÑA S.A</p>
-      </div>
-    </div>
-
-    <div id="Africa_Rodriguez" class="flex flex-col md:flex-row-reverse rounded-xl overflow-hidden shadow-lg">
-      <!-- Imagen -->
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <img src="Assets/images/nuestroEquipo/Africa.webp" alt="Foto de África Rodríguez Micó" class="w-32 h-32 md:w-48 md:h-48 rounded-full" />
-      </div>
-      <!-- Texto -->
-      <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-        <div class="text-center text-white max-w-md">
-          <h3 class="text-xl md:text-2xl font-semibold">África Rodríguez Micó</h3>
-          <p class="text-sm md:text-base opacity-90">Backend Developer | DevOps</p>
-          <p class="text-sm md:text-base opacity-60">INETUM ESPAÑA S.A</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
+    </section>
 
 
     <footer>
