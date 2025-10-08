@@ -64,9 +64,23 @@ header {
     h1, li, ul {
         color: #F7F7F7;
     }
-
 }
 
+#section-sobre_nosotros {
+    background-image: url('../images/sobreNosotros/Fondo_Sobre_Nosotros.png');
+    background-position: center center;
+    background-size: cover;
+}
+
+#Daniel_Villalba, #Alexandre_Vilchez, #Africa_Rodriguez {
+    background-color: #3D6C3F;
+    border-radius: 10px;
+}
+
+#Marc_Balague, #Joan_Juncosa {
+    background-color: #F7F7F7;
+    border-radius: 10px;
+}
 
 /* div {
 
