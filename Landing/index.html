@@ -18,26 +18,26 @@
 
 <body>
     <header id="header" class="text-white py-4 px-4 md:h-screen md:px-8 lg:px-16">
-        <section id="header-section" class="header-section flex justify-between relative">
-            <div class="">
+        <section id="header-section" class="header-section flex justify-between items-center relative">
+            <div class="md:w-full">
                 <a href=""><img src="assets/images/logos/logo.png" alt="Logo de Up2Play"
                     style="width: 220px; height: auto;">
                 </a>
             </div>
             <nav id="menu" class="hidden md:flex md:flex-row md:space-x-8 md:items-center justify-center flex-1">
                 <div class="flex flex-col md:flex-row font-extrabold md:space-x-8 text-2xl md:p-4 navBar">
-                    <a href="#">¿Qué es UP2Play?</a>
-                    <a href="#">Actividades</a>
-                    <a href="#">Sobre Nosotros</a>
-                    <a href="#">Equipo</a>
+                    <a href="#" class="md:hover:underline md:whitespace-nowrap">¿Qué es UP2Play?</a>
+                    <a href="#" class="md:hover:underline">Actividades</a>
+                    <a href="#" class=" md:hover:underline md:whitespace-nowrap">Sobre Nosotros</a>
+                    <a href="#" class="md:hover:underline">Equipo</a>
                 </div>
             </nav>
 
-            <div class="hidden md:flex md:flex-row md:space-x-4 pr-6">
+            <div class="hidden md:w-full md:justify-end md:flex md:flex-row md:space-x-4 pr-6 font-bold rounded-md">
                 <button class="iniciar-sesion px-4 py-2 text-sm" >
                     <a href="#" class="">Iniciar Sesión</a>
                 </button>
-                <button style="background-color: black;" class="registrarse px-4 py-2 text-sm" >
+                <button class="registrarse px-4 py-2 text-sm" >
                     <a href="#" class=" md:p-4 text-white">Registrarse</a>
                 </button>
             </div>
@@ -62,14 +62,14 @@
             </div>
         </section>
 
-        <section id="Activa" class="flex flex-col md:py-75 items-center bg-center md:bg-top 
+        <section id="Activa" class="flex flex-col md:py-60 items-center bg-center md:bg-top 
         bg-no-repeat bg-cover h-96 md:h-screen">
             <div class="text-center ">
                 <h1 class="italic leading-tight text-center text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl">
                     Activa tu vida, <br> conecta con gente
                 </h1>
                 <div class="activa-button p-6 ">
-                    <button class="md:text-2xl "><i>Únete ahora</i></button>
+                    <button class="md:text-2xl md:hover:scale-105 sahdow-lg transition duration-300"><i>Únete ahora</i></button>
                 </div>
             </div>
         </section>
@@ -89,7 +89,7 @@
         md:col-start-2 md:row-start-1
         text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
         font-semibold tracking-tight leading-tight
-        text-gray-900 dark:text-white
+        text-gray-900 dark:text-black
         text-center md:text-left
 
         "
