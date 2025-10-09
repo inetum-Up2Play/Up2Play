@@ -20,6 +20,7 @@ p {
 }
 
 button {
+    height: fit-content;
     background-color: #B1DF75;
     border-radius: 16px;
     padding: 0.75rem 1rem;
@@ -28,11 +29,47 @@ button {
     font-weight: bold;
     cursor: pointer;
 }
-
+ 
+button.iniciar-sesion {
+    height: fit-content;
+    background-color: #B1DF75;
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    color: #152614;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+ 
+ 
+button.iniciar-sesion:hover {
+    background-color: #DFF2B2; /* Un tono más claro del verde base */
+    color: #0f1a0b;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+ 
+button.registrarse {
+    height: fit-content;
+    background-color: #000000;
+    border-radius: 16px;
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+ 
+button.registrarse:hover {
+    background-color: #333333; /* Un negro más claro */
+    color: #B1DF75; /* Verde lima como contraste */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+ 
+ 
+ 
 header {
     background-image: url('../images/header/deporte.png');
     background-position: center center;
-    border: 1px solid green;
     background-size: cover;
 }
 
