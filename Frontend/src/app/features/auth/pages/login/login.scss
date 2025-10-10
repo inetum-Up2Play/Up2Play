@@ -1,0 +1,21 @@
+@import 'styles/variables';
+@import 'styles/mixins';
+ 
+.fondo-register{
+    background:
+    $gradient-register_login
+}
+ /*
+.register-page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    $gradient-register_login
+    linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    url('../../../../../assets/auth/fondo-register_login.webp') center / cover no-repeat;
+ 
+  background-blend-mode: overlay;
+}
+*/
