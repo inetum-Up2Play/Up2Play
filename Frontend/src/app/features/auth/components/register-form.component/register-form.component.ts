@@ -17,6 +17,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
+import { RedirectCommand } from '@angular/router';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -78,12 +79,26 @@ export class RegisterFormComponent {
       nombre_usuario: this.f.nombre_usuario.value
     };
 
-    
-
     this.auth.register(payload).subscribe({
-      next: (res) => console.log('Registro OK:', res),
-      error: (err) => console.error('Error:', err)
+      next: (res) => {
+        if (res) {
+          console.log('Registro OK:', res);
+          const verifyEmail;//router
+          return new RedirectCommand(verifyEmail, {skipLocationChange: true});
+        } else {
+          console.warn('Respuesta inesperada:', res);
+        }
+      },
+      error: (err) => {
+        if (err.status === 409) {
+          console.error('Email ya registrado');
+        } else {
+          console.error('Error desconocido:', err);
+        }
+      }
     });
+
+
 
     // Aquí llamarías a tu servicio real:
     // this.auth.register(payload).subscribe({ ... });

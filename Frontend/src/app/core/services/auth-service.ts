@@ -24,8 +24,6 @@ export class AuthService {
   register(payload: { email: string; password: string; nombre_usuario: string; }) {
     return this.http.post(`${this.baseUrl}/signup`, payload);
   }
-
-
 }
 
 export const AuthGuard: CanActivateFn = () => {
