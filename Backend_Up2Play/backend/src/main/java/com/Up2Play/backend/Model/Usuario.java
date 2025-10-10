@@ -1,5 +1,12 @@
 package com.Up2Play.backend.Model;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,40 +16,82 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Entidad Usuario que representa un usuario en la base de datos.
+ * Implementa UserDetails para integración con Spring Security.
+ */
 @Entity
 @Table(name = "USUARIO")
-public class Usuario {
+public class Usuario implements UserDetails {
 
+    // Campos principales de identificación y autenticación
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id;
+    private Long id; // ID único autogenerado
 
     @NotBlank
     @Email
-    private String email;
-    private String contraseña;
-    private String rol;
-    private String nombre_usuario;
+    @Column(unique = true)
+    private String email; // Email único y validado
 
-    public Usuario(Long id, String email, String contraseña, String rol, String nombre_usuario) {
+    private String password; // Contraseña del usuario (debe encriptarse)
+    private String rol; // Rol del usuario (ej: ADMIN, USER)
+    @Column(unique = true)
+    private String nombre_usuario; // Nombre de usuario único
+
+    // Campos para verificación y estado
+    @Column(name = "ENABLED", nullable = false)
+    private boolean enabled; // Indica si la cuenta está activa
+
+    @Column(name = "VERIFICATION_CODE")
+    private String verificationCode; // Código de verificación temporal
+
+    @Column(name = "VERIFICATION_EXPIRES_AT")
+    private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
+
+    // Constructores
+    /**
+     * Constructor completo con todos los campos.
+     */
+    public Usuario(Long id, String email, String password, String rol, String nombre_usuario) {
         this.id = id;
         this.email = email;
-        this.contraseña = contraseña;
+        this.password = password;
         this.rol = rol;
         this.nombre_usuario = nombre_usuario;
     }
 
-    public Usuario(String email, String contraseña, String rol, String nombre_usuario) {
+    /**
+     * Constructor con campos de verificación incluidos.
+     */
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombre_usuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt) {
+        this.id = id;
         this.email = email;
-        this.contraseña = contraseña;
+        this.password = password;
+        this.rol = rol;
+        this.nombre_usuario = nombre_usuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+    }
+
+    /**
+     * Constructor básico sin ID (para creación).
+     */
+    public Usuario(String email, String password, String rol, String nombre_usuario) {
+        this.email = email;
+        this.password = password;
         this.rol = rol;
         this.nombre_usuario = nombre_usuario;
     }
 
+    // Constructor por defecto
     public Usuario() {
     }
 
+    // Getters y Setters principales
     public Long getId() {
         return id;
     }
@@ -59,12 +108,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getPasswordU() {
+        return password;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRol() {
@@ -83,4 +132,81 @@ public class Usuario {
         this.nombre_usuario = nombre_usuario;
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public LocalDateTime getVerificationCodeExpiresAt() {
+        return verificationCodeExpiresAt;
+    }
+
+    public void setVerificationCodeExpiresAt(LocalDateTime verificationCodeExpiresAt) {
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+    }
+
+    // Implementación de UserDetails para Spring Security
+    /**
+     * Retorna autoridades (roles) del usuario. Actual: vacío, implementar según
+     * roles.
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(); // TODO: Implementar con roles reales
+    }
+
+    /**
+     * Verifica si la cuenta no ha expirado. Siempre true por defecto.
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    /**
+     * Verifica si la cuenta no está bloqueada. Siempre true por defecto.
+     */
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    /**
+     * Verifica si las credenciales no han expirado. Siempre true por defecto.
+     */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    /**
+     * Verifica si el usuario está habilitado.
+     */
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * Retorna la password para autenticación.
+     */
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Retorna el nombre de usuario (usa email).
+     */
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }
