@@ -25,7 +25,7 @@
                 </a>
             </div>
             <nav id="menu" class="hidden md:flex md:flex-row md:space-x-8 md:items-center justify-center flex-1">
-                <div class="flex flex-col md:flex-row font-extrabold md:space-x-8 text-2xl md:p-4 navBar">
+                <div class="flex flex-col md:flex-row font-extrabold md:space-x-14 text-[1.2rem] md:p-4 navBar">
                     <a href="#" class="md:hover:underline md:whitespace-nowrap">¿Qué es UP2Play?</a>
                     <a href="#" class="md:hover:underline">Actividades</a>
                     <a href="#" class="md:hover:underline md:whitespace-nowrap">Sobre Nosotros</a>
@@ -80,15 +80,14 @@
     </header>
 
     <section id="section-UP2Play" class=" py-16 md:py-20 lg:py-16 scroll-mt-24">
-    <div class="
+        <div class="
         container mx-auto max-w-7xl
         px-4 sm:px-6 lg:px-8
         grid grid-cols-1 md:grid-cols-2 md:grid-rows-[auto_1fr]
         gap-8 md:gap-10
-        "
-    >
-        <!-- TÍTULO (móvil 1º) | md: col 2, fila 1 -->
-        <h2 id="up2play-title" class="
+        ">
+            <!-- TÍTULO (móvil 1º) | md: col 2, fila 1 -->
+            <h2 id="up2play-title" class="
 
         md:col-start-2 md:row-start-1
         text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
@@ -96,10 +95,9 @@
         text-gray-900 dark:text-black
         text-center md:text-left
 
-        "
-        >
-            ¿Qué es UP2Play?
-        </h2>
+        ">
+                ¿Qué es UP2Play?
+            </h2>
 
             <!-- IMAGEN -->
             <div
@@ -116,12 +114,12 @@
                 items-center md:items-start
             ">
                 <div class="space-y-4 max-w-xl mx-auto md:mx-0 px-6 md:px-0 text-justify md:text-left sm:text-2xl">
-                    <p class="font-bold sm:text-xl md:text-xl leading-relaxed antialiased">
+                    <p class="font-bold sm:text-xl md:text-xl leading-relaxed antialiased md:text-justify">
                         UP2Play es una aplicación que te conecta con otros deportistas para organizar y
                         disfrutar actividades como fútbol, senderismo y más.
                     </p>
 
-                    <ul class="list-disc pl-5 space-y-2">
+                    <ul class="list-disc pl-5 space-y-2 md:text-justify">
                         <li class="text-base sm:text-lg md:text-xl leading-relaxed antialiased">Crea o únete a planes
                             fácilmente.</li>
                         <li class="text-base sm:text-lg md:text-xl leading-relaxed antialiased">Gestiona tus eventos
@@ -293,9 +291,9 @@
                 </div>
 
                 <!-- Controls als extrems -->
-                <div class="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between">
+                <div class="pointer-events-none absolute inset-y-0 left-[1rem] right-[1rem] md:left-[16rem] md:right-[16rem] flex items-center justify-between">
                     <button data-carousel-prev type="button" aria-label="Anterior"
-                        class="pointer-events-auto ml-2 sm:ml-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow ring-1 ring-slate-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        class="pointer-events-auto ml-2 sm:ml-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow  ring-slate-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500">
                         <!-- Icona esquerra -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" aria-hidden="true">
@@ -303,7 +301,7 @@
                         </svg>
                     </button>
                     <button data-carousel-next type="button" aria-label="Següent"
-                        class="pointer-events-auto mr-2 sm:mr-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow ring-1 ring-slate-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        class="pointer-events-auto mr-2 sm:mr-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow ring-slate-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500">
                         <!-- Icona dreta -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" aria-hidden="true">
@@ -314,11 +312,12 @@
 
                 <!-- Punts de paginació -->
                 <div class="mt-6 flex items-center justify-center gap-2" data-carousel-dots
-                    aria-label="Paginació del carrusel"></div>
+                    aria-label="Paginació del carrusel">
+                </div>
                 <!-- Estat (per a lectors de pantalla) -->
                 <p class="sr-only" aria-live="polite" data-carousel-status></p>
             </div>
-        </div>
+
         </div>
     </section>
 
@@ -430,7 +429,7 @@
         bg-cover bg-no-repeat bg-[position:60%center]
         flex flex-col items-center p-6 sm:p-8 justify-end">
         <div class="max-w-[150ch] text-white py-9 p-4  sm:p-8 rounded-lg">
-            <h2 class="text-5xl sm:text-6xl md:text-5xl lg:text-6xl xl:text-7xl font-bold py-6">SOBRE <br> NOSOTROS</h2>
+            <h2 class="text-4xl md:text-3xl lg:text-6xl xl:text-7xl font-bold py-6 ">SOBRE <br> NOSOTROS</h2>
             <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased text-justify">En
                 <strong>UP2Play</strong> creemos que el deporte tiene el poder de unir a las personas. Por eso creamos
                 una plataforma que facilita encontrar con quién jugar, entrenar o simplemente compartir una actividad
@@ -445,7 +444,8 @@
 
 
     <section class="py-8">
-        <h2 id="titulo_nuestro_equipo" class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-white mb-8 tracking-tight text-center py-6">
+        <h2 id="titulo_nuestro_equipo"
+            class="text-2xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white mb-8 tracking-tight text-center py-6">
             NUESTRO EQUIPO
         </h2>
         <div class="mx-auto max-w-7xl px-12">
@@ -453,11 +453,13 @@
                 <li id="Daniel_Villalba" class="rounded-3xl overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-                            <img src="Assets/images/nuestroEquipo/Daniel.webp" alt="" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
+                            <img src="Assets/images/nuestroEquipo/Daniel.webp" alt=""
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-start p-6 md:px-14">
                             <div class="max-w-md text-left">
-                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#F7F7F7]">Daniel Villalba Marin</h3>
+                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#F7F7F7]">
+                                    Daniel Villalba Marin</h3>
                                 <p class="text-xl md:text-2xl font-semibold text-[#F7F7F7]">Backend Developer</p>
                                 <p class="text-[#F7F7F7]">INETUM ESPAÑA S.A</p>
                             </div>
@@ -467,12 +469,15 @@
                 <li id="Marc_Balague" class="rounded-3xl overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-                            <img src="Assets/images/nuestroEquipo/Marc.webp" alt="" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
+                            <img src="Assets/images/nuestroEquipo/Marc.webp" alt=""
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-end p-6 md:px-14">
                             <div class="max-w-md text-left md:text-right">
-                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">Marc Balague Torrens</h3>
-                                <p class="text-xl md:text-2xl font-semibold text-[#152614]">Frontend Developer | Tester</p>
+                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">Marc
+                                    Balague Torrens</h3>
+                                <p class="text-xl md:text-2xl font-semibold text-[#152614]">Frontend Developer | Tester
+                                </p>
                                 <p class="text-[#152614]">INETUM ESPAÑA S.A</p>
                             </div>
                         </div>
@@ -481,11 +486,13 @@
                 <li id="Alexandre_Vilchez" class="rounded-3xl overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-                            <img src="Assets/images/nuestroEquipo/Alex.webp" alt="" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
+                            <img src="Assets/images/nuestroEquipo/Alex.webp" alt=""
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-start p-6 md:px-14">
                             <div class="max-w-md text-left">
-                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#F7F7F7]">Alexandre Vílchez Peña</h3>
+                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#F7F7F7]">
+                                    Alexandre Vílchez Peña</h3>
                                 <p class="text-xl md:text-2xl font-semibold text-[#F7F7F7]">Frontend Developer</p>
                                 <p class="text-[#F7F7F7]">INETUM ESPAÑA S.A</p>
                             </div>
@@ -495,11 +502,13 @@
                 <li id="Joan_Juncosa" class="rounded-3xl overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-                            <img src="Assets/images/nuestroEquipo/Joan.webp" alt="" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
+                            <img src="Assets/images/nuestroEquipo/Joan.webp" alt=""
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-end p-6 md:px-14">
                             <div class="max-w-md text-left md:text-right">
-                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">Joan Juncosa Vilaplana</h3>
+                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">Joan
+                                    Juncosa Vilaplana</h3>
                                 <p class="text-xl md:text-2xl font-semibold text-[#152614]">DB Developer</p>
                                 <p class="text-[#152614]">INETUM ESPAÑA S.A</p>
                             </div>
@@ -509,12 +518,15 @@
                 <li id="Africa_Rodriguez" class="rounded-3xl overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-                            <img src="Assets/images/nuestroEquipo/Africa.webp" alt="" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
+                            <img src="Assets/images/nuestroEquipo/Africa.webp" alt=""
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-start p-6 md:px-14">
                             <div class="max-w-md text-left">
-                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#F7F7F7]">Àfrica Rodríguez Micó</h3>
-                                <p class="text-xl md:text-2xl font-semibold text-[#F7F7F7]">Backend Developer | DevOps</p>
+                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#F7F7F7]">
+                                    Àfrica Rodríguez Micó</h3>
+                                <p class="text-xl md:text-2xl font-semibold text-[#F7F7F7]">Backend Developer | DevOps
+                                </p>
                                 <p class="text-[#F7F7F7]">INETUM ESPAÑA S.A</p>
                             </div>
                         </div>
@@ -524,11 +536,14 @@
         </div>
     </section>
     <footer class="bg-[#152614] text-[#F7F7F7] w-full leading-relaxed antialiased mt-4">
-        <section class="container mx-auto max-w-7xl px-4 py-8 grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4 md:text-lef">
+        <section
+            class="container mx-auto max-w-7xl px-4 py-8 grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4 md:text-lef">
             <nav aria-labelledby="footer-company">
                 <h2 id="footer-company" class="text-2xl font-extrabold mb-3">Compañía</h2>
                 <ul class="space-y-1">
-                    <li><address class="not-italic">INETUM ESPAÑA S.A</address></li>
+                    <li>
+                        <address class="not-italic">INETUM ESPAÑA S.A</address>
+                    </li>
                     <li><a href="mailto:Up2Play@gmail.com" class="hover:underline">{{Up2Play@gmail.com}}</a></li>
                     <li>+34 677 92 31 15</li>
                     <li>Moll de Lleida, 43004, Tarragona</li>
@@ -551,7 +566,7 @@
                 </ul>
             </nav>
             <nav aria-labelledby="footer-legal">
-                <h2 id="footer-community" class="text-2xl font-extrabold mb-3">Comunidad</h2>
+                <h2 id="footer-community" class="text-2xl font-extrabold mb-3">Legal</h2>
                 <ul class="space-y-1">
                     <li><a href="" class="hover:underline">Política de Privacidad</a></li>
                     <li><a href="" class="hover:underline">Términos y Condiciones</a></li>
@@ -560,13 +575,15 @@
         </section>
         <section class="w-full p-4 grid grid-cols-1 items-center gap-y-4 md:grid-cols-[1fr_auto_1fr] md:gap-y-0 py-4">
             <p class="text-center lg:col-start-2">
-                Copyright © 2025 Up2Play. 
+                Copyright © 2025 Up2Play.
                 <span class="block md:inline">Todos los derechos reservados.</span>
             </p>
-            <img class="w-48 justify-self-center md:justify-self-end" src="Assets/images/logos/logo_footer.png" alt="Logo de Up2Play">
+            <img class="w-48 justify-self-center md:justify-self-end" src="Assets/images/logos/logo_footer.png"
+                alt="Logo de Up2Play">
         </section>
     </footer>
     <script src="assets/js/header.js"></script>
     <script src="assets/js/carousel.js"></script>
 </body>
+
 </html
