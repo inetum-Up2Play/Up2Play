@@ -1,0 +1,27 @@
+@import 'styles/variables';
+@import 'styles/mixins';
+
+.navBar{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding-left: 3rem;
+}
+
+.logo{
+    height: 5rem;
+}
+
+.nav-links{
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    font-family: $montserrat;
+    font-weight: 700;
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+    color: $blanco;
+}
