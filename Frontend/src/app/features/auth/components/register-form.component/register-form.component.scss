@@ -1,0 +1,156 @@
+:host {
+  display: block;
+  /* Ajustables */
+  --field-bg: #646b7b; /* gris medio-claro para buen contraste con texto blanco */
+  --radius: 12px;
+
+  color: #fff; /* Todas las letras en blanco */
+}
+
+.register-form {
+  width: 100%;
+  max-width: 420px; /* “ancho de usuario” que comparten los demás */
+  margin: 0 auto;
+}
+
+.form-field {
+  margin-bottom: 1.25rem;
+
+  /* float label & icono a la derecha */
+  .p-float-label {
+    width: 100%;
+    display: block;
+
+    /* Color del label (flotante) */
+    label {
+      color: rgba(255, 255, 255, 0.92);
+    }
+  }
+
+  .p-input-icon-right {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+
+    > i {
+      color: #fff; /* icono al final del campo */
+      right: 0.75rem;
+    }
+  }
+
+  /* Inputs de texto y password */
+  .p-inputtext,
+  .p-password input {
+    width: 100%;
+    background: var(--field-bg);
+    color: #fff;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    padding-right: 2.25rem; /* espacio para el icono a la derecha */
+    padding-left: 0.9rem;
+    box-shadow: none;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    &.ng-invalid.ng-dirty,
+    &.ng-invalid.ng-touched {
+      border-color: #ffb4b4;
+    }
+  }
+
+  /* Contenedor p-password (para neutralizar fondo del wrapper si el tema lo aplica) */
+  .p-password {
+    width: 100%;
+    .p-password-input {
+      width: 100%;
+    }
+  }
+
+  .hint {
+    display: block;
+    margin-top: 0.35rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.82rem;
+  }
+
+  .error {
+    display: block;
+    margin-top: 0.35rem;
+    color: #ffd2d2; /* errores legibles sobre fondo oscuro/medio */
+    font-size: 0.82rem;
+  }
+}
+
+/* Términos */
+.terms {
+  margin: 0.5rem 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  .p-checkbox {
+    /* Alinear checkbox con su label */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .p-checkbox-box {
+      border-radius: 6px;
+    }
+  }
+
+  label {
+    color: #fff;
+    margin-left: 0.5rem;
+  }
+
+  .terms-link {
+    color: #fff;
+    text-decoration: underline;
+    opacity: 0.95;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: underline wavy;
+    }
+  }
+}
+
+/* Botón “Registrarse” grande y negro */
+.big-black.p-button {
+  background: #000;
+  border: 1px solid #000;
+  color: #fff;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+
+  &:hover {
+    background: #0b0b0b;
+    border-color: #0b0b0b;
+  }
+
+  &.p-button-disabled,
+  &:disabled {
+    background: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+    opacity: 0.7;
+  }
+}
+
+/* Ajustes de accesibilidad del label flotante cuando el input tiene valor/foco */
+:host ::ng-deep .p-float-label .p-inputtext:focus ~ label,
+:host ::ng-deep .p-float-label .p-inputtext.p-filled ~ label,
+:host ::ng-deep .p-float-label .p-password-input:focus ~ label,
+:host ::ng-deep .p-float-label .p-password-input.p-filled ~ label {
+  color: rgba(255, 255, 255, 0.85);
+}
