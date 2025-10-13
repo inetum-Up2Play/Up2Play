@@ -1,21 +1,33 @@
 @import 'styles/variables';
 @import 'styles/mixins';
- 
-.fondo-register{
-    background:
-    $gradient-register_login
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
- /*
-.register-page {
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background:
-    $gradient-register_login
-    linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    url('../../../../../assets/auth/fondo-register_login.webp') center / cover no-repeat;
- 
-  background-blend-mode: overlay;
+
+.fondo-register {
+  position: relative;
+  height: 98vh; // Asegura que ocupe toda la altura de la pantalla
+  width: 100%; // (opcional) para asegurar ancho completo
+
+  @include fondo-gradiente-verde;
+
+  &::before {
+    content: '';
+    position:absolute;
+    inset: 0;
+    background: url('../../../../../assets/auth/fondo-register_login.webp') center/cover no-repeat;
+    opacity: 0.2; 
+    z-index: 0; // detrás del contenido
+  }
+
+  >.imagen-superpuesta {
+    position: relative;
+    z-index: 1; // encima de la imagen
+    height: 100%;
+  }
 }
-*/
