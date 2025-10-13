@@ -9,25 +9,40 @@ body {
   height: 100%;
 }
 
-.fondo-register {
+//Todo el div que implica la vista login
+.fondo-register { 
   position: relative;
-  height: 98vh; // Asegura que ocupe toda la altura de la pantalla
-  width: 100%; // (opcional) para asegurar ancho completo
+  height: 98vh; //Altura
+  width: 100%; //Ancho
+  display: flex; //Para que separe, header, form y footer
+  flex-direction: column; //Organiza header, login y footer en columna
+  justify-content: space-between; //Header arriba, form al centro, footer abajo
 
   @include fondo-gradiente-verde;
 
+  //Sería como la capa del fondo, aquí está la imagen
   &::before {
     content: '';
     position:absolute;
     inset: 0;
-    background: url('../../../../../assets/auth/fondo-register_login.webp') center/cover no-repeat;
+    background: url('../../../../../assets/auth/fondo-register_login.webp') center/cover no-repeat; //Center y cover definen el tamaño de la imagen
     opacity: 0.2; 
-    z-index: 0; // detrás del contenido
+    z-index: 0; //Indica la posición de la 'capa'
   }
 
-  >.imagen-superpuesta {
+  //Indica que todos los hijos de .fondo-register, se encuentren en la 'capa: 1'
+  > * {
     position: relative;
-    z-index: 1; // encima de la imagen
-    height: 100%;
+    z-index: 1;
+  }
+
+  >.div-form {
+    display: flex;
+    flex-grow: 1; //Ocupa el espacio entre header y footer
+    justify-content: flex-start; //Form a la izquierda
+    align-items: center; //Respecto al padre
+    padding-left: 5%;
+    
   }
 }
+

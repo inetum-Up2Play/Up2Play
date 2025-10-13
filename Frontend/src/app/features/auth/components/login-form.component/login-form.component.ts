@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -28,7 +28,11 @@ import { CheckboxModule } from 'primeng/checkbox';
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss'
 })
-export class LoginFormComponent {
+
+export class LoginFormComponent implements OnInit {
+
+  ngOnInit() {
+  }
 
   private fb = inject(FormBuilder);
   // private auth = inject(AuthService); // cuando tengas el servicio
@@ -61,5 +65,7 @@ export class LoginFormComponent {
  
     console.log('Registrando con:', payload);
   }
+
+
 }
  
