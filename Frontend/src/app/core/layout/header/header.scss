@@ -53,12 +53,23 @@
     }
 
     .login {
-        background-color: $verde-claro; 
-        color: $verde-oscuro; 
+        background-color: $verde-claro;
+        color: $verde-oscuro;
+
+        &:hover {
+            background-color: #DFF2B2;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
     }
 
     .register {
-        background-color: $verde-oscuro; 
+        background-color: $verde-oscuro;
         color: $blanco; // Blanco corporativo
+
+        &:hover {
+            background-color: #333333;
+            color: $verde-claro;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
     }
 }
