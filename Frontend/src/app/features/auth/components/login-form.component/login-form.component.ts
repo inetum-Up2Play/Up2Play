@@ -12,6 +12,8 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
  
 
 @Component({
@@ -23,7 +25,9 @@ import { CheckboxModule } from 'primeng/checkbox';
     PasswordModule,
     ButtonModule,
     FloatLabelModule,
-    CheckboxModule
+    CheckboxModule,
+    IconFieldModule,
+    InputIconModule
   ],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss'

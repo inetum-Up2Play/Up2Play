@@ -1,27 +1,33 @@
 @import 'styles/variables';
 @import 'styles/mixins';
 
-.navBar{
+.navBar {
     display: flex;
     justify-content: start;
     align-items: center;
     padding-left: 3rem;
 }
 
-.logo{
-    height: 5rem;
+.logo {
+    height: 5.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
-.nav-links{
+.nav-links {
     display: flex;
     justify-content: center;
     gap: 3rem;
     font-family: $montserrat;
     font-weight: 700;
     list-style: none;
-}
 
-a{
-    text-decoration: none;
-    color: $blanco;
+    a {
+        text-decoration: none;
+        color: $blanco;
+        
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
 }

@@ -17,6 +17,8 @@ body {
   display: flex; //Para que separe, header, form y footer
   flex-direction: column; //Organiza header, login y footer en columna
   justify-content: space-between; //Header arriba, form al centro, footer abajo
+  padding-bottom: 2%;
+  padding-top: 1.75%;
 
   @include fondo-gradiente-verde;
 
@@ -25,7 +27,7 @@ body {
     content: '';
     position:absolute;
     inset: 0;
-    background: url('../../../../../assets/auth/fondo-register_login.webp') center/cover no-repeat; //Center y cover definen el tamaño de la imagen
+    background: url('../../../../../assets/auth/reverse-fondo-register_login.webp') center/cover no-repeat; //Center y cover definen el tamaño de la imagen
     opacity: 0.2; 
     z-index: 0; //Indica la posición de la 'capa'
   }
@@ -39,10 +41,8 @@ body {
   >.div-form {
     display: flex;
     flex-grow: 1; //Ocupa el espacio entre header y footer
-    justify-content: flex-start; //Form a la izquierda
+    justify-content: flex-end; //Form a la izquierda
     align-items: center; //Respecto al padre
-    padding-left: 5%;
-    
+    padding-right: 10%;
   }
 }
-
