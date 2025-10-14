@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form" novalidate>
   <!-- TÍTULO -->
   <h1>INICIAR SESIÓN</h1>
-  <p class="form-introduccion">¿Aún no eres miembro? <a class="form-link-register">Regístrate</a></p>
+  <p class="form-introduccion">¿Aún no eres miembro? <a class="form-link-register" routerLink="/auth/register">Regístrate</a></p>
 
   <!-- CAMPO MAIL -->
   <div class="form-field">

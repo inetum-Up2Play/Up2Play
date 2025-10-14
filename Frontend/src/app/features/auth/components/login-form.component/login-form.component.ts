@@ -14,6 +14,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { RouterModule } from '@angular/router';
  
 
 @Component({
@@ -27,8 +28,9 @@ import { InputIconModule } from 'primeng/inputicon';
     FloatLabelModule,
     CheckboxModule,
     IconFieldModule,
-    InputIconModule
-  ],
+    InputIconModule,
+    RouterModule
+],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss'
 })
