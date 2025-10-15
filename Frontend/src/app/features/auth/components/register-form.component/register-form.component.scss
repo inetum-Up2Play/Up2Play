@@ -1,0 +1,113 @@
+@import 'styles/variables';
+
+h1 {
+  font-family: $montserrat;
+  color: $blanco;
+  font-size: 3.5rem;
+  white-space: nowrap;
+}
+
+.register-form {
+  width: 30rem;
+  align-content: space-between;
+  gap: 2;
+}
+
+.form-introduccion {
+  font-family: $work-sans;
+  font-size: 1.1rem;
+  color: $blanco;
+  font-weight: 600;
+  padding-bottom: 2%;
+
+  .form-link-login {
+    color: $verde-claro;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      color: $verde-oliva;
+    }
+  }
+}
+
+.form-field {
+  padding-bottom: 4%;
+  font-weight: 600;
+}
+
+.input {
+  font-family: $work-sans;
+  font-weight: 600;
+  width: 100%;
+  height: 4rem;
+  background-color: transparentize($color: lightgray, $amount: 0.8);
+  color: $blanco;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
+
+  &::placeholder {
+    color: $blanco;
+  }
+}
+
+.error {
+  font-family: $work-sans;
+  color: rgb(195, 5, 5);
+  display: block;
+  margin-top: 0.35rem;
+  color: #ffd2d2;
+  /* errores legibles sobre fondo oscuro/medio */
+  font-size: 0.82rem;
+}
+
+.password-group {
+  display: flex;
+  align-content: space-between;
+  gap: 1rem;
+}
+
+/* Términos */
+.terms {
+  font-family: $work-sans;
+  gap: 0.35rem;
+
+
+  .label {
+    color: $blanco;
+    margin-left: 0.25rem;
+    font-weight: 500;
+  }
+
+  .terms-conditions {
+    color: $verde-oscuro;
+    text-decoration: underline;
+    opacity: 0.95;
+
+    &:hover {
+      opacity: 1;
+      text-decoration: underline wavy;
+    }
+  }
+}
+
+.btn-register {
+  font-family: $work-sans;
+  width: 100%;
+  height: 4rem;
+  border-radius: 1rem;
+  border: none;
+  background-color: $verde-oscuro;
+
+  &:hover {
+    background: $verde-oscuro;
+    border-color: $verde-oscuro;
+  }
+
+  &:disabled {
+    background: $verde-oscuro !important;
+    border-color: $verde-oscuro !important;
+    opacity: 0.7;
+  }
+}

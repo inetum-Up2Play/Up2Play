@@ -61,6 +61,12 @@ public class AuthenticationController {
         return ResponseEntity.status(201).body(response);
     }
 
+    @GetMapping("/registrado")
+    public String usuarioRegistrado(){
+
+        return "http://localhost:4200";
+    }
+
     /**
      * Endpoint para autenticar usuario (login).
      * Valida credenciales, genera token JWT y retorna respuesta con token y tiempo
