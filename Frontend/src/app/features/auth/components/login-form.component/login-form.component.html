@@ -6,7 +6,7 @@
   <!-- CAMPO MAIL -->
   <div class="form-field">
     <p-iconfield>
-      <input type="email" pInputText placeholder="Usuario" id="email" formControlName="email" autocomplete="email"
+      <input type="email" pInputText placeholder="Email" id="email" formControlName="email" autocomplete="email"
         [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input" />
       <p-inputicon class="pi pi-user" style="color: black" />
     </p-iconfield>
@@ -34,7 +34,7 @@
 
   <!-- TÉRMINOS -->
   <div>
-    <p-checkbox inputId="size_small" name="size" value="Small" size="small" />
+    <p-checkbox inputId="termsConditions" name="size" value="Small" size="small" />
     <a class="terms-conditions" href="">Términos de uso</a>
   </div>
 
