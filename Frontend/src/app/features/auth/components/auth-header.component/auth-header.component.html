@@ -5,7 +5,11 @@
         </div>
         <ul class="nav-links">
             <li><a [href]="landingUrl">Inicio</a></li>
-            <li><a href="iniciosesion.com">Iniciar Sesion</a></li>
+            @if (isLogin()) {
+            <li><a [routerLink]="IniciarSesionUrl">Iniciar sesión</a></li>
+            } @else {
+            <li><a [routerLink]="RegistrarseUrl">Registrarse</a></li>
+            }
         </ul>
     </nav>
 </header>
