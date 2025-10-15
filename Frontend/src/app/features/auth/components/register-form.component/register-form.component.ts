@@ -14,10 +14,12 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
+import { IconFieldModule, IconField } from 'primeng/iconfield';
+import { InputIconModule, InputIcon } from 'primeng/inputicon';
 
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
-import { RedirectCommand } from '@angular/router';
+import { RedirectCommand, Router, RouterModule } from '@angular/router';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -35,14 +37,18 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
     PasswordModule,
     ButtonModule,
     FloatLabelModule,
-    CheckboxModule
-  ],
+    CheckboxModule,
+    RouterModule,
+    InputIcon,
+    IconField
+],
   templateUrl: './register-form.component.html',
   styleUrls: [
     './register-form.component.scss'
     // 'node_modules/primeicons/primeicons.css'
   ]
 })
+
 export class RegisterFormComponent {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService); // cuando tengas el servicio
@@ -57,7 +63,7 @@ export class RegisterFormComponent {
       email: this.fb.nonNullable.control('', [Validators.required, Validators.email, Validators.maxLength(255)]),
       password: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(8), Validators.maxLength(255), Validators.pattern(this.PASSWORD_POLICY)]),
       confirmPassword: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(8), Validators.maxLength(255), Validators.pattern(this.PASSWORD_POLICY)]),
-      aceptaTerminos: this.fb.nonNullable.control(false, {validators: Validators.requiredTrue})
+      aceptaTerminos: this.fb.nonNullable.control(false, { validators: Validators.requiredTrue })
     },
     { validators: [passwordsMatchValidator] } // Valida que coincidan
   );
@@ -82,11 +88,14 @@ export class RegisterFormComponent {
     this.auth.register(payload).subscribe({
       next: (res) => {
         if (res) {
+          const router = inject(Router);//inventado por Alex, si da problemas se puede quitar
+
           console.log('Registro OK:', res);
-          const verifyEmail;//router
-          return new RedirectCommand(verifyEmail, {skipLocationChange: true});
+          const verifyEmail = router.parseUrl("/home");;//inventado por Alex, si da problemas se puede quitar
+          return new RedirectCommand(verifyEmail, { skipLocationChange: true });
         } else {
           console.warn('Respuesta inesperada:', res);
+          return null;//inventado por Alex, si da problemas se puede quitar
         }
       },
       error: (err) => {
