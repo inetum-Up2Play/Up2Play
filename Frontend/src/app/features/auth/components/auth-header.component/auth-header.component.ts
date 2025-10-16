@@ -11,7 +11,8 @@ import { RouterModule, Router } from '@angular/router';
 export class AuthHeaderComponent {
   landingUrl = 'http://127.0.0.1:5500/Up2Play/Landing/index.html'
   IniciarSesionUrl = '/auth/login'
-  RegistrarseUrl = '/auth/register';
+  RegistrarseUrl = '/auth/register'
+  VerificarUrl = '/auth/verification'
 
   constructor(private router: Router) {
   }
@@ -23,6 +24,10 @@ export class AuthHeaderComponent {
 
   isRegister(): boolean {
     return this.router.url === this.RegistrarseUrl;
+  }
+
+  isVerification(): boolean {
+    return this.router.url === this.VerificarUrl;
   }
 
 }

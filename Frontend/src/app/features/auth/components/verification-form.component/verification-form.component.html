@@ -1,0 +1,29 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="verification-form" novalidate>
+    <div class="Imgicono">
+        <img src="../../../../../assets/auth/verificationIcon.svg">
+    </div>
+  <!-- TÍTULO -->
+  <h1>Verifica tu correo</h1>
+  <p class="form-introduccion">El código de verificación de la cuenta ha sido enviado a la dirección de correo electrónico que proporcionaste.</p>
+
+  <!-- CAMPO CONTRASEÑA -->
+  <div class="form-field">
+    <p-iconfield>
+      <input type="text" pInputText placeholder="Código de verificaión" formControlName="verification" class="input"
+        [ngClass]="{ 'ng-invalid': f.verification.invalid && (f.verification.dirty || f.verification.touched) }" />
+      <p-inputicon class="pi pi-verified" style="color: black" />  
+    </p-iconfield>
+
+    <small class="error" *ngIf="f.verification.hasError('required') && (f.verification.dirty || f.verification.touched)">
+      El código de verificación es obligatorio.
+    </small>
+  </div>
+
+  <!-- BOTÓN -->
+  <button pButton type="submit" class="btn-login" size="large" [disabled]="form.invalid">Verificar</button>
+
+  <!-- Enviar de nuevo -->
+  <div>
+    <p><a class="correo-no-recibido">¿No has recibido el correo? Enviar de nuevo</a></p>
+  </div>
+</form>

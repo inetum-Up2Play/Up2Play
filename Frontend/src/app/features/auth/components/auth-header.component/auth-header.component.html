@@ -7,7 +7,7 @@
             <li><a [href]="landingUrl">Inicio</a></li>
             @if (isRegister()) {
             <li><a [routerLink]="IniciarSesionUrl">Iniciar sesión</a></li>
-            } @else if (isLogin()){
+            } @else if (isLogin()||(isVerification())){
             <li><a [routerLink]="RegistrarseUrl">Registrarse</a></li>
             } 
         </ul>

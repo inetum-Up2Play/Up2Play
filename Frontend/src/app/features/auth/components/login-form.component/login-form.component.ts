@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, output, Output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -10,8 +10,6 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { CheckboxModule } from 'primeng/checkbox';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { RouterModule } from '@angular/router';
@@ -25,20 +23,15 @@ import { RouterModule } from '@angular/router';
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    FloatLabelModule,
-    CheckboxModule,
     IconFieldModule,
     InputIconModule,
     RouterModule
 ],
   templateUrl: './login-form.component.html',
-  styleUrl: './login-form.component.scss'
+ styleUrls: [ './login-form.component.scss' ]
 })
 
-export class LoginFormComponent implements OnInit {
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+export class LoginFormComponent {
 
   submitted = output<{ email: string; password: string }>();
 

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UserDataService } from '../../../../core/services/user-data-service'; // ajusta la ruta
 import {
   FormBuilder,
   Validators,
@@ -19,7 +20,7 @@ import { InputIcon } from 'primeng/inputicon';
 
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
-import { RedirectCommand, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -50,8 +51,10 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 })
 
 export class RegisterFormComponent {
+  constructor(private router: Router) {}
   private fb = inject(FormBuilder);
   private auth = inject(AuthService); // cuando tengas el servicio
+  private userData = inject(UserDataService);
 
 
   //en un futuro poner esto en el shard y exportarlo
@@ -87,16 +90,11 @@ export class RegisterFormComponent {
 
     this.auth.register(payload).subscribe({
       next: (res) => {
-        if (res) {
-          const router = inject(Router);//inventado por Alex, si da problemas se puede quitar
-
-          console.log('Registro OK:', res);
-          const verifyEmail = router.parseUrl("/home");;//inventado por Alex, si da problemas se puede quitar
-          return new RedirectCommand(verifyEmail, { skipLocationChange: true });
-        } else {
-          console.warn('Respuesta inesperada:', res);
-          return null;//inventado por Alex, si da problemas se puede quitar
-        }
+          this.userData.setEmail(payload.email); // ← Guarda el email
+          
+          const verifyEmail = this.router.parseUrl('/auth/verification'); // ajusta la ruta si es necesario
+          void this.router.navigateByUrl(verifyEmail, { skipLocationChange: true });
+          
       },
       error: (err) => {
         if (err.status === 409) {
@@ -106,8 +104,6 @@ export class RegisterFormComponent {
         }
       }
     });
-
-
 
     console.log('Registrando con:', payload);
   }
