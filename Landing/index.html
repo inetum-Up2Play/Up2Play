@@ -24,7 +24,9 @@
                         style="width: 220px; height: auto;">
                 </a>
             </div>
-            <nav id="menu" class="hidden md:flex md:flex-row md:space-x-8 md:items-center justify-center flex-1">
+            
+            <nav id="menu" class="hidden border-neutral/10 rounded-box not-prose flex w-full flex-[1_0_0] flex-wrap gap-3 
+            border p-3 sm:p-6 md:flex md:flex-row md:space-x-8 md:items-center justify-center flex-1">
                 <div class="flex flex-col md:flex-row font-extrabold md:space-x-14 text-[1.2rem] md:p-4 navBar">
                     <a href="#" class="md:hover:underline md:whitespace-nowrap">¿Qué es UP2Play?</a>
                     <a href="#" class="md:hover:underline">Actividades</a>
@@ -43,16 +45,15 @@
             </div>
 
             <div class="md:hidden flex space-x-4 items-center">
-                <button class="md:hidden focus:outline-none">
+                <button class="md:hidden avatar">
                     <a href="#">
-                        <img src="assets/images/header/avatar.png" alt="Avatar de usuario"
-                            class="w-6 h-6 focus:outline-none relative" fill="none" stroke="currentColor"
-                            stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <img src="assets/images/header/avatarIcon.png" alt="Avatar de usuario"
+                            class="w-10 h-10 rounded-full overflow-hidden object-cover" stroke="currentColor">
                     </a>
                 </button>
-                <button id="btn-menu" class="md:hidden focus:outline-none relative">
+                <button id="btn-menu" class="md:hidden menu">
                     <a href="#">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                             stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" y1="12" x2="21" y2="12" />
                             <line x1="3" y1="6" x2="21" y2="6" />
@@ -291,7 +292,8 @@
                 </div>
 
                 <!-- Controls als extrems -->
-                <div class="pointer-events-none absolute inset-y-0 left-[1rem] right-[1rem] md:left-[16rem] md:right-[16rem] flex items-center justify-between">
+                <div
+                    class="pointer-events-none absolute inset-y-0 left-[1rem] right-[1rem] md:left-[16rem] md:right-[16rem] flex items-center justify-between">
                     <button data-carousel-prev type="button" aria-label="Anterior"
                         class="pointer-events-auto ml-2 sm:ml-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-800 shadow  ring-slate-300 hover:bg-white focus:outline-none focus:ring-2 focus:ring-slate-500">
                         <!-- Icona esquerra -->
