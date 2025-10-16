@@ -1,8 +1,7 @@
-    <div class="fondo-register">
-        <app-auth-header></app-auth-header>
-        <div class="div-form">
-            <app-login-form></app-login-form>
-        </div>
-        <app-auth-footer></app-auth-footer>
+<div class="fondo-register">
+    <app-auth-header></app-auth-header>
+    <div class="div-form">
+        <app-login-form (submitted)="onSubmit($event)"></app-login-form>
     </div>
-
+    <app-auth-footer></app-auth-footer>
+</div>

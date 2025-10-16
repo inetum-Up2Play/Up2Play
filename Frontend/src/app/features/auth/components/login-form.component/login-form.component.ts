@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, output, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -36,42 +36,36 @@ import { RouterModule } from '@angular/router';
 })
 
 export class LoginFormComponent implements OnInit {
-
-  ngOnInit() {
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
   }
 
+  submitted = output<{ email: string; password: string }>();
+
   private fb = inject(FormBuilder);
-  // private auth = inject(AuthService); // cuando tengas el servicio
  
   form = this.fb.group(
     {
       email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
       password: this.fb.nonNullable.control('', [Validators.required]),
+
     }
   );
  
   // Atajo para no escribir 'this.form.controls' todo el rato en la plantilla
   get f() {
     return this.form.controls;
-  }
- 
+  }   
+
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched(); // enseña errores
       return;
+    } else {
+      this.submitted.emit(this.form.getRawValue()); // <- envía {email, password}
+
     }
- 
-    const payload = {
-      email: this.f.email.value,
-      password: this.f.password.value
-    };
- 
-    // Aquí llamarías a tu servicio real:
-    // this.auth.register(payload).subscribe({ ... });
- 
-    console.log('Registrando con:', payload);
   }
-
-
 }
+ 
  
