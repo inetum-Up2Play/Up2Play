@@ -1,65 +1,116 @@
 import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { CanActivateFn } from '@angular/router';
-import { UserService } from './user-service';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/internal/operators/map';
-import { catchError } from 'rxjs/internal/operators/catchError';
+import { Router, UrlTree } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { LoginResponse, Credentials } from './auth-types';
+
+const STORAGE_KEY = 'auth';
+const SKEW_MS = 10_000; // margen 10s
+
+// Opcional: tipa explícitamente el resultado
+export type LoginResult = true | 'INVALID_CREDENTIALS' | 'EMAIL_NOT_VERIFIED' | 'UNKNOWN';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private userService = inject(UserService);
   private baseUrl = 'http://localhost:8080/auth';
-  private readonly tokenKey = 'accessToken';
+  private logoutTimer: any;
 
-  canActivate(): boolean {
-    if (!this.userService.currentUser.hasPermissions) {
-      this.router.navigate(['/auth/login']);
-    }
-    return this.userService.currentUser.hasPermissions;
-  }
- 
   register(payload: { email: string; password: string; nombre_usuario: string; }) {
     return this.http.post(`${this.baseUrl}/signup`, payload);
   }
 
   login(email: string, password: string) {
-    return this.http.post<{ accessToken: string }>(`${this.baseUrl}/login`, { email, password }).pipe(
-      map(response => {
-        // ✅ Login correcto: guardar token y devolver éxito
-        const token = response.accessToken;
-        sessionStorage.setItem(this.tokenKey, token);
-        return true;
+    // Si ya tienes Credentials importado, úsalo:
+    const body: Credentials = { email, password };
+
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, body).pipe(
+      map((res) => {
+        // res: { token: string; expiresIn: number } en **milisegundos**
+        this.setSession(res);             // <- guarda {token, expiresAt} y programa auto-logout
+        return true as const;             // <- encaja con tu onSubmit(...)
       }),
-      catchError(error => {
+      catchError((error: HttpErrorResponse) => {
         switch (error.status) {
-          case 401:
-            return of('INVALID_CREDENTIALS'); // Credenciales incorrectas
-          case 403:
-            return of('EMAIL_NOT_VERIFIED');   // Falta verificación
-          default:
-            return of('UNKNOWN');              // Otro error
+          case 401: return of('INVALID_CREDENTIALS' as const);
+          case 403: return of('EMAIL_NOT_VERIFIED' as const);
+          default:  return of('UNKNOWN' as const);
         }
       })
     );
   }
+
+  isLoggedIn(): boolean {
+    return !!this.token && !this.isTokenExpired();
+  }
   
-  get token(): string | null {
-    return sessionStorage.getItem(this.tokenKey);
+  /** Limpia storage y redirige a /login si corresponde */
+  logout(navigateToLogin = true) {
+    if (this.logoutTimer) clearTimeout(this.logoutTimer);
+    sessionStorage.removeItem(STORAGE_KEY);
+    if (navigateToLogin) {
+      this.router.navigate(['/auth/login'], { queryParams: { reason: 'expired' } });
+    }
   }
 
-  logout() {
-    sessionStorage.removeItem(this.tokenKey);
+  canActivate(stateUrl: string): boolean | UrlTree {
+    if (this.isLoggedIn()) {
+      return true;
+    }
+    return this.router.parseUrl(`/auth/login?redirect=${encodeURIComponent(stateUrl)}`);
+  }
+  
+  /** Calcula expiresAt a partir de expiresIn (ms) y guarda en sessionStorage */
+  private setSession(res: LoginResponse) {
+    const expiresAt = Date.now() + res.expiresIn;
+    sessionStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ token: res.token, expiresAt })
+    );
+    this.scheduleAutoLogout(expiresAt);
+  }
+  
+  /** Relee storage al arrancar la app y reprograma logout */
+  initFromStorageOnAppStart() {
+    const auth = this.getAuth();
+    if (!auth) return;
+    if (this.isTokenExpired()) {
+      this.logout(false);
+      return;
+    }
+    this.scheduleAutoLogout(auth.expiresAt);
+  }
+  
+  /** Programa el logout cuando venza el token */
+  private scheduleAutoLogout(expiresAt: number) {
+    if (this.logoutTimer) clearTimeout(this.logoutTimer);
+
+    const msLeft = expiresAt - Date.now() - SKEW_MS;
+    if (msLeft <= 0) {
+      this.logout(false);
+      return;
+    }
+    this.logoutTimer = setTimeout(() => this.logout(true), msLeft);
+  }
+ 
+  /** Helpers de estado */
+  getAuth(): { token: string; expiresAt: number } | null {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }
+
+  get token(): string | null {
+    return this.getAuth()?.token ?? null;
+  }
+
+  isTokenExpired(): boolean {
+    const auth = this.getAuth();
+    if (!auth) return true;
+    return Date.now() >= (auth.expiresAt - SKEW_MS);
   }
 }
-
-export const AuthGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  return authService.canActivate();
-};
