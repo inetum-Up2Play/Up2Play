@@ -14,8 +14,8 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
-import { IconFieldModule, IconField } from 'primeng/iconfield';
-import { InputIconModule, InputIcon } from 'primeng/inputicon';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
@@ -108,9 +108,6 @@ export class RegisterFormComponent {
     });
 
 
-
-    // Aquí llamarías a tu servicio real:
-    // this.auth.register(payload).subscribe({ ... });
 
     console.log('Registrando con:', payload);
   }

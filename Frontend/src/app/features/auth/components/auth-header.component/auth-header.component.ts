@@ -13,19 +13,18 @@ export class AuthHeaderComponent {
   IniciarSesionUrl = '/auth/login'
   RegistrarseUrl = '/auth/register';
 
-  currentUrl: string = '';
-
   constructor(private router: Router) {
-    this.router.events.subscribe(() => {
-      this.currentUrl = this.router.url;
-    });
   }
 
+
   isLogin(): boolean {
-    return this.currentUrl === 'IniciarSesionUrl'
+    return this.router.url === this.IniciarSesionUrl;
   }
 
   isRegister(): boolean {
-    return this.currentUrl === 'RegistrarseUrl';
+    return this.router.url === this.RegistrarseUrl;
   }
+
 }
+
+

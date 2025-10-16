@@ -7,18 +7,20 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  border-color: red;
 }
 
 //Todo el div que implica la vista login
 .fondo-register { 
   position: relative;
-  height: 98vh; //Altura
+  height: 100vh; //Altura
   width: 100%; //Ancho
   display: flex; //Para que separe, header, form y footer
   flex-direction: column; //Organiza header, login y footer en columna
   justify-content: space-between; //Header arriba, form al centro, footer abajo
   padding-bottom: 2%;
   padding-top: 1.75%;
+  overflow: hidden;
 
   @include fondo-gradiente-verde;
 
