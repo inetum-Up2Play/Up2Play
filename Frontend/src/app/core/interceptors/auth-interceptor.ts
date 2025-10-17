@@ -10,17 +10,20 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = auth.token;
 
   const shouldAttach = !!token && !auth.isTokenExpired();
+  
+  const isPublicAuthEndpoint = /(^|\/)auth(\/|$)/.test(req.url);
 
-  const authReq = shouldAttach
+  const authReq = shouldAttach && !isPublicAuthEndpoint
     ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
     : req;
 
   return next(authReq).pipe(
-    catchError((err) => {
+    catchError((err: HttpErrorResponse) => {
       if (err.status === 401) {
         auth.logout();
       }
       return throwError(() => err);
     })
   );
+
 };

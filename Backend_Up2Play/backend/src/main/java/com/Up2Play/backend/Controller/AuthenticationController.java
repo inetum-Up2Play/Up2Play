@@ -1,5 +1,7 @@
 package com.Up2Play.backend.Controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,7 +95,7 @@ public class AuthenticationController {
     @PostMapping("/verify")
     public ResponseEntity<?> verifyUser(@RequestBody VerifyUserDto verifyUserDto) {
         usuarioService.verifyUser(verifyUserDto);
-        return ResponseEntity.ok("Cuenta verificada");
+        return ResponseEntity.ok(Map.of("message", "Cuenta verificada"));
     }
 
     /**

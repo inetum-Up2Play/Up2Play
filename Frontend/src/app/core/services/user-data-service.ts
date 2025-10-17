@@ -14,13 +14,10 @@ export class UserDataService {
 
   }
 
-
-  getEmail(): string | null {
-
-    return this.email;
-
+  
+  getEmail(): string {
+    return (this.email ?? '').trim();
   }
-
 
   clearEmail() {
 

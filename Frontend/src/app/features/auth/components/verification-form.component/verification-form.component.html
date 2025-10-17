@@ -9,12 +9,12 @@
   <!-- CAMPO CONTRASEÑA -->
   <div class="form-field">
     <p-iconfield>
-      <input type="text" pInputText placeholder="Código de verificaión" formControlName="verification" class="input"
-        [ngClass]="{ 'ng-invalid': f.verification.invalid && (f.verification.dirty || f.verification.touched) }" />
+      <input type="text" pInputText placeholder="Código de verificaión" formControlName="verificationCode" class="input"
+        [ngClass]="{ 'ng-invalid': f.verificationCode.invalid && (f.verificationCode.dirty || f.verificationCode.touched) }" />
       <p-inputicon class="pi pi-verified" style="color: black" />  
     </p-iconfield>
 
-    <small class="error" *ngIf="f.verification.hasError('required') && (f.verification.dirty || f.verification.touched)">
+    <small class="error" *ngIf="f.verificationCode.hasError('required') && (f.verificationCode.dirty || f.verificationCode.touched)">
       El código de verificación es obligatorio.
     </small>
   </div>

@@ -25,6 +25,11 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/signup`, payload);
   }
 
+  verification(payload: { email: string; verificationCode: string }) { 
+    return this.http.post(`${this.baseUrl}/verify`, payload);
+  }
+
+
   login(email: string, password: string) {
     // Si ya tienes Credentials importado, úsalo:
     const body: Credentials = { email, password };
