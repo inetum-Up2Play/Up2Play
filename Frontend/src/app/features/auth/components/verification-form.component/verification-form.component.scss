@@ -108,7 +108,7 @@ p{
     }
 }
 
-.btn-login {
+.btn-verify {
     color: $blanco;
     font-family: $work-sans;
     width: 100%;
@@ -119,9 +119,9 @@ p{
     cursor: pointer;
     
     &:hover{
-        color: $blanco;
-        background-color: $verde-oscuro;
-        border: none;
+        color: $blanco !important;
+        background-color: $verde-oscuro !important;
+        border: none !important;
         opacity: 0.8;
         transition: ease 0.3s;
         cursor: pointer;
