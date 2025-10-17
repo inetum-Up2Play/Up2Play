@@ -15,7 +15,7 @@ export const routes: Routes = [
         loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
     },
     {
-        path: '',
+        path: 'actividades',
         canActivateChild: [
             (route, state) => {
                 const auth = inject(AuthService);

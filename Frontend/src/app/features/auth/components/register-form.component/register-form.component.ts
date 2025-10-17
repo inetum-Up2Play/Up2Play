@@ -18,9 +18,13 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 
+import { MessageService } from 'primeng/api';
+
+
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
 import { Router, RouterModule } from '@angular/router';
+import { Verification } from '../../pages/verification/verification';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -91,10 +95,7 @@ export class RegisterFormComponent {
     this.auth.register(payload).subscribe({
       next: (res) => {
           this.userData.setEmail(payload.email); // ← Guarda el email
-          
-          const verifyEmail = this.router.parseUrl('/auth/verification'); // ajusta la ruta si es necesario
-          void this.router.navigateByUrl(verifyEmail, { skipLocationChange: true });
-          
+          this.router.navigate(['/auth/verification']);
       },
       error: (err) => {
         if (err.status === 409) {

@@ -14,7 +14,10 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+// Conexion con el servicio
+import { AuthService } from '../../../../core/services/auth-service';
+import { Login } from '../../pages/login/login';
  
 
 @Component({
@@ -31,46 +34,61 @@ import { RouterModule } from '@angular/router';
     RouterModule
 ],
   templateUrl: './verification-form.component.html',
-  styleUrl: './verification-form.component.scss'
-})
+  styleUrls: [
+    './verification-form.component.scss'
+    // 'node_modules/primeicons/primeicons.css'
+  ]})
 
-export class VerificationFormComponent implements OnInit {
+export class VerificationFormComponent {
   private userData = inject(UserDataService);
-
-  email: string | null = null;
-
-
-  ngOnInit() {
-
-    this.email = this.userData.getEmail();
-
-    console.log('Email para verificar:', this.email);
-
-  }
-
-  submitted = output<{ verification: string }>();
-
+  private auth = inject(AuthService); // cuando tengas el servicio
+  private router = inject(Router);
   private fb = inject(FormBuilder);
- 
+  private readonly rawEmail = this.userData.getEmail();
+
+  email = this.userData.getEmail();
+
   form = this.fb.group(
     {
-      verification: this.fb.nonNullable.control('', [Validators.required]),
+      verificationCode: this.fb.nonNullable.control('', [Validators.required]),
     }
   );
  
   // Atajo para no escribir 'this.form.controls' todo el rato en la plantilla
   get f() {
     return this.form.controls;
-  }   
-
+  }
+  
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched(); // enseña errores
       return;
-    } else {
-      this.submitted.emit(this.form.getRawValue()); // <- envía {código}
     }
+
+    
+/*     if (!this.rawEmail) {
+      // Manejo UX: redirigir o avisar
+      console.error('Email no disponible para verificación.');
+      this.router.navigate(['/auth/signup']); // ajusta a tu flujo
+      return;
+    } */
+
+    const payload = {
+      email: this.email,
+      verificationCode: this.f.verificationCode.value
+    };
+
+     this.auth.verification(payload).subscribe({
+      next: (res) => {
+          this.router.navigate(['/auth/login']);
+      }
+    }); 
+
+    console.log(payload);
+
   }
+
+
+
+
 }
- 
- 
