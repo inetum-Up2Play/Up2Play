@@ -38,8 +38,9 @@ Aplicación que ofrece una comunidad de deportistas con los que poder organizar 
 - **git branch -d nombre-de-la-rama**: Eliminar una rama local. Solo funciona si ya ha sido fusionada.
 - **git branch -D nombre-de-la-rama**: Eliminar una rama local si la rama no ha sido fusionada.
 - **git remote prune origin**: Limpiar  ramas remotas que ya no existen en Github.
-### **Estados:**
 - **git merge <rama origen> <rama destino>**: Fusionar cambios. Hay que ubicarse en la rama destino
+
+### **Estados:**
 - **Modified**: El archivo ha sido modificado localmente.
 - **Staged**: Los cambios han sido preparados para ser confirmados. → Usa **git add .** para añadir todos los archivos modificados, o **git add <archivo>** para añadir uno específico.
 - **Committed**:  Los cambios han sido confirmados localmente. → Usa **git commit -m "Descripción del cambio"** para registrar los cambios.
