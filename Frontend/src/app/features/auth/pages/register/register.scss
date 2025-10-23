@@ -10,7 +10,7 @@ body {
 }
 
 //Todo el div que implica la vista login
-.register-page { 
+.register-page {
   position: relative;
   height: 100vh; //Altura
   width: 100%; //Ancho
@@ -22,18 +22,8 @@ body {
 
   @include fondo-gradiente-verde;
 
-  //Sería como la capa del fondo, aquí está la imagen
-  &::before {
-    content: '';
-    position:absolute;
-    inset: 0;
-    background: url('../../../../../assets/auth/fondo-register_login.webp') center/cover no-repeat; //Center y cover definen el tamaño de la imagen
-    opacity: 0.2; 
-    z-index: 0; //Indica la posición de la 'capa'
-  }
-
   //Indica que todos los hijos de .fondo-register, se encuentren en la 'capa: 1'
-  > * {
+  >* {
     position: relative;
     z-index: 1;
   }
@@ -44,5 +34,17 @@ body {
     justify-content: flex-start; //Form a la izquierda
     align-items: center; //Respecto al padre
     padding-left: 5%;
+  }
+}
+
+//Sería como la capa del fondo, aquí está la imagen
+@media (min-width: 768px) {
+  .img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../../../../../assets/auth/fondo-register_login.webp') center/cover no-repeat; //Center y cover definen el tamaño de la imagen
+    opacity: 0.2;
+    z-index: 1; //Indica la posición de la 'capa'
   }
 }
