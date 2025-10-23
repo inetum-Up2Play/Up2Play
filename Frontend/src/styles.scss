@@ -2,10 +2,9 @@
 The styles added here would be global styles to the project.
 Here has to be imported the other style files (from the src/styles/)
 */
-@use "./tailwind.css";
-@use "primeicons/primeicons.css";
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import "./tailwind.css";
+@import "primeicons/primeicons.css";
 
 @import 'styles/variables';
 @import 'styles/mixins';
