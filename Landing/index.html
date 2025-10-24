@@ -18,16 +18,19 @@
 
 <body>
     <header id="header" class="text-white w-full xl:min-h-[90vh] xl:supports-[height:100svh]:min-h-[100svh]">
-        <section id="header-section" class="header-section flex justify-between items-center relative w-full px-4 py-4 xl:px-8 xl:py-8">
-            <div class="shrink-0 ">
+        <section id="header-section" class="header-section flex justify-between items-center relative w-full py-4 xl:px-8 xl:py-8">
+            <div class="shrink-0 px-4">
                 <a href="#"><img class="w-36 md:w-[220px] (y h-auto)" src="assets/images/logos/logo.png" alt="Logo de Up2Play">
                 </a>
             </div>
             
-            <nav id="menu" class="hidden xl:flex flex-1 justify-center">
-                <ul class="flex flex-wrap items-center justify-center font-extrabold
+            <nav id="menu" class="hidden xl:flex relative">
+                <ul class="flex xl:flex-row flex-col items-center justify-center font-extrabold
                             gap-4 md:gap-8 lg:gap-14
-                            text-base md:text-[1.1rem] lg:text-[1.2rem] md:p-2">
+                            text-sm md:text-[1.1rem] lg:text-[1.2rem] 
+                            p-4 xl:p-2 pr-7 lx:pr-0
+                            items-end xl:items-center
+                            whitespace-nowrap">
                     <li><a href="#section-UP2Play" class="md:hover:underline">¿Qué es UP2Play?</a></li>
                     <li><a href="#section-carousel" class="md:hover:underline">Actividades</a></li>
                     <li><a href="#section-sobre_nosotros" class="md:hover:underline">Sobre Nosotros</a></li>
@@ -48,22 +51,20 @@
                 </a>            
             </div>
 
-            <div class="xl:hidden flex space-x-4 items-center">
+            <div class="xl:hidden flex space-x-4 items-center px-4 relative z-20">
                 <button class="xl:hidden avatar">
-                    <a href="#">
+                    <a href="http://localhost:4200/auth/login">
                         <img src="assets/images/header/avatarIcon.png" alt="Avatar de usuario"
                             class="w-10 h-10 rounded-full overflow-hidden object-cover" stroke="currentColor">
                     </a>
                 </button>
                 <button id="btn-menu" class="xl:hidden menu">
-                    <a href="http://localhost:4200/auth/login">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="3" y1="12" x2="21" y2="12" />
-                            <line x1="3" y1="6" x2="21" y2="6" />
-                            <line x1="3" y1="18" x2="21" y2="18" />
-                        </svg>
-                    </a>
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
                 </button>
             </div>
         </section>

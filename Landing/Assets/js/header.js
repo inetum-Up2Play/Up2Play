@@ -1,6 +1,11 @@
 const btnMenu = document.getElementById('btn-menu');
 const menu = document.getElementById('menu');
+
 btnMenu.addEventListener('click', () => {
+
+  const headerHeight = document.getElementById('header').getBoundingClientRect().height;
+  document.documentElement.style.setProperty('--desplegable-height', `${headerHeight}px`);
+  
     menu.classList.toggle('hidden');
     menu.classList.toggle('desplegable');
 });
