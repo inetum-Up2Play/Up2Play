@@ -76,15 +76,15 @@ p{
 
 
 .p-inputtext.ng-invalid.ng-touched {
-    border-color: #8B0000 !important;
+    border-color: $msg-error-oscuro !important;
     &::placeholder{
-        color: #8B0000 !important;
+        color: #cacaca !important;
     }
 }
 
 .error {
     font-family: $work-sans;
-    color: #8B0000c5;
+    color: $msg-error-oscuro;
 }
 
 .correo-no-recibido {
