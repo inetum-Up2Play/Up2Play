@@ -17,8 +17,8 @@
 </head>
 
 <body>
-    <header id="header" class="text-white w-full">
-        <section id="header-section" class="header-section flex justify-between items-center relative w-full px-4 py-4">
+    <header id="header" class="text-white w-full xl:min-h-[90vh] xl:supports-[height:100svh]:min-h-[100svh]">
+        <section id="header-section" class="header-section flex justify-between items-center relative w-full px-4 py-4 xl:px-8 xl:py-8">
             <div class="shrink-0 ">
                 <a href="#"><img class="w-36 md:w-[220px] (y h-auto)" src="assets/images/logos/logo.png" alt="Logo de Up2Play">
                 </a>
@@ -68,9 +68,14 @@
             </div>
         </section>
 
-        <section id="Activa" class="flex flex-col md:py-60 items-center bg-center md:bg-top 
-            bg-no-repeat bg-cover h-96 md:h-screen">
-            <div class="text-center py-25 md:py-0">
+        <section id="Activa" class="flex flex-col 
+        py-[clamp(2rem,7vh,8rem)]
+        md:py-[clamp(1.5rem,2vh,2rem)]
+        xl:py-[clamp(4rem,12vh,14rem)]
+        2xl:py-[clamp(4rem,18vh,20rem)]
+        items-center bg-center md:bg-top 
+        bg-no-repeat bg-cover h-96">
+            <div class="text-center py-4 px-1 md:py-0">
                 <h1
                     class="italic leading-tight text-center text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl">
                     Activa tu vida, <br> conecta con gente
