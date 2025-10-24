@@ -1,7 +1,7 @@
-<div class="fondo-register">
+<div class="fondo-register img">
     <app-auth-header></app-auth-header>
-    <div class="div-form">
-        <app-login-form (submitted)="onSubmit($event)"></app-login-form>
+    <div class="div-form md:pt-0 md:pr-10 md:justify-end sm:items-top md:items-center h-fit">
+        <app-login-form (submitted)="onSubmit($event)" class="w-full md:w-135 xl:w-150 flex justify-center h-fit" > </app-login-form>
     </div>
     <app-auth-footer></app-auth-footer>
 </div>

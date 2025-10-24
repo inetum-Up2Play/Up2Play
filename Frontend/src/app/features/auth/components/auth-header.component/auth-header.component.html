@@ -1,9 +1,9 @@
 <header>
-    <nav class="navBar">
-        <div class="logo">
-            <img src="assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png" routerLink="/" alt="logo" class="logo">
+    <nav class="navBar p-2 md:pl-10">
+        <div class="logo aspect-3/1">
+            <img src="assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png" routerLink="/" alt="logo" class="logo h-12 md:h-16 xl:h-20">
         </div>
-        <ul class="nav-links">
+        <ul class="nav-links gap-6 md:p-6 md:gap-12">
             <li><a [href]="landingUrl">Inicio</a></li>
             @if (isRegister()) {
             <li><a [routerLink]="IniciarSesionUrl">Iniciar sesión</a></li>
