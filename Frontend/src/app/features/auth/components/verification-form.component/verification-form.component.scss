@@ -90,11 +90,6 @@ p{
 .correo-no-recibido {
     font-family: $work-sans;
     color: $verde-oscuro;
-    cursor: pointer;
-
-    &:hover{
-        font-weight: 500;
-    }
 }
 
 .btn-verify {
@@ -104,14 +99,23 @@ p{
     border-radius: 1rem;
     border: none;
     background-color: $verde-oscuro;
-    cursor: pointer;
-    
-    &:hover{
-        color: $blanco !important;
-        background-color: $verde-oscuro !important;
-        border: none !important;
-        opacity: 0.8;
-        transition: ease 0.3s;
+    opacity: 0.9;
+    margin-top: 0.8rem;
+
+    &:enabled{
         cursor: pointer;
+        &:hover{
+            background-color: $verde-oscuro !important;
+            opacity: 1 !important;
+            font-weight: 500 !important;
+            color: $blanco !important;
+            border: none !important;
+            transition: 0.2s ease;
+        }
+    }
+
+    &:disabled{
+        background-color: $verde-oscuro;
+        opacity: 0.7;
     }
 }

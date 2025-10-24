@@ -27,7 +27,7 @@ h1 {
     }
 
     &:hover {
-        border-color: rgb(184, 184, 184);
+        border-color: rgb(184, 184, 184) !important;
     }
     
     &:focus {
@@ -94,15 +94,23 @@ h1 {
     border-radius: 1rem;
     border: none;
     background-color: $verde-oscuro;
+    opacity: 0.9;
     margin-top: 0.8rem;
-    cursor: pointer;
-    
-    &:hover{
-        color: $blanco;
-        background-color: $verde-oscuro;
-        border: none;
-        opacity: 0.8;
-        transition: ease 0.3s;
+
+    &:enabled{
         cursor: pointer;
+        &:hover{
+            background-color: $verde-oscuro !important;
+            opacity: 1 !important;
+            font-weight: 500 !important;
+            color: $blanco !important;
+            border: none !important;
+            transition: 0.2s ease;
+        }
+    }
+
+    &:disabled{
+        background-color: $verde-oscuro;
+        opacity: 0.7;
     }
 }
