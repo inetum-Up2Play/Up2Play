@@ -1,16 +1,16 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="register-form" novalidate>
-  <h1>CREAR CUENTA</h1>
-  <p class="form-introduccion">¿Ya eres miembro?
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="register-form p-10 pb-0 w-full" novalidate>
+  <h1 class="text-3xl md:text-5xl md:pb-2 xl:text-6xl xl:pb-5">CREAR CUENTA</h1>
+  <p class="form-introduccion md:max-w-160 xl:max-w-175 pb-6">¿Ya eres miembro?
     <a class="form-link-login" routerLink="/auth/login">Iniciar sesión</a>
   </p>
 
   <!-- USUARIO -->
-  <div class="form-field">
+  <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
     <p-iconfield>
       <input pInputText id="nombre_usuario" placeholder="Nombre de usuario" formControlName="nombre_usuario"
         autocomplete="username"
         [ngClass]="{'ng-invalid': f.nombre_usuario.invalid && (f.nombre_usuario.dirty || f.nombre_usuario.touched)}"
-        class="input" />
+        class="input h-13 md:h15 xl:h-18" />
       <p-inputicon class="pi pi-user" style="color: black" />
     </p-iconfield>
 
@@ -33,11 +33,11 @@
     }
   </div>
 
-  <div class="password-group">
+  <div class="password-group flex-col md:flex-row md:gap-4 ">
     <!-- CONTRASEÑA -->
-    <div class="form-field">
+    <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
       <p-iconfield>
-        <input pInputText type="password" placeholder="Contraseña" formControlName="password" class="input"
+        <input pInputText type="password" placeholder="Contraseña" formControlName="password" class="input h-13 md:h15 xl:h-18"
           [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
         <p-inputicon class="pi pi-lock" style="color: black" />
       </p-iconfield>
@@ -69,10 +69,10 @@
     </div>
 
     <!-- REPETIR CONTRASEÑA -->
-    <div class="form-field">
+    <div class="form-field  md:max-w-160 xl:max-w-175 pb-4">
       <p-iconfield>
         <input pInputText type="password" placeholder="Repetir contraseña" formControlName="confirmPassword"
-          class="input" [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
+          class="input h-13 md:h15 xl:h-18" [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
         <p-inputicon class="pi pi-arrow-right-arrow-left" style="color: black" />
       </p-iconfield>
 
@@ -109,10 +109,10 @@
   </div>
 
   <!-- EMAIL -->
-  <div class="form-field">
+  <div class="form-field  md:max-w-160 xl:max-w-175 pb-6">
     <p-iconfield>
       <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
-        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input" />
+        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input h-13 md:h15 xl:h-18" />
       <p-inputicon class="pi pi-envelope" style="color: black" />
     </p-iconfield>
 
@@ -136,8 +136,8 @@
   </div>
 
   <!-- ACEPTA TÉRMINOS -->
-  <div class="terms">
-    <p-checkbox class="p-checkbox" inputId="aceptaTerminos" formControlName="aceptaTerminos" [binary]="true"
+  <div class="terms md:max-w-160 xl:max-w-175 pb-4">
+    <p-checkbox class="p-checkbox mb-1" inputId="aceptaTerminos" formControlName="aceptaTerminos" [binary]="true"
       value="Small" size="small"></p-checkbox>
     <label for="aceptaTerminos" class="label">Acepto los Términos de uso</label>
 
@@ -147,9 +147,9 @@
     </small>
     }
 
-    <p><a class="terms-conditions" href="">Nuestros términos y condiciones</a></p>
+    <p><a class="terms-conditions " href="">Nuestros términos y condiciones</a></p>
   </div>
 
   <!-- BOTÓN REGISTRARSE -->
-  <button pButton type="submit" class="btn-register" size="large" [disabled]="form.invalid">Registrarse</button>
+  <button pButton type="submit" class="btn-register h-13 md:h15 xl:h-18" size="large" [disabled]="form.invalid">Registrarse</button>
 </form>
