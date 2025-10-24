@@ -105,7 +105,7 @@ public class AuthenticationController {
      * @return ResponseEntity con mensaje de éxito.
      */
     @PostMapping("/resend")
-    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) {
+    public ResponseEntity<?> resendVerificationCode(@RequestBody String email) {
         usuarioService.resendVerificationCode(email);
         return ResponseEntity.ok("Se ha vuelto a enviar el código");
     }
