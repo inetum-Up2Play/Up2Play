@@ -57,10 +57,10 @@ Las convenciones de nombres son esenciales para mantener la organización y clar
 - **feat**: Nueva funcionalidad. **Ejemplo** → feat: añadir pantalla de registro
 - **fix**: Corrección de errores. **Ejemplo** → fix: corregir validación de email
 - **docs**: Cambios en documentación. **Ejemplo** → docs: actualizar README con instrucciones de instalación
-- **refactor**: Reestructuración del código sin cambiar funcionalidad. **Ejemplo →** refactor: simplificar lógica de autenticación
-- **style**: Cambios de formato, no afectan la lógica del código, solo su presentación.  **Ejemplo →**  style: eliminar espacios innecesarios en funciones
+- **refactor**: Reestructuración del código sin cambiar funcionalidad, como cambios de nombre de variables o funciones.  **Ejemplo →** refactor: simplificar lógica de autenticación
+- **style**: Cambios de formato, tabulaciones, espacios o puntos y coma, etc; no afectan al usuario.  **Ejemplo →**  style: eliminar espacios innecesarios en funciones
 - **test**: Añadir o modificar pruebas.   **Ejemplo** → test: añadir pruebas unitarias para el componente Login
-- **chore**: Tareas menores (actualizar dependencias, configuración, etc.). **Ejemplo** → chore: actualizar dependencias en package.json
+- **chore**: Describir cambios que no afectan directamente el código de producción o los archivos de prueba. Ideal para tareas de mantenimiento, configuraciones o actualizaciones que no introducen nuevas funcionalidades ni corrigen errores. (actualizar dependencias y  configuración.). **Ejemplo** → chore: actualizar dependencias en package.json
 - **perf**: Mejoras de rendimiento. **Ejemplo** → perf: reducir tiempo de carga en la pantalla de inicio
 - **ci**: Cambios en scripts, workflows o configuración de CI/CD. **Ejemplo** → ci: añadir workflow de GitHub Actions para test
     
