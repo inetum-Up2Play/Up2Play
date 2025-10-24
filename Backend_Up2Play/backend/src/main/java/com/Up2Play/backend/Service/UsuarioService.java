@@ -99,7 +99,6 @@ public class UsuarioService {
         try {
             sendVerificationEmail(saved);
         } catch (Exception e) {
-            // TODO: Loggear error (ej: logger.warn("Fallo en envío de email", e))
             // Continúa sin romper el registro
         }
 
