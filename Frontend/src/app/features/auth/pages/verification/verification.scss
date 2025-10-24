@@ -12,13 +12,15 @@ body {
 //Todo el div que implica la vista login
 .verification-page { 
   position: relative;
-  height: 100vh; //Altura
+  height: fit-content; //Altura
+  min-height: 100dvh;
   width: 100%; //Ancho
   display: flex; //Para que separe, header, form y footer
   flex-direction: column; //Organiza header, login y footer en columna
   justify-content: space-between; //Header arriba, form al centro, footer abajo
   padding-bottom: 2%;
   padding-top: 1.75%;
+  overflow: hidden;
 
   @include fondo-gradiente-verde;
 
