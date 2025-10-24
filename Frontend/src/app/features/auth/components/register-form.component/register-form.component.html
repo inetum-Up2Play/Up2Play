@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="register-form p-10 pb-0 w-full" novalidate>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="register-form p-10 pb-0 md:pt-4 w-full" novalidate>
   <h1 class="text-3xl md:text-5xl md:pb-2 xl:text-6xl xl:pb-5">CREAR CUENTA</h1>
   <p class="form-introduccion md:max-w-160 xl:max-w-175 pb-6">¿Ya eres miembro?
     <a class="form-link-login" routerLink="/auth/login">Iniciar sesión</a>
@@ -10,7 +10,7 @@
       <input pInputText id="nombre_usuario" placeholder="Nombre de usuario" formControlName="nombre_usuario"
         autocomplete="username"
         [ngClass]="{'ng-invalid': f.nombre_usuario.invalid && (f.nombre_usuario.dirty || f.nombre_usuario.touched)}"
-        class="input h-13 md:h15 xl:h-18" />
+        class="input h-13 md:h15 2xl:h-18" />
       <p-inputicon class="pi pi-user" style="color: black" />
     </p-iconfield>
 
@@ -37,7 +37,7 @@
     <!-- CONTRASEÑA -->
     <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
       <p-iconfield>
-        <input pInputText type="password" placeholder="Contraseña" formControlName="password" class="input h-13 md:h15 xl:h-18"
+        <input pInputText type="password" placeholder="Contraseña" formControlName="password" class="input h-13 md:h15 2xl:h-18"
           [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
         <p-inputicon class="pi pi-lock" style="color: black" />
       </p-iconfield>
@@ -72,7 +72,7 @@
     <div class="form-field  md:max-w-160 xl:max-w-175 pb-4">
       <p-iconfield>
         <input pInputText type="password" placeholder="Repetir contraseña" formControlName="confirmPassword"
-          class="input h-13 md:h15 xl:h-18" [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
+          class="input h-13 md:h15 2xl:h-18" [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
         <p-inputicon class="pi pi-arrow-right-arrow-left" style="color: black" />
       </p-iconfield>
 
@@ -112,7 +112,7 @@
   <div class="form-field  md:max-w-160 xl:max-w-175 pb-6">
     <p-iconfield>
       <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
-        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input h-13 md:h15 xl:h-18" />
+        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input h-13 md:h15 2xl:h-18" />
       <p-inputicon class="pi pi-envelope" style="color: black" />
     </p-iconfield>
 
@@ -151,5 +151,5 @@
   </div>
 
   <!-- BOTÓN REGISTRARSE -->
-  <button pButton type="submit" class="btn-register h-13 md:h15 xl:h-18" size="large" [disabled]="form.invalid">Registrarse</button>
+  <button pButton type="submit" class="btn-register h-13 md:h15 2xl:h-18" size="large" [disabled]="form.invalid">Registrarse</button>
 </form>
