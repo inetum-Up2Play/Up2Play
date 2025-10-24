@@ -1,6 +1,5 @@
 package com.Up2Play.backend.Controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
 import com.Up2Play.backend.Model.Usuario;
-import com.Up2Play.backend.Model.VerificationToken;
 import com.Up2Play.backend.Responses.LoginResponse;
 import com.Up2Play.backend.Service.JwtService;
 import com.Up2Play.backend.Service.UsuarioService;
@@ -46,7 +44,8 @@ public class AuthenticationController {
      * @param jwtService     Servicio JWT.
      * @param usuarioService Servicio de usuarios.
      */
-    public AuthenticationController(JwtService jwtService, UsuarioService usuarioService, VerificationTokenService verificationTokenService) {
+    public AuthenticationController(JwtService jwtService, UsuarioService usuarioService,
+            VerificationTokenService verificationTokenService) {
         this.jwtService = jwtService;
         this.usuarioService = usuarioService;
         this.verificationTokenService = verificationTokenService;
@@ -73,7 +72,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/registrado")
-    public String usuarioRegistrado(){
+    public String usuarioRegistrado() {
 
         return "http://localhost:4200";
     }
@@ -106,15 +105,15 @@ public class AuthenticationController {
         usuarioService.verifyUser(verifyUserDto);
         return ResponseEntity.ok(Map.of("message", "Cuenta verificada"));
     }
-    
-@GetMapping("/validate-token")
+
+    @GetMapping("/validate-token")
     public ResponseEntity<Map<String, String>> validateToken(@RequestParam String token) {
         try {
             Usuario usuario = verificationTokenService.validateToken(token);
             return ResponseEntity.ok(Map.of("email", usuario.getEmail()));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                 .body(Map.of("error", e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -123,7 +122,7 @@ public class AuthenticationController {
      * 
      * @param email Email del usuario.
      * @return ResponseEntity con mensaje de éxito.
-     * @throws MessagingException 
+     * @throws MessagingException
      */
     @PostMapping("/resend")
     public ResponseEntity<?> resendVerificationCode(@RequestParam String email) throws MessagingException {

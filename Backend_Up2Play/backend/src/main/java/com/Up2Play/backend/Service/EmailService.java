@@ -18,7 +18,8 @@ public class EmailService {
     private final JavaMailSender emailSender;
 
     /**
-     * Constructor que inyecta el JavaMailSender configurado (ej: via application.properties).
+     * Constructor que inyecta el JavaMailSender configurado (ej: via
+     * application.properties).
      */
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
@@ -26,10 +27,11 @@ public class EmailService {
 
     /**
      * Envía un correo electrónico simple al destinatario especificado.
-     * @param to Email del destinatario.
+     * 
+     * @param to      Email del destinatario.
      * @param subject Asunto del correo.
-     * @param body Contenido del mensaje.
-     * @throws MessagingException 
+     * @param body    Contenido del mensaje.
+     * @throws MessagingException
      */
     public void enviarCorreo(String to, String subject, String body) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();

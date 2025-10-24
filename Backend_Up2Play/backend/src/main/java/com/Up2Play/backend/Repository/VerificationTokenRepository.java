@@ -11,5 +11,5 @@ import com.Up2Play.backend.Model.VerificationToken;
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, String> {
 
     Optional<VerificationToken> findByToken(String token);
-    
+
 }
