@@ -1,7 +1,9 @@
 package com.Up2Play.backend.Controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,9 +11,13 @@ import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
 import com.Up2Play.backend.Model.Usuario;
+import com.Up2Play.backend.Model.VerificationToken;
 import com.Up2Play.backend.Responses.LoginResponse;
 import com.Up2Play.backend.Service.JwtService;
 import com.Up2Play.backend.Service.UsuarioService;
+import com.Up2Play.backend.Service.VerificationTokenService;
+
+import jakarta.mail.MessagingException;
 
 /**
  * Controlador REST para manejar autenticación de usuarios: registro, login,
@@ -32,15 +38,18 @@ public class AuthenticationController {
      */
     private final UsuarioService usuarioService;
 
+    private final VerificationTokenService verificationTokenService;
+
     /**
      * Constructor que inyecta servicios de JWT y usuarios.
      * 
      * @param jwtService     Servicio JWT.
      * @param usuarioService Servicio de usuarios.
      */
-    public AuthenticationController(JwtService jwtService, UsuarioService usuarioService) {
+    public AuthenticationController(JwtService jwtService, UsuarioService usuarioService, VerificationTokenService verificationTokenService) {
         this.jwtService = jwtService;
         this.usuarioService = usuarioService;
+        this.verificationTokenService = verificationTokenService;
     }
 
     /**
@@ -97,15 +106,27 @@ public class AuthenticationController {
         usuarioService.verifyUser(verifyUserDto);
         return ResponseEntity.ok(Map.of("message", "Cuenta verificada"));
     }
+    
+@GetMapping("/validate-token")
+    public ResponseEntity<Map<String, String>> validateToken(@RequestParam String token) {
+        try {
+            Usuario usuario = verificationTokenService.validateToken(token);
+            return ResponseEntity.ok(Map.of("email", usuario.getEmail()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                 .body(Map.of("error", e.getMessage()));
+        }
+    }
 
     /**
      * Endpoint para reenviar código de verificación por email.
      * 
      * @param email Email del usuario.
      * @return ResponseEntity con mensaje de éxito.
+     * @throws MessagingException 
      */
     @PostMapping("/resend")
-    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) {
+    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) throws MessagingException {
         usuarioService.resendVerificationCode(email);
         return ResponseEntity.ok("Se ha vuelto a enviar el código");
     }

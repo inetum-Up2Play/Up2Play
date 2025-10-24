@@ -1,8 +1,11 @@
 package com.Up2Play.backend.Service;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 /**
  * Servicio para enviar correos electrónicos simples usando Spring Mail.
@@ -26,13 +29,20 @@ public class EmailService {
      * @param to Email del destinatario.
      * @param subject Asunto del correo.
      * @param body Contenido del mensaje.
+     * @throws MessagingException 
      */
-    public void enviarCorreo(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("up2play1@gmail.com");  // Remitente fijo (configurable via properties)
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        emailSender.send(message);  // Envía el mensaje
+    public void enviarCorreo(String to, String subject, String body) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        try {
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(body, true); // true indica que el contenido es HTML
+            emailSender.send(message);
+        } catch (Exception e) {
+            // Manejo de excepciones (logging, reintentos, etc.)
+            e.printStackTrace();
+        }
     }
 }

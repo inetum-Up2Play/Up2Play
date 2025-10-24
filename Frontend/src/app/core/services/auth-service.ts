@@ -25,8 +25,13 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/signup`, payload);
   }
 
-  verification(payload: { email: string; verificationCode: string }) { 
+  verification(payload: {email: string; verificationCode: string }) { 
     return this.http.post(`${this.baseUrl}/verify`, payload);
+  }
+
+  
+  validateToken(token: string) {
+    return this.http.get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`);
   }
 
 
