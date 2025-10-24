@@ -65,15 +65,15 @@ h1 {
 
 
 .p-inputtext.ng-invalid.ng-touched {
-    border-color: #8B0000 !important;
+    border-color: $msg-error-oscuro !important;
     &::placeholder{
-        color: #8B0000 !important;
+        color: #b8b8b8 !important;
     }
 }
 
 .error {
     font-family: $work-sans;
-    color: #8B0000c5;
+    color: $msg-error-oscuro;
 }
 
 .forgot-password-text {
@@ -100,7 +100,7 @@ h1 {
     &:hover{
         color: $blanco;
         background-color: $verde-oscuro;
-        border: none;
+        border: none !important;
         opacity: 0.8;
         transition: ease 0.3s;
         cursor: pointer;
