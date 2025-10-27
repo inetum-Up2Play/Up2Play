@@ -33,6 +33,8 @@ import { RouterModule } from '@angular/router';
 
 export class LoginFormComponent {
 
+  showPassword: boolean = false;
+
   submitted = output<{ email: string; password: string }>();
 
   private fb = inject(FormBuilder);
