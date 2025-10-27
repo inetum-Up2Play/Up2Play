@@ -84,7 +84,6 @@ export class VerificationFormComponent {
       verificationCode: this.f.verificationCode.value
     };
 
-
     this.authService.verification(payload).subscribe({
       next: (res) => {
         this.router.navigate(['/auth/login']);
@@ -93,7 +92,4 @@ export class VerificationFormComponent {
 
     console.log(payload);
   }
-
-
-
 }

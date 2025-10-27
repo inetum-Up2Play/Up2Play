@@ -57,7 +57,7 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 export class RegisterFormComponent {
   constructor(private router: Router) {}
   private fb = inject(FormBuilder);
-  private auth = inject(AuthService); // cuando tengas el servicio
+  private authService = inject(AuthService); // cuando tengas el servicio
   private userData = inject(UserDataService);
 
 
@@ -92,7 +92,7 @@ export class RegisterFormComponent {
       nombre_usuario: this.f.nombre_usuario.value
     };
 
-    this.auth.register(payload).subscribe({
+    this.authService.register(payload).subscribe({
       next: (res) => {
           this.userData.setEmail(payload.email); // ← Guarda el email
           this.router.navigate(['/auth/verification']);

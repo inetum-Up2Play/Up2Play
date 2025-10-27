@@ -58,11 +58,8 @@ export class LoginFormComponent {
       return;
     } else {
       this.submitted.emit(this.form.getRawValue()); // <- envía {email, password}
-
     }
   }
-
-  
 }
  
  
