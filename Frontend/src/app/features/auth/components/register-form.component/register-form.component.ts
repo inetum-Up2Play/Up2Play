@@ -46,7 +46,7 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
     RouterModule,
     InputIcon,
     IconField
-],
+  ],
   templateUrl: './register-form.component.html',
   styleUrls: [
     './register-form.component.scss'
@@ -55,10 +55,10 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 })
 
 export class RegisterFormComponent {
-  constructor(private router: Router) {}
+  private router = inject(Router);
   private fb = inject(FormBuilder);
-  private auth = inject(AuthService); // cuando tengas el servicio
-  private userData = inject(UserDataService);
+  private authService = inject(AuthService); // cuando tengas el servicio
+  private userDataService = inject(UserDataService);
 
 
   //en un futuro poner esto en el shard y exportarlo
@@ -92,10 +92,10 @@ export class RegisterFormComponent {
       nombre_usuario: this.f.nombre_usuario.value
     };
 
-    this.auth.register(payload).subscribe({
+    this.authService.register(payload).subscribe({
       next: (res) => {
-          this.userData.setEmail(payload.email); // ← Guarda el email
-          this.router.navigate(['/auth/verification']);
+        this.userDataService.setEmail(payload.email); // ← Guarda el email
+        this.router.navigate(['/auth/verification']);
       },
       error: (err) => {
         if (err.status === 409) {

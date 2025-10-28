@@ -58,16 +58,6 @@ p{
     font-family: $work-sans;
     color: $blanco;
 
-    .form-link-register {
-        color: $verde-claro;
-        cursor: pointer;
-        text-decoration: none;
-
-        &:hover {
-            color: $verde-oliva;
-            transition: 0.3s ease;
-        }
-    }
 }
 
 .form-field {

@@ -6,15 +6,13 @@ import {
   Validators,
   ReactiveFormsModule
 } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { CheckboxModule } from 'primeng/checkbox';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { Router, RouterModule } from '@angular/router';
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
 
@@ -26,8 +24,6 @@ import { AuthService } from '../../../../core/services/auth-service';
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
-    FloatLabelModule,
-    CheckboxModule,
     IconFieldModule,
     InputIconModule,
     RouterModule
