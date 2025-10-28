@@ -12,7 +12,7 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
  
 
 @Component({
@@ -32,16 +32,15 @@ import { RouterModule } from '@angular/router';
 })
 
 export class LoginFormComponent {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
 
   submitted = output<{ email: string; password: string }>();
-
-  private fb = inject(FormBuilder);
  
   form = this.fb.group(
     {
       email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
       password: this.fb.nonNullable.control('', [Validators.required]),
-
     }
   );
  
@@ -56,10 +55,12 @@ export class LoginFormComponent {
       return;
     } else {
       this.submitted.emit(this.form.getRawValue()); // <- envía {email, password}
-
     }
   }
 
+  redirectForgotPassword() {
+    this.router.navigate(['/auth/mail-recover']);
+  }
   
 }
  
