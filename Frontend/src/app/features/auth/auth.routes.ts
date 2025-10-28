@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { Verification } from './pages/verification/verification';
+import { MailRecover } from './pages/mail-recover/mail-recover';
 
 
 export const AUTH_ROUTES: Routes = [
@@ -16,5 +17,9 @@ export const AUTH_ROUTES: Routes = [
     {
         path: 'verification',
         component: Verification
+    },
+    {
+        path: 'mail-recover',
+        component: MailRecover
     }
 ];
