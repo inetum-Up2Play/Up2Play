@@ -30,16 +30,17 @@ public class UsuarioService {
     private PasswordEncoder passwordEncoder;  // Encriptador de contraseñas (ej: BCrypt)
     private AuthenticationManager authenticationManager;  // Gestor de autenticación de Spring Security
     private EmailService emailService;  // Servicio para enviar emails de verificación
-
+    private LoginAttemptService loginAttemptService; //servicio para limitar intentos en inicio de sesión 
     /**
      * Constructor que inyecta las dependencias necesarias.
      */
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager, EmailService emailService) {
+            AuthenticationManager authenticationManager, EmailService emailService, LoginAttemptService loginAttemptService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
+        this.loginAttemptService = loginAttemptService;
     }
 
     /**
@@ -123,11 +124,25 @@ public class UsuarioService {
             throw new RuntimeException("Usuario no verificado");
         }
 
-        // Autentica credenciales (lanza excepción si inválidas)
+        //verificar si el usuario esta bloqueado
+        if (loginAttemptService.isBlocked(input.getEmail())){
+            throw new RuntimeException("Demasiados intentos fallidos. Intenta más tarde.");
+        }
+
+        // Autentica credenciales
+        try { //intenta autentificar, si lo consigue borra la cache de intentos de inicio de sesion  y devuelve el usuario
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
+        
+        loginAttemptService.loginSucceeded(input.getEmail());
 
         return user;
+
+        //si no lo consigue, añade un intento de inicio de sesión
+        } catch (Exception e){
+            loginAttemptService.loginFailed(input.getEmail());
+           throw new RuntimeException("Credenciales inválidas"); 
+        }
     }
 
     /**
