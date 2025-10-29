@@ -61,6 +61,7 @@ export class RegisterFormComponent {
   private userDataService = inject(UserDataService);
 
 
+
   //en un futuro poner esto en el shard y exportarlo
   private PASSWORD_POLICY = /^(?=.*\p{Ll})(?=.*\p{Lu})(?=.*\p{Nd})(?=.*[^\p{L}\p{N}\s])(?!.*\s).+$/u;
 

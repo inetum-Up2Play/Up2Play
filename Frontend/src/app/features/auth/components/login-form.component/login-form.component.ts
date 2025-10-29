@@ -35,6 +35,8 @@ export class LoginFormComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
+  showPassword: boolean = false;
+
   submitted = output<{ email: string; password: string }>();
  
   form = this.fb.group(

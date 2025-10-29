@@ -28,17 +28,22 @@
 
   <!-- CAMPO CONTRASEÑA -->
   <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
-    <p-iconfield>
-      <input pInputText type="password" placeholder="Contraseña" formControlName="password"
+
+    <div class="relative">
+      <input pInputText [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" formControlName="password"
         class="input h-13 md:h-15 2xl:h-18"
         [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
-      <p-inputicon class="pi pi-lock" style="color: black" />
-    </p-iconfield>
+      <p-inputicon style="color: black" class="pi pi-lock absolute right-3 top-1/2 text-black" />
+      <p-inputicon [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showPassword = !showPassword"
+        class="absolute right-9 top-1/2 cursor-pointer text-gray-700" style="color: #F7F7F7" />
+    </div>
 
     @if (f.password.hasError('required') && (f.password.dirty || f.password.touched)) {
     <small class="error">
       La password es obligatoria.
-    </small> }
+    </small>
+    }
+
   </div>
 
   <!-- OLVIDAR CONTRASEÑA -->
