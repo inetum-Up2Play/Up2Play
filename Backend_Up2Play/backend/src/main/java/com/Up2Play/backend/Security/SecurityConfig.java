@@ -29,8 +29,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 
     // Dependencias inyectadas para autenticación y filtros
-    private final AuthenticationProvider authenticationProvider;  // Proveedor de autenticación (ej: DaoAuthenticationProvider)
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;  // Filtro personalizado para validar JWT
+    private final AuthenticationProvider authenticationProvider; // Proveedor de autenticación (ej:
+                                                                 // DaoAuthenticationProvider)
+    private final JwtAuthenticationFilter jwtAuthenticationFilter; // Filtro personalizado para validar JWT
 
     /**
      * Constructor que inyecta las dependencias de seguridad.
@@ -49,7 +50,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 // 1) Habilita CORS usando la configuración personalizada
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
                 // 2) Deshabilita CSRF (no necesario para API stateless con JWT)
                 .csrf(csrf -> csrf.disable())
                 // 3) Configura sesiones como stateless (sin cookies de sesión)
@@ -79,8 +81,10 @@ public class SecurityConfig {
     }
 
     /**
-     * Bean para configuración CORS: permite solicitudes desde orígenes específicos (ej: frontend Angular).
-     * Define métodos, headers y credenciales permitidos para evitar errores de cross-origin.
+     * Bean para configuración CORS: permite solicitudes desde orígenes específicos
+     * (ej: frontend Angular).
+     * Define métodos, headers y credenciales permitidos para evitar errores de
+     * cross-origin.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -97,7 +101,7 @@ public class SecurityConfig {
         cfg.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", cfg);  // Aplica a todos los endpoints
+        source.registerCorsConfiguration("/**", cfg); // Aplica a todos los endpoints
         return source;
     }
 }

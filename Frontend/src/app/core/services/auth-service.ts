@@ -15,7 +15,7 @@ export type LoginResult = true | 'INVALID_CREDENTIALS' | 'EMAIL_NOT_VERIFIED' | 
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   private readonly http = inject(HttpClient);
   private router = inject(Router);
   private baseUrl = 'http://localhost:8080/auth';
@@ -25,13 +25,26 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/signup`, payload);
   }
 
-  verification(payload: { email: string; verificationCode: string }) { 
+  verification(payload: { email: string; verificationCode: string }) {
     return this.http.post(`${this.baseUrl}/verify`, payload);
   }
 
-  resendVerificationCode(email: string ) {
+  resendVerificationCode(email: string) {
     return this.http.post(`${this.baseUrl}/resend`, email);
   }
+
+  newPasswordCode(payload: { email: string }) {
+    return this.http.post(`${this.baseUrl}/verifyEmail`, payload);
+  }
+
+  resendNewPasswordCode(payload: { email: string }) {
+    return this.http.post(`${this.baseUrl}/resendEmail`, payload);
+  }
+
+  validateToken(token: string) {
+    return this.http.get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`);
+  }
+
 
   login(email: string, password: string) {
     // Si ya tienes Credentials importado, úsalo:
@@ -47,7 +60,7 @@ export class AuthService {
         switch (error.status) {
           case 401: return of('INVALID_CREDENTIALS' as const);
           case 403: return of('EMAIL_NOT_VERIFIED' as const);
-          default:  return of('UNKNOWN' as const);
+          default: return of('UNKNOWN' as const);
         }
       })
     );
@@ -56,7 +69,7 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.token && !this.isTokenExpired();
   }
-  
+
   /** Limpia storage y redirige a /login si corresponde */
   logout(navigateToLogin = true) {
     if (this.logoutTimer) clearTimeout(this.logoutTimer);
@@ -72,7 +85,7 @@ export class AuthService {
     }
     return this.router.parseUrl(`/auth/login?redirect=${encodeURIComponent(stateUrl)}`);
   }
-  
+
   /** Calcula expiresAt a partir de expiresIn (ms) y guarda en sessionStorage */
   private setSession(res: LoginResponse) {
     const expiresAt = Date.now() + res.expiresIn;
@@ -82,7 +95,7 @@ export class AuthService {
     );
     this.scheduleAutoLogout(expiresAt);
   }
-  
+
   /** Relee storage al arrancar la app y reprograma logout */
   initFromStorageOnAppStart() {
     const auth = this.getAuth();
@@ -93,7 +106,7 @@ export class AuthService {
     }
     this.scheduleAutoLogout(auth.expiresAt);
   }
-  
+
   /** Programa el logout cuando venza el token */
   private scheduleAutoLogout(expiresAt: number) {
     if (this.logoutTimer) clearTimeout(this.logoutTimer);
@@ -105,7 +118,7 @@ export class AuthService {
     }
     this.logoutTimer = setTimeout(() => this.logout(true), msLeft);
   }
- 
+
   /** Helpers de estado */
   getAuth(): { token: string; expiresAt: number } | null {
     const raw = sessionStorage.getItem(STORAGE_KEY);

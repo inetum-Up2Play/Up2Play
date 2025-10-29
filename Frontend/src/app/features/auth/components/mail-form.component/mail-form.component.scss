@@ -4,20 +4,19 @@ h1 {
     font-family: $montserrat;
     color: $blanco;
     margin: 0;
-    text-align: center;
     font-weight: 600;
 }
 
-p {
+p, h1 {
     text-align: center;
 }
 
-.Imgicono {
+.Imgicono{
     display: flex;
     justify-content: center;
 }
 
-.verification-form {
+.mail-recover-form {
     align-content: space-between;
     background-color: #15261423;
     border-radius: 15px;
@@ -32,6 +31,7 @@ p {
     border-color: $blanco;
     border-radius: 1rem;
     box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
+    padding-left: 3%;
 
     &::placeholder {
         color: $blanco;
@@ -65,12 +65,7 @@ p {
 }
 
 
-.input.p-inputtext.p-invalid {
-    border-color: $msg-error-oscuro !important;
-}
-
-
-.input.p-inputtext.ng-invalid.ng-touched {
+.p-inputtext.ng-invalid.ng-touched {
     border-color: $msg-error-oscuro !important;
 
     &::placeholder {

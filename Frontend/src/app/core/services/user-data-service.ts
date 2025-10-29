@@ -6,7 +6,19 @@ import { Injectable } from '@angular/core';
 export class UserDataService {
 
   private email: string | null = null;
+  private token: string | null = null;
 
+  setToken(token: string) {
+    this.token = token;
+  }
+
+  getToken(): string {
+    return (this.token ?? '').trim();
+  }
+
+  clearToken() {
+    this.token = null;
+  }
 
   setEmail(email: string) {
 
