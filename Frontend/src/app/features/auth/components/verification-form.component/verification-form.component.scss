@@ -8,11 +8,11 @@ h1 {
     font-weight: 600;
 }
 
-p{
+p {
     text-align: center;
 }
 
-.Imgicono{
+.Imgicono {
     display: flex;
     justify-content: center;
 }
@@ -30,7 +30,7 @@ p{
     background-color: transparentize($color: lightgray, $amount: 0.8);
     color: $blanco;
     border-color: $blanco;
-    border-radius: 1rem; 
+    border-radius: 1rem;
     box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
 
     &::placeholder {
@@ -42,11 +42,12 @@ p{
     &:hover {
         border-color: rgb(184, 184, 184);
     }
-    
+
     &:focus {
         border-color: rgb(184, 184, 184) !important;
         outline: none; // Elimina el borde azul por defecto del navegador
-        &::placeholder{
+
+        &::placeholder {
             opacity: 0.5;
             transition: ease 0.3s;
         }
@@ -75,9 +76,15 @@ p{
 }
 
 
-.p-inputtext.ng-invalid.ng-touched {
+.input.p-inputtext.p-invalid {
     border-color: $msg-error-oscuro !important;
-    &::placeholder{
+}
+
+
+.input.p-inputtext.ng-invalid.ng-touched {
+    border-color: $msg-error-oscuro !important;
+
+    &::placeholder {
         color: #cacaca !important;
     }
 }
@@ -102,9 +109,10 @@ p{
     opacity: 0.9;
     margin-top: 0.8rem;
 
-    &:enabled{
+    &:enabled {
         cursor: pointer;
-        &:hover{
+
+        &:hover {
             background-color: $verde-oscuro !important;
             opacity: 1 !important;
             font-weight: 500 !important;
@@ -114,7 +122,7 @@ p{
         }
     }
 
-    &:disabled{
+    &:disabled {
         background-color: $verde-oscuro;
         opacity: 0.7;
     }

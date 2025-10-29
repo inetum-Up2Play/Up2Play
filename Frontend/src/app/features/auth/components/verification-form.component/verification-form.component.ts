@@ -4,7 +4,9 @@ import { UserDataService } from '../../../../core/services/user-data-service'; /
 import {
   FormBuilder,
   Validators,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  FormControl,
+  AbstractControl
 } from '@angular/forms';
 
 // PrimeNG
@@ -17,7 +19,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterModule } from '@angular/router';
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
-
+import { Login } from '../../pages/login/login';
 
 @Component({
   selector: 'app-verification-form',
@@ -39,14 +41,21 @@ import { AuthService } from '../../../../core/services/auth-service';
 })
 
 export class VerificationFormComponent {
-  private userData = inject(UserDataService);
+  private userDataService = inject(UserDataService);
   private authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private readonly rawEmail = this.userData.getEmail();
+  private readonly rawEmail = this.userDataService.getEmail();
 
-  email = this.userData.getEmail();
+  errorMessage: string | null = null;
+
+  email = this.userDataService.getEmail();
   
+
+  onTyping() {
+    // borra el mensaje de error al escribir o borrar
+    this.errorMessage = null;
+  }
 
   form = this.fb.group(
     {
@@ -72,28 +81,24 @@ export class VerificationFormComponent {
       return;
     }
 
-    /*     if (!this.rawEmail) {
-          // Manejo UX: redirigir o avisar
-          console.error('Email no disponible para verificación.');
-          this.router.navigate(['/auth/signup']); // ajusta a tu flujo
-          return;
-        } */
-
     const payload = {
       email: this.email,
       verificationCode: this.f.verificationCode.value
     };
 
-
     this.authService.verification(payload).subscribe({
       next: (res) => {
+        console.log("hola");
         this.router.navigate(['/auth/login']);
+      },
+      error: (err) => {
+        // No redirige. Muestra el mensaje de error
+        this.errorMessage = err.error?.message || 'El código de verificación es incorrecto o ha expirado.';
+        console.error('Error de verificación:', err);
+
       }
     });
 
     console.log(payload);
   }
-
-
-
 }
