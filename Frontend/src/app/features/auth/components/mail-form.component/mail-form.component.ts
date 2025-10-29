@@ -52,20 +52,23 @@ export class MailFormComponent {
     }
 
     //Descomentar cuando se haya hecho la lógica en el authService
+    const payload = {
+      email: this.emailText
+    };
 
-    // this.authService.newPasswordCode(this.emailText).subscribe({
-    //   next: (res) => {
-    //     this.userDataService.setEmail(this.emailText); // ← Guarda el email
-    //     this.router.navigate(['/auth/verification']);
-    //   },
-    //   error: (err) => {
-    //     if (err.status === ) { //Aquí hay que poner el error que diga que ese email no existe en la BBDD
-    //       console.error('El email no existe'); 
-    //     } else {
-    //       console.error('Error desconocido:', err);
-    //     }
-    //   }
-    // });
+    this.authService.newPasswordCode(payload).subscribe({
+      next: (res) => {
+        this.userDataService.setEmail(this.emailText); // ← Guarda el email
+        this.router.navigate(['/auth/verification']);
+      },
+      error: (err) => {
+        if (err.status === 401) { //Aquí hay que poner el error que diga que ese email no existe en la BBDD
+          console.error('El email no existe'); 
+        } else {
+          console.error('Error desconocido:', err);
+        }
+      }
+    });
 
   }
 }
