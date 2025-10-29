@@ -129,7 +129,8 @@ public class UsuarioService {
             if (user.getEmail().equals(input.getEmail())) {
 
                 user.setVerificationCode(generateVerificationCode());
-                sendVerificationEmail(user);
+                user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
+                sendVerificationForgetPassword(user);
                 usuarioRepository.save(user);
 
             } else {
@@ -235,6 +236,27 @@ public class UsuarioService {
         }
     }
 
+        public void resendVerificationCodeForgetPsswd(String email) throws MessagingException {
+        Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+
+            if (user.isEnabled()) {
+                throw new RuntimeException("La cuenta esta verificada");
+            }
+
+            // Genera nuevo código y actualiza expiración
+            user.setVerificationCode(generateVerificationCode());
+            user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(1));
+            sendVerificationForgetPassword(user);
+            usuarioRepository.save(user);
+        } else {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+    }
+
+
     /**
      * Envía el email de verificación al usuario.
      * Usa plantilla simple con código y expiración.
@@ -273,6 +295,57 @@ public class UsuarioService {
                                 <a href="http://localhost:4200/auth/verification?token=%s"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Verificar Cuenta
+                                </a>
+
+                                <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
+                                <p style="font-size: 12px; color: #cccccc; text-align: center;">Este correo fue generado automáticamente. Por favor, no respondas.</p>
+                                <p style="font-size: 12px; color: #cccccc; text-align: center;">© 2025 UP2Play. Todos los derechos reservados.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+                """
+                .formatted(
+                        user.getNombre_usuario() != null ? user.getNombre_usuario() : "usuario",
+                        code,
+                        user.getVerificationCodeExpiresAt(),
+                        token);
+
+        emailService.enviarCorreo(user.getEmail(), subject, body);
+    }
+
+    public void sendVerificationForgetPassword(Usuario user) throws MessagingException {
+        String subject = "Verificacion de Email";
+        String code = user.getVerificationCode();
+        String token = verificationTokenService.createToken(user).getToken();
+
+        String body = """
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Verificación de Cuenta</title>
+                </head>
+                <body style="margin: auto; padding: 0; background-color: #ffffffff; font-family: 'Segoe UI', Roboto, Arial, sans-serif;">
+                    <table width="100%%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 40px auto; background-color: #f7f7f7; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+                        <tr>
+                            <td style="padding: 30px;">
+                                <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">📥 Verificación de Email</h2>
+                                <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
+                                <p style="font-size: 15px; color: #555555;">Hemos recibido una solicitud para restablecer tu contraseña en nuestra aplicacion UP2Play. Usa el siguiente código para verificar tu identidad:</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, puedes ignorar este mensaje de forma segura.</p>
+                                <div style="margin: 20px 0; padding: 15px; background-color: #B1DF75; opacity: 0.7; border-left: 5px solid #3D6C3F; border-radius: 10px; text-align: center; font-size: 28px; font-weight: bold; color: #152614; letter-spacing: 4px; font-family: 'Courier New', monospace;">
+                                    %s
+                                </div>
+                                <p style="font-size: 14px; color: #777777;">Este código expira a las <strong>%s</strong>.</p>
+
+                                <p style="font-size: 13px; color: #999999; margin-top: 30px;"><u>Si tienes problemas, también puedes hacer clic en el siguiente botón para continuar con la verificación</u></p>
+
+
+                                <a href="http://localhost:4200/auth/verification?token=%s"
+                                style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
+                                    Verificar Identidad
                                 </a>
 
                                 <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">

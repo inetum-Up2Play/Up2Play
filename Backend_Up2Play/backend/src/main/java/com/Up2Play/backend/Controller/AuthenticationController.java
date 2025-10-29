@@ -131,6 +131,12 @@ public class AuthenticationController {
         return ResponseEntity.ok("Se ha vuelto a enviar el código");
     }
 
+    @PostMapping("/resendEmail")
+    public ResponseEntity<?> resendVerificationCodeForgetPsswd(@RequestParam String email) throws MessagingException {
+        usuarioService.resendVerificationCodeForgetPsswd(email);
+        return ResponseEntity.ok("Se ha vuelto a enviar el código");
+    }
+
     /**
      * Record DTO simple para respuesta de registro: evita exponer datos sensibles
      * como contraseña.

@@ -4,10 +4,12 @@ public class VerifyEmailDto {
 
     private String email;
     private String verificationCode;
+    private String token;
 
-    public VerifyEmailDto(String email, String verificationCode) {
+    public VerifyEmailDto(String email, String verificationCode, String token) {
         this.email = email;
         this.verificationCode = verificationCode;
+        this.token = token;
     }
 
     public String getEmail() {
@@ -24,6 +26,14 @@ public class VerifyEmailDto {
 
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }
