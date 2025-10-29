@@ -35,7 +35,7 @@
       <p-inputicon style="color: black" class="pi pi-lock absolute right-3 top-1/2 text-black" />
 
       <p-inputicon [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showPassword = !showPassword"
-        class="absolute right-9 top-1/2 cursor-pointer text-gray-700" style="color: grey" />
+        class="absolute right-9 top-1/2 cursor-pointer text-gray-700" style="color: #F7F7F7" />
     </div>
 
     @if (f.password.hasError('required') && (f.password.dirty || f.password.touched)) {
