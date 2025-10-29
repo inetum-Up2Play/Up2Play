@@ -8,8 +8,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Work+Sans:wght@400;700&display=swaps "
         rel="stylesheet">
-    <link rel="icon" href="assets/images/logo/simbolo-fondoBlanco.png" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="Assets/images/logos/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="Assets/css/style.css">
     <title>UP2Play</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -17,84 +17,100 @@
 </head>
 
 <body>
-    <header id="header" class="text-white py-4 px-4 md:h-screen md:px-8 lg:px-16">
-        <section id="header-section" class="header-section flex justify-between items-center relative">
-            <div class="md:w-full">
-                <a href=""><img src="assets/images/logos/logo.png" alt="Logo de Up2Play"
-                        style="width: 220px; height: auto;">
+    <header id="header" class="text-white w-full xl:min-h-[90vh] xl:supports-[height:100svh]:min-h-[100svh]">
+        <section id="header-section" class="header-section flex justify-between items-center fixed top-0 right-0 w-full py-4 xl:px-8 xl:py-8 z-60">
+            <div class="shrink-0 px-4">
+                <a href="#"><img class="w-36 md:w-[220px] (y h-auto)" src="assets/images/logos/logo.png" alt="Logo de Up2Play">
                 </a>
             </div>
             
-            <nav id="menu" class="hidden border-neutral/10 rounded-box not-prose flex w-full flex-[1_0_0] flex-wrap gap-3 
-            p-3 sm:p-6 md:flex md:flex-row md:space-x-8 md:items-center justify-center flex-1">
-                <div class="flex flex-col md:flex-row font-extrabold md:space-x-14 text-[1.2rem] md:p-4 navBar">
-                    <a href="#section-UP2Play" class="md:hover:underline md:whitespace-nowrap">¿Qué es UP2Play?</a>
-                    <a href="#section-carousel" class="md:hover:underline">Actividades</a>
-                    <a href="#section-sobre_nosotros" class="md:hover:underline md:whitespace-nowrap">Sobre Nosotros</a>
-                    <a href="#titulo_nuestro_equipo" class="md:hover:underline">Equipo</a>
+            <nav id="menu" class="hidden xl:flex relative">
+                <ul class="flex xl:flex-row flex-col items-center justify-center font-extrabold
+                            gap-4 md:gap-8 lg:gap-14
+                            text-sm md:text-[1.1rem] lg:text-[1.2rem] 
+                            p-4 xl:p-2 pr-7 lx:pr-0
+                            items-end xl:items-center
+                            whitespace-nowrap">
+                    <li><a href="#section-UP2Play" class="md:hover:underline">¿Qué es UP2Play?</a></li>
+                    <li><a href="#section-carousel" class="md:hover:underline">Actividades</a></li>
+                    <li><a href="#section-sobre_nosotros" class="md:hover:underline">Sobre Nosotros</a></li>
+                    <li><a href="#section-nuestro_equipo" class="md:hover:underline">Equipo</a></li>
+                </ul>
+                <div class="xl:hidden fixed bottom-4 right-0 z-40">
+                    <img src="Assets/images/logos/logo_footer.png" alt="Favicon UP2Play" class="block max-w-full h-auto">
                 </div>
             </nav>
 
-            <div class="hidden md:w-full md:justify-end md:flex md:flex-row md:space-x-4 pr-6 font-bold rounded-md">
-                <button class="iniciar-sesion px-4 py-2 text-sm">
-                    <a href="http://localhost:4200/auth/login" class="md:whitespace-nowrap md:p-4">Iniciar Sesión</a>
-                </button>
-                <button class="registrarse px-4 py-2 text-sm">
-                    <a href="http://localhost:4200/auth/register" class="md:p-4">Registrarse</a>
-                </button>
+            <div class="hidden xl:flex items-center gap-4 pr-6 shrink-0 font-bold">
+                <a href="http://localhost:4200/auth/login">
+                    <button class="iniciar-sesion px-4 py-2 text-sm">
+                        Iniciar Sesión
+                    </button>
+                </a>
+                <a href="http://localhost:4200/auth/register">
+                    <button class="registrarse px-4 py-2 text-sm">
+                        Registrarse
+                    </button>
+                </a>            
             </div>
 
-            <div class="md:hidden flex space-x-4 items-center">
-                <button class="md:hidden avatar">
-                    <a href="#">
+            <div class="xl:hidden flex space-x-4 items-center px-4 relative z-20">
+                <button class="xl:hidden avatar">
+                    <a href="http://localhost:4200/auth/login">
                         <img src="assets/images/header/avatarIcon.png" alt="Avatar de usuario"
                             class="w-10 h-10 rounded-full overflow-hidden object-cover" stroke="currentColor">
                     </a>
                 </button>
-                <button id="btn-menu" class="md:hidden menu">
-                    <a href="#">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="3" y1="12" x2="21" y2="12" />
-                            <line x1="3" y1="6" x2="21" y2="6" />
-                            <line x1="3" y1="18" x2="21" y2="18" />
-                        </svg>
-                    </a>
+                <button id="btn-menu" class="xl:hidden menu">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
                 </button>
             </div>
         </section>
+        <div id="header-spacer" aria-hidden="true"></div>
 
-        <section id="Activa" class="flex flex-col md:py-60 items-center bg-center md:bg-top 
-            bg-no-repeat bg-cover h-96 md:h-screen">
-            <div class="text-center py-25 md:py-0">
+        <section id="Activa" class="flex flex-col 
+        py-[clamp(2rem,7vh,8rem)]
+        md:py-[clamp(1.5rem,2vh,2rem)]
+        xl:py-[clamp(4rem,12vh,14rem)]
+        2xl:py-[clamp(4rem,18vh,20rem)]
+        items-center bg-center md:bg-top 
+        bg-no-repeat bg-cover h-96">
+            <div class="text-center py-4 px-1 md:py-0">
                 <h1
                     class="italic leading-tight text-center text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl">
                     Activa tu vida, <br> conecta con gente
                 </h1>
                 <div class="activa-button p-6 ">
-                    <button class="md:text-2xl md:hover:scale-105 sahdow-lg transition duration-300">
-                        <i>Únete ahora</i>
-                    </button>
+                    <a href="http://localhost:4200/auth/register">
+                        <button class="md:text-2xl md:hover:scale-105 sahdow-lg transition duration-300">
+                            <i>Únete ahora</i>
+                        </button>                    
+                    </a>
                 </div>
             </div>
         </section>
     </header>
 
-    <section id="section-UP2Play" class=" py-16 md:py-20 lg:py-16 scroll-mt-24">
+    <section id="section-UP2Play" class=" py-16 lg:py-20 lg:py-16 scroll-mt-22 xl:scroll-mt-38">
         <div class="
         container mx-auto max-w-7xl
         px-4 sm:px-6 lg:px-8
-        grid grid-cols-1 md:grid-cols-2 md:grid-rows-[auto_1fr]
-        gap-8 md:gap-10
+        grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr]
+        gap-8 lg:gap-10
         ">
-            <!-- TÍTULO (móvil 1º) | md: col 2, fila 1 -->
+            <!-- TÍTULO (móvil 1º) | lg: col 2, fila 1 -->
             <h2 id="up2play-title" class="
 
-        md:col-start-2 md:row-start-1
-        text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
+        lg:col-start-2 lg:row-start-1
+        text-2xl sm:text-3xl lg:text-4xl lg:text-5xl xl:text-6xl
         font-extrabold tracking-tight leading-tight
         text-gray-900 dark:text-black
-        text-center md:text-left
+        text-center lg:text-left
 
         ">
                 ¿Qué es UP2Play?
@@ -102,44 +118,45 @@
 
             <!-- IMAGEN -->
             <div
-                class="md:col-start-1 md:row-start-1 md:row-span-2 rounded-2xl md:rounded-none overflow-hidden mx-auto md:mx-0">
+                class="lg:col-start-1 lg:row-start-1 lg:row-span-2 rounded-2xl lg:rounded-none overflow-hidden mx-auto lg:mx-0">
                 <img src="assets/images/up2play/banner_UP2Play.png" alt="Imagen de UP2Play"
-                    class="block mx-auto w-64 sm:w-64 md:w-full h-auto object-cover" />
+                    class="block mx-auto w-64 sm:w-64 lg:w-full h-auto object-cover" />
             </div>
 
             <!-- CONTENIDO -->
             <div class="
-                md:col-start-2 md:row-start-2
-                flex flex-col md:grid md:grid-rows-[1fr_auto]
-                gap-6 md:gap-8
-                items-center md:items-start
+                lg:col-start-2 lg:row-start-2
+                flex flex-col lg:grid lg:grid-rows-[1fr_auto]
+                gap-6 lg:gap-8
+                items-center lg:items-start
             ">
-                <div class="space-y-4 max-w-xl mx-auto md:mx-0 px-6 md:px-0 text-justify md:text-left sm:text-2xl">
-                    <p class="font-bold sm:text-xl md:text-xl leading-relaxed antialiased md:text-justify">
+                <div class="space-y-4 max-w-xl mx-auto lg:mx-0 px-4 lg:px-0 text-justify lg:text-left sm:text-xl break-words">
+                    <p class="font-bold text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">
                         UP2Play es una aplicación que te conecta con otros deportistas para organizar y
                         disfrutar actividades como fútbol, senderismo y más.
                     </p>
 
-                    <ul class="list-disc pl-5 space-y-2 md:text-justify">
-                        <li class="text-base sm:text-lg md:text-xl leading-relaxed antialiased">Crea o únete a planes
+                    <ul class="list-disc pl-5 space-y-2 lg:text-justify break-words">
+                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">Crea o únete a planes
                             fácilmente.</li>
-                        <li class="text-base sm:text-lg md:text-xl leading-relaxed antialiased">Gestiona tus eventos
+                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">Gestiona tus eventos
                             desde un calendario personalizado.</li>
-                        <li class="text-base sm:text-lg md:text-xl leading-relaxed antialiased">Coordina todo con mapas,
+                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">Coordina todo con mapas,
                             notificaciones y pagos integrados.</li>
                     </ul>
-
-                    <button type="button"
-                        class="md:text-xl p-4 flex items-center justify-center w-auto md:w-max mx-auto md:mx-0 mt-6 md:mt-12 whitespace-nowrap">
-                        ¡Haz deporte, conoce gente y diviértete!
-                    </button>
+                    <a href="http://localhost:4200/auth/register">
+                        <button type="button"
+                            class="lg:text-xl p-4 flex items-center justify-center w-auto lg:w-max mx-auto lg:mx-0 mt-6 lg:mt-12">
+                            ¡Haz deporte, conoce gente y diviértete!
+                        </button> 
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
 
-    <section id="section-carousel" class="relative scroll-mt-24 py-12 md:py-16 lg:py-20">
+    <section id="section-carousel" class="relative scroll-mt-22 xl:scroll-mt-38 py-12 md:py-16 lg:py-20">
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 class="
             text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
@@ -444,13 +461,12 @@
         </div>
     </section>
 
-
-    <section class="py-8">
+    <section id="section-nuestro_equipo" class="py-16 lg:py-20 lg:py-16 scroll-mt-23 xl:scroll-mt-38 ">
         <h2 id="titulo_nuestro_equipo"
-            class="text-2xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white mb-8 tracking-tight text-center py-6">
+            class="text-2xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white tracking-tight text-center mb-12">
             NUESTRO EQUIPO
         </h2>
-        <div class="mx-auto max-w-7xl px-12">
+        <div class="mx-auto max-w-7xl px-12 py-">
             <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-16">
                 <li id="Daniel_Villalba" class="rounded-3xl overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
@@ -505,7 +521,7 @@
                     <article class="flex flex-col md:flex-row h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
                             <img src="Assets/images/nuestroEquipo/Joan.webp" alt=""
-                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center">
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center object-top">
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-end p-6 md:px-14">
                             <div class="max-w-md text-left md:text-right">
@@ -539,7 +555,7 @@
     </section>
     <footer class="bg-[#152614] text-[#F7F7F7] w-full leading-relaxed antialiased mt-4">
         <section
-            class="container mx-auto max-w-7xl px-4 py-8 grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4 md:text-lef">
+            class="container mx-auto py-8 md:px-12 grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4">
             <nav aria-labelledby="footer-company">
                 <h2 id="footer-company" class="text-2xl font-extrabold mb-3">Compañía</h2>
                 <ul class="space-y-1">
@@ -551,7 +567,7 @@
                     <li>Moll de Lleida, 43004, Tarragona</li>
                 </ul>
             </nav>
-            <nav aria-labelledby="footer-resources">
+            <nav aria-labelledby="footer-resources" class="hidden md:block">
                 <h2 id="footer-resources" class="text-2xl font-extrabold mb-3">Recursos</h2>
                 <ul class="space-y-1">
                     <li><a href="#section-UP2Play" class="hover:underline">¿Que es UP2Play?</a></li>
@@ -560,18 +576,18 @@
                     <li><a href="#titulo_nuestro_equipo" class="hover:underline">Nuestro Equipo</a></li>
                 </ul>
             </nav>
-            <nav aria-labelledby="footer-community">
+            <nav aria-labelledby="footer-community" class="hidden md:block">
                 <h2 id="footer-community" class="text-2xl font-extrabold mb-3">Comunidad</h2>
                 <ul class="space-y-1">
-                    <li><a href="" class="hover:underline">Instragram</a></li>
-                    <li><a href="" class="hover:underline">X</a></li>
+                    <li><a href="https://www.instagram.com/" class="hover:underline">Instragram</a></li>
+                    <li><a href="https://x.com/" class="hover:underline">X</a></li>
                 </ul>
             </nav>
             <nav aria-labelledby="footer-legal">
                 <h2 id="footer-community" class="text-2xl font-extrabold mb-3">Legal</h2>
                 <ul class="space-y-1">
-                    <li><a href="" class="hover:underline">Política de Privacidad</a></li>
-                    <li><a href="" class="hover:underline">Términos y Condiciones</a></li>
+                    <li><a href="Assets/legal/politica-privacidad.html" class="hover:underline">Política de Privacidad</a></li>
+                    <li><a href="Assets/legal/terminos-y-condiciones.html" class="hover:underline">Términos y Condiciones</a></li>
                 </ul>
             </nav>
         </section>
