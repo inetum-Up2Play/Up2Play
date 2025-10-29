@@ -1,4 +1,19 @@
 @import 'styles/variables';
+/* Ocultar el icono de mostrar/ocultar contraseña predeterminado */
+/* Edge / IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+/* WebKit (Chrome, Safari) */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none;
+  pointer-events: none;
+}
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
 
 h1 {
     font-family: $montserrat;

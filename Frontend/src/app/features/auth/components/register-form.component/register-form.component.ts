@@ -60,6 +60,8 @@ export class RegisterFormComponent {
   private authService = inject(AuthService); // cuando tengas el servicio
   private userDataService = inject(UserDataService);
 
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
 
   //en un futuro poner esto en el shard y exportarlo

@@ -36,11 +36,14 @@
   <div class="password-group flex-col md:flex-row md:gap-4 ">
     <!-- CONTRASEÑA -->
     <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
-      <p-iconfield>
-        <input pInputText type="password" placeholder="Contraseña" formControlName="password" class="input h-13 md:h15 2xl:h-18"
+      <div class="relative">
+        <input pInputText [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" formControlName="password"
+          class="input h-13 md:h-15 2xl:h-18"
           [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
-        <p-inputicon class="pi pi-lock" style="color: black" />
-      </p-iconfield>
+        <p-inputicon style="color: black" class="pi pi-lock absolute right-3 top-1/2 text-black" />
+        <p-inputicon [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showPassword = !showPassword"
+          class="absolute right-9 top-1/2 cursor-pointer text-gray-700" style="color: #F7F7F7" />
+      </div>
 
       @if (f.password.hasError('required') && (f.password.dirty || f.password.touched)) {
       <small class="error">
@@ -69,13 +72,15 @@
     </div>
 
     <!-- REPETIR CONTRASEÑA -->
-    <div class="form-field  md:max-w-160 xl:max-w-175 pb-4">
-      <p-iconfield>
-        <input pInputText type="password" placeholder="Repetir contraseña" formControlName="confirmPassword"
-          class="input h-13 md:h15 2xl:h-18" [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
-        <p-inputicon class="pi pi-arrow-right-arrow-left" style="color: black" />
-      </p-iconfield>
-
+    <div class="form-field  md:max-w-160 xl:max-w-175 pb-4 relative">
+      <div class="relative">
+        <input pInputText [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Repetir Contraseña" formControlName="confirmPassword"
+          class="input h-13 md:h-15 2xl:h-18"
+          [ngClass]="{ 'ng-invalid': f.confirmPassword.invalid && (f.confirmPassword.dirty || f.confirmPassword.touched) }" />
+        <p-inputicon style="color: black" class="pi pi-arrow-right-arrow-left absolute right-3 top-1/2 text-black" />
+        <p-inputicon [class]="showConfirmPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showConfirmPassword = !showConfirmPassword"
+          class="absolute right-9 top-1/2 cursor-pointer text-gray-700" style="color: #F7F7F7" />
+      </div>
       @if (f.confirmPassword.hasError('required') && (f.confirmPassword.dirty || f.confirmPassword.touched)) {
       <small class="error">
         Este campo es obligatorio.
