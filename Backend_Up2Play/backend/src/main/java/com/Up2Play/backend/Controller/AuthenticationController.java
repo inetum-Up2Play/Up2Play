@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
+import com.Up2Play.backend.DTO.VerifyEmailDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Responses.LoginResponse;
@@ -63,12 +64,6 @@ public class AuthenticationController {
         return ResponseEntity.status(201).body(response);
     }
 
-    @GetMapping("/registrado")
-    public String usuarioRegistrado(){
-
-        return "http://localhost:4200";
-    }
-
     /**
      * Endpoint para autenticar usuario (login).
      * Valida credenciales, genera token JWT y retorna respuesta con token y tiempo
@@ -96,6 +91,12 @@ public class AuthenticationController {
     public ResponseEntity<?> verifyUser(@RequestBody VerifyUserDto verifyUserDto) {
         usuarioService.verifyUser(verifyUserDto);
         return ResponseEntity.ok(Map.of("message", "Cuenta verificada"));
+    }
+
+    @PostMapping("/verifyEmail")
+    public ResponseEntity<?> verifyEmail(@RequestBody VerifyEmailDto verifyEmailDto){
+        usuarioService.verifyEmail(verifyEmailDto);
+        return ResponseEntity.ok(Map.of("message", "Email verificado"));
     }
 
     /**

@@ -13,23 +13,26 @@ import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
+import com.Up2Play.backend.DTO.VerifyEmailDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
 /**
- * Servicio principal para gestión de usuarios: CRUD, registro, autenticación y verificación por email.
- * Integra encriptación de contraseñas, autenticación de Spring Security y envío de emails.
+ * Servicio principal para gestión de usuarios: CRUD, registro, autenticación y
+ * verificación por email.
+ * Integra encriptación de contraseñas, autenticación de Spring Security y envío
+ * de emails.
  * Maneja transacciones para operaciones críticas como el registro.
  */
 @Service
 public class UsuarioService {
 
     // Dependencias inyectadas
-    private UsuarioRepository usuarioRepository;  // Repositorio JPA para usuarios
-    private PasswordEncoder passwordEncoder;  // Encriptador de contraseñas (ej: BCrypt)
-    private AuthenticationManager authenticationManager;  // Gestor de autenticación de Spring Security
-    private EmailService emailService;  // Servicio para enviar emails de verificación
+    private UsuarioRepository usuarioRepository; // Repositorio JPA para usuarios
+    private PasswordEncoder passwordEncoder; // Encriptador de contraseñas (ej: BCrypt)
+    private AuthenticationManager authenticationManager; // Gestor de autenticación de Spring Security
+    private EmailService emailService; // Servicio para enviar emails de verificación
 
     /**
      * Constructor que inyecta las dependencias necesarias.
@@ -44,6 +47,7 @@ public class UsuarioService {
 
     /**
      * Obtiene todos los usuarios (para admin o debugging).
+     * 
      * @return Lista de todos los usuarios.
      */
     public List<Usuario> getAllUsuarios() {
@@ -52,6 +56,7 @@ public class UsuarioService {
 
     /**
      * Guarda o actualiza un usuario en la base de datos.
+     * 
      * @param usuario El usuario a guardar.
      * @return El usuario persistido.
      */
@@ -61,6 +66,7 @@ public class UsuarioService {
 
     /**
      * Elimina un usuario por ID.
+     * 
      * @param id ID del usuario a eliminar.
      */
     public void deleteUsuario(Long id) {
@@ -71,6 +77,7 @@ public class UsuarioService {
      * Registra un nuevo usuario con verificación por email.
      * Encripta la contraseña, genera código de verificación y envía email.
      * La cuenta se crea deshabilitada hasta verificación.
+     * 
      * @param input DTO con datos de registro.
      * @return Usuario registrado (deshabilitado).
      * @throws RuntimeException Si el email ya existe.
@@ -86,11 +93,11 @@ public class UsuarioService {
         Usuario user = new Usuario();
         user.setEmail(input.getEmail());
         user.setNombre_usuario(input.getNombre_usuario());
-        user.setPassword(passwordEncoder.encode(input.getContraseña()));  // Encripta contraseña
-        user.setRol("USER");  // Rol por defecto
-        user.setVerificationCode(generateVerificationCode());  // Código temporal
-        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));  // Expira en 15 min
-        user.setEnabled(false);  // Deshabilitado hasta verificación
+        user.setPassword(passwordEncoder.encode(input.getContraseña())); // Encripta contraseña
+        user.setRol("USER"); // Rol por defecto
+        user.setVerificationCode(generateVerificationCode()); // Código temporal
+        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15)); // Expira en 15 min
+        user.setEnabled(false); // Deshabilitado hasta verificación
 
         // Guarda el usuario
         Usuario saved = usuarioRepository.save(user);
@@ -106,12 +113,37 @@ public class UsuarioService {
         return saved;
     }
 
+    public void verifyEmail(VerifyEmailDto input) {
+
+        Optional<Usuario> optional = usuarioRepository.findByEmail(input.getEmail());
+
+        if (optional.isPresent()) {
+
+            Usuario user = optional.get();
+
+            if (user.getEmail().equals(input.getEmail())) {
+
+                user.setVerificationCode(generateVerificationCode());
+                sendVerificationEmail(user);
+                usuarioRepository.save(user);
+
+            } else {
+                throw new RuntimeException("El email no coincide");
+            }
+        } else {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+
+    }
+
     /**
      * Autentica un usuario durante login.
      * Verifica existencia, habilitación y credenciales via Spring Security.
+     * 
      * @param input DTO con email y contraseña.
      * @return Usuario autenticado.
-     * @throws RuntimeException Si no encontrado, no verificado o credenciales inválidas.
+     * @throws RuntimeException Si no encontrado, no verificado o credenciales
+     *                          inválidas.
      */
     public Usuario authenticate(LoginUserDto input) {
         // Busca usuario por email
@@ -132,6 +164,7 @@ public class UsuarioService {
 
     /**
      * Verifica el código de verificación para habilitar la cuenta.
+     * 
      * @param input DTO con email y código.
      * @throws RuntimeException Si no encontrado, expirado o código incorrecto.
      */
@@ -164,6 +197,7 @@ public class UsuarioService {
     /**
      * Reenvía el código de verificación a un email no verificado.
      * Genera nuevo código con expiración extendida (1 hora).
+     * 
      * @param email Email del usuario.
      * @throws RuntimeException Si no encontrado o ya verificado.
      */
@@ -190,6 +224,7 @@ public class UsuarioService {
     /**
      * Envía el email de verificación al usuario.
      * Usa plantilla simple con código y expiración.
+     * 
      * @param user Usuario con código y datos.
      */
     public void sendVerificationEmail(Usuario user) {
@@ -214,11 +249,12 @@ public class UsuarioService {
 
     /**
      * Genera un código de verificación aleatorio de 6 dígitos.
+     * 
      * @return Código como string.
      */
     private String generateVerificationCode() {
         Random random = new Random();
-        int code = random.nextInt(900000) + 100000;  // 100000 a 999999
+        int code = random.nextInt(900000) + 100000; // 100000 a 999999
         return String.valueOf(code);
     }
 }
