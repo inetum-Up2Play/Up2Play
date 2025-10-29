@@ -159,7 +159,7 @@ public class Usuario implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(); // TODO: Implementar con roles reales
+        return List.of();
     }
 
     /**
