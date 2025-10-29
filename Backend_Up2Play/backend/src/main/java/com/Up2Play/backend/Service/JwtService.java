@@ -22,7 +22,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // Clave secreta en base64 para firmar/verificar tokens (debe ser segura y larga)
+    // Clave secreta en base64 para firmar/verificar tokens (debe ser segura y
+    // larga)
     @Value("${spring.security.jwt.secret-key}")
     private String secretKeyBase64;
 
@@ -32,6 +33,7 @@ public class JwtService {
 
     /**
      * Extrae el nombre de usuario (subject) del token JWT.
+     * 
      * @param token El token JWT a procesar.
      * @return El username extraído.
      */
@@ -41,9 +43,10 @@ public class JwtService {
 
     /**
      * Extrae una claim específica del token usando un resolver funcional.
-     * @param token El token JWT.
+     * 
+     * @param token    El token JWT.
      * @param resolver Función para resolver la claim de los Claims.
-     * @param <T> Tipo de la claim.
+     * @param <T>      Tipo de la claim.
      * @return El valor de la claim.
      */
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
@@ -53,6 +56,7 @@ public class JwtService {
 
     /**
      * Genera un token JWT básico para el usuario (sin claims extras).
+     * 
      * @param userDetails Detalles del usuario (incluye username).
      * @return El token JWT generado.
      */
@@ -62,6 +66,7 @@ public class JwtService {
 
     /**
      * Genera un token JWT con claims adicionales opcionales.
+     * 
      * @param extraClaims Claims extras a incluir (ej: roles).
      * @param userDetails Detalles del usuario.
      * @return El token JWT generado.
@@ -72,6 +77,7 @@ public class JwtService {
 
     /**
      * Retorna el tiempo de expiración configurado.
+     * 
      * @return Tiempo en milisegundos.
      */
     public long getExpirationTime() {
@@ -87,18 +93,19 @@ public class JwtService {
         Date exp = new Date(now.getTime() + expiration);
 
         return Jwts.builder()
-                .claims(extraClaims)  // Claims adicionales
-                .subject(userDetails.getUsername())  // Username como subject
-                .issuedAt(now)  // Fecha de emisión
-                .expiration(exp)  // Fecha de expiración
-                .signWith(getSecretKey(), Jwts.SIG.HS256)  // Firma HS256
-                .compact();  // Compacta a string
+                .claims(extraClaims) // Claims adicionales
+                .subject(userDetails.getUsername()) // Username como subject
+                .issuedAt(now) // Fecha de emisión
+                .expiration(exp) // Fecha de expiración
+                .signWith(getSecretKey(), Jwts.SIG.HS256) // Firma HS256
+                .compact(); // Compacta a string
     }
 
     /**
      * Valida si el token es válido para el usuario especificado.
      * Verifica username y no expirado; maneja excepciones como inválido.
-     * @param token El token JWT.
+     * 
+     * @param token       El token JWT.
      * @param userDetails Detalles del usuario.
      * @return true si es válido, false si no.
      */
@@ -107,12 +114,13 @@ public class JwtService {
             final String username = extractUsername(token);
             return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
         } catch (Exception e) {
-            return false;  // Cualquier error (ej: firma inválida) lo invalida
+            return false; // Cualquier error (ej: firma inválida) lo invalida
         }
     }
 
     /**
      * Verifica si el token ha expirado comparando con la fecha actual.
+     * 
      * @param token El token JWT.
      * @return true si expirado.
      */
@@ -122,6 +130,7 @@ public class JwtService {
 
     /**
      * Extrae la fecha de expiración del token.
+     * 
      * @param token El token JWT.
      * @return La fecha de expiración.
      */
@@ -131,19 +140,21 @@ public class JwtService {
 
     /**
      * Parsea el token y extrae todas las claims (payload verificado).
+     * 
      * @param token El token JWT.
      * @return Las claims del token.
      */
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSecretKey())  // Verifica firma con clave secreta
+                .verifyWith(getSecretKey()) // Verifica firma con clave secreta
                 .build()
-                .parseSignedClaims(token)  // Parsea y verifica
-                .getPayload();  // Retorna payload (claims)
+                .parseSignedClaims(token) // Parsea y verifica
+                .getPayload(); // Retorna payload (claims)
     }
 
     /**
      * Genera la clave secreta HMAC a partir de la cadena base64.
+     * 
      * @return SecretKey para HS256.
      */
     private SecretKey getSecretKey() {

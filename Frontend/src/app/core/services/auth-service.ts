@@ -40,6 +40,11 @@ export class AuthService {
   resendNewPasswordCode(payload: { email: string }) {
     //Incluir el post cuando exista
   }
+  
+  validateToken(token: string) {
+    return this.http.get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`);
+  }
+
 
   login(email: string, password: string) {
     // Si ya tienes Credentials importado, úsalo:
