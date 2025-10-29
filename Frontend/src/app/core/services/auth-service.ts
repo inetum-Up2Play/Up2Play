@@ -29,6 +29,9 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/verify`, payload);
   }
 
+  resendVerificationCode(email: string ) {
+    return this.http.post(`${this.baseUrl}/resend`, email);
+  }
 
   login(email: string, password: string) {
     // Si ya tienes Credentials importado, úsalo:

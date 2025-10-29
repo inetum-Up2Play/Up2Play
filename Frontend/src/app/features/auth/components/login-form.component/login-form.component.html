@@ -1,30 +1,36 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form" novalidate>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form p-10 pb-0 md:pt-4 w-full" novalidate>
   <!-- TÍTULO -->
-  <h1>INICIAR SESIÓN</h1>
-  <p class="form-introduccion">¿Aún no eres miembro? <a class="form-link-register" routerLink="/auth/register">Regístrate</a></p>
+  <h1 class="text-3xl md:text-5xl md:pb-2 xl:text-6xl xl:pb-5">INICIAR SESIÓN</h1>
+  <p class="form-introduccion pb-5">¿Aún no eres miembro? <a class="form-link-register"
+      routerLink="/auth/register">Regístrate</a></p>
 
   <!-- CAMPO MAIL -->
-  <div class="form-field">
+  <div class="form-field md:max-w-160 xl:max-w-175 pb-6">
     <p-iconfield>
-      <input pInputText type="email"  placeholder="Email" id="email" formControlName="email" autocomplete="email"
-        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input" />
+      <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
+        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input h-13 md:h-15 2xl:h-18" />
       <p-inputicon class="pi pi-user" style="color: black" />
     </p-iconfield>
 
-    <small class="error" *ngIf="f.email.hasError('required') && (f.email.dirty || f.email.touched)">
+    @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
+    <small class="error">
       El email es obligatorio.
     </small>
-    <small class="error" *ngIf="f.email.hasError('email') && (f.email.dirty || f.email.touched)">
+    }
+
+    @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
+    <small class="error">
       Formato de email no válido.
     </small>
+    }
   </div>
 
   <!-- CAMPO CONTRASEÑA -->
-  <div class="form-field">
+  <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
     <p-iconfield>
-      <input pInputText type="password"  placeholder="Contraseña" formControlName="password" class="input"
+      <input pInputText type="password" placeholder="Contraseña" formControlName="password" class="input h-13 md:h-15 2xl:h-18"
         [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
-      <p-inputicon class="pi pi-lock" style="color: black" />  
+      <p-inputicon class="pi pi-lock" style="color: black" />
     </p-iconfield>
 
     <small class="error" *ngIf="f.password.hasError('required') && (f.password.dirty || f.password.touched)">
@@ -33,10 +39,10 @@
   </div>
 
   <!-- OLVIDAR CONTRASEÑA -->
-  <div>
+  <div class="pt-2">
     <p><a class="forgot-password-text">¿Has olvidado tu contraseña?</a></p>
   </div>
 
   <!-- BOTÓN -->
-  <button pButton type="submit" class="btn-login" size="large" [disabled]="form.invalid">Iniciar sesión</button>
+  <button pButton type="submit" class="btn-login h-13 md:h-15 2xl:h-18 md:max-w-160 xl:max-w-175" size="large" [disabled]="form.invalid">Iniciar sesión</button>
 </form>

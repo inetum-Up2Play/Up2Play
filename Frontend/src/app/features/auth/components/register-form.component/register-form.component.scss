@@ -3,14 +3,13 @@
 h1 {
   font-family: $montserrat;
   color: $blanco;
-  font-size: 3.5rem;
   white-space: nowrap;
+  font-weight: 600;
 }
 
 .register-form {
-  width: 30rem;
+  align-items: center;
   align-content: space-between;
-  gap: 2;
 }
 
 .form-introduccion {
@@ -18,7 +17,6 @@ h1 {
   font-size: 1.1rem;
   color: $blanco;
   font-weight: 600;
-  padding-bottom: 2%;
 
   .form-link-login {
     color: $verde-claro;
@@ -33,7 +31,6 @@ h1 {
 }
 
 .form-field {
-  padding-bottom: 4%;
   font-weight: 600;
 }
 
@@ -41,12 +38,11 @@ h1 {
     font-family: $work-sans;
     font-weight: 600;
     width: 100%;
-    height: 4rem;
     background-color: transparentize($color: lightgray, $amount: 0.8);
     color: $blanco;
     border-color: $blanco;
     border-radius: 1rem; 
-    padding: 1rem;
+    padding: 0.8rem;
     box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
 
     &::placeholder {
@@ -68,21 +64,20 @@ h1 {
 }
 
 .p-inputtext.ng-invalid.ng-touched {
-    border-color: #8B0000 !important;
+    border-color: $msg-error-claro !important;
     &::placeholder{
-        color: #8B0000 !important;
+        color: #cacaca!important;
     }
 }
 
 .error {
     font-family: $work-sans;
-    color: #8b0000c5;
+    color: $msg-error-claro;
 }
 
 .password-group {
   display: flex;
   align-content: space-between;
-  gap: 1rem;
 }
 
 /* Términos */
@@ -126,18 +121,26 @@ h1 {
     color: $blanco;
     font-family: $work-sans;
     width: 100%;
-    height: 4rem;
     border-radius: 1rem;
     border: none;
     background-color: $verde-oscuro;
-    cursor: pointer;
-    
-    &:hover{
-        color: $blanco;
-        background-color: $verde-oscuro;
-        border: none;
-        opacity: 0.8;
-        transition: ease 0.3s;
+    opacity: 0.9;
+    margin-top: 0.8rem;
+
+    &:enabled{
         cursor: pointer;
+        &:hover{
+            background-color: $verde-oscuro !important;
+            opacity: 1 !important;
+            font-weight: 500 !important;
+            color: $blanco !important;
+            border: none !important;
+            transition: 0.2s ease;
+        }
+    }
+
+    &:disabled{
+        background-color: $verde-oscuro;
+        opacity: 0.7;
     }
 }

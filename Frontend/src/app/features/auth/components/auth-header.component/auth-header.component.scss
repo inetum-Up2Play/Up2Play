@@ -5,20 +5,16 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    padding-left: 3rem;
 }
 
 .logo {
-    height: 5.5rem;
     padding-right: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
     cursor: pointer;
 }
 
 .nav-links {
     display: flex;
-    justify-content: center;
-    gap: 3rem;
     font-family: $montserrat;
     font-weight: 700;
     list-style: none;
