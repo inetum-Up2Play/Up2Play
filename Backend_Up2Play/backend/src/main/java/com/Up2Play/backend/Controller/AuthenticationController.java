@@ -81,8 +81,8 @@ public class AuthenticationController {
      * @return ResponseEntity con LoginResponse (token JWT).
      */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        Usuario usuario = usuarioService.authenticate(loginUserDto);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginUserDto loginUserDto) {
+        Usuario usuario = usuarioService.login(loginUserDto);
         String jwtToken = jwtService.generateToken(usuario);
         LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
         return ResponseEntity.ok(loginResponse);

@@ -151,7 +151,7 @@ public class UsuarioService {
      * @throws RuntimeException Si no encontrado, no verificado o credenciales
      *                          inválidas.
      */
-    public Usuario authenticate(LoginUserDto input) {
+    public Usuario login(LoginUserDto input) {
         // Busca usuario por email
         Usuario user = usuarioRepository.findByEmail(input.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

@@ -38,9 +38,9 @@ export class AuthService {
   }
 
   resendNewPasswordCode(payload: { email: string }) {
-    //Incluir el post cuando exista
+    return this.http.post(`${this.baseUrl}/resendEmail`, payload);
   }
-  
+
   validateToken(token: string) {
     return this.http.get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`);
   }

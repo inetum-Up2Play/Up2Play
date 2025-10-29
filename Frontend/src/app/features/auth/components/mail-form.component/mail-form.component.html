@@ -40,8 +40,7 @@
     <!-- Enviar de nuevo -->
     <div>
         <p class="correo-no-recibido pt-4">¿No has recibido el correo?
-            <a class="correo-no-recibido underline hover:font-medium"><br>Enviar de nuevo</a>
-            <!-- Cuando esté hecho, añadirlo al '<a>' (click)="onClickResend()" -->
+            <a class="correo-no-recibido underline hover:font-medium" (click)="onClickResend()"><br>Enviar de nuevo</a>
         </p>
     </div>
 </form>
