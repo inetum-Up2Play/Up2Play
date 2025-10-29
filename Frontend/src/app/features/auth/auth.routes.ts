@@ -3,6 +3,7 @@ import { Login } from './pages/login/login';
 import { Register } from './pages/register/register';
 import { Verification } from './pages/verification/verification';
 import { MailRecover } from './pages/mail-recover/mail-recover';
+import { VerificationPassword } from './pages/verification-password/verification-password';
 
 
 export const AUTH_ROUTES: Routes = [
@@ -21,5 +22,9 @@ export const AUTH_ROUTES: Routes = [
     {
         path: 'mail-recover',
         component: MailRecover
+    },
+    {
+        path: 'verification-password',
+        component: VerificationPassword
     }
 ];
