@@ -49,8 +49,10 @@ export class VerificationFormComponent {
 
   errorMessage: string | null = null;
 
+  resendMessageVisible = false;
+
   email = this.userDataService.getEmail();
-  
+
 
   onTyping() {
     // borra el mensaje de error al escribir o borrar
@@ -69,10 +71,13 @@ export class VerificationFormComponent {
   }
 
   onClickResend() {
+    this.resendMessageVisible = true;
     this.authService.resendVerificationCode(this.email).subscribe({
     });
 
-    console.log(this.email);
+    setTimeout(() => {
+      this.resendMessageVisible = false;
+    }, 15000); // 15 segundos
   }
 
   onSubmit() {
