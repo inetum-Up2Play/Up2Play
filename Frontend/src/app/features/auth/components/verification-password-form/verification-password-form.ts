@@ -1,28 +1,28 @@
-import { Component, inject, OnInit, output, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { UserDataService } from '../../../../core/services/user-data-service'; // ajusta la ruta
+import { UserDataService } from '../../../../core/services/user-data-service';
 import {
   FormBuilder,
   Validators,
-  ReactiveFormsModule,
   FormControl,
   AbstractControl
 } from '@angular/forms';
 
-// PrimeNG
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { CheckboxModule } from 'primeng/checkbox';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { Router, RouterModule } from '@angular/router';
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
 import { Login } from '../../pages/login/login';
 
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+
 @Component({
-  selector: 'app-verification-form',
+  selector: 'app-verification-password-form',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -34,13 +34,10 @@ import { Login } from '../../pages/login/login';
     InputIconModule,
     RouterModule
   ],
-  templateUrl: './verification-form.component.html',
-  styleUrls: [
-    './verification-form.component.scss'
-  ]
+  templateUrl: './verification-password-form.html',
+  styleUrl: './verification-password-form.scss'
 })
-
-export class VerificationFormComponent {
+export class VerificationPasswordForm {
   private userDataService = inject(UserDataService);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -93,7 +90,8 @@ export class VerificationFormComponent {
 
     this.authService.verification(payload).subscribe({
       next: (res) => {
-        this.router.navigate(['/auth/new-password']);
+        console.log("hola");
+        this.router.navigate(['/auth/login']);
       },
       error: (err) => {
         // No redirige. Muestra el mensaje de error
