@@ -12,7 +12,7 @@
   <div class="form-field pb-4">
     <p-iconfield>
       <input type="text" pInputText placeholder="Código de verificación" formControlName="verificationCode"
-        class="input h-13 md:h-15" (input)="onTyping()" [class.p-invalid]="showAnyError"
+        class="input h-13 md:h-15" (input)="onTyping()"
         [ngClass]="{ 'ng-invalid': f.verificationCode.invalid && (f.verificationCode.dirty || f.verificationCode.touched) }" />
       <p-inputicon class="pi pi-verified" style="color: black" />
     </p-iconfield>
