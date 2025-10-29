@@ -33,11 +33,11 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/resend`, email);
   }
 
-  newPasswordCode(email: string) {
-    //Incluir el post cuando exista
+  newPasswordCode(payload: { email: string }) {
+    return this.http.post(`${this.baseUrl}/verifyEmail`, payload);
   }
 
-  resendNewPasswordCode(email: string) {
+  resendNewPasswordCode(payload: { email: string }) {
     //Incluir el post cuando exista
   }
 
