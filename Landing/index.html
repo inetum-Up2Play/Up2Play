@@ -8,8 +8,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Work+Sans:wght@400;700&display=swaps "
         rel="stylesheet">
-    <link rel="icon" href="assets/images/logo/simbolo-fondoBlanco.png" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="Assets/images/logos/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="Assets/css/style.css">
     <title>UP2Play</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -18,7 +18,7 @@
 
 <body>
     <header id="header" class="text-white w-full xl:min-h-[90vh] xl:supports-[height:100svh]:min-h-[100svh]">
-        <section id="header-section" class="header-section flex justify-between items-center relative w-full py-4 xl:px-8 xl:py-8">
+        <section id="header-section" class="header-section flex justify-between items-center fixed top-0 right-0 w-full py-4 xl:px-8 xl:py-8 z-60">
             <div class="shrink-0 px-4">
                 <a href="#"><img class="w-36 md:w-[220px] (y h-auto)" src="assets/images/logos/logo.png" alt="Logo de Up2Play">
                 </a>
@@ -34,8 +34,11 @@
                     <li><a href="#section-UP2Play" class="md:hover:underline">¿Qué es UP2Play?</a></li>
                     <li><a href="#section-carousel" class="md:hover:underline">Actividades</a></li>
                     <li><a href="#section-sobre_nosotros" class="md:hover:underline">Sobre Nosotros</a></li>
-                    <li><a href="#titulo_nuestro_equipo" class="md:hover:underline">Equipo</a></li>
+                    <li><a href="#section-nuestro_equipo" class="md:hover:underline">Equipo</a></li>
                 </ul>
+                <div class="xl:hidden fixed bottom-4 right-0 z-40">
+                    <img src="Assets/images/logos/logo_footer.png" alt="Favicon UP2Play" class="block max-w-full h-auto">
+                </div>
             </nav>
 
             <div class="hidden xl:flex items-center gap-4 pr-6 shrink-0 font-bold">
@@ -68,6 +71,7 @@
                 </button>
             </div>
         </section>
+        <div id="header-spacer" aria-hidden="true"></div>
 
         <section id="Activa" class="flex flex-col 
         py-[clamp(2rem,7vh,8rem)]
@@ -92,7 +96,7 @@
         </section>
     </header>
 
-    <section id="section-UP2Play" class=" py-16 lg:py-20 lg:py-16 scroll-mt-24">
+    <section id="section-UP2Play" class=" py-16 lg:py-20 lg:py-16 scroll-mt-22 xl:scroll-mt-38">
         <div class="
         container mx-auto max-w-7xl
         px-4 sm:px-6 lg:px-8
@@ -152,7 +156,7 @@
     </section>
 
 
-    <section id="section-carousel" class="relative scroll-mt-24 py-12 md:py-16 lg:py-20">
+    <section id="section-carousel" class="relative scroll-mt-22 xl:scroll-mt-38 py-12 md:py-16 lg:py-20">
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 class="
             text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
@@ -457,13 +461,12 @@
         </div>
     </section>
 
-
-    <section class="py-8">
+    <section id="section-nuestro_equipo" class="py-16 lg:py-20 lg:py-16 scroll-mt-23 xl:scroll-mt-38 ">
         <h2 id="titulo_nuestro_equipo"
-            class="text-2xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white mb-8 tracking-tight text-center py-6">
+            class="text-2xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white tracking-tight text-center mb-12">
             NUESTRO EQUIPO
         </h2>
-        <div class="mx-auto max-w-7xl px-12">
+        <div class="mx-auto max-w-7xl px-12 py-">
             <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-16">
                 <li id="Daniel_Villalba" class="rounded-3xl overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
