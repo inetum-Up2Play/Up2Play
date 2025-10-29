@@ -14,6 +14,15 @@ import org.springframework.stereotype.Service;
 import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
+import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CodigoIncorrectoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CorreoRegistradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CredencialesErroneasException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CuentaYaVerificadaException;
+import com.Up2Play.backend.Exception.ErroresUsuario.NombreUsuarioRegistradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginException;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
@@ -74,19 +83,24 @@ public class UsuarioService {
      * La cuenta se crea deshabilitada hasta verificación.
      * @param input DTO con datos de registro.
      * @return Usuario registrado (deshabilitado).
-     * @throws RuntimeException Si el email ya existe.
+     * @throws Exception Si el email ya existe.
      */
     @Transactional
     public Usuario signup(RegisterUserDto input) {
         // Verifica si el email ya está registrado
         if (usuarioRepository.findByEmail(input.getEmail()).isPresent()) {
-            throw new RuntimeException("El email ya está registrado");
+            throw new CorreoRegistradoException("El email ya está registrado");
+        }
+
+        // Verifica si nombre de usuario ya está registrado
+        if (usuarioRepository.findByNombreUsuario(input.getNombre_usuario()).isPresent()) {
+            throw new NombreUsuarioRegistradoException("El nombre de usuario ya está registrado");
         }
 
         // Crea y configura el nuevo usuario
         Usuario user = new Usuario();
         user.setEmail(input.getEmail());
-        user.setNombre_usuario(input.getNombre_usuario());
+        user.setNombreUsuario(input.getNombre_usuario());
         user.setPassword(passwordEncoder.encode(input.getContraseña()));  // Encripta contraseña
         user.setRol("USER");  // Rol por defecto
         user.setVerificationCode(generateVerificationCode());  // Código temporal
@@ -117,16 +131,16 @@ public class UsuarioService {
     public Usuario authenticate(LoginUserDto input) {
         // Busca usuario por email
         Usuario user = usuarioRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         // Verifica si está habilitado
         if (!user.isEnabled()) {
-            throw new RuntimeException("Usuario no verificado");
+            throw new UsuarioNoVerificadoException("Usuario no verificado");
         }
 
         //verificar si el usuario esta bloqueado
         if (loginAttemptService.isBlocked(input.getEmail())){
-            throw new RuntimeException("Demasiados intentos fallidos. Intenta más tarde.");
+            throw new UsuarioBloqueadoLoginException("Demasiados intentos fallidos, tu cuenta ha sido bloqueada "+LoginAttemptService.getMaxAttempts()+" min. Inténtalo de nuevo más tarde.");
         }
 
         // Autentica credenciales
@@ -141,7 +155,7 @@ public class UsuarioService {
         //si no lo consigue, añade un intento de inicio de sesión
         } catch (Exception e){
             loginAttemptService.loginFailed(input.getEmail());
-           throw new RuntimeException("Credenciales inválidas"); 
+           throw new CredencialesErroneasException("Credenciales erróneas"); 
         }
     }
 
@@ -158,7 +172,7 @@ public class UsuarioService {
 
             // Verifica expiración
             if (user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now())) {
-                throw new RuntimeException("Codigo de verificacion expirado");
+                throw new CodigoExpiradoException("Codigo de verificacion expirado");
             }
 
             // Verifica código
@@ -169,10 +183,10 @@ public class UsuarioService {
                 user.setVerificationCodeExpiresAt(null);
                 usuarioRepository.save(user);
             } else {
-                throw new RuntimeException("Codigo de verificacion incorrecto");
+                throw new CodigoIncorrectoException("Codigo de verificacion incorrecto");
             }
         } else {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new UsuarioNoEncontradoException("Usuario no encontrado");
         }
     }
 
@@ -189,7 +203,7 @@ public class UsuarioService {
             Usuario user = optionalUser.get();
 
             if (user.isEnabled()) {
-                throw new RuntimeException("La cuenta esta verificada");
+                throw new CuentaYaVerificadaException("La cuenta esta verificada");
             }
 
             // Genera nuevo código y actualiza expiración
@@ -220,7 +234,7 @@ public class UsuarioService {
 
                 Si no fuiste tú, ignora este mensaje.
                 """.formatted(
-                user.getNombre_usuario() != null ? user.getNombre_usuario() : "usuario",
+                user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario",
                 code,
                 user.getVerificationCodeExpiresAt());
 

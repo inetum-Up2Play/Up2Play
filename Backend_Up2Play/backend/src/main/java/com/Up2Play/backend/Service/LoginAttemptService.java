@@ -24,6 +24,10 @@ public class LoginAttemptService {
         this.attemptsCache = cacheManager.getCache(cache_name); //del CacheManager, coge el caché "loginAttempts" y lo guarda en la variable "attemptsCache" 
     }
     
+    public static int getMaxAttempts() {
+        return max_attempts;
+    }
+
     //método que se llama cuando un usuario falla un intento de login
     public void loginFailed (String key) {
         Integer attempts = attemptsCache.get(key,Integer.class); //muestra los intentos 

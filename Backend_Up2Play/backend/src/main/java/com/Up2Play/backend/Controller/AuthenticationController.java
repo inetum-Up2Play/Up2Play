@@ -58,7 +58,7 @@ public class AuthenticationController {
         var response = new UsuarioResponseDto(
                 registrado.getId(),
                 registrado.getEmail(),
-                registrado.getNombre_usuario(),
+                registrado.getNombreUsuario(),
                 registrado.isEnabled());
         return ResponseEntity.status(201).body(response);
     }
