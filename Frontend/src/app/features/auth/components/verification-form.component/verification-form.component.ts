@@ -1,12 +1,8 @@
-import { Component, inject, OnInit, output, Output } from '@angular/core';
+
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UserDataService } from '../../../../core/services/user-data-service'; // ajusta la ruta
-import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule
-} from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
 
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,10 +11,16 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
+import { UserDataService } from '../../../../core/services/user-data-service';
 
+interface VerificationPayload {
+  email: string;
+  verificationCode: string;
+}
 
 @Component({
   selector: 'app-verification-form',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -34,26 +36,27 @@ import { AuthService } from '../../../../core/services/auth-service';
   ]
 })
 
-export class VerificationFormComponent {
-  private userData = inject(UserDataService);
+export class VerificationFormComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private fb = inject(FormBuilder);
-  private readonly rawEmail = this.userData.getEmail();
+  private userData = inject(UserDataService);
 
-  email = this.userData.getEmail();
-  
 
-  form = this.fb.group(
-    {
-      verificationCode: this.fb.nonNullable.control('', [Validators.required]),
-    }
-  );
+  token = '';
+  email = '';
+  loading = false;
+  errorMessage = '';
 
-  // Atajo para no escribir 'this.form.controls' todo el rato en la plantilla
+  form = this.fb.group({
+    verificationCode: this.fb.nonNullable.control('', [Validators.required]),
+  });
+
   get f() {
     return this.form.controls;
   }
+
 
   onClickResend() {
     this.authService.resendVerificationCode(this.email).subscribe({
@@ -62,34 +65,60 @@ export class VerificationFormComponent {
     console.log(this.email);
   }
 
-  onSubmit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched(); // enseña errores
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.token = params['token'] ?? '';
+      if (this.token) {
+        this.validateToken(this.token);
+      } else {
+        this.email = this.userData.getEmail() ?? '';
+        if (!this.email) {
+          this.errorMessage = 'No se encontró token ni email. Redirigiendo...';
+          this.router.navigate(['/auth/signup']);
+        }
+      }
+    });
+  }
+
+  validateToken(token: string): void {
+    this.loading = true;
+    this.authService.validateToken(token).subscribe({
+      next: (res: { email: string }) => {
+        this.loading = false;
+        this.email = res.email;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.errorMessage = 'Token inválido o expirado.';
+        console.error('Error validando token:', err);
+      },
+    });
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid || !this.email) {
+      this.form.markAllAsTouched();
+      this.errorMessage = 'Email no disponible para verificación.';
       return;
     }
 
-    /*     if (!this.rawEmail) {
-          // Manejo UX: redirigir o avisar
-          console.error('Email no disponible para verificación.');
-          this.router.navigate(['/auth/signup']); // ajusta a tu flujo
-          return;
-        } */
-
-    const payload = {
+    this.loading = true;
+    const payload: VerificationPayload = {
       email: this.email,
-      verificationCode: this.f.verificationCode.value
+      verificationCode: this.f.verificationCode.value,
     };
 
 
     this.authService.verification(payload).subscribe({
-      next: (res) => {
+      next: () => {
+        this.loading = false;
         this.router.navigate(['/auth/login']);
-      }
+      },
+      error: (err) => {
+        this.loading = false;
+        this.errorMessage = 'Error en la verificación. Intenta nuevamente.';
+        console.error('Error en verificación:', err);
+      },
     });
-
-    console.log(payload);
   }
-
-
-
 }
