@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.LoginUserDto;
+import com.Up2Play.backend.DTO.NewPasswordDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
 import com.Up2Play.backend.DTO.VerifyEmailDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
@@ -44,7 +45,7 @@ public class UsuarioService {
     private LoginAttemptService loginAttemptService; // servicio para limitar intentos en inicio de sesión
     private VerificationTokenService verificationTokenService;
 
-    //Contstuctor
+    // Contstuctor
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
             LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService) {
@@ -57,12 +58,12 @@ public class UsuarioService {
         this.verificationTokenService = verificationTokenService;
     }
 
-    //Obtiene todos los usuarios en una lista
+    // Obtiene todos los usuarios en una lista
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    //Guarda o actualiza un usuario en la base de datos.
+    // Guarda o actualiza un usuario en la base de datos.
     public Usuario saveUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
@@ -107,6 +108,7 @@ public class UsuarioService {
         try {
             sendVerificationEmail(saved);
         } catch (Exception e) {
+            // TODO: Loggear error (ej: logger.warn("Fallo en envío de email", e))
             // Continúa sin romper el registro
         }
 
@@ -181,7 +183,7 @@ public class UsuarioService {
         }
     }
 
-    //Envía el email de verificación al usuario. Usa plantilla simple con código y expiración.
+    // Envía el email de verificación al usuario. Usa plantilla simple con código y expiración.
     public void sendVerificationEmail(Usuario user) throws MessagingException {
         String subject = "Verificacion de Cuenta";
         String code = user.getVerificationCode();
@@ -231,7 +233,7 @@ public class UsuarioService {
         emailService.enviarCorreo(user.getEmail(), subject, body);
     }
 
-    //Reenviar código de verificación
+    // Reenviar código de verificación
     public void resendVerificationCode(String email) throws MessagingException {
         Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
 
@@ -252,7 +254,20 @@ public class UsuarioService {
         }
     }
 
-    //Verifica el email para el restablecimiento de la contraseña
+    // Genera un código de verificación aleatorio de 6 dígitos.
+    private String generateVerificationCode() {
+        Random random = new Random();
+        int code = random.nextInt(900000) + 100000; // 100000 a 999999
+        return String.valueOf(code);
+    }
+
+    
+    //---------------FUNCIÓN RECUPERAR CONTRASEÑA---------------
+
+    /*
+     * Verifica el email para el restablecimiento de la contraseña y utiliza método
+     * "sendVerificationForgetPassword" de abajo para enviar el código ese correo
+    */
     public void verifyEmail(VerifyEmailDto input) throws MessagingException {
 
         Optional<Usuario> optional = usuarioRepository.findByEmail(input.getEmail());
@@ -277,7 +292,7 @@ public class UsuarioService {
 
     }
 
-    //Envia el código de verificación para recuperar la contraseña
+    // Envia el código de verificación para recuperar la contraseña
     public void sendVerificationForgetPassword(Usuario user) throws MessagingException {
         String subject = "Verificacion de Email";
         String code = user.getVerificationCode();
@@ -329,7 +344,7 @@ public class UsuarioService {
         emailService.enviarCorreo(user.getEmail(), subject, body);
     }
 
-    //Reenvia el código de verificación para recuperar la contraseña
+    // Reenvia el código de verificación para recuperar la contraseña
     public void resendVerificationCodeForgetPsswd(String email) throws MessagingException {
         Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
 
@@ -350,10 +365,58 @@ public class UsuarioService {
         }
     }
 
-    // Genera un código de verificación aleatorio de 6 dígitos.
-    private String generateVerificationCode() {
-        Random random = new Random();
-        int code = random.nextInt(900000) + 100000; // 100000 a 999999
-        return String.valueOf(code);
+    // Verificar código para cambiar contraseña
+    public void verifyCodeNewPassword(VerifyEmailDto input){
+       Usuario user;
+
+       // Validar por token, si es que se ha rellenado el campo
+        if (input.getToken() != null && !input.getToken().isEmpty()) {
+            user = verificationTokenService.validateToken(input.getToken()); //devuleve el usuario asociado a ese token
+        }
+        // Si no hay token, validamos por email
+        else if (input.getEmail() != null && !input.getEmail().isEmpty()) {
+            user = usuarioRepository.findByEmail(input.getEmail())
+                    .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        }   
+        else {
+            throw new TokenCorreoFaltanteException("Debe proporcionar el token");
+        }
+
+        // Verificar expiración del código
+        if (user.getVerificationCodeExpiresAt() == null ||
+                user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new CodigoExpiradoException("Código de verificación expirado");
+        }
+
+        // Verificar que el código es correcto
+        if (!user.getVerificationCode().equals(input.getVerificationCode())) {
+            throw new CodigoIncorrectoException("Código de verificación incorrecto");
+        }
+
+       //Limpia código
+        user.setVerificationCode(null);
+        user.setVerificationCodeExpiresAt(null);
+        usuarioRepository.save(user);
     }
+
+    // Guardar nueva constraseña en la base de datos
+    public void saveNewPassword (NewPasswordDto input){
+
+        Optional<Usuario> optional = usuarioRepository.findByEmail(input.getEmail());
+
+        if (optional.isPresent()) {
+
+            Usuario user = optional.get();
+
+            if (user.getEmail().equals(input.getEmail())) {
+                user.setPassword(passwordEncoder.encode(input.getPassword()));
+                usuarioRepository.save(user);
+                
+            }   
+        }
+         
+        
+
+    }
+    
 }
