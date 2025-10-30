@@ -1,9 +1,7 @@
-
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,6 +17,10 @@ interface VerificationPayload {
   verificationCode: string;
 }
 
+interface ResendVerificationDto {
+  email: string;
+}
+
 @Component({
   selector: 'app-verification-form',
   imports: [
@@ -31,12 +33,9 @@ interface VerificationPayload {
     RouterModule,
   ],
   templateUrl: './verification-form.component.html',
-  styleUrls: [
-    './verification-form.component.scss'
-  ]
+  styleUrls: ['./verification-form.component.scss'],
 })
-
-export class VerificationFormComponent implements OnInit{
+export class VerificationFormComponent implements OnInit {
   private userDataService = inject(UserDataService);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -65,11 +64,13 @@ export class VerificationFormComponent implements OnInit{
     return this.form.controls;
   }
 
-
   onClickResend() {
+    const payload: ResendVerificationDto = {
+      email: this.email,
+    };
+
     this.resendMessageVisible = true;
-    this.authService.resendVerificationCode(this.email).subscribe({
-    });
+    this.authService.resendVerificationCode(payload).subscribe({});
 
     setTimeout(() => {
       this.resendMessageVisible = false;
@@ -84,7 +85,8 @@ export class VerificationFormComponent implements OnInit{
       } else {
         this.email = this.userDataService.getEmail() ?? '';
         if (!this.email) {
-          this.errorMessageToken = 'No se encontró token ni email. Redirigiendo...';
+          this.errorMessageToken =
+            'No se encontró token ni email. Redirigiendo...';
           this.router.navigate(['/auth/signup']);
         }
       }
@@ -111,7 +113,7 @@ export class VerificationFormComponent implements OnInit{
       this.form.markAllAsTouched();
       this.errorMessageToken = 'Email no disponible para verificación.';
       return;
-    }    
+    }
 
     const payload: VerificationPayload = {
       email: this.email,
@@ -126,10 +128,11 @@ export class VerificationFormComponent implements OnInit{
       error: (err) => {
         // No redirige. Muestra el mensaje de error
         this.loading = false;
-        this.errorMessage = err.error?.message || 'El código de verificación es incorrecto o ha expirado.';
+        this.errorMessage =
+          err.error?.message ||
+          'El código de verificación es incorrecto o ha expirado.';
         console.error('Error de verificación:', err);
-
-      }
+      },
     });
   }
 }

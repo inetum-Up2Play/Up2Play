@@ -29,12 +29,16 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/verify`, payload);
   }
 
-  resendVerificationCode(email: string) {
-    return this.http.post(`${this.baseUrl}/resend`, email);
+  resendVerificationCode(payload: { email: string }) {
+    return this.http.post(`${this.baseUrl}/resend`, payload);
   }
 
   newPasswordCode(payload: { email: string }) {
     return this.http.post(`${this.baseUrl}/verifyEmail`, payload);
+  }
+
+  verifyNewPasswordCode(payload: { email: string; verificationCode: string }) {
+    return this.http.post(`${this.baseUrl}/verifyForgetPassword`, payload);
   }
 
   resendNewPasswordCode(payload: { email: string }) {
