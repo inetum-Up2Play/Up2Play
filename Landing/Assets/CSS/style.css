@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Work+Sans:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap%27');
+
+html {
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4 {
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+p,
+li {
+
+    font-family: 'Work Sans', sans-serif;
+}
+
+.navBar {
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+button {
+    height: fit-content;
+    background-color: #B1DF75;
+    border-radius: 20px;
+    padding: 0.75rem 1rem;
+    color: #152614;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.avatar {
+    border-radius: 100px;
+    padding: 0;
+}
+
+.menu {
+    padding: 0;
+    margin-right: 1rem;
+    background-color: transparent;
+    color: white;
+}
+
+button.iniciar-sesion {
+    height: fit-content;
+    background-color: #B1DF75;
+    padding: 0.75rem 1rem;
+    color: #152614;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+button.iniciar-sesion:hover {
+    background-color: #DFF2B2;
+    /* Un tono más claro del verde base */
+    color: #0f1a0b;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button.registrarse {
+    height: fit-content;
+    background-color: #000000;
+    padding: 0.75rem 1rem;
+    color: #ffffff;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.registrarse:hover {
+    background-color: #333333;
+    /* Un negro más claro */
+    color: #B1DF75;
+    /* Verde lima como contraste */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header {
+    background-image: url('../images/header/deporte.png');
+    background-position: center center;
+    background-size: cover;
+}
+
+#header-section.scrolled {
+  background: #3D6C3F;   /* ajusta color/opacidad a tu paleta */
+}
+
+
+.activity-card {
+    border-radius: 2rem;
+    padding-bottom: 1rem;
+
+    button {
+        padding: 0.25rem 2rem;
+        border-radius: 20px;
+        margin-top: 0.25rem;
+    }
+
+    h3 {
+        font-weight: 800;
+        font-size: large;
+    }
+}
+
+.filosofia-coor {
+    h1 {
+        font-weight: 800;
+        padding-left: 0.5rem;
+    }
+
+    p {
+        font-weight: bold;
+        padding-left: 0.5rem;
+    }
+}
+
+/* Panel desplegable */
+.desplegable {
+    background-color: rgba(21, 38, 20, 0.85);
+    backdrop-filter: blur(4px);
+    position: fixed;
+    right: 0%;
+    top: 0%;
+    width: max-content;
+    height: 100svh;
+
+    ul {
+        padding-top: 7em;
+    }
+}
+
+#header-section.scrolled {
+    background-color: rgba(61, 108, 63, 0.9);
+    backdrop-filter: blur(3px);
+
+}
+
+#section-UP2Play {
+    background-color: #ffffff;
+}
+
+#section-carousel {
+    background-color: #152614;
+}
+
+#mision-content {
+    background-color: #B1DF75;
+}
+
+#vision-content {
+    background-color: #3D6C3F;
+
+    h3,
+    p {
+        color: #F7F7F7;
+    }
+}
+
+#valores-content {
+    background-color: #152614;
+
+    h1,
+    li,
+    ul {
+        color: #F7F7F7;
+    }
+}
+
+#titulo_nuestro_equipo {
+    color: #3D6C3F;
+}
+
+#Daniel_Villalba,
+#Alexandre_Vilchez,
+#Africa_Rodriguez {
+    background-color: #3D6C3F;
+    border-radius: 30px;
+}
+
+#Marc_Balague,
+#Joan_Juncosa {
+    background-color: #F7F7F7;
+    border-radius: 30px;
+}

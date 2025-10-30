@@ -1,0 +1,30 @@
+@import 'styles/variables';
+@import 'styles/mixins';
+
+.navBar {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.logo {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    font-family: $montserrat;
+    font-weight: 700;
+    list-style: none;
+
+    a {
+        text-decoration: none;
+        color: $blanco;
+        
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}

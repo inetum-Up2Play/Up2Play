@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+/* 
+The styles added here would be global styles to the project.
+Here has to be imported the other style files (from the src/styles/)
+*/
+
+@import "./tailwind.css";
+@import "primeicons/primeicons.css";
+
+@import 'styles/variables';
+@import 'styles/mixins';

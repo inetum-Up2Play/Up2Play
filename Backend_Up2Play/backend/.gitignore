@@ -1,33 +1,63 @@
-HELP.md
+# Java & Maven
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
+# Maven Wrapper
+.mvn/
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
 .project
-.settings
+.classpath
+.settings/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+
+# Build directories
+/build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*.swo
+
+# Environment and config files
+.env
+.env.properties
+
+# Test coverage
+/coverage/
+*.exec
+
+# Database files
+*.db
+*.mv.db
+*.h2.db
+
+# JWT keys or secrets
+jwt.key
+jwt-secret.txt
+
+# Email credentials
+email-config.json

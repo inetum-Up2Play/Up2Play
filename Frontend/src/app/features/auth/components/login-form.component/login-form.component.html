@@ -1,0 +1,57 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form p-10 pb-0 md:pt-4 w-full" novalidate>
+  <!-- TÍTULO -->
+  <h1 class="text-3xl md:text-5xl md:pb-2 xl:text-6xl xl:pb-5">INICIAR SESIÓN</h1>
+  <p class="form-introduccion pb-5">¿Aún no eres miembro? <a class="form-link-register"
+      routerLink="/auth/register">Regístrate</a></p>
+
+  <!-- CAMPO MAIL -->
+  <div class="form-field md:max-w-160 xl:max-w-175 pb-6">
+    <p-iconfield class="relative">
+      <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
+        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}"
+        class="input h-13 md:h-15 2xl:h-18" />
+      <p-inputicon class="pi pi-user absolute -translate-y-1/2" style="color: black" />
+    </p-iconfield>
+
+    @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
+    <small class="error">
+      El email es obligatorio.
+    </small>
+    }
+
+    @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
+    <small class="error">
+      Formato de email no válido.
+    </small>
+    }
+  </div>
+
+  <!-- CAMPO CONTRASEÑA -->
+  <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
+
+    <div class="relative">
+      <input pInputText [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" formControlName="password"
+        class="input h-13 md:h-15 2xl:h-18"
+        [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
+      <p-inputicon style="color: black" class="pi pi-lock absolute right-3 -translate-y-1/2" />
+      <p-inputicon [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showPassword = !showPassword"
+        class="absolute right-9 -translate-y-1/2 cursor-pointer" style="color: #F7F7F7" />
+    </div>
+
+    @if (f.password.hasError('required') && (f.password.dirty || f.password.touched)) {
+    <small class="error">
+      La password es obligatoria.
+    </small>
+    }
+
+  </div>
+
+  <!-- OLVIDAR CONTRASEÑA -->
+  <div class="pt-2">
+      <a class="forgot-password-text" (click)="redirectForgotPassword()">¿Has olvidado tu contraseña?</a>
+  </div>
+
+  <!-- BOTÓN -->
+  <button pButton type="submit" class="btn-login h-13 md:h-15 2xl:h-18 md:max-w-160 xl:max-w-175" size="large"
+    [disabled]="form.invalid">Iniciar sesión</button>
+</form>

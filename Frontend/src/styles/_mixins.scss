@@ -1,0 +1,12 @@
+@import 'styles/variables';
+
+@mixin fondo-gradiente-verde {
+  background: linear-gradient(
+    135deg,
+    $verde-oscuro 0%,
+    $verde-oliva 25%,
+    $verde-claro 75%,
+    $verde-claro 100%
+  );
+}
+

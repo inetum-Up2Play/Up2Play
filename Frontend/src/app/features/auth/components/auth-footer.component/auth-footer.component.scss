@@ -1,0 +1,29 @@
+@import 'styles/variables';
+@import 'styles/mixins';
+
+.footer{
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    padding-bottom: 1.5rem;
+}
+
+.footer-content{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+
+.Copiright{
+    text-align: center;
+    color: $verde-oscuro;
+    font-family: $montserrat;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.logo{
+    height: 75px;
+}

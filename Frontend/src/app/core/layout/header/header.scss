@@ -1,0 +1,75 @@
+@import 'styles/variables';
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 1.5rem;
+    background-color: $verde-oliva;
+    color: white;
+}
+
+.logo {
+    img {
+        height: 100px;
+        object-fit: contain;
+    }
+}
+
+.nav-menu {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+
+    a {
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1rem;
+        font-family: $montserrat; //Fuente de títulos
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 2rem;
+    padding-right: 1.5rem;
+
+    .btn {
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 16px;
+        font-family: $work-sans; //Fuente de cuerpo de texto
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .login {
+        background-color: $verde-claro;
+        color: $verde-oscuro;
+
+        &:hover {
+            background-color: #DFF2B2;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    }
+
+    .register {
+        background-color: $verde-oscuro;
+        color: $blanco; // Blanco corporativo
+
+        &:hover {
+            background-color: #333333;
+            color: $verde-claro;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    }
+}

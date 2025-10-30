@@ -1,0 +1,118 @@
+@import 'styles/variables';
+
+h1 {
+    font-family: $montserrat;
+    color: $blanco;
+    margin: 0;
+    text-align: center;
+    font-weight: 600;
+}
+
+p {
+    text-align: center;
+}
+
+.Imgicono {
+    display: flex;
+    justify-content: center;
+}
+
+.verification-form {
+    align-content: space-between;
+    background-color: #15261423;
+    border-radius: 15px;
+}
+
+.input {
+    font-family: $work-sans;
+    font-weight: 600;
+    width: 100%;
+    background-color: transparentize($color: lightgray, $amount: 0.8);
+    color: $blanco;
+    border-color: $blanco;
+    border-radius: 1rem;
+    box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
+
+    &::placeholder {
+        color: $blanco;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    &:hover {
+        border-color: rgb(184, 184, 184);
+    }
+
+    &:focus {
+        border-color: rgb(184, 184, 184) !important;
+        outline: none; // Elimina el borde azul por defecto del navegador
+
+        &::placeholder {
+            opacity: 0.5;
+            transition: ease 0.3s;
+        }
+    }
+}
+
+
+.form-introduccion {
+    font-family: $work-sans;
+    color: $blanco;
+}
+
+.form-field {
+    font-weight: 600;
+}
+
+
+.input.p-inputtext.p-invalid {
+    border-color: $msg-error-oscuro !important;
+}
+
+
+.input.p-inputtext.ng-invalid.ng-touched {
+    border-color: $msg-error-oscuro !important;
+
+    &::placeholder {
+        color: #cacaca !important;
+    }
+}
+
+.error {
+    font-family: $work-sans;
+    color: $msg-error-oscuro;
+}
+
+.correo-no-recibido {
+    font-family: $work-sans;
+    color: $verde-oscuro;
+}
+
+.btn-verify {
+    color: $blanco;
+    font-family: $work-sans;
+    width: 100%;
+    border-radius: 1rem;
+    border: none;
+    background-color: $verde-oscuro;
+    opacity: 0.9;
+    margin-top: 0.8rem;
+
+    &:enabled {
+        cursor: pointer;
+
+        &:hover {
+            background-color: $verde-oscuro !important;
+            opacity: 1 !important;
+            font-weight: 500 !important;
+            color: $blanco !important;
+            border: none !important;
+            transition: 0.2s ease;
+        }
+    }
+
+    &:disabled {
+        background-color: $verde-oscuro;
+        opacity: 0.7;
+    }
+}
