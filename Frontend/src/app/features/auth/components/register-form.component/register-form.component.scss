@@ -1,5 +1,22 @@
 @import 'styles/variables';
 
+/* Ocultar el icono de mostrar/ocultar contraseña predeterminado */
+/* Edge / IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+/* WebKit (Chrome, Safari) */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none;
+  pointer-events: none;
+}
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+
 h1 {
   font-family: $montserrat;
   color: $blanco;
@@ -75,11 +92,6 @@ h1 {
     color: $msg-error-claro;
 }
 
-.password-group {
-  display: flex;
-  align-content: space-between;
-}
-
 /* Términos */
 .terms {
   font-family: $work-sans;
@@ -143,4 +155,9 @@ h1 {
         background-color: $verde-oscuro;
         opacity: 0.7;
     }
+}
+
+//Fixing inputicons position
+::ng-deep .p-inputicon {
+  margin-top: 0 !important;
 }

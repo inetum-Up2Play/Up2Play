@@ -13,11 +13,11 @@
 
     <!-- CAMPO MAIL -->
     <div class="form-field md:max-w-160 xl:max-w-175 pb-6">
-        <p-iconfield>
+        <p-iconfield class="relative">
             <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
                 [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}"
                 class="input h-13 md:h-15" />
-            <p-inputicon class="pi pi-envelope" style="color: black" />
+            <p-inputicon class="pi pi-envelope absolute -translate-y-1/2" style="color: black" />
         </p-iconfield>
 
         @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
