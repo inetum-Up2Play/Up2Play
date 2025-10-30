@@ -92,11 +92,6 @@ h1 {
     color: $msg-error-claro;
 }
 
-.password-group {
-  display: flex;
-  align-content: space-between;
-}
-
 /* Términos */
 .terms {
   font-family: $work-sans;
@@ -160,4 +155,9 @@ h1 {
         background-color: $verde-oscuro;
         opacity: 0.7;
     }
+}
+
+//Fixing inputicons position
+::ng-deep .p-inputicon {
+  margin-top: 0 !important;
 }
