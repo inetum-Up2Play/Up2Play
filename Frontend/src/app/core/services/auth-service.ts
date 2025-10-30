@@ -46,20 +46,20 @@ export class AuthService {
   }
 
 
-  login(email: string, password: string) {
-    // Si ya tienes Credentials importado, úsalo:
-    const body: Credentials = { email, password };
+  login(payload: {email: string, password: string}) {
 
-    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, body).pipe(
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
       map((res) => {
-        // res: { token: string; expiresIn: number } en **milisegundos**
         this.setSession(res);             // <- guarda {token, expiresAt} y programa auto-logout
         return true as const;             // <- encaja con tu onSubmit(...)
       }),
       catchError((error: HttpErrorResponse) => {
         switch (error.status) {
-          case 401: return of('INVALID_CREDENTIALS' as const);
-          case 403: return of('EMAIL_NOT_VERIFIED' as const);
+          case 401: return of('CREDENCIALES_ERRONEAS' as const);
+          case 403: return of('USUARIO_NO_VERIFICADO' as const);
+          case 404: return of('USUARIO_NO_ENCONTRADO' as const);
+          case 409: return of('CORREO_NO_COINCIDE' as const);
+          case 423: return of('USUARIO_BLOQUEADO_LOGIN' as const);
           default: return of('UNKNOWN' as const);
         }
       })

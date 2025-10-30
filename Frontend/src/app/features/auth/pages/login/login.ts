@@ -22,20 +22,5 @@ export class Login {
   private router = inject(Router);
   private message = inject(MessageService);
 
-  onSubmit(payload: { email: string; password: string }) {
-    this.authService.login(payload.email, payload.password).subscribe(result => {
-      if (result === true) {
-        this.message.add({ severity: 'success', summary: 'Bienvenido', detail: 'Sesión iniciada' });
-        this.router.navigate(['']);
-      } else if (result === 'INVALID_CREDENTIALS') {
-        this.message.add({ severity: 'error', summary: 'Error', detail: 'Correo o contraseña incorrectos' });
-      } else if (result === 'EMAIL_NOT_VERIFIED') {
-        this.message.add({ severity: 'warn', summary: 'Verificación', detail: 'Cuenta no verificada. Revisa tu email.' });
-        this.userDataService.setEmail(payload.email); 
-        this.router.navigate(['/auth/verification']);
-      } else {
-        this.message.add({ severity: 'error', summary: 'Error', detail: 'Error inesperado' });
-      }
-    });
-  }
+
 }

@@ -133,7 +133,7 @@ public class ErrorControl {
             .body(body); 
     }
 
-     //Código verificación expirado
+    //Código verificación expirado
     @ExceptionHandler (CodigoExpiradoException.class) 
     public ResponseEntity<ErrorResponseDto> handleCodigoExpirado(
         CodigoExpiradoException ex,

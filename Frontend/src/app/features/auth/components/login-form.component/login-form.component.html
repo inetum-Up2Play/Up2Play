@@ -48,10 +48,12 @@
 
   <!-- OLVIDAR CONTRASEÑA -->
   <div class="pt-2">
-      <a class="forgot-password-text" (click)="redirectForgotPassword()">¿Has olvidado tu contraseña?</a>
+    <a class="forgot-password-text" (click)="redirectForgotPassword()">¿Has olvidado tu contraseña?</a>
   </div>
 
   <!-- BOTÓN -->
   <button pButton type="submit" class="btn-login h-13 md:h-15 2xl:h-18 md:max-w-160 xl:max-w-175" size="large"
     [disabled]="form.invalid">Iniciar sesión</button>
+
+  <p-toast></p-toast>
 </form>
