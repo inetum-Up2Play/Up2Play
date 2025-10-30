@@ -321,7 +321,7 @@ public class UsuarioService {
                                 <p style="font-size: 13px; color: #999999; margin-top: 30px;"><u>Si tienes problemas, también puedes hacer clic en el siguiente botón para continuar con la verificación</u></p>
 
 
-                                <a href="http://localhost:4200/auth/verification?token=%s"
+                                <a href="http://localhost:4200/auth/verification-password?token=%s"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Verificar Identidad
                                 </a>
@@ -351,8 +351,8 @@ public class UsuarioService {
         if (optionalUser.isPresent()) {
             Usuario user = optionalUser.get();
 
-            if (user.isEnabled()) {
-                throw new CuentaYaVerificadaException("La cuenta ya está verificada");
+            if (!user.isEnabled()) {
+                throw new UsuarioNoVerificadoException("La cuenta no está verificada");
             }
 
             // Genera nuevo código y actualiza expiración

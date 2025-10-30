@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.NewPasswordDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
+import com.Up2Play.backend.DTO.ResendVerificationDto;
 import com.Up2Play.backend.DTO.VerifyEmailDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
 import com.Up2Play.backend.Model.Usuario;
@@ -102,14 +103,14 @@ public class AuthenticationController {
 
     //Endpoint para reenviar código de verificación por email.
     @PostMapping("/resend")
-    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) throws MessagingException {
-        usuarioService.resendVerificationCode(email);
+    public ResponseEntity<?> resendVerificationCode(@RequestBody ResendVerificationDto resendVerificationDto) throws MessagingException {
+        usuarioService.resendVerificationCode(resendVerificationDto.getEmail());
         return ResponseEntity.ok("Se ha vuelto a enviar el código");
     }
 
     @PostMapping("/resendEmail")
-    public ResponseEntity<?> resendVerificationCodeForgetPsswd(@RequestParam String email) throws MessagingException {
-        usuarioService.resendVerificationCodeForgetPsswd(email);
+    public ResponseEntity<?> resendVerificationCodeForgetPsswd(@RequestBody ResendVerificationDto resendVerificationDto) throws MessagingException {
+        usuarioService.resendVerificationCodeForgetPsswd(resendVerificationDto.getEmail());
         return ResponseEntity.ok("Se ha vuelto a enviar el código");
     }
 
