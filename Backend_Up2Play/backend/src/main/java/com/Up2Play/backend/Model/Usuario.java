@@ -37,8 +37,8 @@ public class Usuario implements UserDetails {
 
     private String password; // Contraseña del usuario (debe encriptarse)
     private String rol; // Rol del usuario (ej: ADMIN, USER)
-    @Column(unique = true)
-    private String nombre_usuario; // Nombre de usuario único
+    @Column(name = "nombre_usuario", unique = true)
+    private String nombreUsuario; // Nombre de usuario único
 
     // Campos para verificación y estado
     @Column(name = "ENABLED", nullable = false)
@@ -54,24 +54,24 @@ public class Usuario implements UserDetails {
     /**
      * Constructor completo con todos los campos.
      */
-    public Usuario(Long id, String email, String password, String rol, String nombre_usuario) {
+    public Usuario(Long id, String email, String password, String rol, String nombreUsuario) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.rol = rol;
-        this.nombre_usuario = nombre_usuario;
+        this.nombreUsuario = nombreUsuario;
     }
 
     /**
      * Constructor con campos de verificación incluidos.
      */
-    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombre_usuario,
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
             boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.rol = rol;
-        this.nombre_usuario = nombre_usuario;
+        this.nombreUsuario = nombreUsuario;
         this.enabled = enabled;
         this.verificationCode = verificationCode;
         this.verificationCodeExpiresAt = verificationCodeExpiresAt;
@@ -80,11 +80,11 @@ public class Usuario implements UserDetails {
     /**
      * Constructor básico sin ID (para creación).
      */
-    public Usuario(String email, String password, String rol, String nombre_usuario) {
+    public Usuario(String email, String password, String rol, String nombreUsuario) {
         this.email = email;
         this.password = password;
         this.rol = rol;
-        this.nombre_usuario = nombre_usuario;
+        this.nombreUsuario = nombreUsuario;
     }
 
     // Constructor por defecto
@@ -124,12 +124,12 @@ public class Usuario implements UserDetails {
         this.rol = rol;
     }
 
-    public String getNombre_usuario() {
-        return nombre_usuario;
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
-    public void setNombre_usuario(String nombre_usuario) {
-        this.nombre_usuario = nombre_usuario;
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
     }
 
     public void setEnabled(boolean enabled) {
