@@ -408,6 +408,9 @@ public class UsuarioService {
 
             Usuario user = optional.get();
 
+            user.setPassword(null);
+            usuarioRepository.save(user);
+
             if (user.getEmail().equals(input.getEmail())) {
                 user.setPassword(passwordEncoder.encode(input.getPassword()));
                 usuarioRepository.save(user);

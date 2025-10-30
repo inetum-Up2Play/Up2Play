@@ -49,6 +49,10 @@ export class AuthService {
     return this.http.get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`);
   }
 
+  saveNewPassword(payload: { email: string; password: string }) {
+    return this.http.post(`${this.baseUrl}/saveNewPassword`, payload);
+  }
+
 
   login(email: string, password: string) {
     // Si ya tienes Credentials importado, úsalo:
