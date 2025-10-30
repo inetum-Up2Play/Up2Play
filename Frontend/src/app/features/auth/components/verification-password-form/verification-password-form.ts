@@ -68,9 +68,12 @@ export class VerificationPasswordForm {
   }
 
   onClickResend() {
+
     this.resendMessageVisible = true;
-    this.authService.resendVerificationCode(this.email).subscribe({
+    this.authService.resendNewPasswordCode(this.email).subscribe({
     });
+
+    console.log(this.email);
 
     setTimeout(() => {
       this.resendMessageVisible = false;
@@ -90,8 +93,7 @@ export class VerificationPasswordForm {
 
     this.authService.verification(payload).subscribe({
       next: (res) => {
-        console.log("hola");
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/auth/new-password']);
       },
       error: (err) => {
         // No redirige. Muestra el mensaje de error

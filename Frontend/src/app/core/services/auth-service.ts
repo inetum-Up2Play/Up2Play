@@ -37,8 +37,8 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/verifyEmail`, payload);
   }
 
-  resendNewPasswordCode(payload: { email: string }) {
-    return this.http.post(`${this.baseUrl}/resendEmail`, payload);
+  resendNewPasswordCode(email: string ) {
+    return this.http.post(`${this.baseUrl}/resendEmail`, email);
   }
 
   validateToken(token: string) {
