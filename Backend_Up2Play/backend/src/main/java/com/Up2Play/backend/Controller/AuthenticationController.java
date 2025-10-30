@@ -105,13 +105,13 @@ public class AuthenticationController {
     @PostMapping("/resend")
     public ResponseEntity<?> resendVerificationCode(@RequestBody ResendVerificationDto resendVerificationDto) throws MessagingException {
         usuarioService.resendVerificationCode(resendVerificationDto.getEmail());
-        return ResponseEntity.ok("Se ha vuelto a enviar el código");
+        return ResponseEntity.ok(Map.of("message","Se ha vuelto a enviar el código"));
     }
 
     @PostMapping("/resendEmail")
     public ResponseEntity<?> resendVerificationCodeForgetPsswd(@RequestBody ResendVerificationDto resendVerificationDto) throws MessagingException {
         usuarioService.resendVerificationCodeForgetPsswd(resendVerificationDto.getEmail());
-        return ResponseEntity.ok("Se ha vuelto a enviar el código");
+        return ResponseEntity.ok(Map.of("message","Se ha vuelto a enviar el código"));
     }
 
     //Record DTO simple para respuesta de registro: evita exponer datos sensibles.
@@ -122,14 +122,14 @@ public class AuthenticationController {
     @PostMapping("/verifyForgetPassword")
     public ResponseEntity<?>verifyCodeNewPassword(@RequestBody VerifyEmailDto verifyEmailDto){
         usuarioService.verifyCodeNewPassword(verifyEmailDto);
-        return ResponseEntity.ok("Código verificado correctamente");
+        return ResponseEntity.ok(Map.of("message", "Código verificado correctamente"));
     }
 
     //Endpoint guardar nueva contaseña
     @PostMapping("/saveNewPassword")
     public ResponseEntity<?>saveNewPassword(@RequestBody NewPasswordDto newPasswordDto){
         usuarioService.saveNewPassword(newPasswordDto);
-        return ResponseEntity.ok("Contraseña guardada correctamente");
+        return ResponseEntity.ok(Map.of("message","Contraseña guardada correctamente"));
     }
 }
 
