@@ -54,7 +54,6 @@ p, h1 {
     }
 }
 
-
 .form-introduccion {
     font-family: $work-sans;
     color: $blanco;
@@ -63,7 +62,6 @@ p, h1 {
 .form-field {
     font-weight: 600;
 }
-
 
 .p-inputtext.ng-invalid.ng-touched {
     border-color: $msg-error-oscuro !important;
@@ -110,4 +108,9 @@ p, h1 {
         background-color: $verde-oscuro;
         opacity: 0.7;
     }
+}
+
+//Fixing inputicons position
+::ng-deep .p-inputicon {
+  margin-top: 0 !important;
 }
