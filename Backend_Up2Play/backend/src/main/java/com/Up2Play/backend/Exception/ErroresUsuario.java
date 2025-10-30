@@ -55,4 +55,17 @@ public class ErroresUsuario {
             super(message);
         }
     }
+
+    public static class CorreoNoCoincideException extends RuntimeException {
+        public CorreoNoCoincideException(String message){
+            super(message);
+        }
+    }
+
+    public static class TokenCorreoFaltanteException extends RuntimeException {
+        public TokenCorreoFaltanteException(String message){
+            super(message);
+        }
+    }
+
 }

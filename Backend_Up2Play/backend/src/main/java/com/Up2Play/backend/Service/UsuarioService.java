@@ -17,10 +17,12 @@ import com.Up2Play.backend.DTO.VerifyEmailDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoIncorrectoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CorreoNoCoincideException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CorreoRegistradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CredencialesErroneasException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CuentaYaVerificadaException;
 import com.Up2Play.backend.Exception.ErroresUsuario.NombreUsuarioRegistradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.TokenCorreoFaltanteException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
@@ -29,30 +31,23 @@ import com.Up2Play.backend.Repository.UsuarioRepository;
 
 import jakarta.mail.MessagingException;
 
-/**
- * Servicio principal para gestión de usuarios: CRUD, registro, autenticación y
- * verificación por email.
- * Integra encriptación de contraseñas, autenticación de Spring Security y envío
- * de emails.
- * Maneja transacciones para operaciones críticas como el registro.
- */
+// Servicio principal para gestión de usuarios: CRUD, registro, verificación mediante JWT, inicio de sesión y cambio de contraseña.
+ 
 @Service
 public class UsuarioService {
 
     // Dependencias inyectadas
-    private UsuarioRepository usuarioRepository;  // Repositorio JPA para usuarios
-    private PasswordEncoder passwordEncoder;  // Encriptador de contraseñas (ej: BCrypt)
-    private AuthenticationManager authenticationManager;  // Gestor de autenticación de Spring Security
-    private EmailService emailService;  // Servicio para enviar emails de verificación
-    private LoginAttemptService loginAttemptService; //servicio para limitar intentos en inicio de sesión 
+    private UsuarioRepository usuarioRepository; // Repositorio JPA para usuarios
+    private PasswordEncoder passwordEncoder; // Encriptador de contraseñas (ej: BCrypt)
+    private AuthenticationManager authenticationManager; // Gestor de autenticación de Spring Security
+    private EmailService emailService; // Servicio para enviar emails de verificación
+    private LoginAttemptService loginAttemptService; // servicio para limitar intentos en inicio de sesión
     private VerificationTokenService verificationTokenService;
 
-
-    /**
-     * Constructor que inyecta las dependencias necesarias.
-     */
+    //Contstuctor
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager, EmailService emailService, LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService) {
+            AuthenticationManager authenticationManager, EmailService emailService,
+            LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService) {
 
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
@@ -62,30 +57,17 @@ public class UsuarioService {
         this.verificationTokenService = verificationTokenService;
     }
 
-    /**
-     * Obtiene todos los usuarios (para admin o debugging).
-     * 
-     * @return Lista de todos los usuarios.
-     */
+    //Obtiene todos los usuarios en una lista
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    /**
-     * Guarda o actualiza un usuario en la base de datos.
-     * 
-     * @param usuario El usuario a guardar.
-     * @return El usuario persistido.
-     */
+    //Guarda o actualiza un usuario en la base de datos.
     public Usuario saveUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-    /**
-     * Elimina un usuario por ID.
-     * 
-     * @param id ID del usuario a eliminar.
-     */
+    // Elimina un usuario por ID.
     public void deleteUsuario(Long id) {
         usuarioRepository.deleteById(id);
     }
@@ -94,11 +76,7 @@ public class UsuarioService {
      * Registra un nuevo usuario con verificación por email.
      * Encripta la contraseña, genera código de verificación y envía email.
      * La cuenta se crea deshabilitada hasta verificación.
-     * 
-     * @param input DTO con datos de registro.
-     * @return Usuario registrado (deshabilitado).
-     * @throws Exception Si el email ya existe.
-     */
+    **/
     @Transactional
     public Usuario signup(RegisterUserDto input) {
         // Verifica si el email ya está registrado
@@ -116,12 +94,11 @@ public class UsuarioService {
         user.setEmail(input.getEmail());
 
         user.setNombreUsuario(input.getNombre_usuario());
-        user.setPassword(passwordEncoder.encode(input.getContraseña()));  // Encripta contraseña
-        user.setRol("USER");  // Rol por defecto
-        user.setVerificationCode(generateVerificationCode());  // Código temporal
-        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));  // Expira en 15 min
-        user.setEnabled(false);  // Deshabilitado hasta verificación
-
+        user.setPassword(passwordEncoder.encode(input.getContraseña())); // Encripta contraseña
+        user.setRol("USER"); // Rol por defecto
+        user.setVerificationCode(generateVerificationCode()); // Código temporal
+        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15)); // Expira en 15 min
+        user.setEnabled(false); // Deshabilitado hasta verificación
 
         // Guarda el usuario
         Usuario saved = usuarioRepository.save(user);
@@ -137,78 +114,8 @@ public class UsuarioService {
         return saved;
     }
 
-    public void verifyEmail(VerifyEmailDto input) throws MessagingException {
-
-        Optional<Usuario> optional = usuarioRepository.findByEmail(input.getEmail());
-
-        if (optional.isPresent()) {
-
-            Usuario user = optional.get();
-
-            if (user.getEmail().equals(input.getEmail())) {
-
-                user.setVerificationCode(generateVerificationCode());
-                user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
-                sendVerificationForgetPassword(user);
-                usuarioRepository.save(user);
-
-            } else {
-                throw new RuntimeException("El email no coincide");
-            }
-        } else {
-            throw new UsuarioNoEncontradoException("Usuario no encontrado");
-        }
-
-    }
-
-    /**
-     * Autentica un usuario durante login.
-     * Verifica existencia, habilitación y credenciales via Spring Security.
-     * 
-     * @param input DTO con email y contraseña.
-     * @return Usuario autenticado.
-     * @throws Exception Si no encontrado, no verificado o credenciales
-     *                          inválidas.
-     */
-    public Usuario login(LoginUserDto input) {
-        // Busca usuario por email
-        Usuario user = usuarioRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
-
-        // Verifica si está habilitado
-        if (!user.isEnabled()) {
-            throw new UsuarioNoVerificadoException("Usuario no verificado");
-        }
-
-        //verificar si el usuario esta bloqueado
-        if (loginAttemptService.isBlocked(input.getEmail())){
-            throw new UsuarioBloqueadoLoginException("Demasiados intentos fallidos, tu cuenta ha sido bloqueada "+LoginAttemptService.getMaxAttempts()+" min. Inténtalo de nuevo más tarde.");
-        }
-
-        // Autentica credenciales
-        try { //intenta autentificar, si lo consigue borra la cache de intentos de inicio de sesion  y devuelve el usuario
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
-        
-        loginAttemptService.loginSucceeded(input.getEmail());
-
-        return user;
-
-        //si no lo consigue, añade un intento de inicio de sesión
-        } catch (Exception e){
-            loginAttemptService.loginFailed(input.getEmail());
-           throw new CredencialesErroneasException("Credenciales erróneas"); 
-        }
-    }
-
-    /**
-     * Verifica el código de verificación para habilitar la cuenta.
-     * 
-     * @param input DTO con email y código.
-     * @throws Exception Si no encontrado, expirado o código incorrecto.
-     */
-
-     public void verifyUser(VerifyUserDto input) {
+    // Verifica el código de verificación para habilitar la cuenta.
+    public void verifyUser(VerifyUserDto input) {
         Usuario user;
 
         // Si viene token, validamos por token
@@ -220,7 +127,7 @@ public class UsuarioService {
             user = usuarioRepository.findByEmail(input.getEmail())
                     .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         } else {
-            throw new RuntimeException("Debe proporcionar token o email");
+            throw new TokenCorreoFaltanteException("Debe proporcionar token o email");
         }
 
         // Verifica expiración del código
@@ -241,14 +148,41 @@ public class UsuarioService {
         usuarioRepository.save(user);
     }
 
+    // Autentica un usuario durante login.
+    public Usuario login(LoginUserDto input) {
+        // Busca usuario por email
+        Usuario user = usuarioRepository.findByEmail(input.getEmail())
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-    /**
-     * Envía el email de verificación al usuario.
-     * Usa plantilla simple con código y expiración.
-     * 
-     * @param user Usuario con código y datos.
-     * @throws MessagingException
-     */
+        // Verifica si está habilitado
+        if (!user.isEnabled()) {
+            throw new UsuarioNoVerificadoException("Usuario no verificado");
+        }
+
+        // verificar si el usuario esta bloqueado
+        if (loginAttemptService.isBlocked(input.getEmail())) {
+            throw new UsuarioBloqueadoLoginException("Demasiados intentos fallidos, tu cuenta ha sido bloqueada "
+                    + LoginAttemptService.getMaxAttempts() + " min. Inténtalo de nuevo más tarde.");
+        }
+
+        // Autentica credenciales
+        try { // intenta autentificar, si lo consigue borra la cache de intentos de inicio de
+              // sesion y devuelve el usuario
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
+
+            loginAttemptService.loginSucceeded(input.getEmail());
+
+            return user;
+
+            // si no lo consigue, añade un intento de inicio de sesión
+        } catch (Exception e) {
+            loginAttemptService.loginFailed(input.getEmail());
+            throw new CredencialesErroneasException("Credenciales erróneas");
+        }
+    }
+
+    //Envía el email de verificación al usuario. Usa plantilla simple con código y expiración.
     public void sendVerificationEmail(Usuario user) throws MessagingException {
         String subject = "Verificacion de Cuenta";
         String code = user.getVerificationCode();
@@ -298,6 +232,53 @@ public class UsuarioService {
         emailService.enviarCorreo(user.getEmail(), subject, body);
     }
 
+    //Reenviar código de verificación
+    public void resendVerificationCode(String email) throws MessagingException {
+        Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+
+            if (user.isEnabled()) {
+                throw new CuentaYaVerificadaException("La cuenta ya está verificada");
+            }
+
+            // Genera nuevo código y actualiza expiración
+            user.setVerificationCode(generateVerificationCode());
+            user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(1));
+            sendVerificationEmail(user);
+            usuarioRepository.save(user);
+        } else {
+            throw new UsuarioNoEncontradoException("Usuario no encontrado");
+        }
+    }
+
+    //Verifica el email para el restablecimiento de la contraseña
+    public void verifyEmail(VerifyEmailDto input) throws MessagingException {
+
+        Optional<Usuario> optional = usuarioRepository.findByEmail(input.getEmail());
+
+        if (optional.isPresent()) {
+
+            Usuario user = optional.get();
+
+            if (user.getEmail().equals(input.getEmail())) {
+
+                user.setVerificationCode(generateVerificationCode());
+                user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
+                sendVerificationForgetPassword(user);
+                usuarioRepository.save(user);
+
+            } else {
+                throw new CorreoNoCoincideException("El email no coincide");
+            }
+        } else {
+            throw new UsuarioNoEncontradoException("Usuario no encontrado");
+        }
+
+    }
+
+    //Envia el código de verificación para recuperar la contraseña
     public void sendVerificationForgetPassword(Usuario user) throws MessagingException {
         String subject = "Verificacion de Email";
         String code = user.getVerificationCode();
@@ -349,11 +330,28 @@ public class UsuarioService {
         emailService.enviarCorreo(user.getEmail(), subject, body);
     }
 
-    /**
-     * Genera un código de verificación aleatorio de 6 dígitos.
-     * 
-     * @return Código como string.
-     */
+    //Reenvia el código de verificación para recuperar la contraseña
+    public void resendVerificationCodeForgetPsswd(String email) throws MessagingException {
+        Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
+
+        if (optionalUser.isPresent()) {
+            Usuario user = optionalUser.get();
+
+            if (user.isEnabled()) {
+                throw new CuentaYaVerificadaException("La cuenta ya está verificada");
+            }
+
+            // Genera nuevo código y actualiza expiración
+            user.setVerificationCode(generateVerificationCode());
+            user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(1));
+            sendVerificationForgetPassword(user);
+            usuarioRepository.save(user);
+        } else {
+            throw new UsuarioNoEncontradoException("Usuario no encontrado");
+        }
+    }
+
+    // Genera un código de verificación aleatorio de 6 dígitos.
     private String generateVerificationCode() {
         Random random = new Random();
         int code = random.nextInt(900000) + 100000; // 100000 a 999999

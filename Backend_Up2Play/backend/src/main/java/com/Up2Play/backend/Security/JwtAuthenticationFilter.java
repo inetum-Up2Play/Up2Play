@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.Up2Play.backend.Service.JwtService;
 
-import io.micrometer.common.lang.NonNull;
+import org.springframework.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

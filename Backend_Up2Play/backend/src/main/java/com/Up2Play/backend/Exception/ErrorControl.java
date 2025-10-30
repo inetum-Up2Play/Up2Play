@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.Up2Play.backend.DTO.ErrorResponseDto;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoIncorrectoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CorreoNoCoincideException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CorreoRegistradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CredencialesErroneasException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CuentaYaVerificadaException;
 import com.Up2Play.backend.Exception.ErroresUsuario.NombreUsuarioRegistradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.TokenCorreoFaltanteException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
@@ -182,6 +184,42 @@ public class ErrorControl {
         );
         return ResponseEntity 
             .status(HttpStatus.CONFLICT) 
+            .body(body); 
+    }
+
+    //Correo no existente
+    @ExceptionHandler (CorreoNoCoincideException.class) 
+    public ResponseEntity<ErrorResponseDto> handleCorreoNoCoincide(
+        CorreoNoCoincideException ex,
+        HttpServletRequest request
+    ) {
+        ErrorResponseDto body = new ErrorResponseDto(
+            "CORREO_NO_COINCIDE", 
+            ex.getMessage(), 
+            HttpStatus.CONFLICT.value(), //ERROR 409
+            request.getRequestURI(),
+            Instant.now() 
+        );
+        return ResponseEntity 
+            .status(HttpStatus.CONFLICT) 
+            .body(body); 
+    }
+
+    //Falta token o correo
+    @ExceptionHandler (TokenCorreoFaltanteException.class) 
+    public ResponseEntity<ErrorResponseDto> handleTokenCorreoFaltante(
+        TokenCorreoFaltanteException ex,
+        HttpServletRequest request
+    ) {
+        ErrorResponseDto body = new ErrorResponseDto(
+            "FALTA_TOKEN_O_CORREO", 
+            ex.getMessage(), 
+            HttpStatus.BAD_REQUEST.value(), //ERROR 400
+            request.getRequestURI(),
+            Instant.now() 
+        );
+        return ResponseEntity 
+            .status(HttpStatus.BAD_REQUEST) 
             .body(body); 
     }
 

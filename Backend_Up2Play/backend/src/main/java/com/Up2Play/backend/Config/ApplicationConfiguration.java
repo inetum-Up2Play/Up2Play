@@ -17,13 +17,12 @@ import com.Up2Play.backend.Repository.UsuarioRepository;
  * Define beans para UserDetailsService, codificador de contraseñas y
  * proveedores de autenticación.
  */
-
 @Configuration
 public class ApplicationConfiguration {
     /**
      * Repositorio de usuarios inyectado para cargar datos durante autenticación.
      */
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     /**
      * Constructor que inyecta el repositorio de usuarios.
@@ -40,9 +39,8 @@ public class ApplicationConfiguration {
      * 
      * @return Implementación que busca en el repositorio.
      */
-
     @Bean
-    UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() {
         return username -> usuarioRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
     }
@@ -53,8 +51,7 @@ public class ApplicationConfiguration {
      * @return Instancia de BCryptPasswordEncoder.
      */
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
-
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -65,27 +62,26 @@ public class ApplicationConfiguration {
      * @return Manager obtenido de la config.
      * @throws Exception En caso de error.
      */
-
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     /**
      * Bean para AuthenticationProvider: usa UserDetailsService y PasswordEncoder
-     * para validar credenciales.
+     * para validar credenciales. Refactorizado para inyectar dependencias directamente,
+     * evitando warnings de deprecación.
      * 
+     * @param userDetailsService Servicio de detalles de usuario.
+     * @param passwordEncoder Codificador de contraseñas.
      * @return DaoAuthenticationProvider configurado.
      */
-
+    @SuppressWarnings("deprecation")
     @Bean
-    AuthenticationProvider authenticationProvider() {
-
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
-
 }
