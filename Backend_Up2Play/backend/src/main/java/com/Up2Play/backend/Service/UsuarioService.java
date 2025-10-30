@@ -15,6 +15,15 @@ import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
 import com.Up2Play.backend.DTO.VerifyEmailDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
+import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CodigoIncorrectoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CorreoRegistradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CredencialesErroneasException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CuentaYaVerificadaException;
+import com.Up2Play.backend.Exception.ErroresUsuario.NombreUsuarioRegistradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginException;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
@@ -88,24 +97,31 @@ public class UsuarioService {
      * 
      * @param input DTO con datos de registro.
      * @return Usuario registrado (deshabilitado).
-     * @throws RuntimeException Si el email ya existe.
+     * @throws Exception Si el email ya existe.
      */
     @Transactional
     public Usuario signup(RegisterUserDto input) {
         // Verifica si el email ya está registrado
         if (usuarioRepository.findByEmail(input.getEmail()).isPresent()) {
-            throw new RuntimeException("El email ya está registrado");
+            throw new CorreoRegistradoException("El email ya está registrado");
+        }
+
+        // Verifica si nombre de usuario ya está registrado
+        if (usuarioRepository.findByNombreUsuario(input.getNombre_usuario()).isPresent()) {
+            throw new NombreUsuarioRegistradoException("El nombre de usuario ya está registrado");
         }
 
         // Crea y configura el nuevo usuario
         Usuario user = new Usuario();
         user.setEmail(input.getEmail());
-        user.setNombre_usuario(input.getNombre_usuario());
-        user.setPassword(passwordEncoder.encode(input.getContraseña())); // Encripta contraseña
-        user.setRol("USER"); // Rol por defecto
-        user.setVerificationCode(generateVerificationCode()); // Código temporal
-        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15)); // Expira en 15 min
-        user.setEnabled(false); // Deshabilitado hasta verificación
+
+        user.setNombreUsuario(input.getNombre_usuario());
+        user.setPassword(passwordEncoder.encode(input.getContraseña()));  // Encripta contraseña
+        user.setRol("USER");  // Rol por defecto
+        user.setVerificationCode(generateVerificationCode());  // Código temporal
+        user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));  // Expira en 15 min
+        user.setEnabled(false);  // Deshabilitado hasta verificación
+
 
         // Guarda el usuario
         Usuario saved = usuarioRepository.save(user);
@@ -140,7 +156,7 @@ public class UsuarioService {
                 throw new RuntimeException("El email no coincide");
             }
         } else {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new UsuarioNoEncontradoException("Usuario no encontrado");
         }
 
     }
@@ -151,22 +167,22 @@ public class UsuarioService {
      * 
      * @param input DTO con email y contraseña.
      * @return Usuario autenticado.
-     * @throws RuntimeException Si no encontrado, no verificado o credenciales
+     * @throws Exception Si no encontrado, no verificado o credenciales
      *                          inválidas.
      */
     public Usuario login(LoginUserDto input) {
         // Busca usuario por email
         Usuario user = usuarioRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         // Verifica si está habilitado
         if (!user.isEnabled()) {
-            throw new RuntimeException("Usuario no verificado");
+            throw new UsuarioNoVerificadoException("Usuario no verificado");
         }
 
         //verificar si el usuario esta bloqueado
         if (loginAttemptService.isBlocked(input.getEmail())){
-            throw new RuntimeException("Demasiados intentos fallidos. Intenta más tarde.");
+            throw new UsuarioBloqueadoLoginException("Demasiados intentos fallidos, tu cuenta ha sido bloqueada "+LoginAttemptService.getMaxAttempts()+" min. Inténtalo de nuevo más tarde.");
         }
 
         // Autentica credenciales
@@ -181,7 +197,7 @@ public class UsuarioService {
         //si no lo consigue, añade un intento de inicio de sesión
         } catch (Exception e){
             loginAttemptService.loginFailed(input.getEmail());
-           throw new RuntimeException("Credenciales inválidas"); 
+           throw new CredencialesErroneasException("Credenciales erróneas"); 
         }
     }
 
@@ -189,10 +205,10 @@ public class UsuarioService {
      * Verifica el código de verificación para habilitar la cuenta.
      * 
      * @param input DTO con email y código.
-     * @throws RuntimeException Si no encontrado, expirado o código incorrecto.
+     * @throws Exception Si no encontrado, expirado o código incorrecto.
      */
 
-    public void verifyUser(VerifyUserDto input) {
+     public void verifyUser(VerifyUserDto input) {
         Usuario user;
 
         // Si viene token, validamos por token
@@ -202,7 +218,7 @@ public class UsuarioService {
         // Si no hay token, validamos por email
         else if (input.getEmail() != null && !input.getEmail().isEmpty()) {
             user = usuarioRepository.findByEmail(input.getEmail())
-                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                    .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         } else {
             throw new RuntimeException("Debe proporcionar token o email");
         }
@@ -210,12 +226,12 @@ public class UsuarioService {
         // Verifica expiración del código
         if (user.getVerificationCodeExpiresAt() == null ||
                 user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Código de verificación expirado");
+            throw new CodigoExpiradoException("Código de verificación expirado");
         }
 
         // Verifica código
         if (!user.getVerificationCode().equals(input.getVerificationCode())) {
-            throw new RuntimeException("Código de verificación incorrecto");
+            throw new CodigoIncorrectoException("Código de verificación incorrecto");
         }
 
         // Habilita cuenta y limpia datos
@@ -223,54 +239,6 @@ public class UsuarioService {
         user.setVerificationCode(null);
         user.setVerificationCodeExpiresAt(null);
         usuarioRepository.save(user);
-    }
-
-    /**
-     * Reenvía el código de verificación a un email no verificado.
-     * Genera nuevo código con expiración extendida (1 hora).
-     * 
-     * @param email Email del usuario.
-     * @throws MessagingException
-     * @throws RuntimeException   Si no encontrado o ya verificado.
-     */
-    public void resendVerificationCode(String email) throws MessagingException {
-        Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
-
-        if (optionalUser.isPresent()) {
-            Usuario user = optionalUser.get();
-
-            if (user.isEnabled()) {
-                throw new RuntimeException("La cuenta esta verificada");
-            }
-
-            // Genera nuevo código y actualiza expiración
-            user.setVerificationCode(generateVerificationCode());
-            user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(1));
-            sendVerificationEmail(user);
-            usuarioRepository.save(user);
-        } else {
-            throw new RuntimeException("Usuario no encontrado");
-        }
-    }
-
-        public void resendVerificationCodeForgetPsswd(String email) throws MessagingException {
-        Optional<Usuario> optionalUser = usuarioRepository.findByEmail(email);
-
-        if (optionalUser.isPresent()) {
-            Usuario user = optionalUser.get();
-
-            if (user.isEnabled()) {
-                throw new RuntimeException("La cuenta esta verificada");
-            }
-
-            // Genera nuevo código y actualiza expiración
-            user.setVerificationCode(generateVerificationCode());
-            user.setVerificationCodeExpiresAt(LocalDateTime.now().plusHours(1));
-            sendVerificationForgetPassword(user);
-            usuarioRepository.save(user);
-        } else {
-            throw new RuntimeException("Usuario no encontrado");
-        }
     }
 
 
@@ -307,8 +275,6 @@ public class UsuarioService {
                                 <p style="font-size: 14px; color: #777777;">Este código expira a las <strong>%s</strong>.</p>
 
                                 <p style="font-size: 13px; color: #999999; margin-top: 30px;"><u>En caso de problemas con la pagina de verificación pulsa el boton para redirigirte a la pagina de verificar</u></p>
-
-
                                 <a href="http://localhost:4200/auth/verification?token=%s"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Verificar Cuenta
@@ -324,7 +290,7 @@ public class UsuarioService {
                 </html>
                 """
                 .formatted(
-                        user.getNombre_usuario() != null ? user.getNombre_usuario() : "usuario",
+                        user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario",
                         code,
                         user.getVerificationCodeExpiresAt(),
                         token);
@@ -375,7 +341,7 @@ public class UsuarioService {
                 </html>
                 """
                 .formatted(
-                        user.getNombre_usuario() != null ? user.getNombre_usuario() : "usuario",
+                        user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario",
                         code,
                         user.getVerificationCodeExpiresAt(),
                         token);
