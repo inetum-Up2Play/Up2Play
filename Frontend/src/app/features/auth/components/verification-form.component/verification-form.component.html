@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()"
   class="verification-form max-w-xl mr-6 ml-6 p-4 md:p-8 xl:p-12 xl:mt-6 xl:mb-6" novalidate>
   <div class="Imgicono pb-6 h-28 md:h-32 xl:h-38">
-    <img src="../../../../../assets/auth/verificationIcon.svg">
+    <img src="../../../../../assets/auth/verificationIcon.svg" alt="icon">
   </div>
   <!-- TÍTULO -->
   <h1 class="text-3xl pb-2 md:text-4xl xl:text-5xl">Verifica tu correo</h1>
@@ -23,7 +23,7 @@
     </p-message>
     }
 
-    @if (errorMessage && ((f.verificationCode.value?.trim()?.length ?? 0) > 0) &&
+    @if (errorMessage && (f.verificationCode.value.trim().length > 0) &&
     !f.verificationCode.hasError('required')) {
     <p-message size="small" severity="error" variant="outlined" class="error">
       El código de verificación no es correcto o ha expirado.

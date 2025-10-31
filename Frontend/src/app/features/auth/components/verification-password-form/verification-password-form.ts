@@ -2,13 +2,10 @@ import { UserDataService } from '../../../../core/services/user-data-service';
 import {
   FormBuilder,
   Validators,
-  FormControl,
-  AbstractControl,
 } from '@angular/forms';
 
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
-import { Login } from '../../pages/login/login';
 
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
@@ -112,9 +109,10 @@ export class VerificationPasswordForm {
   validateToken(token: string): void {
     this.loading = true;
     this.authService.validateToken(token).subscribe({
-      next: (res: { email: string }) => {
+      next: (res: string | { email: string }) => {
         this.loading = false;
-        this.email = res.email;
+        if (typeof res === 'string') this.email = res;
+        else this.email = res.email;
       },
       error: (err) => {
         this.loading = false;

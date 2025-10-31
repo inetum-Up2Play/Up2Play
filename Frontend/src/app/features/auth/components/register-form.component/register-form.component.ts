@@ -26,6 +26,7 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../../core/services/auth-service';
 import { Router, RouterModule } from '@angular/router';
 import { Verification } from '../../pages/verification/verification';
+import { ErrorService } from '../../../../core/services/error-service';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -61,6 +62,7 @@ export class RegisterFormComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService); // cuando tengas el servicio
   private userDataService = inject(UserDataService);
+  private errorService = inject(ErrorService);
 
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
@@ -97,17 +99,12 @@ export class RegisterFormComponent {
       nombre_usuario: this.f.nombre_usuario.value
     };
 
-    this.authService.register(payload).subscribe({
-      next: (res) => {
+    this.authService.register(payload).subscribe((res) => {
+      if (res === true) {
         this.userDataService.setEmail(payload.email); // ← Guarda el email
         this.router.navigate(['/auth/verification']);
-      },
-      error: (err) => {
-        if (err.status === 409) {
-          console.error('Email ya registrado');
-        } else {
-          console.error('Error desconocido:', err);
-        }
+      } else {
+        this.errorService.showError(this.errorService.getMensajeError(res));
       }
     });
 

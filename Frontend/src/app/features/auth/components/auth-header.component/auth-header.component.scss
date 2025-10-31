@@ -1,5 +1,5 @@
-@import 'styles/variables';
-@import 'styles/mixins';
+@use 'styles/variables' as vars;
+@use 'styles/mixins' as mix;
 
 .navBar {
     display: flex;
@@ -15,13 +15,13 @@
 
 .nav-links {
     display: flex;
-    font-family: $montserrat;
+    font-family: vars.$montserrat;
     font-weight: 700;
     list-style: none;
 
     a {
         text-decoration: none;
-        color: $blanco;
+        color: vars.$blanco;
         
         &:hover {
             transform: scale(1.05);
