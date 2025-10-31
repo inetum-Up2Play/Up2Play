@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   Validators,
@@ -13,22 +13,20 @@ import { InputIconModule } from 'primeng/inputicon';
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
 
-interface newPassword {
+interface NewPassword {
   email: string;
   password: string;
 }
+
 @Component({
   selector: 'app-new-password-form',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IconFieldModule,
-    InputIconModule,
-  ],
+  // si es componente standalone, añade:
+  // standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, IconFieldModule, InputIconModule],
   templateUrl: './new-password-form.html',
   styleUrls: ['./new-password-form.scss'],
 })
-export class NewPasswordForm {
+export class NewPasswordForm implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
@@ -51,6 +49,11 @@ export class NewPasswordForm {
     return this.form.controls;
   }
 
+  ngOnInit(): void {
+    this.email = this.userDataService.getEmail() ?? '';
+    console.log('Email cargado desde UserDataService:', this.email);
+  }
+
   passwordValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
@@ -62,11 +65,7 @@ export class NewPasswordForm {
     const hasMinLength = value.length >= 8;
 
     const valid =
-      hasUpperCase &&
-      hasLowerCase &&
-      hasNumber &&
-      hasSpecialChar &&
-      hasMinLength;
+      hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && hasMinLength;
     return valid ? null : { passwordStrength: true };
   }
 
@@ -76,31 +75,26 @@ export class NewPasswordForm {
     return password === confirm ? null : { passwordsMismatch: true };
   }
 
-  onInit() {
-    this.email = this.userDataService.getEmail() ?? '';
-  }
-
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    const payload: newPassword = {
+    const payload: NewPassword = {
       email: this.email,
       password: this.f.newPassword.value!,
     };
-    // Aquí iría la llamada al servicio para cambiar la contraseña
+
+    console.log('Payload a enviar:', payload);
 
     this.authService.saveNewPassword(payload).subscribe({
-      next: (res) => {
+      next: () => {
         this.router.navigate(['/auth/login']);
       },
       error: (err) => {
-        // No redirige. Muestra el mensaje de error
         this.errorMessage =
-          err.error?.message ||
-          'La contraseña esta mal :(';
-        console.error('La contraseña esta mal :', err);
+          err.error?.message || 'La contraseña está mal :(';
+        console.error('Error al guardar nueva contraseña:', err);
       },
     });
   }
