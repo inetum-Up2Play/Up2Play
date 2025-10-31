@@ -3,8 +3,8 @@ The styles added here would be global styles to the project.
 Here has to be imported the other style files (from the src/styles/)
 */
 
-@import "./tailwind.css";
-@import "primeicons/primeicons.css";
+@use "./tailwind.css";
+@use "primeicons/primeicons.css";
 
-@import 'styles/variables';
-@import 'styles/mixins';
+@use 'styles/variables';
+@use 'styles/mixins';

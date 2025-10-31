@@ -23,7 +23,7 @@
     </p-message>
     }
 
-    @if (errorMessage && ((f.verificationCode.value?.trim()?.length ?? 0) > 0) &&
+    @if (errorMessage && (f.verificationCode.value.trim().length > 0) &&
     !f.verificationCode.hasError('required')) {
     <p-message size="small" severity="error" variant="outlined" class="error">
       El código de verificación no es correcto o ha expirado.

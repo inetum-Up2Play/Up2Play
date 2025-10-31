@@ -1,5 +1,5 @@
-@import 'styles/variables';
-@import 'styles/mixins';
+@use 'styles/variables' as vars;
+@use 'styles/mixins' as mix;
 
 .footer{
     display: flex;
@@ -18,8 +18,8 @@
 
 .Copiright{
     text-align: center;
-    color: $verde-oscuro;
-    font-family: $montserrat;
+    color: vars.$verde-oscuro;
+    font-family: vars.$montserrat;
     font-weight: 500;
     font-size: 14px;
 }
