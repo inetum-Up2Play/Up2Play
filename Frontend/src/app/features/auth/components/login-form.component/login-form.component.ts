@@ -82,16 +82,13 @@ export class LoginFormComponent {
           // Aquí maneja los errores devueltos del authService
           switch (res) {
             case 'CREDENCIALES_ERRONEAS':
-              this.showError('Credenciales incorrectas. Por favor, verifica tu email y contraseña.');
+              this.showError('Credenciales incorrectas. Por favor, comprueba tu email y contraseña.');
               break;
             case 'USUARIO_NO_VERIFICADO':
               this.showError('Tu cuenta no ha sido verificada. Revisa tu correo electrónico.');
               break;
             case 'USUARIO_NO_ENCONTRADO':
               this.showError('Usuario no encontrado.');
-              break;
-            case 'CORREO_NO_COINCIDE':
-              this.showError('El correo no coincide con el usuario.');
               break;
             case 'USUARIO_BLOQUEADO_LOGIN':
               this.showError('Tu cuenta está bloqueada. Contacta con soporte.');

@@ -58,7 +58,6 @@ export class AuthService {
           case 401: return of('CREDENCIALES_ERRONEAS' as const);
           case 403: return of('USUARIO_NO_VERIFICADO' as const);
           case 404: return of('USUARIO_NO_ENCONTRADO' as const);
-          case 409: return of('CORREO_NO_COINCIDE' as const);
           case 423: return of('USUARIO_BLOQUEADO_LOGIN' as const);
           default: return of('UNKNOWN' as const);
         }
