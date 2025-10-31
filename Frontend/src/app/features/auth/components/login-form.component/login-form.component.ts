@@ -16,6 +16,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
 import { ErrorService } from '../../../../core/services/error-service';
+import { MessageModule } from 'primeng/message';
 
 
 @Component({
@@ -29,6 +30,7 @@ import { ErrorService } from '../../../../core/services/error-service';
     IconFieldModule,
     InputIconModule,
     RouterModule,
+    MessageModule
   ],
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']

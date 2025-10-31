@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   // REENVÍO DE CÓDIGO DE VERIFICACIÓN
-  resendVerificationCode(payload: {email: string}) {
+  resendVerificationCode(payload: { email: string }) {
     return this.http.post(`${this.baseUrl}/resend`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
@@ -55,6 +55,17 @@ export class AuthService {
   // SOLICITAR CÓDIGO PARA CAMBIAR CONTRASEÑA
   newPasswordCode(payload: { email: string }) {
     return this.http.post(`${this.baseUrl}/verifyEmail`, payload).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
+  }
+
+  // VERIFICAR CÓDIGO NUEVA CONTRASEÑA
+  verifyNewPasswordCode(payload: { email: string; verificationCode: string }) {
+    return this.http.post(`${this.baseUrl}/verifyForgetPassword`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;

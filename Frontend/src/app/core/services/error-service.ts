@@ -25,10 +25,16 @@ export class ErrorService {
     UNKNOWN: 'Ha ocurrido un error desconocido.' // ?
   };
 
-  getMensajeError(codigo: string | false): string {
+  getMensajeError(codigo: string | false | Object): string {
     if (!codigo) return 'Ha ocurrido un error desconocido.';
 
-    return this.ERROR_MESSAGES[codigo] ?? `Error inesperado: ${codigo}`;
+    if (typeof codigo === 'string') return this.ERROR_MESSAGES[codigo] ?? `Error inesperado: ${codigo}`;
+    
+    try {
+      return `Error inesperado: ${JSON.stringify(codigo)}`;
+    } catch {
+      return 'Ha ocurrido un error desconocido.';
+    }
   }
 
   showError(detail: string): void {

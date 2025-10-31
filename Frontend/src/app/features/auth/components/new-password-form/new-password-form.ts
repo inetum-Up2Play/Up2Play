@@ -13,6 +13,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
+import { ErrorService } from '../../../../core/services/error-service';
 
 interface NewPassword {
   email: string;
@@ -32,6 +33,7 @@ export class NewPasswordForm implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
+  private errorService = inject(ErrorService);
 
   errorMessage: string | null = null;
 
@@ -89,14 +91,17 @@ export class NewPasswordForm implements OnInit {
     console.log('Payload a enviar:', payload);
 
     this.authService.saveNewPassword(payload).subscribe({
-      next: () => {
-        this.router.navigate(['/auth/login']);
+      next: (res) => {
+        if (res === true) {
+          this.router.navigate(['/auth/login']);
+        } else {
+          const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
+        }
       },
-      error: (err) => {
-        this.errorMessage =
-          err.error?.message || 'La contraseña está mal :(';
-        console.error('Error al guardar nueva contraseña:', err);
-      },
+      error: () => {
+        this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
+      }
     });
   }
 }
