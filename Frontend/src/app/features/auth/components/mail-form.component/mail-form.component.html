@@ -21,15 +21,15 @@
         </p-iconfield>
 
         @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
-        <small class="error">
+        <p-message size="small" severity="error" variant="outlined" class="error">
             Escribe un email para poder enviarte el código.
-        </small>
+        </p-message>
         }
 
         @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
-        <small class="error">
+        <p-message size="small" severity="error" variant="outlined" class="error">
             Formato de email no válido.
-        </small>
+        </p-message>
         }
     </div>
 

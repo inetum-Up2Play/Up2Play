@@ -20,6 +20,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 
 interface ResendVerificationDto {
   email: string;
@@ -42,6 +43,7 @@ interface VerificationPayload {
     IconFieldModule,
     InputIconModule,
     RouterModule,
+    MessageModule
   ],
   templateUrl: './verification-password-form.html',
   styleUrl: './verification-password-form.scss',

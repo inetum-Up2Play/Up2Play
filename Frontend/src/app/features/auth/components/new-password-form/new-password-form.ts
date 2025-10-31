@@ -10,8 +10,11 @@ import {
 import { Router } from '@angular/router';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
+
+
 
 interface newPassword {
   email: string;
@@ -24,6 +27,7 @@ interface newPassword {
     ReactiveFormsModule,
     IconFieldModule,
     InputIconModule,
+    MessageModule
   ],
   templateUrl: './new-password-form.html',
   styleUrls: ['./new-password-form.scss'],

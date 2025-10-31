@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterModule } from '@angular/router';
+import { MessageModule } from 'primeng/message';
  
 
 @Component({
@@ -25,7 +26,8 @@ import { Router, RouterModule } from '@angular/router';
     ButtonModule,
     IconFieldModule,
     InputIconModule,
-    RouterModule
+    RouterModule,
+    MessageModule
 ],
   templateUrl: './login-form.component.html',
  styleUrls: [ './login-form.component.scss' ]
