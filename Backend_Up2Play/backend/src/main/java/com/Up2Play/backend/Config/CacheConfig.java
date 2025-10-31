@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 
-//configuración que controla el comportamiento el caché, como la expiración o los limites del caché.
-
+// Configuración que controla el comportamiento el caché, como la expiración o los limites del caché.
 @Configuration
 @EnableCaching //activa el soporte de caché en Spring. Esto permite usar anotaciones como @Cacheable, @CachePut, @CacheEvict.
 public class CacheConfig {

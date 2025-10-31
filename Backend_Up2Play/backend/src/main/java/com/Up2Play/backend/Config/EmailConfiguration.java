@@ -8,43 +8,32 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-/**
- * Configuración para el envío de emails usando Spring Mail con SMTP de Gmail.
- * Define un bean para JavaMailSender que utiliza credenciales desde properties.
- */
+//Configuración de envío de correos electrónicos usando el servicio de Gmail.
 @Configuration
 public class EmailConfiguration {
 
-    /**
-     * Usuario (email) para autenticación SMTP, inyectado desde
-     * application.properties.
-     */
+    //Email que se usará para enviar los correo, inyectado de archivo application.properties
     @Value("${spring.mail.username}")
     private String emailUsername;
 
-    /**
-     * Contraseña para autenticación SMTP, inyectado desde application.properties.
-     * Nota: Para Gmail, usa una contraseña de app si 2FA está activado.
-     */
+    //Contraseña para envisr correos, inyectado de archivo application.properties 
     @Value("${spring.mail.password}")
     private String emailPassword;
 
-    /**
-     * Bean para JavaMailSender: configura conexión SMTP a Gmail con TLS y
-     * autenticación.
-     * Utiliza puerto 587 para envío seguro de emails (ej. notificaciones, resets de
-     * contraseña).
-     * 
-     * @return Instancia configurada de JavaMailSenderImpl.
-     */
+    // Función que crea y configura el sistema de envío de correos. Usa el servidor SMTP de Gmail.
     @Bean
     public JavaMailSender javaMailSender() {
+
+        //Configuración del servidor del correo de Gmail
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
+
+        //Indica cuenta de Gmail para enviar correos
         mailSender.setUsername(emailUsername);
         mailSender.setPassword(emailPassword);
 
+        //Opciones adicionales
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");

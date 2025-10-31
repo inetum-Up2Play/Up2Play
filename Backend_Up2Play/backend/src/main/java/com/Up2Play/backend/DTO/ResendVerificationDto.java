@@ -4,10 +4,12 @@ public class ResendVerificationDto {
 
     private String email;
 
+    //Contructor
     public ResendVerificationDto(String email) {
         this.email = email;
     }
 
+    //Getters y Setters
     public String getEmail() {
         return email;
     }
