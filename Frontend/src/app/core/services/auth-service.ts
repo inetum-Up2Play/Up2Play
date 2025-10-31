@@ -3,13 +3,13 @@ import { Router, UrlTree } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { LoginResponse, Credentials } from './auth-types';
+import { LoginResponse} from './auth-types';
+import { ErrorResponseDto } from '../models/ErrorResponseDto';
+
 
 const STORAGE_KEY = 'auth';
 const SKEW_MS = 10_000; // margen 10s
 
-// Opcional: tipa explícitamente el resultado
-export type LoginResult = true | 'INVALID_CREDENTIALS' | 'EMAIL_NOT_VERIFIED' | 'UNKNOWN';
 
 @Injectable({
   providedIn: 'root'
@@ -46,24 +46,21 @@ export class AuthService {
   }
 
 
-  login(payload: {email: string, password: string}) {
+  login(payload: { email: string, password: string }) {
+
 
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
       map((res) => {
-        this.setSession(res);             // <- guarda {token, expiresAt} y programa auto-logout
-        return true as const;             // <- encaja con tu onSubmit(...)
+        this.setSession(res);           // Guarda errore y programa auto-logout
+        return true;
       }),
       catchError((error: HttpErrorResponse) => {
-        switch (error.status) {
-          case 401: return of('CREDENCIALES_ERRONEAS' as const);
-          case 403: return of('USUARIO_NO_VERIFICADO' as const);
-          case 404: return of('USUARIO_NO_ENCONTRADO' as const);
-          case 423: return of('USUARIO_BLOQUEADO_LOGIN' as const);
-          default: return of('UNKNOWN' as const);
-        }
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN'); // Devuelve el mensaje tal cual venga del backend
       })
     );
   }
+
 
   isLoggedIn(): boolean {
     return !!this.token && !this.isTokenExpired();

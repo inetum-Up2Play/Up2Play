@@ -15,8 +15,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
-import { MessageService } from 'primeng/api';
-import { Toast } from 'primeng/toast';
+import { ErrorService } from '../../../../core/services/error-service';
 
 
 @Component({
@@ -30,9 +29,7 @@ import { Toast } from 'primeng/toast';
     IconFieldModule,
     InputIconModule,
     RouterModule,
-    Toast
   ],
-  providers: [MessageService],
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
@@ -42,7 +39,7 @@ export class LoginFormComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
-  private messageService = inject(MessageService);
+  private errorService = inject(ErrorService);
 
   showPassword: boolean = false;
 
@@ -79,28 +76,12 @@ export class LoginFormComponent {
           this.userDataService.setEmail(payload.email);
           this.router.navigate(['/auth/my-account']);
         } else {
-          // Aquí maneja los errores devueltos del authService
-          switch (res) {
-            case 'CREDENCIALES_ERRONEAS':
-              this.showError('Credenciales incorrectas. Por favor, comprueba tu email y contraseña.');
-              break;
-            case 'USUARIO_NO_VERIFICADO':
-              this.showError('Tu cuenta no ha sido verificada. Revisa tu correo electrónico.');
-              break;
-            case 'USUARIO_NO_ENCONTRADO':
-              this.showError('Usuario no encontrado.');
-              break;
-            case 'USUARIO_BLOQUEADO_LOGIN':
-              this.showError('Tu cuenta está bloqueada. Contacta con soporte.');
-              break;
-            default:
-              this.showError('Error desconocido: ' + res);
-          }
-        }
+          const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
+        } 
       },
-      error: (err) => {
-        // Este bloque solo se ejecutará si ocurre un error fuera del flujo normal (por ejemplo, error de red)
-        this.showError('Error de red o del servidor. Intenta más tarde.');
+      error: () => {
+        this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
       }
     });
   }
@@ -108,15 +89,6 @@ export class LoginFormComponent {
   redirectForgotPassword() {
     this.router.navigate(['/auth/mail-recover']);
   }
-
-  showError(detail: string) {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: detail
-    });
-  }
-
 
 }
 
