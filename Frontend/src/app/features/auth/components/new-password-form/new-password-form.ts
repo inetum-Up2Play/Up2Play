@@ -4,6 +4,7 @@ import { FormBuilder, Validators, AbstractControl, ValidationErrors, ReactiveFor
 import { Router } from '@angular/router';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-new-password-form',
@@ -11,7 +12,8 @@ import { InputIconModule } from 'primeng/inputicon';
     CommonModule,
     ReactiveFormsModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    MessageModule
   ],
   templateUrl: './new-password-form.html',
   styleUrls: ['./new-password-form.scss']

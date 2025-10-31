@@ -7,12 +7,13 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { MessageModule } from 'primeng/message';
 import { UserDataService } from '../../../../core/services/user-data-service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mail-form',
-  imports: [IconFieldModule, CommonModule, ReactiveFormsModule, InputIconModule, InputTextModule, ButtonModule],
+  imports: [IconFieldModule, CommonModule, ReactiveFormsModule, InputIconModule, InputTextModule, ButtonModule, MessageModule],
   templateUrl: './mail-form.component.html',
   styleUrl: './mail-form.component.scss'
 })

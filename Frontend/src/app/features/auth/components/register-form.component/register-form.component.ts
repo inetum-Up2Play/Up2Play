@@ -17,6 +17,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { MessageModule } from 'primeng/message';
 
 import { MessageService } from 'primeng/api';
 
@@ -45,7 +46,8 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
     CheckboxModule,
     RouterModule,
     InputIcon,
-    IconField
+    IconField,
+    MessageModule
   ],
   templateUrl: './register-form.component.html',
   styleUrls: [

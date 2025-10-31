@@ -20,6 +20,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-verification-password-form',
@@ -32,7 +33,8 @@ import { InputTextModule } from 'primeng/inputtext';
     CheckboxModule,
     IconFieldModule,
     InputIconModule,
-    RouterModule
+    RouterModule,
+    MessageModule
   ],
   templateUrl: './verification-password-form.html',
   styleUrl: './verification-password-form.scss'

@@ -13,6 +13,7 @@ import { InputIconModule } from 'primeng/inputicon';
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
+import { MessageModule } from 'primeng/message';
 
 interface VerificationPayload {
   email: string;
@@ -29,6 +30,7 @@ interface VerificationPayload {
     IconFieldModule,
     InputIconModule,
     RouterModule,
+    MessageModule
   ],
   templateUrl: './verification-form.component.html',
   styleUrls: [

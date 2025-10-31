@@ -71,9 +71,18 @@ h1 {
     }
 }
 
+:host ::ng-deep .p-message-error {
+  background-color: #971919 !important;
+  border-color: #971919 !important;
+  color: #facccc !important;
+  height: fit-content;
+}
+
 .error {
     font-family: $work-sans;
     color: $msg-error-oscuro;
+    margin-top: 0.3rem;
+    display: flex;
 }
 
 .forgot-password-text {

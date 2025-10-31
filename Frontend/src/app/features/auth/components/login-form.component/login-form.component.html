@@ -14,15 +14,15 @@
     </p-iconfield>
 
     @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       El email es obligatorio.
-    </small>
+    </p-message>
     }
 
     @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
-    <small class="error">
+     <p-message size="small" severity="error" variant="outlined" class="error">
       Formato de email no válido.
-    </small>
+     </p-message>
     }
   </div>
 
@@ -39,9 +39,9 @@
     </div>
 
     @if (f.password.hasError('required') && (f.password.dirty || f.password.touched)) {
-    <small class="error">
-      La password es obligatoria.
-    </small>
+     <p-message size="small" severity="error" variant="outlined" class="error">
+      La contraseña es obligatoria.
+     </p-message>
     }
 
   </div>
