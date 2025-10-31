@@ -78,7 +78,7 @@ export class LoginFormComponent {
         } else {
           const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
           this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
-        } 
+        }
       },
       error: () => {
         this.errorService.showError('Error de red o del servidor. Intenta más tarde.');

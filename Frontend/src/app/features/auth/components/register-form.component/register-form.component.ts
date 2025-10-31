@@ -17,6 +17,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { CheckboxModule } from 'primeng/checkbox';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { MessageModule } from 'primeng/message';
 
 import { MessageService } from 'primeng/api';
 
@@ -46,7 +47,8 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
     CheckboxModule,
     RouterModule,
     InputIcon,
-    IconField
+    IconField,
+    MessageModule
   ],
   templateUrl: './register-form.component.html',
   styleUrls: [
@@ -62,6 +64,8 @@ export class RegisterFormComponent {
   private userDataService = inject(UserDataService);
   private errorService = inject(ErrorService);
 
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
 
   //en un futuro poner esto en el shard y exportarlo

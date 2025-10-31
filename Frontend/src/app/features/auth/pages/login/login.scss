@@ -1,5 +1,5 @@
-@import 'styles/variables';
-@import 'styles/mixins';
+@use 'styles/variables' as vars;
+@use 'styles/mixins' as mix;
 
 
 html,
@@ -23,7 +23,7 @@ body {
   padding-top: 1.75%;
   overflow: hidden;
 
-  @include fondo-gradiente-verde;
+  @include mix.fondo-gradiente-verde;
 
   //Indica que todos los hijos de .fondo-register, se encuentren en la 'capa: 1'
   >* {

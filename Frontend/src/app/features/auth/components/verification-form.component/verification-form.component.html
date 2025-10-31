@@ -17,15 +17,18 @@
       <p-inputicon class="pi pi-verified" style="color: black" />
     </p-iconfield>
 
-    <small class="error"
-      *ngIf="f.verificationCode.hasError('required') && (f.verificationCode.dirty || f.verificationCode.touched)">
+    @if (f.verificationCode.hasError('required') && (f.verificationCode.dirty || f.verificationCode.touched)) {
+    <p-message size="small" severity="error" variant="outlined" class="error">
       El código de verificación es obligatorio.
-    </small>
+    </p-message>
+    }
 
-    <small class="error"
-      *ngIf="errorMessage && (f.verificationCode.value?.trim()?.length ?? 0) > 0 && !f.verificationCode.hasError('required')">
+    @if (errorMessage && (f.verificationCode.value.trim().length > 0) &&
+    !f.verificationCode.hasError('required')) {
+    <p-message size="small" severity="error" variant="outlined" class="error">
       El código de verificación no es correcto o ha expirado.
-    </small>
+    </p-message>
+    }
   </div>
 
   <!-- BOTÓN -->
@@ -35,7 +38,8 @@
   <!-- Enviar de nuevo -->
   <div>
     <p class="correo-no-recibido pt-4">¿No has recibido el correo?
-      <a class="correo-no-recibido underline hover:font-medium" (click)="onClickResend()"><br>Enviar de nuevo</a>
+      <a class="correo-no-recibido underline cursor-pointer hover:font-medium" (click)="onClickResend()"><br>Enviar de
+        nuevo</a>
     </p>
     <div *ngIf="resendMessageVisible" class="mensaje-reenvio pt-4 font-bold text-lime-400 flex justify-center">
       Se ha reenviado el código de verificación a tu correo.

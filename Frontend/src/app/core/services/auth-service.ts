@@ -19,7 +19,7 @@ export class AuthService {
   private baseUrl = 'http://localhost:8080/auth';
   private logoutTimer: any;
 
-  // ✅ REGISTRO
+  // REGISTRO
   register(payload: { email: string; password: string; nombre_usuario: string }) {
     return this.http.post(`${this.baseUrl}/signup`, payload).pipe(
       map(() => true),
@@ -30,7 +30,7 @@ export class AuthService {
     );
   }
 
-  // ✅ VERIFICACIÓN DE CUENTA
+  // VERIFICACIÓN DE CUENTA
   verification(payload: { email: string; verificationCode: string }) {
     return this.http.post(`${this.baseUrl}/verify`, payload).pipe(
       map(() => true),
@@ -41,9 +41,9 @@ export class AuthService {
     );
   }
 
-  // ✅ REENVÍO DE CÓDIGO DE VERIFICACIÓN
-  resendVerificationCode(email: string) {
-    return this.http.post(`${this.baseUrl}/resend`, email).pipe(
+  // REENVÍO DE CÓDIGO DE VERIFICACIÓN
+  resendVerificationCode(payload: {email: string}) {
+    return this.http.post(`${this.baseUrl}/resend`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
@@ -52,7 +52,7 @@ export class AuthService {
     );
   }
 
-  // ✅ SOLICITAR CÓDIGO PARA CAMBIAR CONTRASEÑA
+  // SOLICITAR CÓDIGO PARA CAMBIAR CONTRASEÑA
   newPasswordCode(payload: { email: string }) {
     return this.http.post(`${this.baseUrl}/verifyEmail`, payload).pipe(
       map(() => true),
@@ -63,7 +63,7 @@ export class AuthService {
     );
   }
 
-  // ✅ REENVIAR CÓDIGO PARA CAMBIAR CONTRASEÑA
+  // REENVIAR CÓDIGO PARA CAMBIAR CONTRASEÑA
   resendNewPasswordCode(payload: { email: string }) {
     return this.http.post(`${this.baseUrl}/resendEmail`, payload).pipe(
       map(() => true),
@@ -74,7 +74,7 @@ export class AuthService {
     );
   }
 
-  // ✅ VALIDAR TOKEN
+  // VALIDAR TOKEN
   validateToken(token: string) {
     return this.http.get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`).pipe(
       map((res) => res), // ← aquí sí se devuelve el objeto con email
@@ -85,7 +85,12 @@ export class AuthService {
     );
   }
 
-  // ✅ LOGIN
+  // NUEVA CONTRASEÑA
+  saveNewPassword(payload: { email: string; password: string }) {
+    return this.http.post(`${this.baseUrl}/saveNewPassword`, payload);
+  }
+
+  // LOGIN
   login(payload: { email: string; password: string }) {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
       map((res) => {

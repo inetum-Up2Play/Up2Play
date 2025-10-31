@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.Up2Play.backend.DTO.LoginUserDto;
+import com.Up2Play.backend.DTO.NewPasswordDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
+import com.Up2Play.backend.DTO.ResendVerificationDto;
 import com.Up2Play.backend.DTO.VerifyEmailDto;
 import com.Up2Play.backend.DTO.VerifyUserDto;
 import com.Up2Play.backend.Model.Usuario;
@@ -27,24 +29,15 @@ import jakarta.mail.MessagingException;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-    /**
-     * Servicio para generar y manejar tokens JWT.
-     */
-    private final JwtService jwtService;
-    /**
-     * Servicio para operaciones de usuarios (registro, autenticación,
-     * verificación).
-     */
-    private final UsuarioService usuarioService;
 
+    
+    //Inyección servicios
+    private final JwtService jwtService;
+    private final UsuarioService usuarioService;
     private final VerificationTokenService verificationTokenService;
 
-    /**
-     * Constructor que inyecta servicios de JWT y usuarios.
-     * 
-     * @param jwtService     Servicio JWT.
-     * @param usuarioService Servicio de usuarios.
-     */
+    
+    //Constructor que inyecta servicios de JWT y usuarios.
     public AuthenticationController(JwtService jwtService, UsuarioService usuarioService,
             VerificationTokenService verificationTokenService) {
         this.jwtService = jwtService;
@@ -52,17 +45,14 @@ public class AuthenticationController {
         this.verificationTokenService = verificationTokenService;
     }
 
-    /**
+    /*
      * Endpoint para registrar un nuevo usuario.
      * Recibe DTO con datos de registro, crea el usuario y retorna respuesta sin
      * exponer contraseña.
-     * 
-     * @param registerUser Dto Datos del usuario a registrar.
-     * @return ResponseEntity con DTO de usuario registrado (status 201).
-     */
-    @PostMapping("/signup") // ← corregido
+    */
+    @PostMapping("/signup") 
     public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
-        Usuario registrado = usuarioService.signup(registerUserDto); // ← corregido
+        Usuario registrado = usuarioService.signup(registerUserDto);
         // Mapea a un DTO de respuesta para no exponer contraseña
         var response = new UsuarioResponseDto(
                 registrado.getId(),
@@ -72,14 +62,10 @@ public class AuthenticationController {
         return ResponseEntity.status(201).body(response);
     }
 
-    /**
+    /*
      * Endpoint para autenticar usuario (login).
-     * Valida credenciales, genera token JWT y retorna respuesta con token y tiempo
-     * de expiración.
-     * 
-     * @param loginUser Dto Datos de login (email y contraseña).
-     * @return ResponseEntity con LoginResponse (token JWT).
-     */
+     * Valida credenciales, genera token JWT y retorna respuesta con token y tiempo de expiración.
+    */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginUserDto loginUserDto) {
         Usuario usuario = usuarioService.login(loginUserDto);
@@ -91,10 +77,7 @@ public class AuthenticationController {
     /**
      * Endpoint para verificar cuenta de usuario con código.
      * Procesa verificación y habilita la cuenta.
-     * 
-     * @param verifyUser Dto DTO con email y código de verificación.
-     * @return ResponseEntity con mensaje de éxito.
-     */
+    */
     @PostMapping("/verify")
     public ResponseEntity<?> verifyUser(@RequestBody VerifyUserDto verifyUserDto) {
         usuarioService.verifyUser(verifyUserDto);
@@ -118,35 +101,35 @@ public class AuthenticationController {
         }
     }
 
-    /**
-     * Endpoint para reenviar código de verificación por email.
-     * 
-     * @param email Email del usuario.
-     * @return ResponseEntity con mensaje de éxito.
-     * @throws MessagingException
-     */
+    //Endpoint para reenviar código de verificación por email.
     @PostMapping("/resend")
-    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) throws MessagingException {
-        usuarioService.resendVerificationCode(email);
-        return ResponseEntity.ok("Se ha vuelto a enviar el código");
+    public ResponseEntity<?> resendVerificationCode(@RequestBody ResendVerificationDto resendVerificationDto) throws MessagingException {
+        usuarioService.resendVerificationCode(resendVerificationDto.getEmail());
+        return ResponseEntity.ok(Map.of("message","Se ha vuelto a enviar el código"));
     }
 
     @PostMapping("/resendEmail")
-    public ResponseEntity<?> resendVerificationCodeForgetPsswd(@RequestParam String email) throws MessagingException {
-        usuarioService.resendVerificationCodeForgetPsswd(email);
-        return ResponseEntity.ok("Se ha vuelto a enviar el código");
+    public ResponseEntity<?> resendVerificationCodeForgetPsswd(@RequestBody ResendVerificationDto resendVerificationDto) throws MessagingException {
+        usuarioService.resendVerificationCodeForgetPsswd(resendVerificationDto.getEmail());
+        return ResponseEntity.ok(Map.of("message","Se ha vuelto a enviar el código"));
     }
 
-    /**
-     * Record DTO simple para respuesta de registro: evita exponer datos sensibles
-     * como contraseña.
-     * 
-     * @param id            ID del usuario.
-     * @param email         Email del usuario.
-     * @param nombreUsuario Nombre de usuario.
-     * @param enabled       Estado de habilitación.
-     */
+    //Record DTO simple para respuesta de registro: evita exponer datos sensibles.
     public record UsuarioResponseDto(Long id, String email, String nombreUsuario, boolean enabled) {
+    }
+
+    //Endpoint que verifica el código de verificación para recuperar contraseña
+    @PostMapping("/verifyForgetPassword")
+    public ResponseEntity<?>verifyCodeNewPassword(@RequestBody VerifyEmailDto verifyEmailDto){
+        usuarioService.verifyCodeNewPassword(verifyEmailDto);
+        return ResponseEntity.ok(Map.of("message", "Código verificado correctamente"));
+    }
+
+    //Endpoint guardar nueva contaseña
+    @PostMapping("/saveNewPassword")
+    public ResponseEntity<?>saveNewPassword(@RequestBody NewPasswordDto newPasswordDto){
+        usuarioService.saveNewPassword(newPasswordDto);
+        return ResponseEntity.ok(Map.of("message","Contraseña guardada correctamente"));
     }
 }
 

@@ -7,12 +7,13 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { MessageModule } from 'primeng/message';
 import { UserDataService } from '../../../../core/services/user-data-service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mail-form',
-  imports: [IconFieldModule, CommonModule, ReactiveFormsModule, InputIconModule, InputTextModule, ButtonModule],
+  imports: [IconFieldModule, CommonModule, ReactiveFormsModule, InputIconModule, InputTextModule, ButtonModule, MessageModule],
   templateUrl: './mail-form.component.html',
   styleUrl: './mail-form.component.scss'
 })
@@ -35,27 +36,6 @@ export class MailFormComponent {
   // Para obtener el email y guardarlo en una variable actualizada
   get emailText(): string { return this.f.email.value ?? ''; }
 
-
-  onClickResend() {
-    const payload = { email: this.emailText };
-
-    this.authService.resendNewPasswordCode(payload).subscribe({next: (res) => {
-        this.userDataService.setEmail(this.emailText); // ← Guarda el email
-        this.router.navigate(['/auth/verification']); //Habrá que cambiarlo al nuevo
-      },
-      error: (err) => {
-        if (err.status === 401) { //Aquí hay que poner el error que diga que ese email no existe en la BBDD
-          console.error('El email no existe');
-        } else {
-          console.error('Error desconocido:', err);
-        }
-      }
-    });
-
-    console.log(this.emailText);
-  }
-
-
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched(); // enseña errores
@@ -70,7 +50,7 @@ export class MailFormComponent {
     this.authService.newPasswordCode(payload).subscribe({
       next: (res) => {
         this.userDataService.setEmail(this.emailText); // ← Guarda el email
-        this.router.navigate(['/auth/verification']); //Habrá que cambiarlo al nuevo
+        this.router.navigate(['/auth/verification-password']); //Habrá que cambiarlo al nuevo
       },
       error: (err) => {
         if (err.status === 401) { //Aquí hay que poner el error que diga que ese email no existe en la BBDD

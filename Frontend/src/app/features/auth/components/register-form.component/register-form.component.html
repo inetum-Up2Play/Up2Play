@@ -6,132 +6,126 @@
 
   <!-- USUARIO -->
   <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
-    <p-iconfield>
+    <p-iconfield class="relative">
       <input pInputText id="nombre_usuario" placeholder="Nombre de usuario" formControlName="nombre_usuario"
         autocomplete="username"
         [ngClass]="{'ng-invalid': f.nombre_usuario.invalid && (f.nombre_usuario.dirty || f.nombre_usuario.touched)}"
-        class="input h-13 md:h15 2xl:h-18" />
-      <p-inputicon class="pi pi-user" style="color: black" />
+        class="input h-13 md:h-15 2xl:h-18" />
+      <p-inputicon class="pi pi-user absolute -translate-y-1/2" style="color: black" />
     </p-iconfield>
 
     @if (f.nombre_usuario.hasError('required') && (f.nombre_usuario.dirty || f.nombre_usuario.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       El usuario es obligatorio.
-    </small>
+    </p-message>
     }
 
     @if (f.nombre_usuario.hasError('minlength') && (f.nombre_usuario.dirty || f.nombre_usuario.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       Mínimo 3 caracteres.
-    </small>
+    </p-message>
     }
 
     @if (f.nombre_usuario.hasError('maxlength') && (f.nombre_usuario.dirty || f.nombre_usuario.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       Máximo 25 caracteres.
-    </small>
+    </p-message>
     }
   </div>
 
-  <div class="password-group flex-col md:flex-row md:gap-4 ">
+  <div class="password-group flex flex-col md:flex-row md:gap-4 w-full">
     <!-- CONTRASEÑA -->
-    <div class="form-field md:max-w-160 xl:max-w-175 pb-4">
-      <p-iconfield>
-        <input pInputText type="password" placeholder="Contraseña" formControlName="password" class="input h-13 md:h15 2xl:h-18"
+    <div class="form-field md:max-w-160 xl:max-w-175 pb-4 w-full">
+      <div class="relative">
+        <input pInputText [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" formControlName="password"
+          class="input h-13 md:h-15 2xl:h-18"
           [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
-        <p-inputicon class="pi pi-lock" style="color: black" />
-      </p-iconfield>
+        <p-inputicon style="color: black" class="pi pi-lock absolute right-3 -translate-y-1/2" />
+        <p-inputicon [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showPassword = !showPassword"
+          class="absolute right-9 -translate-y-1/2 cursor-pointer text-gray-700" style="color: #F7F7F7" />
+      </div>
 
       @if (f.password.hasError('required') && (f.password.dirty || f.password.touched)) {
-      <small class="error">
+      <p-message size="small" severity="error" variant="outlined" class="error">
         La contraseña es obligatoria.
-      </small>
-      }
-
-      @if (f.password.hasError('minlength') && (f.password.dirty || f.password.touched)) {
-      <small class="error">
-        Mínimo 8 caracteres.
-      </small>
+      </p-message>
       }
 
       @if (f.password.hasError('maxlength') && (f.password.dirty || f.password.touched)) {
-      <small class="error">
+      <p-message size="small" severity="error" variant="outlined" class="error">
         Máximo 255 caracteres.
-      </small>
+      </p-message>
       }
 
       @if (f.password.hasError('pattern') && (f.password.dirty || f.password.touched)) {
-      <small class="error">
-        La contraseña debe incluir minúsculas, mayúsculas, números y símbolos.
-      </small>
+      <p-message size="small" severity="error" variant="outlined" class="error">
+        Debe incluir minúsculas, mayúsculas, números y símbolos.
+      </p-message>
       }
 
     </div>
 
     <!-- REPETIR CONTRASEÑA -->
-    <div class="form-field  md:max-w-160 xl:max-w-175 pb-4">
-      <p-iconfield>
-        <input pInputText type="password" placeholder="Repetir contraseña" formControlName="confirmPassword"
-          class="input h-13 md:h15 2xl:h-18" [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
-        <p-inputicon class="pi pi-arrow-right-arrow-left" style="color: black" />
-      </p-iconfield>
+    <div class="form-field  md:max-w-160 xl:max-w-175 pb-4 w-full">
+      <div class="relative">
+        <input pInputText [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Repetir Contraseña" formControlName="confirmPassword"
+          class="input h-13 md:h-15 2xl:h-18"
+          [ngClass]="{ 'ng-invalid': f.confirmPassword.invalid && (f.confirmPassword.dirty || f.confirmPassword.touched) }" />
+        <p-inputicon style="color: black" class="pi pi-arrow-right-arrow-left absolute right-3 -translate-y-1/2" />
+        <p-inputicon [class]="showConfirmPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showConfirmPassword = !showConfirmPassword"
+          class="absolute right-9 -translate-y-1/2 cursor-pointer" style="color: #F7F7F7" />
+      </div>
 
       @if (f.confirmPassword.hasError('required') && (f.confirmPassword.dirty || f.confirmPassword.touched)) {
-      <small class="error">
+      <p-message size="small" severity="error" variant="outlined" class="error">
         Este campo es obligatorio.
-      </small>
-      }
-
-      @if (f.confirmPassword.hasError('minlength') && (f.confirmPassword.dirty || f.confirmPassword.touched)) {
-      <small class="error">
-        Mínimo 8 caracteres.
-      </small>
+      </p-message>
       }
 
       @if (f.confirmPassword.hasError('maxlength') && (f.confirmPassword.dirty || f.confirmPassword.touched)) {
-      <small class="error">
+      <p-message size="small" severity="error" variant="outlined" class="error">
         Máximo 255 caracteres.
-      </small>
+      </p-message>
       }
 
       @if (f.confirmPassword.hasError('pattern') && (f.confirmPassword.dirty || f.confirmPassword.touched)) {
-      <small class="error">
-        La contraseña debe incluir minúsculas, mayúsculas, números y símbolos.
-      </small>
+      <p-message size="small" severity="error" variant="outlined" class="error">
+        Ddebe incluir minúsculas, mayúsculas, números y símbolos.
+      </p-message>
       }
 
       @if (form.hasError('passwordsDontMatch') && (f.confirmPassword.dirty || f.confirmPassword.touched)) {
-      <small class="error">
+      <p-message size="small" severity="error" variant="outlined" class="error">
         Las contraseñas no coinciden.
-      </small>
+      </p-message>
       }
     </div>
   </div>
 
   <!-- EMAIL -->
-  <div class="form-field  md:max-w-160 xl:max-w-175 pb-6">
-    <p-iconfield>
+  <div class="form-field md:max-w-160 xl:max-w-175 pb-6">
+    <p-iconfield class="relative">
       <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
-        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input h-13 md:h15 2xl:h-18" />
-      <p-inputicon class="pi pi-envelope" style="color: black" />
+        [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}" class="input h-13 md:h-15 2xl:h-18" />
+      <p-inputicon class="pi pi-envelope absolute -translate-y-1/2" style="color: black" />
     </p-iconfield>
 
     @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       El email es obligatorio.
-    </small>
+    </p-message>
     }
 
     @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       Formato de email no válido.
-    </small>
+    </p-message>
     }
 
     @if (f.email.hasError('maxlength') && (f.email.dirty || f.email.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       Máximo 255 caracteres.
-    </small>
+    </p-message>
     }
   </div>
 
@@ -142,14 +136,14 @@
     <label for="aceptaTerminos" class="label">Acepto los Términos de uso</label>
 
     @if (f.aceptaTerminos.hasError('required') && (f.aceptaTerminos.dirty || f.aceptaTerminos.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       Debes aceptar los términos para continuar.
-    </small>
+    </p-message>
     }
 
     <p><a class="terms-conditions " href="">Nuestros términos y condiciones</a></p>
   </div>
 
   <!-- BOTÓN REGISTRARSE -->
-  <button pButton type="submit" class="btn-register h-13 md:h15 2xl:h-18" size="large" [disabled]="form.invalid">Registrarse</button>
+  <button pButton type="submit" class="btn-register h-13 md:h-15 2xl:h-18" size="large" [disabled]="form.invalid">Registrarse</button>
 </form>

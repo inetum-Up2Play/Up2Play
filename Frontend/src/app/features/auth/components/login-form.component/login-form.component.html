@@ -6,23 +6,23 @@
 
   <!-- CAMPO MAIL -->
   <div class="form-field md:max-w-160 xl:max-w-175 pb-6">
-    <p-iconfield>
+    <p-iconfield class="relative">
       <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
         [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}"
         class="input h-13 md:h-15 2xl:h-18" />
-      <p-inputicon class="pi pi-user" style="color: black" />
+      <p-inputicon class="pi pi-user absolute -translate-y-1/2" style="color: black" />
     </p-iconfield>
 
     @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
-    <small class="error">
+    <p-message size="small" severity="error" variant="outlined" class="error">
       El email es obligatorio.
-    </small>
+    </p-message>
     }
 
     @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
-    <small class="error">
+     <p-message size="small" severity="error" variant="outlined" class="error">
       Formato de email no válido.
-    </small>
+     </p-message>
     }
   </div>
 
@@ -33,15 +33,15 @@
       <input pInputText [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" formControlName="password"
         class="input h-13 md:h-15 2xl:h-18"
         [ngClass]="{ 'ng-invalid': f.password.invalid && (f.password.dirty || f.password.touched) }" />
-      <p-inputicon style="color: black" class="pi pi-lock absolute right-3 top-1/2 text-black" />
+      <p-inputicon style="color: black" class="pi pi-lock absolute right-3 -translate-y-1/2" />
       <p-inputicon [class]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="showPassword = !showPassword"
-        class="absolute right-9 top-1/2 cursor-pointer text-gray-700" style="color: #F7F7F7" />
+        class="absolute right-9 -translate-y-1/2 cursor-pointer" style="color: #F7F7F7" />
     </div>
 
     @if (f.password.hasError('required') && (f.password.dirty || f.password.touched)) {
-    <small class="error">
-      La password es obligatoria.
-    </small>
+     <p-message size="small" severity="error" variant="outlined" class="error">
+      La contraseña es obligatoria.
+     </p-message>
     }
 
   </div>
