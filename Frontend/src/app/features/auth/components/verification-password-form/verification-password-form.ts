@@ -2,13 +2,10 @@ import { UserDataService } from '../../../../core/services/user-data-service';
 import {
   FormBuilder,
   Validators,
-  FormControl,
-  AbstractControl
 } from '@angular/forms';
 
 // Conexion con el servicio
 import { AuthService } from '../../../../core/services/auth-service';
-import { Login } from '../../pages/login/login';
 
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
