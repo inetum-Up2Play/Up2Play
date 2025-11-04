@@ -6,7 +6,6 @@ import { MailRecover } from './pages/mail-recover/mail-recover';
 import { VerificationPassword } from './pages/verification-password/verification-password';
 import { NewPassword } from './pages/new-password/new-password';
 
-
 export const AUTH_ROUTES: Routes = [
     { 
         path: 'login', 

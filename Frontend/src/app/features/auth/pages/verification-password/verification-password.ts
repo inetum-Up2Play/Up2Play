@@ -9,6 +9,7 @@ import { AuthHeaderComponent } from '../../components/auth-header.component/auth
   templateUrl: './verification-password.html',
   styleUrl: './verification-password.scss'
 })
+
 export class VerificationPassword {
 
 }

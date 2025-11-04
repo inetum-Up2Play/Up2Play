@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../../core/services/auth-service';
+import { Router } from '@angular/router';
 
+// PrimeNG
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
+
+// Services
 import { UserDataService } from '../../../../core/services/user-data-service';
-import { Router } from '@angular/router';
 import { ErrorService } from '../../../../core/services/error-service';
+import { AuthService } from '../../../../core/services/auth-service';
 
 @Component({
   selector: 'app-mail-form',
@@ -52,8 +55,8 @@ export class MailFormComponent {
     this.authService.newPasswordCode(payload).subscribe({
       next: (res) => {
         if (res === true) {
-          this.userDataService.setEmail(this.emailText); // ← Guarda el email
-          this.router.navigate(['/auth/verification-password']); //Habrá que cambiarlo al nuevo
+          this.userDataService.setEmail(this.emailText); // Guarda el email
+          this.router.navigate(['/auth/verification-password']); // Habrá que cambiarlo al nuevo
         } else {
           const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
           this.errorService.showError(mensaje);                    // Se muestra con PrimeNG

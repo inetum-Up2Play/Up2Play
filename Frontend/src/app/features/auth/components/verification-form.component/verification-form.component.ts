@@ -8,10 +8,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-// Conexion con el servicio
+import { MessageModule } from 'primeng/message';
+
+// Services
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
-import { MessageModule } from 'primeng/message';
 import { ErrorService } from '../../../../core/services/error-service';
 
 interface VerificationPayload {

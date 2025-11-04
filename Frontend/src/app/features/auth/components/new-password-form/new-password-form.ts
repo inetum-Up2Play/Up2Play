@@ -1,16 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule, } from '@angular/forms';
 import { Router } from '@angular/router';
+
+// PrimeNG
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageModule } from 'primeng/message';
+
+// Services
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
 import { ErrorService } from '../../../../core/services/error-service';
@@ -22,8 +20,6 @@ interface NewPassword {
 
 @Component({
   selector: 'app-new-password-form',
-  // si es componente standalone, añade:
-  // standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IconFieldModule, InputIconModule, MessageModule],
   templateUrl: './new-password-form.html',
   styleUrls: ['./new-password-form.scss'],

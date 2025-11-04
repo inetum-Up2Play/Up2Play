@@ -3,9 +3,6 @@ import { RegisterFormComponent } from '../../components/register-form.component/
 import { AuthFooterComponent } from '../../components/auth-footer.component/auth-footer.component';
 import { AuthHeaderComponent } from '../../components/auth-header.component/auth-header.component';
 
-import { MessageService } from 'primeng/api';
-
-
 @Component({
   selector: 'app-register',
   imports: [RegisterFormComponent, AuthFooterComponent, AuthHeaderComponent],

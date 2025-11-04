@@ -115,7 +115,6 @@ export class AuthService {
     );
   }
 
-
   // ESTADO DE SESIÓN
   isLoggedIn(): boolean {
     return !!this.token && !this.isTokenExpired();

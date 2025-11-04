@@ -1,7 +1,6 @@
 @use 'styles/variables' as vars;
 
-/* Ocultar el icono de mostrar/ocultar contraseña predeterminado */
-/* Edge / IE */
+/* Ocultar el icono de mostrar/ocultar contraseña predeterminado en Edge / IE */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
     display: none;

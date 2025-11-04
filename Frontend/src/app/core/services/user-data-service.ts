@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 
 export class UserDataService {
-
   private email: string | null = null;
   private token: string | null = null;
 
@@ -31,5 +30,4 @@ export class UserDataService {
   clearEmail() {
     this.email = null;
   }
-
 }

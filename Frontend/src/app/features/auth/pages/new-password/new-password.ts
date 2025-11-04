@@ -9,6 +9,7 @@ import { NewPasswordForm } from '../../components/new-password-form/new-password
   templateUrl: './new-password.html',
   styleUrl: './new-password.scss'
 })
+
 export class NewPassword {
 
 }

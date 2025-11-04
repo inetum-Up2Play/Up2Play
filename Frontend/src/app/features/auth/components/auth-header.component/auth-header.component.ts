@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
+
 import { MenuItem } from 'primeng/api';
 import { Menu, MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
@@ -27,9 +28,9 @@ export class AuthHeaderComponent {
       {
         label: 'MENÚ',
         items: [
-          { label: 'Inicio', routerLink: ['http://127.0.0.1:5500/Up2Play/Landing/index.html'] }, // Angular Router
-          { label: 'Registrarse', routerLink: ['/auth/register'] }, // Angular Router
-          { label: 'Iniciar sesión', routerLink: ['/auth/login'] }, // Angular Router
+          { label: 'Inicio', routerLink: [this.landingUrl] },
+          { label: 'Registrarse', routerLink: [this.RegistrarseUrl] },
+          { label: 'Iniciar sesión', routerLink: [this.IniciarSesionUrl] },
         ]
       }
     ];
@@ -46,7 +47,6 @@ export class AuthHeaderComponent {
   isVerification(): boolean {
     return this.router.url === this.VerificarUrl;
   }
-
 }
 
 

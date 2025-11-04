@@ -41,8 +41,10 @@
       <a class="correo-no-recibido underline cursor-pointer hover:font-medium" (click)="onClickResend()"><br>Enviar de
         nuevo</a>
     </p>
-    <div *ngIf="resendMessageVisible" class="mensaje-reenvio pt-4 font-bold text-lime-400 flex justify-center">
+    @if (resendMessageVisible) {
+    <div class="mensaje-reenvio pt-4 font-bold text-lime-400 flex justify-center">
       Se ha reenviado el código de verificación a tu correo.
     </div>
+    }
   </div>
 </form>

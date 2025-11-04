@@ -1,10 +1,7 @@
 import { Component, inject, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,11 +9,12 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { Router, RouterModule } from '@angular/router';
+import { MessageModule } from 'primeng/message';
+
+// Services
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
 import { ErrorService } from '../../../../core/services/error-service';
-import { MessageModule } from 'primeng/message';
 
 
 @Component({
@@ -64,7 +62,7 @@ export class LoginFormComponent {
       this.form.markAllAsTouched(); // enseña errores
       return;
     } else {
-      this.submitted.emit(this.form.getRawValue()); // <- envía {email, password}
+      this.submitted.emit(this.form.getRawValue()); // envía {email, password}
     }
 
     const payload = {
