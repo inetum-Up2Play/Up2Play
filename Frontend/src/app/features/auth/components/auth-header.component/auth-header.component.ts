@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/button';
 })
 
 export class AuthHeaderComponent {
-  landingUrl = 'http://127.0.0.1:5500/Up2Play/Landing/index.html'
+  landingUrl = 'http://127.0.0.1:5500/Landing/index.html'
   IniciarSesionUrl = '/auth/login'
   RegistrarseUrl = '/auth/register'
   VerificarUrl = '/auth/verification'
@@ -28,7 +28,7 @@ export class AuthHeaderComponent {
       {
         label: 'MENÚ',
         items: [
-          { label: 'Inicio', routerLink: [this.landingUrl] },
+          { label: 'Inicio', url: this.landingUrl },
           { label: 'Registrarse', routerLink: [this.RegistrarseUrl] },
           { label: 'Iniciar sesión', routerLink: [this.IniciarSesionUrl] },
         ]
