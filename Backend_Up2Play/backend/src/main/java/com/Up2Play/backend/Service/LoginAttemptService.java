@@ -1,6 +1,5 @@
 package com.Up2Play.backend.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ public class LoginAttemptService {
     private final Cache attemptsCache;
     
     //autoinyecta el CacheManager (configurado en CacheConfig)
-    @Autowired 
     public LoginAttemptService (CacheManager cacheManager){
         this.attemptsCache = cacheManager.getCache(cache_name); //del CacheManager, coge el caché "loginAttempts" y lo guarda en la variable "attemptsCache" 
     }

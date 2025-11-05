@@ -1,23 +1,25 @@
-@import 'styles/variables';
-/* Ocultar el icono de mostrar/ocultar contraseña predeterminado */
-/* Edge / IE */
+@use 'styles/variables' as vars;
+
+/* Ocultar el icono de mostrar/ocultar contraseña predeterminado en Edge / IE */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
-  display: none;
+    display: none;
 }
+
 /* WebKit (Chrome, Safari) */
 input[type="password"]::-webkit-credentials-auto-fill-button {
-  visibility: hidden;
-  display: none;
-  pointer-events: none;
+    visibility: hidden;
+    display: none;
+    pointer-events: none;
 }
+
 input[type="password"]::-webkit-textfield-decoration-container {
-  display: none;
+    display: none;
 }
 
 h1 {
-    font-family: $montserrat;
-    color: $blanco;
+    font-family: vars.$montserrat;
+    color: vars.$blanco;
     margin-top: 0;
     font-weight: 600;
 }
@@ -27,28 +29,28 @@ h1 {
 }
 
 .input {
-    font-family: $work-sans;
+    font-family: vars.$work-sans;
     font-weight: 600;
     width: 100%;
-    background-color: transparentize($color: lightgray, $amount: 0.8);
-    color: $blanco;
-    border-color: $blanco;
-    border-radius: 1rem; 
+    background-color: rgba(lightgray, 0.2);
+    border-color: vars.$blanco;
+    border-radius: 1rem;
     padding: 0.8rem;
     box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
 
     &::placeholder {
-        color: $blanco;
+        color: vars.$blanco;
     }
 
     &:hover {
         border-color: rgb(184, 184, 184) !important;
     }
-    
+
     &:focus {
         border-color: rgb(184, 184, 184) !important;
         outline: none; // Elimina el borde azul por defecto del navegador
-        &::placeholder{
+
+        &::placeholder {
             opacity: 0.5;
             transition: ease 0.3s;
         }
@@ -57,18 +59,18 @@ h1 {
 
 
 .form-introduccion {
-    font-family: $work-sans;
+    font-family: vars.$work-sans;
     font-size: 1rem;
-    color: $blanco;
+    color: vars.$blanco;
     font-weight: 600;
 
     .form-link-register {
-        color: $verde-claro;
+        color: vars.$verde-claro;
         cursor: pointer;
         text-decoration: none;
 
         &:hover {
-            color: $verde-oliva;
+            color: vars.$verde-oliva;
             transition: 0.3s ease;
         }
     }
@@ -80,57 +82,68 @@ h1 {
 
 
 .p-inputtext.ng-invalid.ng-touched {
-    border-color: $msg-error-oscuro !important;
-    &::placeholder{
+    border-color: vars.$msg-error-oscuro !important;
+
+    &::placeholder {
         color: #cacaca !important;
     }
 }
 
+:host ::ng-deep .p-message-error {
+    background-color: #971919 !important;
+    border-color: #971919 !important;
+    color: #facccc !important;
+    height: fit-content;
+}
+
 .error {
-    font-family: $work-sans;
-    color: $msg-error-oscuro;
+    font-family: vars.$work-sans;
+    color: vars.$msg-error-oscuro;
+    margin-top: 0.3rem;
+    display: flex;
 }
 
 .forgot-password-text {
-    font-family: $work-sans;
+    font-family: vars.$work-sans;
     text-decoration: underline;
-    color: $verde-oscuro;
+    color: vars.$verde-oscuro;
     cursor: pointer;
 
-    &:hover{
+    &:hover {
         font-weight: 500;
     }
 }
 
 .btn-login {
-    color: $blanco;
-    font-family: $work-sans;
+    color: vars.$blanco;
+    font-family: vars.$work-sans;
     width: 100%;
     border-radius: 1rem;
     border: none;
-    background-color: $verde-oscuro;
+    background-color: vars.$verde-oscuro;
     opacity: 0.9;
     margin-top: 0.8rem;
 
-    &:enabled{
+    &:enabled {
         cursor: pointer;
-        &:hover{
-            background-color: $verde-oscuro !important;
+
+        &:hover {
+            background-color: vars.$verde-oscuro !important;
             opacity: 1 !important;
             font-weight: 500 !important;
-            color: $blanco !important;
+            color: vars.$blanco !important;
             border: none !important;
             transition: 0.2s ease;
         }
     }
 
-    &:disabled{
-        background-color: $verde-oscuro;
+    &:disabled {
+        background-color: vars.$verde-oscuro;
         opacity: 0.7;
     }
 }
 
 //Fixing inputicons position
 ::ng-deep .p-inputicon {
-  margin-top: 0 !important;
+    margin-top: 0 !important;
 }

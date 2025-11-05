@@ -16,19 +16,17 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-/**
- * Entidad Usuario que representa un usuario en la base de datos.
- * Implementa UserDetails para integración con Spring Security.
- */
+//Entidad Usuario que representa un usuario en la base de datos.
+
 @Entity
 @Table(name = "USUARIO")
 public class Usuario implements UserDetails {
 
     // Campos principales de identificación y autenticación
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Long id; // ID único autogenerado
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //autogenera el ID
+    @Column(unique = true, nullable = false) //único y no nulo
+    private Long id; 
 
     @NotBlank
     @Email
@@ -51,9 +49,6 @@ public class Usuario implements UserDetails {
     private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
 
     // Constructores
-    /**
-     * Constructor completo con todos los campos.
-     */
     public Usuario(Long id, String email, String password, String rol, String nombreUsuario) {
         this.id = id;
         this.email = email;
@@ -62,9 +57,6 @@ public class Usuario implements UserDetails {
         this.nombreUsuario = nombreUsuario;
     }
 
-    /**
-     * Constructor con campos de verificación incluidos.
-     */
     public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
             boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt) {
         this.id = id;
@@ -77,9 +69,6 @@ public class Usuario implements UserDetails {
         this.verificationCodeExpiresAt = verificationCodeExpiresAt;
     }
 
-    /**
-     * Constructor básico sin ID (para creación).
-     */
     public Usuario(String email, String password, String rol, String nombreUsuario) {
         this.email = email;
         this.password = password;
@@ -87,7 +76,6 @@ public class Usuario implements UserDetails {
         this.nombreUsuario = nombreUsuario;
     }
 
-    // Constructor por defecto
     public Usuario() {
     }
 
@@ -153,58 +141,44 @@ public class Usuario implements UserDetails {
     }
 
     // Implementación de UserDetails para Spring Security
-    /**
-     * Retorna autoridades (roles) del usuario. Actual: vacío, implementar según
-     * roles.
-     */
+
+    //Devuelve los permisos o roles del usuario
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
-    /**
-     * Verifica si la cuenta no ha expirado. Siempre true por defecto.
-     */
+    //Verifica si la cuenta no ha expirado. Siempre true por defecto.
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    /**
-     * Verifica si la cuenta no está bloqueada. Siempre true por defecto.
-     */
+    //Verifica si la cuenta no está bloqueada. Siempre true por defecto.
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    /**
-     * Verifica si las credenciales no han expirado. Siempre true por defecto.
-     */
+    //Verifica si las credenciales no han expirado. Siempre true por defecto.
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    /**
-     * Verifica si el usuario está habilitado.
-     */
+    //Verifica si el usuario está habilitado.
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
-    /**
-     * Retorna la password para autenticación.
-     */
+    //Retorna la password para autenticación.
     @Override
     public String getPassword() {
         return password;
     }
 
-    /**
-     * Retorna el nombre de usuario (usa email).
-     */
+    //Retorna el nombre de usuario (usa email).
     @Override
     public String getUsername() {
         return email;

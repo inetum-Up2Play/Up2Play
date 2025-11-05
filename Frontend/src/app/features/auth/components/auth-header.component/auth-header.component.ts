@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
+
+import { MenuItem } from 'primeng/api';
+import { Menu, MenuModule } from 'primeng/menu';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-auth-header',
-  imports: [RouterModule],
+  imports: [RouterModule, Menu, MenuModule, ButtonModule],
   templateUrl: './auth-header.component.html',
   styleUrl: './auth-header.component.scss'
 })
@@ -17,6 +21,20 @@ export class AuthHeaderComponent {
   constructor(private router: Router) {
   }
 
+  items: MenuItem[] | undefined;
+
+  ngOnInit() {
+    this.items = [
+      {
+        label: 'MENÚ',
+        items: [
+          { label: 'Inicio', url: this.landingUrl },
+          { label: 'Registrarse', routerLink: [this.RegistrarseUrl] },
+          { label: 'Iniciar sesión', routerLink: [this.IniciarSesionUrl] },
+        ]
+      }
+    ];
+  }
 
   isLogin(): boolean {
     return this.router.url === this.IniciarSesionUrl;
@@ -29,7 +47,6 @@ export class AuthHeaderComponent {
   isVerification(): boolean {
     return this.router.url === this.VerificarUrl;
   }
-
 }
 
 

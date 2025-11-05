@@ -7,6 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import Aura from '@primeuix/themes/aura';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
+import { MessageService } from 'primeng/api';
 
 
 export const appConfig: ApplicationConfig = {
@@ -24,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([authInterceptor]) // activa tu interceptor
     ),
+    MessageService
   ]
 };

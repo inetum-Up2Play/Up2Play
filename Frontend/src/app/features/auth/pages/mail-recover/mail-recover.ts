@@ -9,6 +9,6 @@ import { MailFormComponent } from "../../components/mail-form.component/mail-for
   templateUrl: './mail-recover.html',
   styleUrl: './mail-recover.scss'
 })
-export class MailRecover {
 
+export class MailRecover {
 }

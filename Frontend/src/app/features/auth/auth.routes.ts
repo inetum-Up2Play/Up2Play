@@ -4,7 +4,7 @@ import { Register } from './pages/register/register';
 import { Verification } from './pages/verification/verification';
 import { MailRecover } from './pages/mail-recover/mail-recover';
 import { VerificationPassword } from './pages/verification-password/verification-password';
-
+import { NewPassword } from './pages/new-password/new-password';
 
 export const AUTH_ROUTES: Routes = [
     { 
@@ -26,5 +26,9 @@ export const AUTH_ROUTES: Routes = [
     {
         path: 'verification-password',
         component: VerificationPassword
+    },
+    {
+        path: 'new-password',
+        component: NewPassword
     }
 ];

@@ -1,7 +1,6 @@
-@import 'styles/variables';
+@use 'styles/variables' as vars;
 
-/* Ocultar el icono de mostrar/ocultar contraseña predeterminado */
-/* Edge / IE */
+/* Ocultar el icono de mostrar/ocultar contraseña predeterminado Edge / IE */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
@@ -16,10 +15,9 @@ input[type="password"]::-webkit-textfield-decoration-container {
   display: none;
 }
 
-
 h1 {
-  font-family: $montserrat;
-  color: $blanco;
+  font-family: vars.$montserrat;
+  color: vars.$blanco;
   white-space: nowrap;
   font-weight: 600;
 }
@@ -30,13 +28,13 @@ h1 {
 }
 
 .form-introduccion {
-  font-family: $work-sans;
+  font-family: vars.$work-sans;
   font-size: 1.1rem;
-  color: $blanco;
+  color: vars.$blanco;
   font-weight: 600;
 
   .form-link-login {
-    color: $verde-claro;
+    color: vars.$verde-claro;
     cursor: pointer;
     text-decoration: none;
 
@@ -52,18 +50,18 @@ h1 {
 }
 
 .input {
-    font-family: $work-sans;
+    font-family: vars.$work-sans;
     font-weight: 600;
     width: 100%;
-    background-color: transparentize($color: lightgray, $amount: 0.8);
-    color: $blanco;
-    border-color: $blanco;
+    background-color: rgba(lightgray, 0.2); // porque 1 - 0.8 = 0.2
+    color: vars.$blanco;
+    border-color: vars.$blanco;
     border-radius: 1rem; 
     padding: 0.8rem;
     box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
 
     &::placeholder {
-        color: $blanco;
+        color: vars.$blanco;
     }
 
     &:hover {
@@ -81,20 +79,27 @@ h1 {
 }
 
 .p-inputtext.ng-invalid.ng-touched {
-    border-color: $msg-error-claro !important;
+    border-color: vars.$msg-error-claro !important;
     &::placeholder{
         color: #cacaca!important;
     }
 }
 
+:host ::ng-deep .p-message-error {
+  background-color: #971919 !important;
+  border-color: #971919 !important;
+  color: #facccc !important;
+  height: fit-content;
+}
 .error {
-    font-family: $work-sans;
-    color: $msg-error-claro;
+    font-family: vars.$work-sans;
+    color: vars.$msg-error-claro;
+    margin-top: 0.3rem;
+    display: flex;
 }
 
-/* Términos */
 .terms {
-  font-family: $work-sans;
+  font-family: vars.$work-sans;
   gap: 0.35rem;
 
   ::ng-deep .p-checkbox-box {
@@ -112,15 +117,15 @@ h1 {
   }
 
   .label {
-    color: $blanco;
+    color: vars.$blanco;
     margin-left: 0.25rem;
     font-weight: 500;
   }
 
   .terms-conditions {
-    font-family: $work-sans;
+    font-family: vars.$work-sans;
     text-decoration: underline;
-    color: $verde-oscuro;
+    color: vars.$verde-oscuro;
     cursor: pointer;
 
     &:hover{
@@ -130,29 +135,29 @@ h1 {
 }
 
 .btn-register {
-    color: $blanco;
-    font-family: $work-sans;
+    color: vars.$blanco;
+    font-family: vars.$work-sans;
     width: 100%;
     border-radius: 1rem;
     border: none;
-    background-color: $verde-oscuro;
+    background-color: vars.$verde-oscuro;
     opacity: 0.9;
     margin-top: 0.8rem;
 
     &:enabled{
         cursor: pointer;
         &:hover{
-            background-color: $verde-oscuro !important;
+            background-color: vars.$verde-oscuro !important;
             opacity: 1 !important;
             font-weight: 500 !important;
-            color: $blanco !important;
+            color: vars.$blanco !important;
             border: none !important;
             transition: 0.2s ease;
         }
     }
 
     &:disabled{
-        background-color: $verde-oscuro;
+        background-color: vars.$verde-oscuro;
         opacity: 0.7;
     }
 }

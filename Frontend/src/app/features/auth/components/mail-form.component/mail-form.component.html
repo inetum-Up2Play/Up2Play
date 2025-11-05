@@ -21,26 +21,19 @@
         </p-iconfield>
 
         @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
-        <small class="error">
+        <p-message size="small" severity="error" variant="outlined" class="error">
             Escribe un email para poder enviarte el código.
-        </small>
+        </p-message>
         }
 
         @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
-        <small class="error">
+        <p-message size="small" severity="error" variant="outlined" class="error">
             Formato de email no válido.
-        </small>
+        </p-message>
         }
     </div>
 
     <!-- BOTÓN -->
     <button pButton type="submit" class="btn-verify h-13 md:h-15" size="large" [disabled]="form.invalid">Enviar
         código</button>
-
-    <!-- Enviar de nuevo -->
-    <div>
-        <p class="correo-no-recibido pt-4">¿No has recibido el correo?
-            <a class="correo-no-recibido underline hover:font-medium" (click)="onClickResend()"><br>Enviar de nuevo</a>
-        </p>
-    </div>
 </form>

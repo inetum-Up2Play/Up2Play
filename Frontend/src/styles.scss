@@ -3,8 +3,47 @@ The styles added here would be global styles to the project.
 Here has to be imported the other style files (from the src/styles/)
 */
 
-@import "./tailwind.css";
-@import "primeicons/primeicons.css";
+@use "./tailwind.css";
+@use "primeicons/primeicons.css";
 
-@import 'styles/variables';
-@import 'styles/mixins';
+@use 'styles/variables' as vars;
+@use 'styles/mixins' as mix;
+
+@use 'sass:color';
+
+/* Contenedor del overlay del menú (styleClass="mobile-menu") */
+.mobile-menu.p-menu {
+  /* — Apariencia del panel — */
+  background-color: color.change(vars.$verde-oscuro, $alpha: 0.90); // blanco con 15% de transparencia
+  color: vars.$verde-oscuro;
+  border: 1px solid color.change(vars.$verde-oscuro, $alpha: 0.25);
+  border-radius: 12px;
+  font-family: vars.$montserrat;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: .02em;      /* tracking */
+  text-align: right;
+
+  /* (Opcional) Para que el popup pueda ser más estrecho y se adapte al contenido */
+  min-width: 0 !important;
+  width: fit-content;       /* o max-content si lo prefieres */
+  max-width: 90vw;          /* evita desbordes en móvil */
+}
+
+/* Lista interior: un poco de aire y separación */
+.mobile-menu .p-menu-list {
+  padding: .5rem;
+  gap: .25rem;
+}
+
+/* Cada item (contenedor y link) alineado a la izquierda y con bordes suaves */
+.mobile-menu .p-menu-item-content {
+  border-radius: 8px;
+  text-align: right;
+}
+
+.mobile-menu .p-menu-item-link {
+  color: vars.$blanco;
+  justify-content: flex-end;
+  text-align: right;            /* por si hay contenido multilínea */
+}
