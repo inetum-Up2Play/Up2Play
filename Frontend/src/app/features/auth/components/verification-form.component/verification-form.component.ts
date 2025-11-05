@@ -8,10 +8,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-// Conexion con el servicio
+import { MessageModule } from 'primeng/message';
+
+// Services
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
-import { MessageModule } from 'primeng/message';
+import { ErrorService } from '../../../../core/services/error-service';
 
 interface VerificationPayload {
   email: string;
@@ -40,6 +42,7 @@ interface ResendVerificationDto {
 export class VerificationFormComponent implements OnInit {
   private userDataService = inject(UserDataService);
   private authService = inject(AuthService);
+  private errorService = inject(ErrorService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
@@ -98,9 +101,13 @@ export class VerificationFormComponent implements OnInit {
   validateToken(token: string): void {
     this.loading = true;
     this.authService.validateToken(token).subscribe({
-      next: (res: { email: string }) => {
+      next: (res: string | { email: string }) => {
         this.loading = false;
-        this.email = res.email;
+        if (typeof res === 'string') {
+          this.errorMessageToken = res;  //Muestra respuesta con string
+        } else {
+          this.email = res.email;  //Muestra respuesta con payload
+        }
       },
       error: (err) => {
         this.loading = false;
@@ -124,17 +131,17 @@ export class VerificationFormComponent implements OnInit {
 
     this.authService.verification(payload).subscribe({
       next: (res) => {
-        this.loading = false;
-        this.router.navigate(['/auth/login']);
+        if (res === true) {
+          this.loading = false;
+          this.router.navigate(['/auth/login']);
+        } else {
+          const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
+        }
       },
-      error: (err) => {
-        // No redirige. Muestra el mensaje de error
-        this.loading = false;
-        this.errorMessage =
-          err.error?.message ||
-          'El código de verificación es incorrecto o ha expirado.';
-        console.error('Error de verificación:', err);
-      },
+      error: () => {
+        this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
+      }
     });
   }
 }

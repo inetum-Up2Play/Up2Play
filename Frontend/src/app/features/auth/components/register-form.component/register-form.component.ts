@@ -1,13 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserDataService } from '../../../../core/services/user-data-service'; // ajusta la ruta
-import {
-  FormBuilder,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 // PrimeNG
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,13 +13,10 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { MessageModule } from 'primeng/message';
 
-import { MessageService } from 'primeng/api';
-
-
-// Conexion con el servicio
+// Services
 import { AuthService } from '../../../../core/services/auth-service';
-import { Router, RouterModule } from '@angular/router';
-import { Verification } from '../../pages/verification/verification';
+import { UserDataService } from '../../../../core/services/user-data-service';
+import { ErrorService } from '../../../../core/services/error-service';
 
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const password = group.get('password')?.value;
@@ -52,21 +43,21 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
   templateUrl: './register-form.component.html',
   styleUrls: [
     './register-form.component.scss'
-    // 'node_modules/primeicons/primeicons.css'
   ]
 })
 
 export class RegisterFormComponent {
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService); // cuando tengas el servicio
+  private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
+  private errorService = inject(ErrorService);
 
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
 
-  //en un futuro poner esto en el shard y exportarlo
+  // En un futuro poner esto en el shard y exportarlo
   private PASSWORD_POLICY = /^(?=.*\p{Ll})(?=.*\p{Lu})(?=.*\p{Nd})(?=.*[^\p{L}\p{N}\s])(?!.*\s).+$/u;
 
   form = this.fb.group(
@@ -97,17 +88,12 @@ export class RegisterFormComponent {
       nombre_usuario: this.f.nombre_usuario.value
     };
 
-    this.authService.register(payload).subscribe({
-      next: (res) => {
+    this.authService.register(payload).subscribe((res) => {
+      if (res === true) {
         this.userDataService.setEmail(payload.email); // ← Guarda el email
         this.router.navigate(['/auth/verification']);
-      },
-      error: (err) => {
-        if (err.status === 409) {
-          console.error('Email ya registrado');
-        } else {
-          console.error('Error desconocido:', err);
-        }
+      } else {
+        this.errorService.showError(this.errorService.getMensajeError(res));
       }
     });
 

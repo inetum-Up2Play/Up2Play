@@ -21,10 +21,8 @@ import com.Up2Play.backend.Service.VerificationTokenService;
 import jakarta.mail.MessagingException;
 
 /**
- * Controlador REST para manejar autenticación de usuarios: registro, login,
- * verificación y reenvío de códigos.
- * Utiliza servicios para procesar lógica de negocio y JWT para tokens de
- * sesión.
+ * Controlador REST para manejar autenticación de usuarios: registro, login, verificación y reenvío de códigos.
+ * Utiliza servicios para procesar lógica de negocio y JWT para tokens de sesión.
  */
 @RestController
 @RequestMapping("/auth")
@@ -47,8 +45,7 @@ public class AuthenticationController {
 
     /*
      * Endpoint para registrar un nuevo usuario.
-     * Recibe DTO con datos de registro, crea el usuario y retorna respuesta sin
-     * exponer contraseña.
+     * Recibe DTO con datos de registro, crea el usuario y retorna respuesta sin exponer contraseña.
     */
     @PostMapping("/signup") 
     public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
@@ -56,6 +53,8 @@ public class AuthenticationController {
         // Mapea a un DTO de respuesta para no exponer contraseña
         var response = new UsuarioResponseDto(
                 registrado.getId(),
+
+
                 registrado.getEmail(),
                 registrado.getNombreUsuario(),
                 registrado.isEnabled());

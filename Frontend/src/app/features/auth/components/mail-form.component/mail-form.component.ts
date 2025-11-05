@@ -1,15 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../../core/services/auth-service';
+import { Router } from '@angular/router';
 
+// PrimeNG
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
+
+// Services
 import { UserDataService } from '../../../../core/services/user-data-service';
-import { Router } from '@angular/router';
+import { ErrorService } from '../../../../core/services/error-service';
+import { AuthService } from '../../../../core/services/auth-service';
 
 @Component({
   selector: 'app-mail-form',
@@ -20,6 +24,7 @@ import { Router } from '@angular/router';
 export class MailFormComponent {
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
+  private errorService = inject(ErrorService);
   private router = inject(Router);
 
   private fb = inject(FormBuilder);
@@ -49,17 +54,19 @@ export class MailFormComponent {
 
     this.authService.newPasswordCode(payload).subscribe({
       next: (res) => {
-        this.userDataService.setEmail(this.emailText); // ← Guarda el email
-        this.router.navigate(['/auth/verification-password']); //Habrá que cambiarlo al nuevo
-      },
-      error: (err) => {
-        if (err.status === 401) { //Aquí hay que poner el error que diga que ese email no existe en la BBDD
-          console.error('El email no existe');
+        if (res === true) {
+          this.userDataService.setEmail(this.emailText); // Guarda el email
+          this.router.navigate(['/auth/verification-password']); // Habrá que cambiarlo al nuevo
         } else {
-          console.error('Error desconocido:', err);
+          const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
         }
+      },
+      error: () => {
+        this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
       }
     });
-
   }
 }
+
+

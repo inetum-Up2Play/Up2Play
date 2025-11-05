@@ -2,6 +2,7 @@ package com.Up2Play.backend.DTO;
 
 import java.time.Instant;
 
+// Plantilla Respuesta errores
 public record ErrorResponseDto( 
     /* record se utilitzan en DTOs de solo lectura, no hay que modificar variables. Se usa en lugar de "class" para ahorrar código y hacerlos más seguros
     es un archivo inmtutable.*/

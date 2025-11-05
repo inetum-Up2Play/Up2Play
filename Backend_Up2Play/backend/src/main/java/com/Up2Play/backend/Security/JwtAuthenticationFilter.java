@@ -21,25 +21,18 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-/**
- * Filtro JWT que autentica solicitudes HTTP una vez por request.
- * Extrae y valida el token JWT del header Authorization, carga detalles del
- * usuario
- * y establece el contexto de seguridad si es válido.
- */
+// Filtro de seguridad que se ejecuta cada vez que llega una petición HTTP
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String BEARER_PREFIX = "Bearer "; // Prefijo esperado en el header Authorization
+    private static final String BEARER_PREFIX = "Bearer "; //  Prefijo que debe tener el token en el header
 
     // Dependencias inyectadas
     private final HandlerExceptionResolver handlerExceptionResolver; // Maneja excepciones globales
     private final JwtService jwtService; // Servicio para validar y extraer datos del JWT
     private final UserDetailsService userDetailsService; // Carga detalles del usuario por username
 
-    /**
-     * Constructor que inyecta las dependencias necesarias.
-     */
+    // Constructor que inyecta las dependencias necesarias
     public JwtAuthenticationFilter(
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver,
             JwtService jwtService,
@@ -50,22 +43,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Procesa cada solicitud HTTP: valida JWT, autentica usuario y continúa la
-     * cadena de filtros.
-     * Maneja excepciones delegando al resolver global.
+     * Este método se ejecuta en cada petición HTTP
+     * Valida JWT, autentica usuario y continúa la cadena de filtros.
      */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-
+        
+        //Leer el header "Authorization"
         final String authHeader = request.getHeader("Authorization");
 
-        // Verifica si el header existe y comienza con "Bearer " (insensible a
-        // mayúsculas)
+        // Verifica si el header existe y comienza con "Bearer " (insensible a mayúsculas)
         if (authHeader == null || !authHeader.regionMatches(true, 0, BEARER_PREFIX, 0, BEARER_PREFIX.length())) {
-            filterChain.doFilter(request, response); // Continúa sin autenticación
+            // Si no hay token, continuar sin autenticación
+            filterChain.doFilter(request, response); 
             return;
         }
 
@@ -73,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Extrae el token JWT del header (quita el prefijo y espacios)
             final String jwt = authHeader.substring(BEARER_PREFIX.length()).trim();
             if (jwt.isEmpty()) {
-                filterChain.doFilter(request, response); // Token vacío, continúa
+                filterChain.doFilter(request, response); // Si el Token está vacío, continúa
                 return;
             }
 

@@ -19,23 +19,20 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 //import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Configuración de seguridad para la aplicación Spring Boot.
+ * Configuración de seguridad para la aplicación.
  * Habilita Web Security, CORS, JWT stateless y autorización de endpoints.
  * Deshabilita CSRF y sesiones tradicionales para API REST con JWT.
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //Activa la seguridad web de Spring Security
 @EnableMethodSecurity // Habilita anotaciones como @PreAuthorize para control de métodos
 public class SecurityConfig {
 
     // Dependencias inyectadas para autenticación y filtros
-    private final AuthenticationProvider authenticationProvider; // Proveedor de autenticación (ej:
-                                                                 // DaoAuthenticationProvider)
+    private final AuthenticationProvider authenticationProvider; // Proveedor de autenticación                                                            
     private final JwtAuthenticationFilter jwtAuthenticationFilter; // Filtro personalizado para validar JWT
 
-    /**
-     * Constructor que inyecta las dependencias de seguridad.
-     */
+    //Constructor que inyecta las dependencias de seguridad.
     public SecurityConfig(AuthenticationProvider authenticationProvider,
             JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.authenticationProvider = authenticationProvider;
@@ -45,47 +42,38 @@ public class SecurityConfig {
     /**
      * Bean principal que configura la cadena de filtros de seguridad HTTP.
      * Define CORS, CSRF, sesiones, autorización y manejo de excepciones.
-     */
+    **/
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                // 1) Habilita CORS usando la configuración personalizada
+                // Permite peticiones desde otros orígenes (como Angular en localhost:4200)
                 .cors(cors -> {
                 })
-                // 2) Deshabilita CSRF (no necesario para API stateless con JWT)
+                // Desactiva CSRF (protección contra ataques de formularios, no necesaria con JWT)
                 .csrf(csrf -> csrf.disable())
-                // 3) Configura sesiones como stateless (sin cookies de sesión)
+                // No se usan sesiones (stateless), porque JWT se manda en cada petición
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 4) Reglas de autorización por endpoint
+                // Define qué rutas son públicas y cuáles requieren login
                 .authorizeHttpRequests(auth -> auth
-                        // Permite solicitudes OPTIONS (preflight CORS)
+                        // Permite peticiones OPTIONS (necesarias para CORS)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Endpoints públicos: autenticación y registro
+                        // // Permite acceso libre a rutas de login y registro
                         .requestMatchers("/auth/**").permitAll()
-                        // (Opcional) Acceso público a Swagger UI y docs
+                        // Permite acceso libre a Swagger (documentación de la API)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        // Todas las demás solicitudes requieren autenticación
+                        // Todas las demás rutas requieren que el usuario esté autenticado
                         .anyRequest().authenticated())
-                // 5) Usa el proveedor de autenticación personalizado
+                // Usa el proveedor de autenticación personalizado para validar usuarios
                 .authenticationProvider(authenticationProvider)
-                // 6) Agrega el filtro JWT antes del filtro de autenticación por defecto
+                // Agrega el filtro JWT antes del filtro de autenticación por defecto
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // 7) Manejo de excepciones: 401 para no autenticado, 403 para acceso denegado
-                //.exceptionHandling(ex -> ex
-                   //     .authenticationEntryPoint((req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                    //    .accessDeniedHandler((req, res, e) -> res.sendError(HttpServletResponse.SC_FORBIDDEN)))
-                // 8) Deshabilita autenticación básica y login por formulario (solo JWT)
+                // Desactiva login por formulario y autenticación básica (solo JWT)
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
                 .build();
     }
 
-    /**
-     * Bean para configuración CORS: permite solicitudes desde orígenes específicos
-     * (ej: frontend Angular).
-     * Define métodos, headers y credenciales permitidos para evitar errores de
-     * cross-origin.
-     */
+    //Configura CORS para permitir que el frontend se comunique con el backend
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();

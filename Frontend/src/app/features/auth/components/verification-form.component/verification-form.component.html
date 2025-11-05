@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()"
   class="verification-form max-w-xl mr-6 ml-6 p-4 md:p-8 xl:p-12 xl:mt-6 xl:mb-6" novalidate>
   <div class="Imgicono pb-6 h-28 md:h-32 xl:h-38">
-    <img src="../../../../../assets/auth/verificationIcon.svg">
+    <img src="../../../../../assets/auth/verificationIcon.svg" alt="icon">
   </div>
   <!-- TÍTULO -->
   <h1 class="text-3xl pb-2 md:text-4xl xl:text-5xl">Verifica tu correo</h1>
@@ -41,8 +41,10 @@
       <a class="correo-no-recibido underline cursor-pointer hover:font-medium" (click)="onClickResend()"><br>Enviar de
         nuevo</a>
     </p>
-    <div *ngIf="resendMessageVisible" class="mensaje-reenvio pt-4 font-bold text-lime-400 flex justify-center">
+    @if (resendMessageVisible) {
+    <div class="mensaje-reenvio pt-4 font-bold text-lime-400 flex justify-center">
       Se ha reenviado el código de verificación a tu correo.
     </div>
+    }
   </div>
 </form>

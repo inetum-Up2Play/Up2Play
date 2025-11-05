@@ -1,7 +1,6 @@
 @use 'styles/variables' as vars;
 
-/* Ocultar el icono de mostrar/ocultar contraseña predeterminado */
-/* Edge / IE */
+/* Ocultar el icono de mostrar/ocultar contraseña predeterminado Edge / IE */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
@@ -15,7 +14,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 input[type="password"]::-webkit-textfield-decoration-container {
   display: none;
 }
-
 
 h1 {
   font-family: vars.$montserrat;
@@ -87,16 +85,12 @@ h1 {
     }
 }
 
-
-
 :host ::ng-deep .p-message-error {
   background-color: #971919 !important;
   border-color: #971919 !important;
   color: #facccc !important;
   height: fit-content;
 }
-
-
 .error {
     font-family: vars.$work-sans;
     color: vars.$msg-error-claro;
@@ -104,7 +98,6 @@ h1 {
     display: flex;
 }
 
-/* Términos */
 .terms {
   font-family: vars.$work-sans;
   gap: 0.35rem;

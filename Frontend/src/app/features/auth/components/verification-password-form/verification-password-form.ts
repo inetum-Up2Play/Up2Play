@@ -1,19 +1,9 @@
-import { UserDataService } from '../../../../core/services/user-data-service';
-import {
-  FormBuilder,
-  Validators,
-  FormControl,
-  AbstractControl,
-} from '@angular/forms';
-
-// Conexion con el servicio
-import { AuthService } from '../../../../core/services/auth-service';
-import { Login } from '../../pages/login/login';
-
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+
+// PrimeNG
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -21,6 +11,10 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
+
+// Services
+import { AuthService } from '../../../../core/services/auth-service';
+import { UserDataService } from '../../../../core/services/user-data-service';
 
 interface ResendVerificationDto {
   email: string;
@@ -60,8 +54,7 @@ export class VerificationPasswordForm {
   resendMessageVisible = false;
 
   onTyping() {
-    // borra el mensaje de error al escribir o borrar
-    this.errorMessage = null;
+    this.errorMessage = null; // Borra el mensaje de error al escribir o borrar
   }
 
   token = '';
@@ -112,9 +105,10 @@ export class VerificationPasswordForm {
   validateToken(token: string): void {
     this.loading = true;
     this.authService.validateToken(token).subscribe({
-      next: (res: { email: string }) => {
+      next: (res: string | { email: string }) => {
         this.loading = false;
-        this.email = res.email;
+        if (typeof res === 'string') this.email = res;
+        else this.email = res.email;
       },
       error: (err) => {
         this.loading = false;

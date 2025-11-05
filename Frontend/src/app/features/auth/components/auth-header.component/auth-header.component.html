@@ -1,11 +1,20 @@
 <header>
-    <div class="inline-block">
+    <div class="inline-block w-full">
         <nav class="navBar p-2 md:pl-10">
             <div class="logo aspect-3/1v min-w-36">
                 <img src="assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png" routerLink="/" alt="logo"
                     class="logo h-12 md:h-16 xl:h-20">
             </div>
-            <ul class="nav-links gap-6 md:p-6 md:gap-12">
+            <div class="card flex w-full justify-end pr-6 md:hidden">
+                <p-menu #menu [model]="items" [popup]="true" appendTo="body" styleClass="mobile-menu"></p-menu>
+
+                <p-button (click)="menu.toggle($event)" icon="pi pi-bars" [rounded]="true" [raised]="true"
+                    aria-label="Abrir menú" styleClass="menu-btn !bg-emerald-700/0 !border-emerald-700/0 
+                    !shadow-none !text-white !w-11 !h-11 !p-0 !flex !items-center !justify-center">
+                </p-button>
+            </div>
+
+            <ul class="nav-links hidden md:flex gap-6 md:p-6 md:gap-12">
                 <li><a [href]="landingUrl">Inicio</a></li>
                 @if (isRegister()) {
                 <li><a [routerLink]="IniciarSesionUrl" class="whitespace-nowrap">Iniciar sesión</a></li>

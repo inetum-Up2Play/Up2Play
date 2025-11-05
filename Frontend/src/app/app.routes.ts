@@ -34,5 +34,9 @@ export const routes: Routes = [
                 import('./features/home/pruebaPrimeNG/pruebaPrimeNG.component').then(m => m.PruebaPrimeNGComponent)
             },
         ]
+    },
+    {
+        path:'my-account',
+        component: Profile
     }
 ];

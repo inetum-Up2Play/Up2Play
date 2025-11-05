@@ -3,17 +3,16 @@ import { VerificationFormComponent } from '../../components/verification-form.co
 import { AuthFooterComponent } from '../../components/auth-footer.component/auth-footer.component';
 import { AuthHeaderComponent } from '../../components/auth-header.component/auth-header.component';
 
-
 @Component({
   selector: 'app-verification',
   imports: [VerificationFormComponent, AuthFooterComponent, AuthHeaderComponent],
   templateUrl: './verification.html',
   styleUrl: './verification.scss'
 })
-export class Verification {
-  
 
-  }
+export class Verification {
+
+}
 
 
 

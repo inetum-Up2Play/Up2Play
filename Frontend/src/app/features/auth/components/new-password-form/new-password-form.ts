@@ -1,18 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule, } from '@angular/forms';
 import { Router } from '@angular/router';
+
+// PrimeNG
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageModule } from 'primeng/message';
+
+// Services
 import { AuthService } from '../../../../core/services/auth-service';
 import { UserDataService } from '../../../../core/services/user-data-service';
+import { ErrorService } from '../../../../core/services/error-service';
 
 interface NewPassword {
   email: string;
@@ -21,8 +20,6 @@ interface NewPassword {
 
 @Component({
   selector: 'app-new-password-form',
-  // si es componente standalone, añade:
-  // standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IconFieldModule, InputIconModule, MessageModule],
   templateUrl: './new-password-form.html',
   styleUrls: ['./new-password-form.scss'],
@@ -32,6 +29,7 @@ export class NewPasswordForm implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
+  private errorService = inject(ErrorService);
 
   errorMessage: string | null = null;
 
@@ -89,14 +87,17 @@ export class NewPasswordForm implements OnInit {
     console.log('Payload a enviar:', payload);
 
     this.authService.saveNewPassword(payload).subscribe({
-      next: () => {
-        this.router.navigate(['/auth/login']);
+      next: (res) => {
+        if (res === true) {
+          this.router.navigate(['/auth/login']);
+        } else {
+          const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
+        }
       },
-      error: (err) => {
-        this.errorMessage =
-          err.error?.message || 'La contraseña está mal :(';
-        console.error('Error al guardar nueva contraseña:', err);
-      },
+      error: () => {
+        this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
+      }
     });
   }
 }
