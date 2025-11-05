@@ -60,75 +60,120 @@
 			<scope>test</scope>
 		</dependency>
 
-<dependency>
-    <groupId>com.oracle.database.jdbc</groupId>
-    <artifactId>ojdbc8</artifactId>
-    <version>21.9.0.0</version>
-</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+		</dependency>
 
-<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
-<dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt-api</artifactId>
-    <version>0.12.6</version>
-</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.6</version>
+		</dependency>
 
-<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
-<dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt-impl</artifactId>
-    <version>0.12.6</version>
-    <scope>runtime</scope>
-</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>java-dotenv</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<!-- dependencias caché con Caffeine -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+		</dependency>
+
+		<!-- dependencias para Skeleton Test -->
+
+		<!-- Actuator per health/readiness -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		
+		<!-- Paquet amb serveis de testing -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 
 
-<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
-<dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt-jackson</artifactId>
-    <version>0.12.6</version>
-    <scope>runtime</scope>
-</dependency>
+		<!-- H2 per a tests unitarios (ràpid i in-memory) -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-mail</artifactId>
-</dependency>
+		<!-- Simula base de datos real -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+  			<scope>test</scope>
+		</dependency>
 
-<dependency>
+		
+		<!-- *** Módulo específico Oracle: imprescindible *** -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-oracle</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-    <groupId>jakarta.validation</groupId>
 
-    <artifactId>jakarta.validation-api</artifactId>
+		<!-- Núcleo Testcontainers + JUnit 5 -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-    <version>3.0.2</version>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-</dependency>
-
-<dependency>
-<groupId>io.github.cdimascio</groupId>
-<artifactId>java-dotenv</artifactId>
-<version>5.2.2</version>
-</dependency>
-
-<dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-jdbc</artifactId>
-  <version>3.0.5</version>
-</dependency>
-
-<!-- dependencias caché con Caffeine -->
-
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-cache</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>com.github.ben-manes.caffeine</groupId>
-    <artifactId>caffeine</artifactId>
-</dependency>
-
+		<!-- Módulo JDBC (facilita DataSource en tests) -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>jdbc</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
@@ -138,7 +183,18 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<useModulePath>false</useModulePath>
+					<systemPropertyVariables>
+					<spring.profiles.active>test</spring.profiles.active>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
