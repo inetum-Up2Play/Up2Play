@@ -8,5 +8,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.scss'
 })
 export class Header {
-  landingUrl = 'http://127.0.0.1:5500/Landing/index.html'
+  landingUrl = 'http://127.0.0.1:5500/Up2Play/Landing/index.html'
 }
