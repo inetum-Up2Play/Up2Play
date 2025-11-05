@@ -98,7 +98,13 @@ export class AuthService {
 
   // NUEVA CONTRASEÑA
   saveNewPassword(payload: { email: string; password: string }) {
-    return this.http.post(`${this.baseUrl}/saveNewPassword`, payload);
+     return this.http.post(`${this.baseUrl}/saveNewPassword`, payload).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
   }
 
   // LOGIN
