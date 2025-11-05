@@ -33,7 +33,7 @@ import com.Up2Play.backend.Repository.UsuarioRepository;
 import jakarta.mail.MessagingException;
 
 // Servicio principal para gestión de usuarios: CRUD, registro, verificación mediante JWT, inicio de sesión y cambio de contraseña.
- 
+
 @Service
 public class UsuarioService {
 
@@ -77,7 +77,7 @@ public class UsuarioService {
      * Registra un nuevo usuario con verificación por email.
      * Encripta la contraseña, genera código de verificación y envía email.
      * La cuenta se crea deshabilitada hasta verificación.
-    **/
+     **/
     @Transactional
     public Usuario signup(RegisterUserDto input) {
         // Verifica si el email ya está registrado
@@ -182,7 +182,8 @@ public class UsuarioService {
         }
     }
 
-    // Envía el email de verificación al usuario. Usa plantilla simple con código y expiración.
+    // Envía el email de verificación al usuario. Usa plantilla simple con código y
+    // expiración.
     public void sendVerificationEmail(Usuario user) throws MessagingException {
         String subject = "Verificacion de Cuenta";
         String code = user.getVerificationCode();
@@ -260,13 +261,12 @@ public class UsuarioService {
         return String.valueOf(code);
     }
 
-    
-    //---------------FUNCIÓN RECUPERAR CONTRASEÑA---------------
+    // ---------------FUNCIÓN RECUPERAR CONTRASEÑA---------------
 
     /*
      * Verifica el email para el restablecimiento de la contraseña y utiliza método
      * "sendVerificationForgetPassword" de abajo para enviar el código ese correo
-    */
+     */
     public void verifyEmail(VerifyEmailDto input) throws MessagingException {
 
         Optional<Usuario> optional = usuarioRepository.findByEmail(input.getEmail());
@@ -365,19 +365,18 @@ public class UsuarioService {
     }
 
     // Verificar código para cambiar contraseña
-    public void verifyCodeNewPassword(VerifyEmailDto input){
-       Usuario user;
+    public void verifyCodeNewPassword(VerifyEmailDto input) {
+        Usuario user;
 
-       // Validar por token, si es que se ha rellenado el campo
+        // Validar por token, si es que se ha rellenado el campo
         if (input.getToken() != null && !input.getToken().isEmpty()) {
-            user = verificationTokenService.validateToken(input.getToken()); //devuleve el usuario asociado a ese token
+            user = verificationTokenService.validateToken(input.getToken()); // devuleve el usuario asociado a ese token
         }
         // Si no hay token, validamos por email
         else if (input.getEmail() != null && !input.getEmail().isEmpty()) {
             user = usuarioRepository.findByEmail(input.getEmail())
                     .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
-        }   
-        else {
+        } else {
             throw new TokenCorreoFaltanteException("Debe proporcionar el token");
         }
 
@@ -392,14 +391,14 @@ public class UsuarioService {
             throw new CodigoIncorrectoException("Código de verificación incorrecto");
         }
 
-       //Limpia código
+        // Limpia código
         user.setVerificationCode(null);
         user.setVerificationCodeExpiresAt(null);
         usuarioRepository.save(user);
     }
 
     // Guardar nueva constraseña en la base de datos
-    public void saveNewPassword (NewPasswordDto input){
+    public void saveNewPassword(NewPasswordDto input) {
 
         Optional<Usuario> optional = usuarioRepository.findByEmail(input.getEmail());
 
@@ -410,12 +409,10 @@ public class UsuarioService {
             if (user.getEmail().equals(input.getEmail())) {
                 user.setPassword(passwordEncoder.encode(input.getPassword()));
                 usuarioRepository.save(user);
-                
-            }   
+
+            }
         }
-         
-        
 
     }
-    
+
 }
