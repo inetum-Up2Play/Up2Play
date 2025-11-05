@@ -44,6 +44,9 @@ export class NewPasswordForm implements OnInit {
     { validators: this.passwordsMatchValidator }
   );
 
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
+
   get f() {
     return this.form.controls;
   }
