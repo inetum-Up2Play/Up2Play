@@ -102,21 +102,23 @@ export class VerificationPasswordForm {
     });
   }
 
-  validateToken(token: string): void {
-    this.loading = true;
-    this.authService.validateToken(token).subscribe({
-      next: (res: string | { email: string }) => {
-        this.loading = false;
-        if (typeof res === 'string') this.email = res;
-        else this.email = res.email;
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorMessageToken = 'Token inválido o expirado.';
-        console.error('Error validando token:', err);
-      },
-    });
-  }
+validateToken(token: string): void {
+  this.loading = true;
+  this.authService.validateToken(token).subscribe({
+    next: (res: string | { email: string }) => {
+      this.loading = false;
+      this.email = typeof res === 'string' ? res : res.email;
+
+      // 🔹 GUARDA el email en el servicio compartido
+      this.userDataService.setEmail(this.email);
+    },
+    error: (err) => {
+      this.loading = false;
+      this.errorMessageToken = 'Token inválido o expirado.';
+      console.error('Error validando token:', err);
+    },
+  });
+}
 
   onSubmit(): void {
     if (this.form.invalid || !this.email) {
@@ -133,6 +135,7 @@ export class VerificationPasswordForm {
     this.authService.verifyNewPasswordCode(payload).subscribe({
       next: (res) => {
         this.loading = false;
+        this.userDataService.setEmail(this.email);
         this.router.navigate(['/auth/new-password']);
       },
       error: (err) => {
