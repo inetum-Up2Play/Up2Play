@@ -76,7 +76,7 @@ button.registrarse {
 }
 
 /* Evita que el body genere scroll lateral por animaciones */
-html, body { overflow-x: hidden; }
+html, body { overflow-x: hidden; }  
 
 button.botones-carusel {
     width: auto;

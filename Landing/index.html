@@ -171,7 +171,6 @@
                 ACTIVIDADES
             </h2>
 
-            <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
             <style>
                 [x-cloak] {
                     display: none !important;
@@ -184,7 +183,6 @@
 
             <body class="bg-gray-100">
                 <div class="container mx-auto px-4 py-12">
-
                     <div x-data="carousel()" x-init="init()" x-cloak class="relative">
                         <div class="relative overflow-hidden rounded-lg shadow-xl">
                             <!-- Track -->
@@ -201,9 +199,11 @@
                                             <div class="p-4">
                                                 <h3 x-text="slide.title" class="text-xl font-semibold"></h3>
                                                 <p x-text="slide.description" class="text-gray-600 mt-2"></p>
-                                                <button x-text="slide.button"
-                                                    class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg">
-                                                </button>
+                                                <a href="http://localhost:4200/auth/login">
+                                                    <button x-text="slide.button"
+                                                        class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg">
+                                                    </button>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -247,13 +247,9 @@
                         </div>
                     </div>
                 </div>
-
-                <script src="/Landing/Assets/js/carousel.js"></script>
             </body>
+        </div>
     </section>
-
-    </section>
-
 
     <section class="filosofia-coor py-16 md:bg-[#f7f7f7]">
         <div class="max-w-5xl mx-auto md:rounded-4xl" style="background-color: white;">
@@ -524,6 +520,6 @@
     </footer>
     <script src="assets/js/header.js"></script>
     <script src="assets/js/carousel.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
-
-</html
+</html>
