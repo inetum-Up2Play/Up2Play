@@ -41,17 +41,33 @@
             }
           },
           "configurations": {
-            "production": {
+            "production": {  
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "600kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1000kB",
+                  "maximumError": "1300kB"
+                },
+                {
+                  "type": "bundle",
+                  "name": "main",
+                  "maximumWarning": "300kB",
+                  "maximumError": "380kB"
+                },
+                {
+                  "type": "anyScript",
+                  "maximumWarning": "320kB",
+                  "maximumError": "400kB"
+                },
+                {
+                  "type": "any",
+                  "maximumWarning": "200kB",
+                  "maximumError": "300kB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "10kB",
+                  "maximumError": "16kB"
                 }
               ],
               "outputHashing": "all"

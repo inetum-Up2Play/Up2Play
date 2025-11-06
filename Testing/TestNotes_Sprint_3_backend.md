@@ -1,6 +1,4 @@
-# ✅ Informe de Pruebas – Backend Up2Play
-
-## 🧩 Resumen Ejecutivo
+# Informe de Pruebas – Backend Up2Play
 Se han ejecutado dos tipos de pruebas sobre el servicio:
 
 - **Arranque del sistema**: verifica que la aplicación puede iniciarse correctamente.
@@ -10,7 +8,7 @@ Se han ejecutado dos tipos de pruebas sobre el servicio:
 
 ---
 
-## 🧪 Prueba 1: Arranque del sistema
+## Prueba 1: Arranque del sistema
 **Nombre técnico:** `SkeletonContextLoadTest`
 
 ### ¿Qué valida?
@@ -24,7 +22,7 @@ Porque asegura que la configuración básica es válida y que el servicio puede 
 
 ---
 
-## 🩺 Pruebas 2: Salud del sistema (Spring Boot Actuator)
+## Pruebas 2: Salud del sistema (Spring Boot Actuator)
 **Nombre técnico del conjunto:** `ActuatorHealthTest`
 
 Estas pruebas consultan tres endpoints de monitorización estándar. Cada uno debe responder con código **200 OK** y un cuerpo con `{"status":"UP"}`.
