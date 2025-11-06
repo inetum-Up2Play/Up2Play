@@ -6,37 +6,45 @@ import { Actividades } from './features/actividades/pages/actividades/actividade
 import { inject } from '@angular/core';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: Home
-    },
-    {
-        path: 'auth',
-        loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
-    },
-    {
-        path: 'actividades',
+  {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
+  },
+
+  // Zona protegida: TODO lo demás entra por el guard
+  {
+    path: '',
         canActivateChild: [
             (route, state) => {
                 const auth = inject(AuthService);
                 return auth.canActivate(state.url);
             }
         ],
-        children: [
-            {
-                path: 'actividades',
-                loadComponent: () =>
-                import('./features/actividades/pages/actividades/actividades').then(m => m.Actividades)
-            },
-            {
-                path: 'prova',
-                loadComponent: () =>
-                import('./features/home/pruebaPrimeNG/pruebaPrimeNG.component').then(m => m.PruebaPrimeNGComponent)
-            },
-        ]
-    },
-    {
-        path:'my-account',
-        component: Profile
-    }
+            children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/home/home').then(m => m.Home),
+      },
+      {
+        path: 'actividades',
+        loadComponent: () =>
+          import('./features/actividades/pages/actividades/actividades')
+            .then(m => m.Actividades),
+      },
+      {
+        path: 'prova',
+        loadComponent: () =>
+          import('./features/home/pruebaPrimeNG/pruebaPrimeNG.component')
+            .then(m => m.PruebaPrimeNGComponent),
+      },
+      {
+        path: 'my-account',
+        component: Profile,
+      },
+    ],
+  },
+
+  // Cualquier otra ruta desconocida -> a home (protegida, por tanto pasará por el guard)
+  { path: '**', redirectTo: '' },
 ];
