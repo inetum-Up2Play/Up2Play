@@ -75,13 +75,8 @@ button.registrarse {
     cursor: pointer;
 }
 
-button.registrarse:hover {
-    background-color: #333333;
-    /* Un negro más claro */
-    color: #B1DF75;
-    /* Verde lima como contraste */
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+/* Evita que el body genere scroll lateral por animaciones */
+html, body { overflow-x: hidden; }
 
 button.botones-carusel {
     width: auto;
