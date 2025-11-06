@@ -1,86 +1,139 @@
-// carousel.lite.js
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-carousel]').forEach(initCarousel);
-});
+function carousel() {
+  return {
+    currentSlide: 0,
+    visibleSlides: 1, // 1 en sm, 3 en md+
+    slidePercentage: 100, // 100% cuando 1 por vista; 33.333% cuando 3 por vista
+    step: 1, // cuánto avanza prev/next (== visibleSlides)
+    slides: [
+      {
+        id: 1,
+        image: "https://picsum.photos/id/10/800/600",
+        title: "Ioga al Parc",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 2,
+        image: "https://picsum.photos/id/11/800/600",
+        title: "Meditación",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 3,
+        image: "https://picsum.photos/id/12/800/600",
+        title: "Pilates",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 4,
+        image: "https://picsum.photos/id/13/800/600",
+        title: "Running",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 5,
+        image: "https://picsum.photos/id/14/800/600",
+        title: "Crossfit",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 6,
+        image: "https://picsum.photos/id/15/800/600",
+        title: "Boxeo",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 7,
+        image: "https://picsum.photos/id/16/800/600",
+        title: "Zumba",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 8,
+        image: "https://picsum.photos/id/17/800/600",
+        title: "Yoga Avanzado",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+      {
+        id: 9,
+        image: "https://picsum.photos/id/18/800/600",
+        title: "Stretching",
+        description: "Gratis",
+        button: "¡Apúntate!",
+      },
+    ],
 
-function initCarousel(root) {
-  const viewport = root.querySelector('[data-carousel-viewport]');
-  const track = root.querySelector('[data-carousel-track]');
-  const slides = Array.from(track.children);
-  const prev = root.querySelector('[data-carousel-prev]');
-  const next = root.querySelector('[data-carousel-next]');
-  const dots = root.querySelector('[data-carousel-dots]');
-  const mql = matchMedia('(min-width: 1024px)');
+    // Derivados / getters
+    get maxStartIndex() {
+      // último índice de inicio válido para llenar la vista
+      return Math.max(0, this.slides.length - this.visibleSlides);
+    },
+    get isAtStart() {
+      return this.currentSlide <= 0;
+    },
+    get isAtEnd() {
+      return this.currentSlide >= this.maxStartIndex;
+    },
+    get totalPages() {
+      // número de "bloques" (para dots)
+      return Math.ceil(this.slides.length / this.visibleSlides);
+    },
 
-  let perView = mql.matches ? 3 : 1;
-  let page = 0;
-  let pages = Math.ceil(slides.length / perView);
+    init() {
+      this.updateLayoutByWidth();
+      // Recalcular en resize y ajustar índice para no pasarnos
+      window.addEventListener("resize", () => {
+        const prevVisible = this.visibleSlides;
+        this.updateLayoutByWidth();
+        if (this.visibleSlides !== prevVisible) {
+          // al cambiar de 1↔3, alineamos para no dejar huecos
+          this.currentSlide = Math.min(this.currentSlide, this.maxStartIndex);
+        }
+      });
+    },
 
-  mql.addEventListener('change', () => {
-    perView = mql.matches ? 3 : 1;
-    pages = Math.ceil(slides.length / perView);
-    renderDots();
-    go(page); // realinea la vista
-  });
+    updateLayoutByWidth() {
+      if (window.innerWidth < 768) {
+        this.visibleSlides = 1;
+        this.slidePercentage = 100;
+      } else {
+        this.visibleSlides = 3;
+        this.slidePercentage = 100 / 3;
+      }
+      // Paso = cuántas se ven (1 en sm, 3 en md+)
+      this.step = this.visibleSlides;
+    },
 
-  function renderDots() {
-    dots.innerHTML = '';
-    for (let i = 0; i < pages; i++) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'h-2 w-2 rounded-full bg-slate-300 aria-[current=true]:bg-slate-800';
-      b.setAttribute('aria-current', i === page ? 'true' : 'false');
-      b.addEventListener('click', () => go(i));
-      dots.appendChild(b);
-    }
-  }
+    clamp(i) {
+      return Math.max(0, Math.min(i, this.maxStartIndex));
+    },
 
-  function go(p) {
-    page = Math.max(0, Math.min(p, pages - 1));
-    const idx = page * perView;
-    const target = slides[idx];
-    if (target) viewport.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
-    update();
-  }
+    next() {
+      if (this.currentSlide < this.maxStartIndex) {
+        this.currentSlide = this.clamp(this.currentSlide + this.step);
+      }
+    },
 
-  function update() {
-    prev.disabled = page === 0;
-    next.disabled = page >= pages - 1;
-    dots.querySelectorAll('button').forEach((b, i) =>
-      b.setAttribute('aria-current', i === page ? 'true' : 'false')
-    );
-  }
+    prev() {
+      if (this.currentSlide > 0) {
+        this.currentSlide = this.clamp(this.currentSlide - this.step);
+      }
+    },
 
-  prev.addEventListener('click', () => go(page - 1));
-  next.addEventListener('click', () => go(page + 1));
+    goTo(i) {
+      this.currentSlide = this.clamp(i);
+    },
 
-  // Sincroniza al hacer swipe/drag (sin throttle para mantenerlo corto)
-  viewport.addEventListener('scroll', () => {
-    const left = viewport.scrollLeft;
-    let first = 0;
-    for (let i = 0; i < slides.length; i++) {
-      if (slides[i].offsetLeft <= left + 1) first = i; else break;
-    }
-    page = Math.min(Math.floor(first / perView), pages - 1);
-    update();
-  });
-
-  renderDots();
-  go(0);
+    handleImageError(slide) {
+      slide.image =
+        "https://via.placeholder.com/800x600?text=Imagen+no+disponible";
+    },
+  };
 }
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const cards = document.querySelectorAll('[data-carousel-track] > li > article');
-  let maxHeight = 0;
-
-  cards.forEach(card => {
-    card.style.height = 'auto'; // Reset height
-    const height = card.offsetHeight;
-    if (height > maxHeight) maxHeight = height;
-  });
-
-  cards.forEach(card => {
-    card.style.height = `${maxHeight}px`;
-  });
-});
