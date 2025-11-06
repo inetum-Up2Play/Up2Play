@@ -78,35 +78,8 @@ button.registrarse {
 /* Evita que el body genere scroll lateral por animaciones */
 html, body { overflow-x: hidden; }  
 
-button.botones-carusel {
-    width: auto;
-    background-color: transparent;
-    display: flex;
-    color: #F7F7F7;
-}
-.cards{
-
-    border-radius: 8%;
-}
-button.botones-carusel-abajo {
-
-    background-color: #F7F7F7;
-    width: 20px;           /* tamaño del botón */
-    height: 20px;          /* igual que el ancho para que sea circular */
-    border-radius: 50%;    /* hace el botón completamente redondo */
-    display: inline-block; /* asegura que se comporte como un botón */
-    cursor: pointer;       /* cursor tipo mano */
-    transition: all 0.3s ease; /* animación suave */
-}
-
-button.botones-carusel-abajo:focus {
-
-    background-color: #B1DF75;  
-
-}
-
 header {
-    background-image: url('../images/header/deporte.png');
+    background-image: url('../images/header/deporte.webp');
     background-position: center center;
     background-size: cover;
 }
