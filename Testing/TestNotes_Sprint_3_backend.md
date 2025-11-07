@@ -1,10 +1,5 @@
-# Informe de Pruebas – Backend Up2Play
-Se han ejecutado dos tipos de pruebas sobre el servicio:
-
 - **Arranque del sistema**: verifica que la aplicación puede iniciarse correctamente.
 - **Salud del sistema (Actuator)**: comprueba que los indicadores de salud responden `UP` (correcto) y el servicio está vivo y preparado para recibir tráfico.
-
-**Resultado:** ✔️ Todas las pruebas han pasado correctamente.
 
 ---
 
@@ -24,6 +19,7 @@ Porque asegura que la configuración básica es válida y que el servicio puede 
 
 ## Pruebas 2: Salud del sistema (Spring Boot Actuator)
 **Nombre técnico del conjunto:** `ActuatorHealthTest`
+- Es muy útil para saber si tu app está sana, viva y lista para atender peticiones.
 
 Estas pruebas consultan tres endpoints de monitorización estándar. Cada uno debe responder con código **200 OK** y un cuerpo con `{"status":"UP"}`.
 
@@ -46,16 +42,20 @@ Estas pruebas consultan tres endpoints de monitorización estándar. Cada uno de
 - Valida que las dependencias necesarias para atender peticiones (p. ej., base de datos) están listas.
 
 **¿Para qué sirve?**
-- En plataformas de despliegue (como Kubernetes), se usa para decidir si enviar tráfico a esta instancia del servicio.
+- En plataformas de despliegue, se usa para decidir si enviar tráfico a esta instancia del servicio.
 
 ---
 
 ### 2.3. Vivacidad (Liveness) – `/actuator/health/liveness`
 **¿Qué comprueba?**
-- Si el proceso del servicio está vivo y no bloqueado.
+- Monitorizar tu app con herramientas como Prometheus, Grafana, o cualquier sistema de observabilidad.
+- Detectar si tu aplicación está colgada o en un estado no funcional.
+- Integrarlo en scripts o sistemas propios que reinicien el servicio si el estado es DOWN.
 
 **¿Para qué sirve?**
-- Plataformas como Kubernetes usan esta señal para reiniciar automáticamente el servicio si detectan que ha dejado de estar vivo.
+
+- El proceso de la JVM sigue corriendo.
+- No hay errores graves que impidan continuar.
 
 **Señales de posible problema:**
 - `DOWN` si el servicio entra en un estado no recuperable o queda colgado.

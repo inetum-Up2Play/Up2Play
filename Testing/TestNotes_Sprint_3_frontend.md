@@ -1,5 +1,3 @@
-# Informe de Pruebas – **Frontend Up2Play**
-
 ## Control de Arquitectura (Boundaries)
 
 Se utiliza **ESLint** junto con el plugin https://github.com/javierbrea/eslint-plugin-boundaries para garantizar la correcta estructura del proyecto:
