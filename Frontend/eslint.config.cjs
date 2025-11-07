@@ -1,83 +1,65 @@
-// eslint.config.cjs
-// Flat Config para ESLint v9: solo control de arquitectura (boundaries) para TS.
-
-// Importa el parser de TypeScript para que ESLint pueda entender archivos .ts
+// import para que entienda TypeScript
 const tsParser = require('@typescript-eslint/parser');
-// Importa el plugin eslint-plugin-boundaries que proporciona reglas para controlar imports entre capas
+// Importa el plugin eslint-plugin-boundaries que usaremos para definir zonas y reglas entre ellas
 const boundaries = require('eslint-plugin-boundaries');
 
 // Exporta un array de bloques de configuración (formato Flat Config de ESLint v9)
 module.exports = [
-  // 1) Ignorar carpetas de build/deps
-  // Bloque de configuración que indica a ESLint qué rutas debe ignorar completamente
   {
-    // No analizar salidas de build ni dependencias (mejora rendimiento y evita falsos positivos)
+    // Carpetes que ignoro
     ignores: ['dist/**', 'node_modules/**'],
   },
 
-  // 2) Reglas para archivos TypeScript
-  // Bloque de configuración que aplica solo a ficheros que coinciden con el patrón (aquí, todos los .ts)
+  // Array de reglas per 
   {
     // Selecciona todos los archivos TypeScript del repo
     files: ['**/*.ts'],
     // Opciones del lenguaje (parser, versión de ECMAScript, etc.)
     languageOptions: {
-      // Define el parser a utilizar (TS) para interpretar la sintaxis de TypeScript
+      // Interpreta TS
       parser: tsParser,
-      // Configuración del parser (sin proyecto TS para máxima rapidez)
       parserOptions: {
-        // No utiliza type-checking ni carga tsconfig (más rápido). Actívalo si necesitas paths/Tipos.
-        // (si necesitas paths/ tipos, apunta a tsconfig en project y añade tsconfigRootDir)
+        // No carga tsconfig.json (mas rapido)
         project: false,
-        // Usa módulos ES (import/export)
         sourceType: 'module',
-        // Permite sintaxis moderna de JS/TS
+        // sintaxis moderna de TS
         ecmaVersion: 'latest',
       },
     },
-    // Configuración específica para plugins (aquí, boundaries) que necesita conocer la estructura del repo
+    // Configuración para el plugin boundaries(asignar un type a cada archivo según su ruta)
     settings: {
-      // Definición de elementos (capas/zonas) según tu estructura
-      // Mapea “tipos lógicos” a patrones de rutas; el plugin usa estos tipos en las reglas
       'boundaries/elements': [
-        // Zonas transversales
-        // Todo lo que esté bajo src/app/core/** pertenece al tipo "core" (shell global, interceptors, guards, etc.)
+        // core: shell global (routing raíz, interceptors, guards globales, etc.).
         { type: 'core',   pattern: 'src/app/core/**' },
-        // Todo lo que esté bajo src/app/shared/** pertenece al tipo "shared" (UI/Utils reutilizables)
+        // shared: UI/utilidades reutilizables (no dependen de dominio).
         { type: 'shared', pattern: 'src/app/shared/**' },
 
         // Capas dentro de cada feature
-        // Rutas de páginas enroutables dentro de cualquier feature
+        // feature:*: subdivisiones por feature (pages, components, data, models).
         { type: 'feature:pages',      pattern: 'src/app/features/**/pages/**' },
-        // Componentes internos de las features (UI “tonta” preferiblemente)
         { type: 'feature:components', pattern: 'src/app/features/**/components/**' },
-        // Servicios de datos/HTTP de cada feature
         { type: 'feature:data',       pattern: 'src/app/features/**/data/**' },
-        // Modelos/Interfaces del dominio de cada feature
         { type: 'feature:models',     pattern: 'src/app/features/**/models/**' },
 
-        // Macro-agrupador de cualquier cosa en features (útil para reglas de zona)
+        // Altres zones dins de features (si n'hi ha)
         { type: 'features', pattern: 'src/app/features/**' },
       ],
     },
-    // Registro de plugins disponibles en este bloque (clave = nombre del plugin usado en reglas)
+    // Registro el plugin boundaries
     plugins: {
-      // Registra el plugin boundaries para poder usar 'boundaries/...' en rules
-      boundaries, // registra el plugin con el nombre 'boundaries'
+      boundaries,
     },
-    // Conjunto de reglas que se aplican a los archivos .ts seleccionados
+    // Conjunto de reglas que se aplican a los archivos TS seleccionados
     rules: {
-      // Reglas entre zonas principales
       // Activa la regla principal del plugin boundaries: controla qué tipos pueden importar a cuáles
       'boundaries/element-types': ['error', {
-        // Modo permisivo por defecto; solo se restringe lo que declaras en 'rules'
+        // Lo permite todo menos lo que se especifique en las reglas
         default: 'allow',
-        // Mensaje que mostrará ESLint cuando un import viole alguna de estas reglas
+        // Mensaje de error por defecto
         message: 'Import no permitido por las reglas de arquitectura',
-        // Lista de reglas entre "from" (origen) y "allow/disallow" (destino)
+        // Reglas específicas entre zonas
         rules: [
-          // core NO depende de features (shared permitido si lo necesitas)
-          // Evita acoplar el shell global con dominios de negocio
+          // core NO depende de features
           { from: ['core'],   disallow: ['features'] },
 
           // shared NO depende de features ni core (transversal)
@@ -99,14 +81,6 @@ module.exports = [
           { from: ['feature:models'],     disallow: ['feature:pages', 'feature:components', 'feature:data'] },
         ],
       }],
-
-      // (Opcional) bloquear deep imports entre features si expones public API por feature
-      // Regla de ESLint para evitar imports internos a carpetas profundas de otras features (si usas index.ts público)
-      // 'no-restricted-imports': ['error', {
-      //   patterns: [
-      //     { group: ['src/app/features/*/*/**'], message: 'Evita imports profundos entre features' }
-      //   ]
-      // }],
     },
   },
 ];
