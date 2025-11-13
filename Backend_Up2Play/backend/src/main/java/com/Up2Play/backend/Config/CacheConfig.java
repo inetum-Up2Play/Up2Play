@@ -20,7 +20,8 @@ public class CacheConfig {
     public Caffeine<Object, Object> caffeineConfig() {
         return Caffeine.newBuilder() //crea una configuración personalizada para caffeine
         .expireAfterWrite(10, TimeUnit.MINUTES)
-        .maximumSize(1000);
+        .maximumSize(1000)
+        .recordStats(); //habilita la recopilación de estadísticas para el caché
     }
 
     //Este método define el gestor de caché principal, donde recoge el objeto Caffeine de arriba
