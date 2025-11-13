@@ -35,6 +35,7 @@ public class Actividad {
     private LocalDate fecha;
     private LocalTime hora;
     private String ubicación;
+    private String deporte;
 
     @Convert(converter = NivelDificultadConverter.class)
     private NivelDificultad nivel;
@@ -58,7 +59,29 @@ public class Actividad {
     public Actividad() {
     }
 
-    public Actividad(Long id, String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicación,
+    
+
+    public Actividad(String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicación, String deporte,
+            NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
+            Usuario usuarioCreador, Set<Usuario> usuarios) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.ubicación = ubicación;
+        this.deporte = deporte;
+        this.nivel = nivel;
+        this.num_pers_inscritas = num_pers_inscritas;
+        this.num_pers_totales = num_pers_totales;
+        this.estado = estado;
+        this.precio = precio;
+        this.usuarioCreador = usuarioCreador;
+        this.usuarios = usuarios;
+    }
+
+
+
+    public Actividad(Long id, String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicación, String deporte,
             NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
             Usuario usuarioCreador, Set<Usuario> usuarios) {
         this.id = id;
@@ -67,6 +90,7 @@ public class Actividad {
         this.fecha = fecha;
         this.hora = hora;
         this.ubicación = ubicación;
+        this.deporte = deporte;
         this.nivel = nivel;
         this.num_pers_inscritas = num_pers_inscritas;
         this.num_pers_totales = num_pers_totales;
@@ -120,6 +144,7 @@ public class Actividad {
         return ubicación;
     }
 
+    
     public void setUbicación(String ubicación) {
         this.ubicación = ubicación;
     }
@@ -178,6 +203,18 @@ public class Actividad {
 
     public void setUsuarios(Set<Usuario> usuarios) {
         this.usuarios = usuarios;
+    }
+
+
+
+    public String getDeporte() {
+        return deporte;
+    }
+
+
+
+    public void setDeporte(String deporte) {
+        this.deporte = deporte;
     }
 
     

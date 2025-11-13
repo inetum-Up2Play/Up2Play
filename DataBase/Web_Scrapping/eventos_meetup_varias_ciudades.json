@@ -243,7 +243,7 @@
         "ubicacion": "Grass area with logs, next to the running track near the Palau de la Musica, Valencia, es",
         "nivel": "Principiante",
         "num_pers_inscritas": 3,
-        "num_pers_totales": "25",
+        "num_pers_totales": 25,
         "estado": "Completada",
         "precio": 0,
         "id_usuario_creador": 40
@@ -321,7 +321,7 @@
         "ubicacion": "Polideportivo Virgen del Carmen Betero, Valencia, es",
         "nivel": "Principiante",
         "num_pers_inscritas": 1,
-        "num_pers_totales": "",
+        "num_pers_totales": 99,
         "estado": "En curso",
         "precio": 0,
         "id_usuario_creador": 30
@@ -334,7 +334,7 @@
         "ubicacion": null,
         "nivel": "Principiante",
         "num_pers_inscritas": 1,
-        "num_pers_totales": null,
+        "num_pers_totales": 10,
         "estado": "En curso",
         "precio": 0,
         "id_usuario_creador": 43
@@ -347,7 +347,7 @@
         "ubicacion": "PARKING Estación Blas Infante, Seville, AN, es",
         "nivel": "Principiante",
         "num_pers_inscritas": 1,
-        "num_pers_totales": null,
+        "num_pers_totales": 12,
         "estado": "En curso",
         "precio": 0,
         "id_usuario_creador": 19
@@ -373,7 +373,7 @@
         "ubicacion": "Bar La Capi Gourmet, Santurtzi, es",
         "nivel": "Principiante",
         "num_pers_inscritas": 27,
-        "num_pers_totales": null,
+        "num_pers_totales": 12,
         "estado": "En curso",
         "precio": 15,
         "id_usuario_creador": 22

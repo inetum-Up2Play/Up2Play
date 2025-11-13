@@ -15,26 +15,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Up2Play.backend.DTO.ActividadDto;
 import com.Up2Play.backend.Model.Actividad;
+import com.Up2Play.backend.Model.Usuario;
+import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.ActividadService;
+import com.Up2Play.backend.Service.JwtService;
 
 @RestController
-@RequestMapping("/actividades")
+@RequestMapping("/auth/actividades")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ActividadController {
 
     private final ActividadService actividadService;
+    private final JwtService jwtService;
+    private final UsuarioRepository usuarioRepository;
 
-    public ActividadController(ActividadService actividadService) {
+    public ActividadController(ActividadService actividadService , JwtService jwtService ,
+     UsuarioRepository usuarioRepository) {
         this.actividadService = actividadService;
+        this.jwtService = jwtService;
+        this.usuarioRepository = usuarioRepository;
     }
 
-  /* 
+  
     @GetMapping("/getAll")
     public List<Actividad> getAllActividades() {
       
         return actividadService.getAllActividades();
     }
-    
+    /* 
     @GetMapping("/getCreadas")
     public List<Actividad> getActividadesCreadas() {
       
@@ -51,13 +59,16 @@ public class ActividadController {
     public void deleteActividad(@PathVariable Long id){
         actividadService.deleteActividad(id);
     }
-
-    @PostMapping("/createActividad")
-    public ResponseEntity<Actividad> createActividad(@RequestBody ActividadDto actividadDto) {
-        Actividad creada = actividadService.createActividad(actividadDto);
+*/
+    @PostMapping("/crearActividad")
+    public ResponseEntity<Actividad> crearActividad(@RequestBody ActividadDto actividadDto, @RequestBody String token) {
+        String email = jwtService.extractUsername(token);
+        Usuario usuario = new Usuario();
+        usuarioRepository.findByEmail(email);
+        Actividad creada = actividadService.crearActividad(actividadDto , usuario);
         return ResponseEntity.status(201).body(creada);
     }
-
+/* 
     @PostMapping("/unirseActividad/{id}")
 
     @PutMapping("/desapuntarseActividad/{id}")
@@ -67,8 +78,9 @@ public class ActividadController {
         Actividad editada = actividadService.editarActividad(id, actividadDto);
         return ResponseEntity.ok(editada);
     }
+        */
 
-  */  
+  
     
     
 }
