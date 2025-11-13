@@ -2,16 +2,21 @@ package com.Up2Play.backend.Model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,6 +52,18 @@ public class Usuario implements UserDetails {
 
     @Column(name = "VERIFICATION_EXPIRES_AT")
     private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
+
+    @OneToMany (mappedBy = "usuarioCreador")
+    Set<Actividad> actividadesCreadas = new HashSet<>();
+
+    @ManyToMany 
+    @JoinTable(
+    name = "USUARIO_ACTIVIDAD",
+    joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id")
+    )
+    private Set<Actividad> actividadesUnidas = new HashSet<>();
+
 
     // Constructores
     public Usuario(Long id, String email, String password, String rol, String nombreUsuario) {
@@ -183,4 +200,25 @@ public class Usuario implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+    public Set<Actividad> getActividadesCreadas() {
+        return actividadesCreadas;
+    }
+
+    public void setActividadesCreadas(Set<Actividad> actividadesCreadas) {
+        this.actividadesCreadas = actividadesCreadas;
+    }
+
+    public Set<Actividad> getActividadesUnidas() {
+        return actividadesUnidas;
+    }
+
+    public void setActividadesUnidas(Set<Actividad> actividadesUnidas) {
+        this.actividadesUnidas = actividadesUnidas;
+    }
+
+    
+   
+
+    
 }
