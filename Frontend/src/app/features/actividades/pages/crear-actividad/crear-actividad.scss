@@ -1,0 +1,210 @@
+@use 'styles/variables' as vars;
+
+main {
+    background-color: vars.$blanco;
+    display: flex;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: 60px;
+}
+
+h1 {
+    font-family: vars.$montserrat;
+    color: vars.$verde-oscuro;
+    font-weight: 800;
+    font-size: 1.8rem;
+    padding-bottom: 1.2rem;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    width: 75%;
+    height: fit-content;
+    padding: 4rem;
+    border-radius: 15px;
+}
+
+label {
+    color: vars.$verde-oscuro;
+    font-family: vars.$work-sans;
+    font-weight: 600;
+    padding-left: 0.7rem;
+}
+
+label i.pi {
+    color: vars.$verde-oliva;
+}
+
+/* Cambia el fondo y el color del texto */
+input[pInputText] {
+    background-color: vars.$blanco; // color de fondo
+    color: vars.$verde-oscuro; // color del texto
+    border: 1px solid vars.$verde-oscuro; // borde inicial
+    transition: all 0.3s ease; // animación suave
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%); // fondo más claro al pasar el mouse
+        border-color: darken(vars.$verde-oscuro, 10%); // borde más oscuro
+    }
+
+    &:focus {
+        outline: none;
+        border-color: darken(vars.$verde-oscuro, 10%) !important; // mantiene el color en focus
+        box-shadow: 0 0 5px rgba(vars.$verde-oscuro, 0.4); // efecto visual
+    }
+}
+
+/* Cambia el fondo y el color del texto */
+textarea[pTextarea] {
+    background-color: vars.$blanco; // color de fondo
+    color: vars.$verde-oscuro; // color del texto
+    border: 1px solid vars.$verde-oscuro; // borde inicial
+    transition: all 0.3s ease; // animación suave
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%); // fondo más claro al pasar el mouse
+        border-color: darken(vars.$verde-oscuro, 10%); // borde más oscuro
+    }
+
+    &:focus {
+        outline: none;
+        border-color: darken(vars.$verde-oscuro, 10%) !important; // mantiene el color en focus
+        box-shadow: 0 0 5px rgba(vars.$verde-oscuro, 0.4); // efecto visual
+    }
+}
+
+:host ::ng-deep .p-select {
+    background-color: vars.$blanco !important; // fondo igual que input
+    color: vars.$verde-oscuro !important; // color del texto
+    border: 1px solid vars.$verde-oscuro !important; // borde inicial
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%) !important;
+        border-color: darken(vars.$verde-oscuro, 10%) !important;
+    }
+
+    &.p-focus {
+        border-color: vars.$verde-oscuro !important; // color al hacer click
+    }
+}
+
+:host ::ng-deep .p-select-label {
+    color: vars.$verde-oscuro !important; // asegura que el texto interno tenga el color correcto
+}
+
+:host ::ng-deep .p-select-overlay {
+    background-color: vars.$blanco !important; // fondo igual que input
+    border: 1px solid vars.$verde-oscuro !important; // borde inicial
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%) !important;
+        border-color: darken(vars.$verde-oscuro, 10%) !important;
+    }
+}
+
+:host ::ng-deep .p-select-filter {
+    background-color: vars.$blanco !important; // fondo igual que input
+    border: 1px solid vars.$verde-oscuro !important; // borde inicial
+    color: vars.$verde-oscuro !important;
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%) !important;
+    }
+}
+
+:host ::ng-deep .p-select-option {
+    color: vars.$verde-oscuro !important;
+
+    &.p-focus {
+        background-color: rgb(230, 230, 230) !important;
+    }
+}
+
+:host ::ng-deep .p-datepicker-input {
+    background-color: vars.$blanco !important;
+    color: vars.$verde-oscuro !important;
+    border: 1px solid vars.$verde-oscuro !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%) !important;
+        border-color: darken(vars.$verde-oscuro, 10%) !important;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: vars.$verde-oscuro !important;
+    }
+}
+
+:host ::ng-deep .p-datepicker-panel {
+    background-color: vars.$blanco !important;
+    border: 1px solid vars.$verde-oscuro !important;
+}
+
+:host ::ng-deep .p-datepicker-header {
+    background-color: vars.$blanco !important; // Fondo del header
+    color: vars.$verde-oscuro !important; // Texto del header
+}
+
+:host ::ng-deep .p-datepicker-weekday {
+    color: vars.$verde-oscuro !important; // Texto del header
+}
+
+:host ::ng-deep .p-datepicker-select-month,
+:host ::ng-deep .p-datepicker-select-year {
+    background-color: vars.$blanco !important; // Fondo del header
+    color: vars.$verde-oscuro !important; // Texto del header
+
+    &:hover {
+        background-color: rgb(230, 230, 230) !important;
+    }
+}
+
+:host ::ng-deep .p-datepicker-calendar-container {
+    background-color: vars.$blanco !important;
+}
+
+:host ::ng-deep .p-datepicker-day,
+:host ::ng-deep .p-datepicker-month,
+:host ::ng-deep .p-datepicker-year {
+    color: vars.$verde-oscuro !important;
+
+    &:hover {
+        background-color: rgb(230, 230, 230) !important;
+    }
+
+    &:focus {
+        background-color: rgb(230, 230, 230) !important;
+    }
+}
+
+:host ::ng-deep .p-datepicker-weekday-cell {
+    background-color: vars.$blanco !important; // Fondo del header
+    color: vars.$verde-oscuro !important; // Texto del header
+
+    &:hover {
+        background-color: rgb(230, 230, 230) !important;
+    }
+}
+
+:host ::ng-deep .p-datepicker-clear-button {
+    color: vars.$verde-oscuro !important;
+    border: 1px solid vars.$verde-oscuro !important;
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%) !important;
+    }
+}
+
+:host ::ng-deep .p-datepicker-today-button {
+    color: vars.$verde-oscuro !important;
+    border: 1px solid vars.$verde-oscuro !important;
+
+    &:hover {
+        background-color: lighten(vars.$blanco, 5%) !important;
+    }
+}

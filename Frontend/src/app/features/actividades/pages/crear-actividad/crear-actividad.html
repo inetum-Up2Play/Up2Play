@@ -1,0 +1,68 @@
+<main>
+    <p-toast />
+    <div class="formulario card flex justify-center">
+        <h1>CREA TU ACTIVIDAD</h1>
+        <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full">
+            <div class="flex flex-col gap-1 w-full">
+                <label for="título" class="flex items-center gap-2">
+                    <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
+                    Título
+                </label>
+                <input pInputText type="text" id="título" formControlName="título" [invalid]="isInvalid('título')" />
+                @if (isInvalid('título')) {
+                <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
+                }
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <label for="título" class="flex items-center gap-2">
+                    <i class="pi pi-receipt"></i> <!-- Icono PrimeIcons -->
+                    Descripción
+                </label>
+                <textarea rows="5" cols="30" pTextarea id="descripción" formControlName="descripción"
+                    [invalid]="isInvalid('descripción')"></textarea>
+                @if (isInvalid('descripción')) {
+                <p-message severity="error" size="small" variant="simple">Describe tu actidad.</p-message>
+                }
+            </div>
+            <div class="flex gap-6">
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="título" class="flex items-center gap-2">
+                        <i class="pi pi-trophy"></i> <!-- Icono PrimeIcons -->
+                        Deporte
+                    </label>
+                    <p-select [options]="deportes" [(ngModel)]="deporteEscogido" optionLabel="name" [filter]="true"
+                        filterBy="name" [showClear]="true" class="w-full">
+                        <ng-template #selectedItem let-selectedOption>
+                            <div class="flex items-center gap-2">
+                                <div>{{ selectedOption.name }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-country #item>
+                            <div class="flex items-center gap-2">
+                                <div>{{ country.name }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="maxPart" class="flex items-center gap-2">
+                        <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
+                        Número máximo de participantes
+                    </label>
+                    <input pInputText type="text" id="maxPart" pKeyFilter="int" />
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <label for="maxPart" class="flex items-center gap-2">
+                    <i class="pi pi-calendar-minus"></i> <!-- Icono PrimeIcons -->
+                    Fecha
+                </label>
+                <p-datepicker formControlName="selectedDate" [invalid]="isInvalid('selectedDate')" />
+                @if (isInvalid('selectedDate')) {
+                <p-message severity="error" size="small" variant="simple">Fecha requerida.</p-message>
+                }
+            </div>
+            <button pButton severity="secondary" type="submit"><span pButtonLabel>Submit</span></button>
+        </form>
+    </div>
+</main>
