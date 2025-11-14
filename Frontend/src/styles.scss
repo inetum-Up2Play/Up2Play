@@ -53,7 +53,13 @@ Here has to be imported the other style files (from the src/styles/)
 .p-drawer {
   --p-drawer-background: #3D6C3F;
 
-
 }
+
+.layout-menu {
+    background-color: vars.$verde-oscuro !important;
+}
+
+
+
 
 

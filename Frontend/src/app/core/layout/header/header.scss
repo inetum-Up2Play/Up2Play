@@ -13,13 +13,20 @@ p-menubar {
 .menu-items li, a, h2 {
     color: vars.$blanco;
 
-    :hover {
-        color: vars.$verde-oliva;
-        background-color: vars.$amarillo;
-        margin-right: 1.5rem;
-
+    :hover, .active {
+      color: vars.$verde-oliva;
+      background-color: vars.$amarillo;
+      margin-right: 1.5rem;
+      margin-right: 0%;
     }
+
 }
+
+.drawer-style .p-drawer {
+    top: auto !important;
+    margin-top: 4rem !important;
+}
+
 
 :host ::ng-deep .boton-hamburguesa .pi-bars{
   font-size: 2rem !important; 
