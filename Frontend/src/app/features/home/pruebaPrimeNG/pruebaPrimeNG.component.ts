@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+
+import { ActivityCard } from "../../actividades/components/activity-card/activity-card";
+import { InfoActividad } from '../../actividades/pages/info-actividad/info-actividad';
+
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Toast } from 'primeng/toast';
-import { ActivityCard } from "../../actividades/components/activity-card/activity-card";
-import { InfoActividad } from '../../actividades/pages/info-actividad/info-actividad';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-pruebaPrimeNG',
-  imports: [ButtonModule, Toast, Ripple, ActivityCard, InfoActividad],
+  imports: [ButtonModule, Toast, Ripple, ActivityCard, InfoActividad, CardModule],
   providers: [MessageService],
   templateUrl: './pruebaPrimeNG.component.html',
   styleUrls: ['./pruebaPrimeNG.component.css']
