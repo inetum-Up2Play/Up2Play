@@ -13,8 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 
 // Services
-import { AuthService } from '../../../../core/services/auth-service';
-import { UserDataService } from '../../../../core/services/user-data-service';
+import { AuthService } from '../../../../core/services/auth/auth-service';
+import { UserDataService } from '../../../../core/services/auth/user-data-service';
 
 interface ResendVerificationDto {
   email: string;

@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LoginResponse } from './auth-types';
-import { ErrorResponseDto } from '../models/ErrorResponseDto';
+import { ErrorResponseDto } from '../../models/ErrorResponseDto';
 
 const STORAGE_KEY = 'auth';
 const SKEW_MS = 10_000;

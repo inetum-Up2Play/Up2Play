@@ -4,10 +4,11 @@ import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Toast } from 'primeng/toast';
 import { ActivityCard } from "../../actividades/components/activity-card/activity-card";
+import { InfoActividad } from '../../actividades/pages/info-actividad/info-actividad';
 
 @Component({
   selector: 'app-pruebaPrimeNG',
-  imports: [ButtonModule, Toast, Ripple, ActivityCard],
+  imports: [ButtonModule, Toast, Ripple, ActivityCard, InfoActividad],
   providers: [MessageService],
   templateUrl: './pruebaPrimeNG.component.html',
   styleUrls: ['./pruebaPrimeNG.component.css']

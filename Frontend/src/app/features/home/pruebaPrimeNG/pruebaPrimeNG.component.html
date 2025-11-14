@@ -3,7 +3,7 @@
     <p-button type="button" pRipple (click)="showSuccess()" label="UP2Play" severity="success" />
 </div>
 
-<!--Bucle para recorrer las actividades-->>
+<!--Bucle para recorrer las actividades-->
 <div class="grid grid-cols-3 gap-4">
   @for (activity of activities; track activity.id) {
     <app-activity-card
@@ -15,3 +15,5 @@
     </app-activity-card>
   }
 </div>
+
+<app-info-actividad></app-info-actividad>
