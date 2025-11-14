@@ -1,6 +1,6 @@
 package com.Up2Play.backend.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,9 +11,9 @@ import com.Up2Play.backend.Model.Usuario;
 @Repository
 public interface ActividadRepository extends JpaRepository<Actividad, Long>{
      
-    //Busca la actividad por su usuario creador
-    Optional<Actividad> findByUsuarioCreador(Usuario usuarioCreador);
+    //Buscar lista actividades por su usuario creador
+    List<Actividad> findByUsuarioCreador(Usuario usuarioCreador);
 
-    //Busca actividad por id
+    //Buscar Buscar lista actividades 
     
     }

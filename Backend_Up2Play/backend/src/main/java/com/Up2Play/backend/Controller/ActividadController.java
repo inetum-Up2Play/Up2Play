@@ -1,6 +1,7 @@
 package com.Up2Play.backend.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +21,8 @@ import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.ActividadService;
 import com.Up2Play.backend.Service.JwtService;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/auth/actividades")
@@ -60,14 +63,15 @@ public class ActividadController {
     public void deleteActividad(@PathVariable Long id){
         actividadService.deleteActividad(id);
     }
-*/
+*/  @Transactional
     @PostMapping("/crearActividad")
-    public ResponseEntity<Actividad> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader  String token) {
+
+    public  ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader String token) {
         String email = jwtService.extractUsername(token);
-        Usuario usuario = new Usuario();
-        usuarioRepository.findByEmail(email);
-        Actividad creada = actividadService.crearActividad(actividadDto , usuario);
-        return ResponseEntity.status(201).body(creada);
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));  
+        System.out.println("HOLA" + email + usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+        actividadService.crearActividad(actividadDto , usuario);
+        return ResponseEntity.ok(Map.of("message","Se ha creado una nueva nueva actividad."));
     }
 /* 
     @PostMapping("/unirseActividad/{id}")
@@ -79,5 +83,13 @@ public class ActividadController {
         Actividad editada = actividadService.editarActividad(id, actividadDto);
         return ResponseEntity.ok(editada);
     }
-        */ 
+git pu
+
+    */
+
+  
+    
+    
+
+
 }

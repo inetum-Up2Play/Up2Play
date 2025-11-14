@@ -3,6 +3,7 @@ package com.Up2Play.backend.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -35,14 +36,14 @@ public class ActividadService {
         act.setDescripcion(input.getDescripcion());
 
         LocalDate fecha = LocalDate.parse(input.getFecha());
-         if (LocalDate.now().isBefore(fecha)) {
+         if (fecha.isBefore(LocalDate.now())) {
             throw new RuntimeException ("La fecha no puede ser anterior a la fecha actual.");
         } else {
             act.setFecha(fecha);
         }
 
         LocalTime hora = LocalTime.parse(input.getHora());
-         if (LocalDate.now().isEqual(fecha) && LocalTime.now().isBefore(hora)) {
+         if (fecha.isBefore(LocalDate.now()) && hora.isBefore(LocalTime.now())) {
             throw new RuntimeException ("La  no puede ser anterior a la fecha actual.");
         } else {
             act.setHora(hora);
@@ -62,16 +63,43 @@ public class ActividadService {
         act.setDeporte(input.getDeporte());
        
         act.setEstado(EstadoActividad.fromValue("Pendiente"));
+        act.setUsuarioCreador(usuario);
 
         Actividad actGuardada = actividadRepository.save(act);
 
         
-        act.setUsuarioCreador(usuario);
+        
         return actGuardada;
     }
 
-    //Ver acvtividad
+    //Listado todas las actividades
     public List<Actividad> getAllActividades (){
         return actividadRepository.findAll();
     }
+
+    //Lista de actividades creadas por un usuario
+    public List<Actividad> getActividadesCreadas(Usuario usuario) {
+        return actividadRepository.findByUsuarioCreador(usuario);
+    }
+    //Lista de actividades a las que un usuario está apuntado
+    public Set<Actividad> getActividadesApuntadas(Usuario usuario){
+        return usuario.getActividadesUnidas();
+    }
+    //Lista actividad por id
+    public Actividad getActividad(Long id){
+        return actividadRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+    }
+
+    //Editar actividad
+    public Actividad editarActividad(Long id, ActividadDto input){
+        Actividad act = new Actividad();
+
+        Actividad actEditada= actividadRepository.save(act);
+        return actEditada;
+
+    }
+    //Eliminar actiividad
+
+
 }
