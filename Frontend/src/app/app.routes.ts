@@ -5,6 +5,7 @@ import { AuthService } from './core/services/auth-service';
 import { Actividades } from './features/actividades/pages/actividades/actividades';
 import { inject } from '@angular/core';
 import { Header } from './core/layout/header/header';
+import { Background } from './core/layout/background/background/background';
 
 export const routes: Routes = [
   {
@@ -50,5 +51,10 @@ export const routes: Routes = [
     {
         path: 'header',
         component: Header
+    },
+
+    {
+        path: 'background',
+        component: Background
     }
 ];
