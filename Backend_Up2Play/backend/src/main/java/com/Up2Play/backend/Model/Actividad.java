@@ -20,6 +20,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -34,7 +35,11 @@ public class Actividad {
     private Long id;
 
     private String nombre;
+    
+    @Lob
+    @Column(name = "DESCRIPCION", columnDefinition = "CLOB")
     private String descripcion;
+    
     private LocalDate fecha;
     private LocalTime hora;
     private String ubicacion;

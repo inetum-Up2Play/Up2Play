@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Up2Play.backend.DTO.ActividadDto;
+import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -42,10 +43,11 @@ public class ActividadController {
 
   
     @GetMapping("/getAll")
-    public List<Actividad> getAllActividades() {
+    public List<ActividadDtoResp> getAllActividades() {
       
         return actividadService.getAllActividades();
     }
+    
     /* 
     @GetMapping("/getCreadas")
     public List<Actividad> getActividadesCreadas() {
@@ -83,13 +85,7 @@ public class ActividadController {
         Actividad editada = actividadService.editarActividad(id, actividadDto);
         return ResponseEntity.ok(editada);
     }
-git pu
 
     */
-
-  
-    
-    
-
 
 }
