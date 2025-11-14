@@ -4,6 +4,7 @@ import { Profile } from './features/user/pages/profile/profile';
 import { AuthService } from './core/services/auth-service';
 import { Actividades } from './features/actividades/pages/actividades/actividades';
 import { inject } from '@angular/core';
+import { Header } from './core/layout/header/header';
 
 export const routes: Routes = [
   {
@@ -46,5 +47,8 @@ export const routes: Routes = [
   },
 
   // Cualquier otra ruta desconocida -> a home (protegida, por tanto pasará por el guard)
-  { path: '**', redirectTo: '' },
+    {
+        path: 'header',
+        component: Header
+    }
 ];
