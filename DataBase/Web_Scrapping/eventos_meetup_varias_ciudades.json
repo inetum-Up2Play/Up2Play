@@ -1,10 +1,10 @@
 [
     {
         "nombre": "DOMINGO ⚽ PARTIDO FÚTBOL F7 MIXTO⚽NEW PLAYERS WELCOME ⚽CAMPO RODRÍGUEZ SAHAGÚN ⚽",
-        "descripcion": null,
+        "descripcion": "descripcion",
         "fecha": "2025-09-21",
         "hora": "20:00:00",
-        "ubicacion": null,
+        "ubicacion": "Tarragona, es",
         "nivel": "Iniciado",
         "num_pers_inscritas": 14,
         "num_pers_totales": 14,
