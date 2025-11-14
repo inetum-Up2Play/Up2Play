@@ -34,7 +34,7 @@ public class Actividad {
     private String descripcion;
     private LocalDate fecha;
     private LocalTime hora;
-    private String ubicación;
+    private String ubicacion;
     private String deporte;
 
     @Convert(converter = NivelDificultadConverter.class)
@@ -61,14 +61,14 @@ public class Actividad {
 
     
 
-    public Actividad(String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicación, String deporte,
+    public Actividad(String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicacion, String deporte,
             NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
             Usuario usuarioCreador, Set<Usuario> usuarios) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.hora = hora;
-        this.ubicación = ubicación;
+        this.ubicacion = ubicacion;
         this.deporte = deporte;
         this.nivel = nivel;
         this.num_pers_inscritas = num_pers_inscritas;
@@ -81,7 +81,7 @@ public class Actividad {
 
 
 
-    public Actividad(Long id, String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicación, String deporte,
+    public Actividad(Long id, String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicacion, String deporte,
             NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
             Usuario usuarioCreador, Set<Usuario> usuarios) {
         this.id = id;
@@ -89,7 +89,7 @@ public class Actividad {
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.hora = hora;
-        this.ubicación = ubicación;
+        this.ubicacion = ubicacion;
         this.deporte = deporte;
         this.nivel = nivel;
         this.num_pers_inscritas = num_pers_inscritas;
@@ -140,13 +140,13 @@ public class Actividad {
         this.hora = hora;
     }
 
-    public String getUbicación() {
-        return ubicación;
+    public String getUbicacion() {
+        return ubicacion;
     }
 
     
-    public void setUbicación(String ubicación) {
-        this.ubicación = ubicación;
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     public NivelDificultad getNivel() {

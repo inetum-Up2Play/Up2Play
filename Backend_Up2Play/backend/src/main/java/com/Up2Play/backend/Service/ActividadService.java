@@ -48,7 +48,7 @@ public class ActividadService {
             act.setHora(hora);
         }
 
-        act.setUbicación(input.getUbicacion());
+        act.setUbicacion(input.getUbicacion());
         act.setNivel(NivelDificultad.fromValue(input.getNivel()));
 
         act.setNum_pers_inscritas(1);
