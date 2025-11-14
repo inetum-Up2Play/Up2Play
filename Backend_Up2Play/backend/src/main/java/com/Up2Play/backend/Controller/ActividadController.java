@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Up2Play.backend.DTO.ActividadDto;
+import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Usuario;
@@ -48,12 +49,15 @@ public class ActividadController {
         return actividadService.getAllActividades();
     }
     
-    /* 
+
     @GetMapping("/getCreadas")
-    public List<Actividad> getActividadesCreadas() {
-      
-        return actividadService.getActividadesCreadas();
+    public List<ActividadDtoCreadas> getActividadesCreadas(@RequestHeader String token) {
+        String email = jwtService.extractUsername(token);
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return actividadService.getActividadesCreadas(usuario);
     }
+
+    /* 
 
     @GetMapping("/getApuntadas")
     public List<Actividad> getActividadesApuntadas() {

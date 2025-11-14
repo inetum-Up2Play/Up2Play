@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.ActividadDto;
+import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Usuario;
@@ -98,8 +99,23 @@ public class ActividadService {
     }
 
     // Lista de actividades creadas por un usuario
-    public List<Actividad> getActividadesCreadas(Usuario usuario) {
-        return actividadRepository.findByUsuarioCreador(usuario);
+    @Transactional
+    public List<ActividadDtoCreadas> getActividadesCreadas(Usuario usuario) {
+        return actividadRepository.findByUsuarioCreador(usuario).stream().map(a -> new ActividadDtoCreadas(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getHora() != null ? a.getHora().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNum_pers_inscritas(),
+                        a.getNum_pers_totales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null)).toList();
     }
 
     // Lista de actividades a las que un usuario está apuntado
