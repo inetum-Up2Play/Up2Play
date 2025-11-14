@@ -27,10 +27,7 @@ export class ActService {
   }
 
   listarActividades() {
-
     return this.http.get(this.baseUrl + '/getAll', {})
-
-
   }
 
   listarActividadedsCreadas(){
