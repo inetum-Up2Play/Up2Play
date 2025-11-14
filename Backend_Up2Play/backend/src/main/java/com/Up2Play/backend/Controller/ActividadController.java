@@ -78,9 +78,5 @@ public class ActividadController {
         Actividad editada = actividadService.editarActividad(id, actividadDto);
         return ResponseEntity.ok(editada);
     }
-        */
-
-  
-    
-    
+        */ 
 }
