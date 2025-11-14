@@ -93,7 +93,7 @@ export class Header {
 
   // Calcular tamaño del header
   //Busca id menu-superior en el html, con ElementRef lo referencia
-  @ViewChild('menu-superior', { static: true }) headerRef!: ElementRef<HTMLElement>;
+  @ViewChild('menuSuperior', { static: true }) headerRef!: ElementRef<HTMLElement>;
 
   //ResizeObserver para observar cambios en el tamaño del header
   private ro?: ResizeObserver;
