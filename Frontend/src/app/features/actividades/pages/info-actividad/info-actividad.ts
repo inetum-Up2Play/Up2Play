@@ -16,21 +16,21 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
   styleUrl: './info-actividad.scss'
 })
 export class InfoActividad {
+
   actividad = signal<Actividad | null>(null);
-
-  //Todavía no funciona bien, es para el nivel de actividad
-  nivelControl = new FormControl(3);
-  form = new FormGroup({
-    rating: new FormControl(0)
-  });
-
 
   constructor(private actService: ActService) {
     // Simulación: obtener actividad por ID
-    this.actService.infoActividad(1).subscribe(data => {
-      this.actividad.set(data); // Actualizamos la signal con la respuesta
+    this.actService.infoActividad(1).subscribe(act => {
+      this.actividad.set(act); // Actualizamos la signal con la respuesta
+      this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
     });
   }
+
+  //Usamos el p-rating como un form
+  formRating = new FormGroup({
+    rating: new FormControl(0)
+  });
 
   //Método para indicar las banderas según nivel
   getNivelValue(nivel: string): number {

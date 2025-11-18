@@ -7,14 +7,13 @@
         <p class="mb-4">Creado por el usuario con id: {{act.id_usuario_creador}}</p>
         <p><span class="font-bold text-[#3D6C3F]">Deporte: </span>{{ act.deporte }}</p><br>
 
-        <p class="text-gray-700 mb-6 pr-10">{{ act.descripcion }}</p>
+        <p class="mb-6 pr-10">{{ act.descripcion }}</p>
 
         <div class="space-y-2">
-            <br>
-            <strong>Nivel:</strong> {{ act.nivel }}
-            <div class="card flex justify-center">
-
-                <form [formGroup]="form">
+            <div class="flex">
+            <strong>Nivel: </strong>{{ act.nivel }}
+            
+                <form [formGroup]="formRating">
                     <p-rating formControlName="rating" [readonly]="true">
                         <ng-template #onicon>
                             <p-inputicon class="pi pi-flag-fill" />
@@ -24,8 +23,6 @@
                         </ng-template>
                     </p-rating>
                 </form>
-
-
             </div>
 
             <p><strong>Punto de encuentro:</strong> {{ act.ubicacion }}</p>
@@ -42,6 +39,7 @@
     <div>
         <img class="rounded-md mb-8 aspect-3/2 max-w-md min-w-xs"
             src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" alt="actividad-img">
+        <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="w-full rounded-lg mb-4"> -->   
 
         <p-card class="max-w-md">
             <p><strong>Fecha</strong><br>{{ act.fecha }}</p>
