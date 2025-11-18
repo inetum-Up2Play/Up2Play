@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './features/home/home';
 import { Profile } from './features/user/pages/profile/profile';
-import { AuthService } from './core/services/auth-service';
+import { AuthService } from './core/services/auth/auth-service';
 import { Actividades } from './features/actividades/pages/actividades/actividades';
 import { inject } from '@angular/core';
 import { Header } from './core/layout/header/header';

@@ -11,9 +11,9 @@ import { InputIconModule } from 'primeng/inputicon';
 import { MessageModule } from 'primeng/message';
 
 // Services
-import { AuthService } from '../../../../core/services/auth-service';
-import { UserDataService } from '../../../../core/services/user-data-service';
-import { ErrorService } from '../../../../core/services/error-service';
+import { AuthService } from '../../../../core/services/auth/auth-service';
+import { UserDataService } from '../../../../core/services/auth/user-data-service';
+import { ErrorService } from '../../../../core/services/error/error-service';
 
 interface VerificationPayload {
   email: string;
