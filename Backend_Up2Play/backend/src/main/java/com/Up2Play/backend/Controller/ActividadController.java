@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Up2Play.backend.DTO.ActividadDto;
+import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Model.Actividad;
@@ -83,13 +84,19 @@ public class ActividadController {
     @PostMapping("/unirseActividad/{id}")
 
     @PutMapping("/desapuntarseActividad/{id}")
-
+ */
+    //el controlador funciona, pero hay que comprovar si solo puede editar la actividad el creador
     @PutMapping("/editarActividad/{id}")
-    public ResponseEntity<Actividad> editarActividad(@PathVariable Long id, @RequestBody ActividadDto actividadDto) {
-        Actividad editada = actividadService.editarActividad(id, actividadDto);
-        return ResponseEntity.ok(editada);
+    public ResponseEntity<?> editarActividad(@PathVariable Long id, @RequestBody EditarActividadDto editarActividadDto) {
+        actividadService.editarActividad(id, editarActividadDto);
+        return ResponseEntity.ok(Map.of("message","Se ha editado la actividad correctamente."));
     }
 
-    */
+    /* Faltan: 
+     *listar actividad por id
+     *borrar actividad
+    */ 
+
+    
 
 }

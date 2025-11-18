@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.ActividadDto;
+import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Model.Actividad;
@@ -48,7 +49,7 @@ public class ActividadService {
 
         LocalTime hora = LocalTime.parse(input.getHora());
         if (fecha.isBefore(LocalDate.now()) && hora.isBefore(LocalTime.now())) {
-            throw new RuntimeException("La  no puede ser anterior a la fecha actual.");
+            throw new RuntimeException("La hora no puede ser anterior a la fecha  y hora actual.");
         } else {
             act.setHora(hora);
         }
@@ -67,6 +68,9 @@ public class ActividadService {
 
         act.setDeporte(input.getDeporte());
 
+        double precio = Double.parseDouble(input.getPrecio());
+        act.setPrecio(precio);
+
         act.setEstado(EstadoActividad.fromValue("Pendiente"));
         act.setUsuarioCreador(usuario);
 
@@ -77,7 +81,7 @@ public class ActividadService {
 
     // Listado todas las actividades
 
-    @Transactional
+    @Transactional //(readOnly = true)
     public List<ActividadDtoResp> getAllActividades() {
         return actividadRepository.findAll().stream()
                 .map(a -> new ActividadDtoResp(
@@ -99,7 +103,7 @@ public class ActividadService {
     }
 
     // Lista de actividades creadas por un usuario
-    @Transactional
+    @Transactional //(readOnly = true)
     public List<ActividadDtoCreadas> getActividadesCreadas(Usuario usuario) {
         return actividadRepository.findByUsuarioCreador(usuario).stream().map(a -> new ActividadDtoCreadas(
                         a.getId(),
@@ -119,24 +123,93 @@ public class ActividadService {
     }
 
     // Lista de actividades a las que un usuario está apuntado
-    public Set<Actividad> getActividadesApuntadas(Usuario usuario) {
-        return usuario.getActividadesUnidas();
+    @Transactional
+    public List<ActividadDtoResp> getActividadesApuntadas(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    return usuario.getActividadesUnidas().stream()
+            .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getHora() != null ? a.getHora().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNum_pers_inscritas(),
+                        a.getNum_pers_totales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+            .toList();
+
     }
 
     // Lista actividad por id
-    public Actividad getActividad(Long id) {
+    @Transactional
+    public ActividadDtoResp getActividad(Long id) {
         return actividadRepository.findById(id)
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getHora() != null ? a.getHora().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNum_pers_inscritas(),
+                        a.getNum_pers_totales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
     }
 
     // Editar actividad
-    public Actividad editarActividad(Long id, ActividadDto input) {
-        Actividad act = new Actividad();
+    public Actividad editarActividad(Long id, EditarActividadDto input) {
+        Actividad act = actividadRepository.findById(id).orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+        act.setNombre(input.getNombre());
+        act.setDescripcion(input.getDescripcion());
+
+        LocalDate fecha = LocalDate.parse(input.getFecha());
+        if (fecha.isBefore(LocalDate.now())) {
+            throw new RuntimeException("La fecha no puede ser anterior a la fecha actual.");
+        } else {
+            act.setFecha(fecha);
+        }
+
+        LocalTime hora = LocalTime.parse(input.getHora());
+        if (fecha.isBefore(LocalDate.now()) && hora.isBefore(LocalTime.now())) {
+            throw new RuntimeException("La hora no puede ser anterior a la fecha  y hora actual.");
+        } else {
+            act.setHora(hora);
+        }
+
+        act.setUbicacion(input.getUbicacion());
+        act.setNivel(NivelDificultad.fromValue(input.getNivel()));
+
+
+        int num_personas_totales = Integer.parseInt(input.getNum_pers_totales());
+
+        if (num_personas_totales == 0) {
+            act.setNum_pers_totales(1);
+        } else
+            act.setNum_pers_totales(num_personas_totales);
+
+        act.setDeporte(input.getDeporte());
 
         Actividad actEditada = actividadRepository.save(act);
         return actEditada;
 
     }
-    // Eliminar actiividad
+    // Eliminar actividad
+    public void deleteActividad(Long id){
+        actividadRepository.deleteById(id);
+    }
+
 
 }
