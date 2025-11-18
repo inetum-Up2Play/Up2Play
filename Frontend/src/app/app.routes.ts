@@ -6,6 +6,7 @@ import { Actividades } from './features/actividades/pages/actividades/actividade
 import { inject } from '@angular/core';
 import { Header } from './core/layout/header/header';
 import { Background } from './core/layout/background/background/background';
+import { CrearActividad } from './features/actividades/pages/crear-actividad/crear-actividad';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,10 @@ export const routes: Routes = [
         path: 'my-account',
         component: Profile,
       },
+      {
+        path: 'crear-actividad',
+        component: CrearActividad,
+      }
     ],
   },
 
