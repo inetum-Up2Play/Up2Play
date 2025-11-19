@@ -16,7 +16,7 @@ export class ActService {
   private logoutTimer: any;
 
 
-//Metodo crear actividad
+  //Metodo crear actividad
   crearActividad(payload: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl + '/crearActividad'}`, payload).pipe(
       map(() => true),
@@ -41,7 +41,7 @@ export class ActService {
   //Metodo obtener actividad por id
   getActividad(id: number) {
     return this.http.get(this.baseUrl + `/getPorId/${id}`, {}).pipe(
-       map(() => true),
+      map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
         return of(errBody?.error ?? 'UNKNOWN');
@@ -72,7 +72,7 @@ export class ActService {
   }
 
   //Metodo eliminar actividad
-    deleteActividad(id: number) {
+  deleteActividad(id: number) {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
@@ -82,11 +82,21 @@ export class ActService {
     );
   }
 
-  getApuntadas() {}
+  getApuntadas() { }
+  
+  //Metodo apuntarte a actividad
+  unirteActividad(idActividad: number): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl + '/unirActividad'}`, idActividad).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
+  }
 
-  unirteActividad() {}
 
-  desapuntarteActividad() {}
+  desapuntarteActividad() { }
 
   // Método que devuelve la info de la actividad por ID (mock)
   infoActividad(id: number): Observable<Actividad> {
@@ -111,7 +121,7 @@ export class ActService {
     return of(actividadMock); // Devuelve un Observable simulando la respuesta HTTP
   }
 
-  ComprovarCreador() {}
+  ComprovarCreador() { }
 
-  estoyApuntado() {}
+  estoyApuntado() { }
 }

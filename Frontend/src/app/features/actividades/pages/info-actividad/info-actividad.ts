@@ -8,16 +8,20 @@ import { InputIcon } from 'primeng/inputicon';
 import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { inject } from '@angular/core/primitives/di';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, Rating, InputIcon, FormsModule, ReactiveFormsModule],
+  imports: [CardModule, DividerModule, Rating, InputIcon, FormsModule, ReactiveFormsModule, MessageService],
   templateUrl: './info-actividad.html',
   styleUrl: './info-actividad.scss'
 })
 export class InfoActividad {
 
   actividad = signal<Actividad | null>(null);
+
+  messageService = inject(MessageService);
 
   constructor(private actService: ActService) {
     // Simulación: obtener actividad por ID
@@ -43,6 +47,26 @@ export class InfoActividad {
     };
     return map[nivel] || 0; // Devuelve 0 si no coincide
   }
+
+  unirse(idActividad: number): void {
+    this.actService.unirteActividad(idActividad).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'OK',
+          detail: 'Te has unido a la actividad'
+        });
+      },
+      error: (e) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: e.error?.message ?? 'No se pudo unir a la actividad'
+        });
+      }
+    });
+  }
+
 
 
   // Creo que aquí debería ir la lógica para según el deporte que sea, 
