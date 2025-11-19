@@ -13,10 +13,11 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ActService } from '../../../../core/services/actividad/act-service';
+import { Header } from '../../../../core/layout/header/header';
 
 @Component({
   selector: 'app-crear-actividad',
-  imports: [ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
+  imports: [Header, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
   templateUrl: './crear-actividad.html',
   styleUrl: './crear-actividad.scss'
 })
@@ -93,11 +94,23 @@ export class CrearActividad {
 
     // Llamada a servicio
     this.actService.crearActividad(payload).subscribe({
-      next: () => this.messageService.add({
-        severity: 'success',
-        summary: 'OK',
-        detail: 'Actividad creada'
-      }),
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'OK',
+          detail: 'Actividad creada'
+        });
+
+        // Vaciar formulario
+        this.actividadForm.reset();
+        this.formSubmitted = false;
+
+        // Redirigir a la lista de actividades
+        setTimeout(() => {
+          this.actService['router'].navigate(['/actividades']);
+        }, 1500); // espera 1.5 segundos para que se vea el toast
+      },
+
       error: (e) => this.messageService.add({
         severity: 'error',
         summary: 'Error',
