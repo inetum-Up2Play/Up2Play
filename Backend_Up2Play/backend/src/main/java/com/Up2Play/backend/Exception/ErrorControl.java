@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.Up2Play.backend.DTO.ErrorResponseDto;
+import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
+import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoIncorrectoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CorreoNoCoincideException;
@@ -223,4 +225,40 @@ public class ErrorControl {
             .body(body); 
     }
 
+    //La fecha y la hora no pueden ser anteriores al momento actual.
+
+    @ExceptionHandler (FechaYHora.class)
+    public ResponseEntity<ErrorResponseDto> handleFechaYHora(
+        FechaYHora ex,
+        HttpServletRequest request
+    ) {
+        ErrorResponseDto body = new ErrorResponseDto(
+            "FECHA_Y_HORA_INVALIDAS", 
+            ex.getMessage(), 
+            HttpStatus.BAD_REQUEST.value(), //ERROR 400
+            request.getRequestURI(),
+            Instant.now() 
+        );
+        return ResponseEntity 
+            .status(HttpStatus.BAD_REQUEST) 
+            .body(body); 
+    }
+
+    //Actividad no encontrada
+    @ExceptionHandler (ActividadNoEncontrada.class)
+    public ResponseEntity<ErrorResponseDto> handleActividadNoEncontrada(
+        ActividadNoEncontrada ex,
+        HttpServletRequest request
+    ) {
+        ErrorResponseDto body = new ErrorResponseDto(
+            "ACTIVIDAD_NO_ENCONTRADA", 
+            ex.getMessage(), 
+            HttpStatus.NOT_FOUND.value(), //ERROR 404
+            request.getRequestURI(),
+            Instant.now() 
+        );
+        return ResponseEntity 
+            .status(HttpStatus.NOT_FOUND) 
+            .body(body); 
+    }
 }

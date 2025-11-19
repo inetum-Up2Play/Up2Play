@@ -2,16 +2,22 @@ package com.Up2Play.backend.Model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,9 +30,9 @@ public class Usuario implements UserDetails {
 
     // Campos principales de identificación y autenticación
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //autogenera el ID
-    @Column(unique = true, nullable = false) //único y no nulo
-    private Long id; 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // autogenera el ID
+    @Column(unique = true, nullable = false) // único y no nulo
+    private Long id;
 
     @NotBlank
     @Email
@@ -47,6 +53,13 @@ public class Usuario implements UserDetails {
 
     @Column(name = "VERIFICATION_EXPIRES_AT")
     private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
+
+    @OneToMany(mappedBy = "usuarioCreador")
+    Set<Actividad> actividadesCreadas = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "USUARIO_ACTIVIDAD", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id"))
+    private Set<Actividad> actividadesUnidas = new HashSet<>();
 
     // Constructores
     public Usuario(Long id, String email, String password, String rol, String nombreUsuario) {
@@ -142,45 +155,62 @@ public class Usuario implements UserDetails {
 
     // Implementación de UserDetails para Spring Security
 
-    //Devuelve los permisos o roles del usuario
+    // Devuelve los permisos o roles del usuario
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
-    //Verifica si la cuenta no ha expirado. Siempre true por defecto.
+    // Verifica si la cuenta no ha expirado. Siempre true por defecto.
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    //Verifica si la cuenta no está bloqueada. Siempre true por defecto.
+    // Verifica si la cuenta no está bloqueada. Siempre true por defecto.
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    //Verifica si las credenciales no han expirado. Siempre true por defecto.
+    // Verifica si las credenciales no han expirado. Siempre true por defecto.
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    //Verifica si el usuario está habilitado.
+    // Verifica si el usuario está habilitado.
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
-    //Retorna la password para autenticación.
+    // Retorna la password para autenticación.
     @Override
     public String getPassword() {
         return password;
     }
 
-    //Retorna el nombre de usuario (usa email).
+    // Retorna el nombre de usuario (usa email).
     @Override
     public String getUsername() {
         return email;
     }
+
+    public Set<Actividad> getActividadesCreadas() {
+        return actividadesCreadas;
+    }
+
+    public void setActividadesCreadas(Set<Actividad> actividadesCreadas) {
+        this.actividadesCreadas = actividadesCreadas;
+    }
+
+    public Set<Actividad> getActividadesUnidas() {
+        return actividadesUnidas;
+    }
+
+    public void setActividadesUnidas(Set<Actividad> actividadesUnidas) {
+        this.actividadesUnidas = actividadesUnidas;
+    }
+
 }
