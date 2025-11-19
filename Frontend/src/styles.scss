@@ -21,13 +21,16 @@ Here has to be imported the other style files (from the src/styles/)
   font-family: vars.$montserrat;
   font-weight: 700;
   font-size: 1rem;
-  letter-spacing: .02em;      /* tracking */
+  letter-spacing: .02em;
+  /* tracking */
   text-align: right;
 
   /* (Opcional) Para que el popup pueda ser más estrecho y se adapte al contenido */
   min-width: 0 !important;
-  width: fit-content;       /* o max-content si lo prefieres */
-  max-width: 90vw;          /* evita desbordes en móvil */
+  width: fit-content;
+  /* o max-content si lo prefieres */
+  max-width: 90vw;
+  /* evita desbordes en móvil */
 }
 
 /* Lista interior: un poco de aire y separación */
@@ -52,17 +55,14 @@ Here has to be imported the other style files (from the src/styles/)
 /* ESTILOS PARA EL HEADER GENERAL */
 .p-drawer {
   --p-drawer-background: #3D6C3F;
-
 }
 
 .layout-menu {
     background-color: vars.$verde-oscuro !important;
-
 }
 
 .layout-menu li:hover, a:hover {
   color: vars.$verde-oliva !important;
-  
 }
 
 

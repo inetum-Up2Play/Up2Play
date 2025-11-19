@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { Home } from './features/home/home';
 import { Profile } from './features/user/pages/profile/profile';
-import { AuthService } from './core/services/auth-service';
+import { AuthService } from './core/services/auth/auth-service';
 import { Actividades } from './features/actividades/pages/actividades/actividades';
 import { inject } from '@angular/core';
 import { Header } from './core/layout/header/header';
+import { Background } from './core/layout/background/background/background';
+import { CrearActividad } from './features/actividades/pages/crear-actividad/crear-actividad';
 
 export const routes: Routes = [
   {
@@ -43,6 +45,10 @@ export const routes: Routes = [
         path: 'my-account',
         component: Profile,
       },
+      {
+        path: 'crear-actividad',
+        component: CrearActividad,
+      }
     ],
   },
 
@@ -50,5 +56,10 @@ export const routes: Routes = [
     {
         path: 'header',
         component: Header
+    },
+
+    {
+        path: 'background',
+        component: Background
     }
 ];
