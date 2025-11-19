@@ -14,6 +14,5 @@ public interface ActividadRepository extends JpaRepository<Actividad, Long>{
     //Buscar lista actividades por su usuario creador
     List<Actividad> findByUsuarioCreador(Usuario usuarioCreador);
 
-    //Buscar Buscar lista actividades 
     
     }
