@@ -1,6 +1,6 @@
 package com.Up2Play.backend.DTO;
 
-public class ActividadDto {
+public class EditarActividadDto {
 
     private String nombre;
     private String descripcion;
@@ -8,9 +8,8 @@ public class ActividadDto {
     private String ubicacion;
     private String deporte;
     private String nivel;
-    private String estado;
     private String num_pers_totales;
-    private String precio;
+    private String precio; //editar precio? que pasa con las personas que ya se ha apuntado?
 
     public String getNombre() {
         return nombre;
@@ -30,7 +29,6 @@ public class ActividadDto {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-
     public String getUbicacion() {
         return ubicacion;
     }
@@ -61,12 +59,7 @@ public class ActividadDto {
     public void setDeporte(String deporte) {
         this.deporte = deporte;
     }
-    public String getEstado() {
-        return estado;
-    }
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+   
 
     
 

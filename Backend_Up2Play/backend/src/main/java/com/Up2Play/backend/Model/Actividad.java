@@ -1,6 +1,7 @@
 package com.Up2Play.backend.Model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,13 +10,10 @@ import com.Up2Play.backend.Model.converter.EstadoActividadConverter;
 import com.Up2Play.backend.Model.converter.NivelDificultadConverter;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
 import com.Up2Play.backend.Model.enums.NivelDificultad;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,8 +38,7 @@ public class Actividad {
     @Column(name = "DESCRIPCION", columnDefinition = "CLOB")
     private String descripcion;
     
-    private LocalDate fecha;
-    private LocalTime hora;
+    private LocalDateTime fecha;
     private String ubicacion;
     private String deporte;
 
@@ -69,13 +66,12 @@ public class Actividad {
 
     
 
-    public Actividad(String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicacion, String deporte,
+    public Actividad(String nombre, String descripcion, LocalDateTime fecha, String ubicacion, String deporte,
             NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
             Usuario usuarioCreador, Set<Usuario> usuarios) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fecha = fecha;
-        this.hora = hora;
         this.ubicacion = ubicacion;
         this.deporte = deporte;
         this.nivel = nivel;
@@ -89,14 +85,13 @@ public class Actividad {
 
 
 
-    public Actividad(Long id, String nombre, String descripcion, LocalDate fecha, LocalTime hora, String ubicacion, String deporte,
+    public Actividad(Long id, String nombre, String descripcion, LocalDateTime fecha, String ubicacion, String deporte,
             NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
             Usuario usuarioCreador, Set<Usuario> usuarios) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fecha = fecha;
-        this.hora = hora;
         this.ubicacion = ubicacion;
         this.deporte = deporte;
         this.nivel = nivel;
@@ -132,20 +127,12 @@ public class Actividad {
         this.descripcion = descripcion;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
-    }
-
-    public LocalTime getHora() {
-        return hora;
-    }
-
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
     }
 
     public String getUbicacion() {
