@@ -3,7 +3,6 @@ package com.Up2Play.backend.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -211,5 +210,20 @@ public class ActividadService {
         actividadRepository.deleteById(id);
     }
 
+    //Unirse a Actividad
+    public Actividad unirteActividad (Long idActividad , Long idUsuario){
+        Actividad act = actividadRepository.findById(idActividad)
+            .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+        
+        //act.getUsuarios().add(usuario);
+        return actividadRepository.save(act);
+    }
 
+    //Desapuntarse a Actividad
+    public Actividad desapunrarteActividad (Long id , Usuario usuario){
+        Actividad act = actividadRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+        act.getUsuarios().remove(usuario);
+        return actividadRepository.save(act);
+    }
 }
