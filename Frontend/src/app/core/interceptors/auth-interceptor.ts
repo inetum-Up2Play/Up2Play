@@ -12,6 +12,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
  
   const isPublicAuthEndpoint = /(^|\/)auth(\/|$)/.test(req.url);
  
+
+/*    const PUBLIC_AUTH_ENDPOINTS = [
+    '/auth/login',
+    '/auth/register',
+    '/auth/verification',           // ← corregido
+    '/auth/mail-recover',
+    '/auth/verification-password',
+    '/auth/new-password',
+  ]; */ 
+  
+  //const isPublicAuthEndpoint = PUBLIC_AUTH_ENDPOINTS.some((p) => req.url.includes(p));
+
   const authReq = shouldAttach && !isPublicAuthEndpoint
     ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
     : req;
