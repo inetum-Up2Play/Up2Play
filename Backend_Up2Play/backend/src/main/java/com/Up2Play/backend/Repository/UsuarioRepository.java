@@ -12,7 +12,7 @@ import com.Up2Play.backend.Model.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     //Busca un usuario por su email.
-    Optional<Usuario> findByEmail(String email);
+    Usuario findByEmail(String email);
 
     //Busca usuario por nombre
     Optional<Usuario> findByNombreUsuario(String nombreUsuario);

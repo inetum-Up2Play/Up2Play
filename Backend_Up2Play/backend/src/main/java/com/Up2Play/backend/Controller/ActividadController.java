@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,67 +35,71 @@ public class ActividadController {
     private final JwtService jwtService;
     private final UsuarioRepository usuarioRepository;
 
-    public ActividadController(ActividadService actividadService , JwtService jwtService ,
-     UsuarioRepository usuarioRepository) {
+    public ActividadController(ActividadService actividadService, JwtService jwtService,
+            UsuarioRepository usuarioRepository) {
         this.actividadService = actividadService;
         this.jwtService = jwtService;
         this.usuarioRepository = usuarioRepository;
     }
 
-  
     @GetMapping("/getAll")
     public List<ActividadDtoResp> getAllActividades() {
-      
+
         return actividadService.getAllActividades();
     }
-    
 
     @GetMapping("/getCreadas")
     public List<ActividadDtoCreadas> getActividadesCreadas(@RequestHeader String token) {
         String email = jwtService.extractUsername(token);
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return actividadService.getActividadesCreadas(usuario);
     }
 
-    /* 
-
     @GetMapping("/getApuntadas")
-    public List<Actividad> getActividadesApuntadas() {
-      
-        return actividadService.getActividadesApuntadas();
+    public List<ActividadDtoResp> getActividadesApuntadas(@RequestHeader String token) {
+
+        String email = jwtService.extractUsername(token);
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Long usuariosId = usuario.getId();
+        return actividadService.getActividadesApuntadas(usuariosId);
+    }
+
+    @GetMapping("/getPorId/{id}")
+    public ActividadDtoResp getActividad(@PathVariable Long id) {
+        return actividadService.getActividad(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteActividad(@PathVariable Long id){
+    public void deleteActividad(@PathVariable Long id) {
         actividadService.deleteActividad(id);
     }
-*/  @Transactional
+
+    @Transactional
     @PostMapping("/crearActividad")
-
-    public  ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader String token) {
+    public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader String token) {
         String email = jwtService.extractUsername(token);
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));  
-        System.out.println("HOLA" + email + usuarioRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
-        actividadService.crearActividad(actividadDto , usuario);
-        return ResponseEntity.ok(Map.of("message","Se ha creado una nueva nueva actividad."));
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        System.out.println("HOLA" + email + usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+        actividadService.crearActividad(actividadDto, usuario);
+        return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva nueva actividad."));
     }
-/* 
-    @PostMapping("/unirseActividad/{id}")
 
-    @PutMapping("/desapuntarseActividad/{id}")
- */
-    //el controlador funciona, pero hay que comprovar si solo puede editar la actividad el creador
+    /*
+     * @PostMapping("/unirseActividad/{id}")
+     * 
+     * @PutMapping("/desapuntarseActividad/{id}")
+     */
+    // el controlador funciona, pero hay que comprovar si solo puede editar la
+    // actividad el creador
     @PutMapping("/editarActividad/{id}")
-    public ResponseEntity<?> editarActividad(@PathVariable Long id, @RequestBody EditarActividadDto editarActividadDto) {
+    public ResponseEntity<?> editarActividad(@PathVariable Long id,
+            @RequestBody EditarActividadDto editarActividadDto) {
         actividadService.editarActividad(id, editarActividadDto);
-        return ResponseEntity.ok(Map.of("message","Se ha editado la actividad correctamente."));
+        return ResponseEntity.ok(Map.of("message", "Se ha editado la actividad correctamente."));
     }
-
-    /* Faltan: 
-     *listar actividad por id
-     *borrar actividad
-    */ 
-
-    
 
 }
