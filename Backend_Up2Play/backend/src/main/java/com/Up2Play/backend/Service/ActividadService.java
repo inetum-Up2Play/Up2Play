@@ -145,6 +145,32 @@ public class ActividadService {
 
     }
 
+    //Lista de actividades a las que un usuario no esta apuntado
+    @Transactional
+    public List<ActividadDtoResp> getActividadesNoApuntadas(Long usuarioId) {
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        return actividadRepository.findAll().stream()
+                .filter(act -> !usuario.getActividadesUnidas().contains(act))
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNum_pers_inscritas(),
+                        a.getNum_pers_totales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+    }
+
     // Lista actividad por id
     @Transactional
     public ActividadDtoResp getActividad(Long id) {

@@ -92,6 +92,16 @@ public class ActividadController {
     public ActividadDtoResp getActividad(@PathVariable Long id) {
         return actividadService.getActividad(id);
     }
+    
+    @GetMapping("getNoApuntadas")
+     public List<ActividadDtoResp> getActividadesNoApuntadas(@AuthenticationPrincipal UserDetails principal) {
+
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Long usuariosId = usuario.getId();
+        return actividadService.getActividadesNoApuntadas(usuariosId);
+    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteActividad(@PathVariable Long id) {
