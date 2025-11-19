@@ -86,7 +86,8 @@ export class Header {
         command: () => this.logout(),
       },
     ];
-    this.renderer.addClass(this.document.body, 'header-background-active');
+    this.renderer.addClass(this.document.body, 'header-background-active'); //img-fondo
+    this.renderer.addClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
   }
 
   logout(): void {
@@ -123,7 +124,8 @@ export class Header {
   // Se elimina el recurso si sales del componente(ej login)
   ngOnDestroy() {
     this.ro?.disconnect();
-    this.renderer.removeClass(this.document.body, 'header-background-active');
+    this.renderer.removeClass(this.document.body, 'header-background-active'); //img-fondo
+    this.renderer.addClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
   }
 
 }
