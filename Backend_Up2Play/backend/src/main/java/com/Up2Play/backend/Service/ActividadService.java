@@ -1,8 +1,6 @@
 package com.Up2Play.backend.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +9,9 @@ import com.Up2Play.backend.DTO.ActividadDto;
 import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
+import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
+import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
@@ -42,7 +43,7 @@ public class ActividadService {
 
         LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
         if (fecha.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("La fecha y hora no pueden ser anteriores al momento actual.");
+            throw new FechaYHora("La fecha y hora no pueden ser anteriores al momento actual.");
         } else {
             act.setFecha(fecha);
         }
@@ -117,7 +118,7 @@ public class ActividadService {
     @Transactional
     public List<ActividadDtoResp> getActividadesApuntadas(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
-        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
     return usuario.getActividadesUnidas().stream()
             .map(a -> new ActividadDtoResp(
                         a.getId(),
@@ -155,18 +156,18 @@ public class ActividadService {
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
     }
 
     // Editar actividad
     public Actividad editarActividad(Long id, EditarActividadDto input) {
-        Actividad act = actividadRepository.findById(id).orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+        Actividad act = actividadRepository.findById(id).orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
         act.setNombre(input.getNombre());
         act.setDescripcion(input.getDescripcion());
 
        LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
         if (fecha.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("La fecha y hora no pueden ser anteriores al momento actual.");
+            throw new FechaYHora("La fecha y hora no pueden ser anteriores al momento actual.");
         } else {
             act.setFecha(fecha);
         }
@@ -196,10 +197,10 @@ public class ActividadService {
     //Unirse a Actividad
     public Actividad unirteActividad (Long idActividad , Long idUsuario){
         Actividad act = actividadRepository.findById(idActividad)
-            .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+            .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
         
         Usuario usuario = usuarioRepository.findById(idUsuario)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         
         act.getUsuarios().add(usuario);
         usuario.getActividadesUnidas().add(act);
@@ -209,10 +210,10 @@ public class ActividadService {
     //Desapuntarse a Actividad
     public Actividad desapunrarteActividad (Long idActividad , Long idUsuario){
         Actividad act = actividadRepository.findById(idActividad)
-            .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+            .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
         
         Usuario usuario = usuarioRepository.findById(idUsuario)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         
         act.getUsuarios().remove(usuario);
         usuario.getActividadesUnidas().remove(act);

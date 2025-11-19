@@ -19,6 +19,7 @@ import com.Up2Play.backend.DTO.ActividadDto;
 import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.ActividadService;
@@ -44,7 +45,6 @@ public class ActividadController {
 
     @GetMapping("/getAll")
     public List<ActividadDtoResp> getAllActividades() {
-
         return actividadService.getAllActividades();
     }
 
@@ -52,7 +52,7 @@ public class ActividadController {
     public List<ActividadDtoCreadas> getActividadesCreadas(@RequestHeader String token) {
         String email = jwtService.extractUsername(token);
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         return actividadService.getActividadesCreadas(usuario);
     }
 
@@ -61,7 +61,7 @@ public class ActividadController {
 
         String email = jwtService.extractUsername(token);
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();
         return actividadService.getActividadesApuntadas(usuariosId);
     }
@@ -81,9 +81,9 @@ public class ActividadController {
     public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader String token) {
         String email = jwtService.extractUsername(token);
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         System.out.println("HOLA" + email + usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado")));
         actividadService.crearActividad(actividadDto, usuario);
         return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva nueva actividad."));
     }
