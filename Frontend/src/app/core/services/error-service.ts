@@ -21,6 +21,10 @@ export class ErrorService {
     CUENTA_YA_VERIFICADA: 'Tu cuenta ya ha sido verificada. Puedes iniciar sesión.', // 409
     CORREO_NO_COINCIDE: 'No se ha encontrado una cuenta con ese correo.', // 409
     FALTA_TOKEN_O_CORREO: 'Falta el token o el correo en la solicitud. Intenta de nuevo.', // 400
+    FECHA_Y_HORA_INVALIDAS: 'La fecha y hora no pueden ser anteriores al momento actual.',//400
+    ACTIVIDAD_NO_ENCONTRADA: 'Actividad no encontrada', //404
+    USUARIO_YA_APUNTADO: 'El usuario ya está apuntado a la actividad', //409
+    USUARIO_NO_APUNTADO: 'El usuario no está apuntado a la actividad', //404
     UNKNOWN: 'Ha ocurrido un error desconocido.' // ?
   };
 
@@ -43,5 +47,4 @@ export class ErrorService {
       detail: detail
     });
   }
-
 }

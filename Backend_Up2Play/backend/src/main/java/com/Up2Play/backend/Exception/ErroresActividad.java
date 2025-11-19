@@ -14,4 +14,16 @@ public class ErroresActividad {
         }
     }
 
+    public static class UsuarioYaApuntadoException extends RuntimeException {
+        public UsuarioYaApuntadoException(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioNoApuntadoException extends RuntimeException {
+        public UsuarioNoApuntadoException(String message) {
+            super(message);
+        }
+    }
+
 }
