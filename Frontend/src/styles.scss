@@ -65,6 +65,19 @@ Here has to be imported the other style files (from the src/styles/)
   color: vars.$verde-oliva !important;
 }
 
+//Pone una imagen de fondo de la app
+.header-background-active {
+    background-image: url('/assets/background/fondo_ok.webp'); /* Reemplaza con la URL correcta */
+    background-size: cover; /* Cubre todo el viewport */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Opcional: para que el fondo no se mueva al hacer scroll */
+}
+
+//Hace que el contenido de la app aparezca luego del header
+.header-offset-active {
+    padding-top: var(--header-h); /* Usamos el valor calculado en el header.component.ts */
+}
+
 
 
 
