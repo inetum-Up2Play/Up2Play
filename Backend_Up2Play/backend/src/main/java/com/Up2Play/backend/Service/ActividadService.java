@@ -1,6 +1,7 @@
 package com.Up2Play.backend.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -39,18 +40,11 @@ public class ActividadService {
         act.setNombre(input.getNombre());
         act.setDescripcion(input.getDescripcion());
 
-        LocalDate fecha = LocalDate.parse(input.getFecha());
-        if (fecha.isBefore(LocalDate.now())) {
-            throw new RuntimeException("La fecha no puede ser anterior a la fecha actual.");
+        LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
+        if (fecha.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("La fecha y hora no pueden ser anteriores al momento actual.");
         } else {
             act.setFecha(fecha);
-        }
-
-        LocalTime hora = LocalTime.parse(input.getHora());
-        if (fecha.isBefore(LocalDate.now()) && hora.isBefore(LocalTime.now())) {
-            throw new RuntimeException("La hora no puede ser anterior a la fecha  y hora actual.");
-        } else {
-            act.setHora(hora);
         }
 
         act.setUbicacion(input.getUbicacion());
@@ -88,7 +82,6 @@ public class ActividadService {
                         a.getNombre(),
                         a.getDescripcion(),
                         a.getFecha() != null ? a.getFecha().toString() : null,
-                        a.getHora() != null ? a.getHora().toString() : null,
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
@@ -109,7 +102,6 @@ public class ActividadService {
                         a.getNombre(),
                         a.getDescripcion(),
                         a.getFecha() != null ? a.getFecha().toString() : null,
-                        a.getHora() != null ? a.getHora().toString() : null,
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
@@ -132,7 +124,6 @@ public class ActividadService {
                         a.getNombre(),
                         a.getDescripcion(),
                         a.getFecha() != null ? a.getFecha().toString() : null,
-                        a.getHora() != null ? a.getHora().toString() : null,
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
@@ -155,7 +146,6 @@ public class ActividadService {
                         a.getNombre(),
                         a.getDescripcion(),
                         a.getFecha() != null ? a.getFecha().toString() : null,
-                        a.getHora() != null ? a.getHora().toString() : null,
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
@@ -174,18 +164,11 @@ public class ActividadService {
         act.setNombre(input.getNombre());
         act.setDescripcion(input.getDescripcion());
 
-        LocalDate fecha = LocalDate.parse(input.getFecha());
-        if (fecha.isBefore(LocalDate.now())) {
-            throw new RuntimeException("La fecha no puede ser anterior a la fecha actual.");
+       LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
+        if (fecha.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("La fecha y hora no pueden ser anteriores al momento actual.");
         } else {
             act.setFecha(fecha);
-        }
-
-        LocalTime hora = LocalTime.parse(input.getHora());
-        if (fecha.isBefore(LocalDate.now()) && hora.isBefore(LocalTime.now())) {
-            throw new RuntimeException("La hora no puede ser anterior a la fecha  y hora actual.");
-        } else {
-            act.setHora(hora);
         }
 
         act.setUbicacion(input.getUbicacion());
@@ -215,15 +198,24 @@ public class ActividadService {
         Actividad act = actividadRepository.findById(idActividad)
             .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
         
-        //act.getUsuarios().add(usuario);
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        act.getUsuarios().add(usuario);
+        usuario.getActividadesUnidas().add(act);
         return actividadRepository.save(act);
     }
 
     //Desapuntarse a Actividad
-    public Actividad desapunrarteActividad (Long id , Usuario usuario){
-        Actividad act = actividadRepository.findById(id)
+    public Actividad desapunrarteActividad (Long idActividad , Long idUsuario){
+        Actividad act = actividadRepository.findById(idActividad)
             .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
+        
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
         act.getUsuarios().remove(usuario);
+        usuario.getActividadesUnidas().remove(act);
         return actividadRepository.save(act);
     }
 }

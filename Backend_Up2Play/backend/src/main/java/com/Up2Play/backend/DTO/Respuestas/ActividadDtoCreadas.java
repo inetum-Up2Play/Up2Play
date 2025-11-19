@@ -5,7 +5,6 @@ public record ActividadDtoCreadas(
     String nombre,
     String descripcion,
     String fecha,
-    String hora,
     String ubicacion,
     String deporte,
     String nivel,
