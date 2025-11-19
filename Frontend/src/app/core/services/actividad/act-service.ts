@@ -41,7 +41,9 @@ export class ActService {
 
   }
 
-  listarActividadesInscritas() { }
+  listarActividadesInscritas() { 
+    
+  }
 
   unirteActividad() { }
 
