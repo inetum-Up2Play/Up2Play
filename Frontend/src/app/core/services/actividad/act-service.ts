@@ -1,61 +1,85 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actividad } from '../../models/Actividad';
-import { Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
+import { ErrorResponseDto } from '../../models/ErrorResponseDto';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ActService {
-
   private readonly http = inject(HttpClient);
   private router = inject(Router);
   private baseUrl = 'http://localhost:8080/actividades';
   private logoutTimer: any;
 
-  crearActividad() { }
+  crearActividad() {}
 
-  editarActividad() {
-
-    return this.http.put(this.baseUrl + '/editarActividad', {})
-
+  editarActividad(id: number, payload: {}) {
+    return this.http.put(this.baseUrl + `/editarActividad/${id}`, payload).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
   }
 
-  eliminarActividad() {
+  getActividad(id: number) {
 
-    return this.http.delete(this.baseUrl + '/eliminarActividad', {})
-
+    return this.http.get(this.baseUrl + `/getPorId/${id}`, {}).pipe(
+       map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
   }
 
   listarActividades() {
-
-    return this.http.get(this.baseUrl + '/getAll', {})
-
-
+    return this.http.get(this.baseUrl + '/getAll', {}).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
   }
 
   listarActividadedsCreadas() {
-
-    return this.http.get(this.baseUrl + '/getActividades', {})
-
+    return this.http.get(this.baseUrl + '/getCreadas', {}).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
+  }
+  
+    deleteActividad(id: number) {
+    return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
   }
 
-  listarActividadesInscritas() { 
-    
-  }
+  getApuntadas() {}
 
-  unirteActividad() { }
+  unirteActividad() {}
 
-  desapuntarteActividad() { }
-
+  desapuntarteActividad() {}
 
   // Método que devuelve la info de la actividad por ID (mock)
   infoActividad(id: number): Observable<Actividad> {
     const actividadMock: Actividad = {
       id: 1,
       titulo: 'Running por la playa',
-      descripcion: 'Este fin de semana vamos a correr por la Playa Larga. Es un plan sencillo para disfrutar del mar y el amanecer mientras hacemos algo de ejercicio. El recorrido será cómodo, apto para cualquiera que quiera moverse y pasar un buen rato. Solo necesitas ropa deportiva y agua. Al terminar, nos quedamos un rato para estirar y charlar. ¿Te animas? :)',
+      descripcion:
+        'Este fin de semana vamos a correr por la Playa Larga. Es un plan sencillo para disfrutar del mar y el amanecer mientras hacemos algo de ejercicio. El recorrido será cómodo, apto para cualquiera que quiera moverse y pasar un buen rato. Solo necesitas ropa deportiva y agua. Al terminar, nos quedamos un rato para estirar y charlar. ¿Te animas? :)',
       fecha: '2025-11-20',
       hora: '08:00',
       ubicacion: 'Playa de Tokyo',
@@ -72,8 +96,7 @@ export class ActService {
     return of(actividadMock); // Devuelve un Observable simulando la respuesta HTTP
   }
 
-  ComprovarCreador() { }
+  ComprovarCreador() {}
 
-  estoyApuntado() { }
-
+  estoyApuntado() {}
 }
