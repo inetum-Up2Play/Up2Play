@@ -1,19 +1,23 @@
-<div class="grid grid-cols-1 md:grid-cols-2 px-30 py-15 mx-70 my-10 bg-white rounded-lg shadow">
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 p-4 sm:p-6 md:p-8 lg:p-10 mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto lg:max-w-6xl my-4 sm:my-6 md:my-10 bg-white rounded-lg shadow">
+
     @let act = actividad();
     @if (act) {
     <!-- Columna izquierda -->
-    <div>
-        <h1 class="text-3xl font-bold mb-2">{{ act.titulo }}</h1><br>
-        <p class="mb-4">Creado por el usuario con id: {{act.id_usuario_creador}}</p>
-        <p><span class="font-bold text-[#3D6C3F]">Deporte: </span>{{ act.deporte }}</p><br>
+    <div class="lg:pr-10">
+        <h1 class="text-3xl font-bold mb-2">{{ act.titulo }}</h1>
+        <p class="mb-4 text-sm">Creado por el usuario con id: {{act.id_usuario_creador}}</p><br>
+        <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
+            <span class="font-bold"> Deporte: </span>{{ act.deporte }}
+        </p><br>
 
-        <p class="mb-6 pr-10">{{ act.descripcion }}</p>
+        <p class="mb-6 text-justify">{{ act.descripcion }}</p>
 
-        <div class="space-y-2">
-            <div class="flex">
-            <strong>Nivel: </strong>{{ act.nivel }}
-            
-                <form [formGroup]="formRating">
+        <div class="space-y-2 mb-6">
+            <div class="flex items-center space-x-1">
+                <p><p-inputicon class="pi pi-chart-line" style="color: #3D6C3F" />
+                <strong class="mr-1"> Nivel: </strong>
+
+                <form [formGroup]="formRating" class="ml-2">
                     <p-rating formControlName="rating" [readonly]="true">
                         <ng-template #onicon>
                             <p-inputicon class="pi pi-flag-fill" />
@@ -25,23 +29,23 @@
                 </form>
             </div>
 
-            <p><strong>Punto de encuentro:</strong> {{ act.ubicacion }}</p>
-            <p><strong>Precio:</strong> {{ act.precio == '0' ? 'Gratuita' : act.precio + '€' }}</p>
+            <p><p-inputicon class="pi pi-map-marker" style="color: #3D6C3F" />
+                <strong> Punto de encuentro:</strong> {{ act.ubicacion }}
+            </p>
+            <p><p-inputicon class="pi pi-euro" style="color: #3D6C3F" />
+                <strong> Precio:</strong> {{ act.precio == '0' ? 'Gratuita' : act.precio + '€' }}
+            </p>
         </div>
 
-
-        <!-- Mapa -->
-        <div class="mt-6">
-        </div>
     </div>
 
     <!-- Columna derecha -->
-    <div>
-        <img class="rounded-md mb-8 aspect-3/2 max-w-md min-w-xs"
+    <div class="mt-8 lg:mt-0">
+        <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
             src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" alt="actividad-img">
-        <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="w-full rounded-lg mb-4"> -->   
+        <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"> -->
 
-        <p-card class="max-w-md">
+        <p-card class="w-full">
             <p><strong>Fecha</strong><br>{{ act.fecha }}</p>
             <p-divider></p-divider>
             <p><strong>Hora</strong><br>{{ act.hora }}</p>
@@ -54,6 +58,10 @@
         </div>
     </div>
 
-
+    <!-- Mapa -->
+    <div class="my-8 min-w-xs lg:col-span-full">
+        <img class="rounded-md"
+            src="https://www.esriuk.com/content/dam/esrisites/en-us/maps-we-love/48-os-open-basemaps/banner-main.jpg" alt="actividad-img">
+    </div>
     }
 </div>

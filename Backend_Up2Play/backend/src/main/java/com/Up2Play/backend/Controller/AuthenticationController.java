@@ -53,6 +53,8 @@ public class AuthenticationController {
         // Mapea a un DTO de respuesta para no exponer contraseña
         var response = new UsuarioResponseDto(
                 registrado.getId(),
+
+
                 registrado.getEmail(),
                 registrado.getNombreUsuario(),
                 registrado.isEnabled());

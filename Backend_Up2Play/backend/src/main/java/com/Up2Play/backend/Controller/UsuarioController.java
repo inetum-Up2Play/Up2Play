@@ -19,10 +19,9 @@ import org.springframework.security.core.Authentication;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Service.UsuarioService;
 
-
 //Controlador REST para operaciones CRUD de usuarios. Incluye endpoints que conectan con Angular en localhost:4200) pueda hacer peticiones a este backend.
 @RestController
-@RequestMapping("/auth/usuarios")
+@RequestMapping("/usuarios")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioController {
 
@@ -37,7 +36,7 @@ public class UsuarioController {
     }
 
     // Devuelve lista de usuarios.
-    @GetMapping("/usu")
+    @GetMapping
     public List<Usuario> getAllUsuarios() {
 
         return usuarioService.getAllUsuarios();
