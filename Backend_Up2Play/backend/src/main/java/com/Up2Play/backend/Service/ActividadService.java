@@ -11,6 +11,8 @@ import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
+import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
+import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreador;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
@@ -145,7 +147,7 @@ public class ActividadService {
 
     }
 
-    //Lista de actividades a las que un usuario no esta apuntado
+    // Lista de actividades a las que un usuario no esta apuntado
     @Transactional
     public List<ActividadDtoResp> getActividadesNoApuntadas(Long usuarioId) {
 
@@ -228,11 +230,9 @@ public class ActividadService {
         actividadRepository.deleteById(id);
     }
 
-
-
-    //Unirse a Actividad
+    // Unirse a Actividad
     @Transactional
-    public ActividadDtoResp unirActividad (Long idActividad , Long idUsuario){
+    public ActividadDtoResp unirActividad(Long idActividad, Long idUsuario) {
 
         Actividad act = actividadRepository.findById(idActividad)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
@@ -240,68 +240,81 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-
         if (!act.getUsuarios().contains(usuario)) {
             act.getUsuarios().add(usuario);
-            usuario.getActividadesUnidas().add(act);
+            if (act.getNum_pers_inscritas() > act.getNum_pers_totales()) {
+
+                throw new MaximosParticipantes("Se ha alcanzado el numero maximo de participantes en esta actividad");
+            } else {
+
+                act.setNum_pers_inscritas(act.getNum_pers_inscritas() + 1);
+                usuario.getActividadesUnidas().add(act);
+
+            }
+
         } else {
 
             throw new UsuarioYaApuntadoException("El usuario ya está apuntado a esta actividad");
         }
         usuarioRepository.save(usuario);
-    return new ActividadDtoResp(
-                        act.getId(),
-                        act.getNombre(),
-                        act.getDescripcion(),
-                        act.getFecha() != null ? act.getFecha().toString() : null,
-                        act.getUbicacion(),
-                        act.getDeporte(),
-                        act.getNivel() != null ? act.getNivel().name() : null,
-                        act.getNum_pers_inscritas(),
-                        act.getNum_pers_totales(),
-                        act.getEstado() != null ? act.getEstado().name() : null,
-                        act.getPrecio(),
-                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
-                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
+        return new ActividadDtoResp(
+                act.getId(),
+                act.getNombre(),
+                act.getDescripcion(),
+                act.getFecha() != null ? act.getFecha().toString() : null,
+                act.getUbicacion(),
+                act.getDeporte(),
+                act.getNivel() != null ? act.getNivel().name() : null,
+                act.getNum_pers_inscritas(),
+                act.getNum_pers_totales(),
+                act.getEstado() != null ? act.getEstado().name() : null,
+                act.getPrecio(),
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
     }
-    
 
-
-    //Desapuntarse a Actividad
+    // Desapuntarse a Actividad
     @Transactional
-    public ActividadDtoResp desapuntarActividad (Long idActividad , Long idUsuario){
-        
+    public ActividadDtoResp desapuntarActividad(Long idActividad, Long idUsuario) {
+
         Actividad act = actividadRepository.findById(idActividad)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-        if (!act.getUsuarios().contains(usuario)) {
-            throw new UsuarioNoApuntadoException("El usuario no está apuntado a esta actividad");
-        } else {
-            act.getUsuarios().remove(usuario);
-            usuario.getActividadesUnidas().remove(act);
+        if (act.getUsuarios().contains(usuario)) {
 
+            if (!act.getUsuarioCreador().equals(usuario)) {
+
+                act.getUsuarios().remove(usuario);
+                usuario.getActividadesUnidas().remove(act);
+                act.setNum_pers_inscritas(act.getNum_pers_inscritas() - 1);
+
+            } else {
+                throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
+            }
+
+        } else {
+
+            throw new UsuarioNoApuntadoException("El usuario no está apuntado a esta actividad");
         }
 
         usuarioRepository.save(usuario);
-    return new ActividadDtoResp(
-                        act.getId(),
-                        act.getNombre(),
-                        act.getDescripcion(),
-                        act.getFecha() != null ? act.getFecha().toString() : null,
-                        act.getUbicacion(),
-                        act.getDeporte(),
-                        act.getNivel() != null ? act.getNivel().name() : null,
-                        act.getNum_pers_inscritas(),
-                        act.getNum_pers_totales(),
-                        act.getEstado() != null ? act.getEstado().name() : null,
-                        act.getPrecio(),
-                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
-                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
+        return new ActividadDtoResp(
+                act.getId(),
+                act.getNombre(),
+                act.getDescripcion(),
+                act.getFecha() != null ? act.getFecha().toString() : null,
+                act.getUbicacion(),
+                act.getDeporte(),
+                act.getNivel() != null ? act.getNivel().name() : null,
+                act.getNum_pers_inscritas(),
+                act.getNum_pers_totales(),
+                act.getEstado() != null ? act.getEstado().name() : null,
+                act.getPrecio(),
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
 
     }
 }
-    
-

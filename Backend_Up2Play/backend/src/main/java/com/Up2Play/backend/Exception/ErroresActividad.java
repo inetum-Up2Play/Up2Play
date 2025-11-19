@@ -26,4 +26,16 @@ public class ErroresActividad {
         }
     }
 
+    public static class MaximosParticipantes extends RuntimeException {
+        public MaximosParticipantes(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioCreador extends RuntimeException {
+        public UsuarioCreador(String message) {
+            super(message);
+        }
+    }
+
 }
