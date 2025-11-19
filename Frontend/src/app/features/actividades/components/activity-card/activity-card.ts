@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -11,13 +11,18 @@ import { ButtonModule } from 'primeng/button';
 })
 
 export class ActivityCard {
-  titulo = input<string>();
-  fecha = input<string>();
-  hora = input<string>();
-  ubicacion = input<string>();
-  imagen = input<string>();
 
+  titulo = input.required<string>();
+  fecha = input.required<string>();
+  hora = input.required<string>();
+  ubicacion = input.required<string>();
+  imagen = input<string>('');
+
+  // Preparar evento al hacer click en "Unirse" i que el componente padre lo pueda capturar
+  join = output<void>();
+
+  //Botón ejecuta el join
   click() {
-    //Código de cuando clickas en apuntarte a una actividad
+    this.join.emit();
   }
 }
