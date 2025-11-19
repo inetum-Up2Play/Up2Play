@@ -179,7 +179,7 @@ public class ActividadService {
         act.setNivel(NivelDificultad.fromValue(input.getNivel()));
 
 
-        int num_personas_totales = Integer.parseInt(input.getNum_pers_totales());
+        int num_personas_totales = Integer.parseInt(input.getnumPersTotales());
 
         if (num_personas_totales == 0) {
             act.setNum_pers_totales(1);
@@ -198,7 +198,8 @@ public class ActividadService {
     }
 
     //Unirse a Actividad
-    public Actividad unirActividad (Long idActividad , Long idUsuario){
+    @Transactional
+    public ActividadDtoResp unirActividad (Long idActividad , Long idUsuario){
         Actividad act = actividadRepository.findById(idActividad)
             .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
         
@@ -207,11 +208,28 @@ public class ActividadService {
         
         act.getUsuarios().add(usuario);
         usuario.getActividadesUnidas().add(act);
-        return actividadRepository.save(act);
+        usuarioRepository.save(usuario);
+    return new ActividadDtoResp(
+                        act.getId(),
+                        act.getNombre(),
+                        act.getDescripcion(),
+                        act.getFecha() != null ? act.getFecha().toString() : null,
+                        act.getUbicacion(),
+                        act.getDeporte(),
+                        act.getNivel() != null ? act.getNivel().name() : null,
+                        act.getNum_pers_inscritas(),
+                        act.getNum_pers_totales(),
+                        act.getEstado() != null ? act.getEstado().name() : null,
+                        act.getPrecio(),
+                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
+                
     }
+    
 
     //Desapuntarse a Actividad
-    public Actividad desapuntarActividad (Long idActividad , Long idUsuario){
+    @Transactional
+    public ActividadDtoResp desapuntarActividad (Long idActividad , Long idUsuario){
         Actividad act = actividadRepository.findById(idActividad)
             .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
         
@@ -220,6 +238,23 @@ public class ActividadService {
         
         act.getUsuarios().remove(usuario);
         usuario.getActividadesUnidas().remove(act);
-        return actividadRepository.save(act);
+        usuarioRepository.save(usuario);
+    return new ActividadDtoResp(
+                        act.getId(),
+                        act.getNombre(),
+                        act.getDescripcion(),
+                        act.getFecha() != null ? act.getFecha().toString() : null,
+                        act.getUbicacion(),
+                        act.getDeporte(),
+                        act.getNivel() != null ? act.getNivel().name() : null,
+                        act.getNum_pers_inscritas(),
+                        act.getNum_pers_totales(),
+                        act.getEstado() != null ? act.getEstado().name() : null,
+                        act.getPrecio(),
+                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                        act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
+                
     }
 }
+    
+

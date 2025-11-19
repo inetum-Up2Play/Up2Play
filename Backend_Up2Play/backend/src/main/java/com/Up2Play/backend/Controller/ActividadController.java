@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,23 +23,19 @@ import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.ActividadService;
-import com.Up2Play.backend.Service.JwtService;
 
 import jakarta.transaction.Transactional;
 
 @RestController
-@RequestMapping("/auth/actividades")
+@RequestMapping("/actividades")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ActividadController {
 
     private final ActividadService actividadService;
-    private final JwtService jwtService;
     private final UsuarioRepository usuarioRepository;
 
-    public ActividadController(ActividadService actividadService, JwtService jwtService,
-            UsuarioRepository usuarioRepository) {
+    public ActividadController(ActividadService actividadService, UsuarioRepository usuarioRepository) {
         this.actividadService = actividadService;
-        this.jwtService = jwtService;
         this.usuarioRepository = usuarioRepository;
     }
 
@@ -50,14 +45,16 @@ public class ActividadController {
         return actividadService.getAllActividades();
     }
 
-   /* @GetMapping("/getCreadas")
+   /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
+   @GetMapping("/getCreadas")
     public List<ActividadDtoCreadas> getActividadesCreadas(@RequestHeader String token) {
         String email = jwtService.extractUsername(token);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return actividadService.getActividadesCreadas(usuario);
     }
-        */
+    */
+
     @GetMapping("/getCreadas")
     public List<ActividadDtoCreadas> getActividadesCreadas(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
@@ -65,7 +62,8 @@ public class ActividadController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return actividadService.getActividadesCreadas(usuario);
     }
-    /* 
+
+    /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
     @GetMapping("/getApuntadas")
     public List<ActividadDtoResp> getActividadesApuntadas(@RequestHeader String token) {
 
@@ -76,16 +74,18 @@ public class ActividadController {
         return actividadService.getActividadesApuntadas(usuariosId);
     }
     */
+
    @GetMapping("/getApuntadas")
     public List<ActividadDtoResp> getActividadesApuntadas(@AuthenticationPrincipal UserDetails principal) {
-
+        //el getUsername recoge el correo, no el username
         String email = principal.getUsername();
+        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();
         return actividadService.getActividadesApuntadas(usuariosId);
     }
-    @GetMapping("/getPorId/{id}")
+    @GetMapping("/{id}")
     public ActividadDtoResp getActividad(@PathVariable Long id) {
         return actividadService.getActividad(id);
     }
@@ -101,13 +101,13 @@ public class ActividadController {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        System.out.println("HOLA" + email + usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+
         actividadService.crearActividad(actividadDto, usuario);
-        return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva nueva actividad."));
+        return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva actividad."));
     }
 
-    /*@Transactional
+    /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
+    @Transactional
     @PostMapping("/crearActividad")
     public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader String token) {
         String email = jwtService.extractUsername(token);
@@ -119,17 +119,28 @@ public class ActividadController {
         return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva nueva actividad."));
     } */
 
-    /*
-     @PostMapping("/unirseActividad/{id}")
-     public ResponseEntity<?> unirActividad (@PathVariable Long idActividad,  @RequestHeader String token) {
-
-     }
-     */
-     //@PutMapping("/desapuntarseActividad/{id}")
+    
+    @PutMapping("/{id}/participantes")
+    public ResponseEntity<?> unirActividad (@PathVariable("id") Long idActividad,  @AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        actividadService.unirActividad(idActividad, usuario.getId());
+        return ResponseEntity.ok(Map.of("message", "Te has unido a la actividad."));
+    }
+    
+    @DeleteMapping("/{id}/participantes")
+    public ResponseEntity<?> desapuntarActividad (@PathVariable("id") Long idActividad,  @AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        actividadService.desapuntarActividad(idActividad, usuario.getId());
+        return ResponseEntity.ok(Map.of("message", "Te has desapuntado de la actividad."));
+    }
      
     // el controlador funciona, pero hay que comprovar si solo puede editar la
     // actividad el creador
-    @PutMapping("/editarActividad/{id}")
+    @PutMapping("editarActividad/{id}")
     public ResponseEntity<?> editarActividad(@PathVariable Long id,
             @RequestBody EditarActividadDto editarActividadDto) {
         actividadService.editarActividad(id, editarActividadDto);
