@@ -1,8 +1,7 @@
 package com.Up2Play.backend.Model;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 

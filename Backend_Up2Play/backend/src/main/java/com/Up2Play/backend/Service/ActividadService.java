@@ -68,6 +68,12 @@ public class ActividadService {
         act.setEstado(EstadoActividad.fromValue("Pendiente"));
         act.setUsuarioCreador(usuario);
 
+        Usuario usuarioApuntado = usuarioRepository.findById(usuario.getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        act.getUsuarios().add(usuario);
+        usuarioApuntado.getActividadesUnidas().add(act);
+
+
+
         Actividad actGuardada = actividadRepository.save(act);
 
         return actGuardada;
@@ -195,7 +201,7 @@ public class ActividadService {
     }
 
     //Unirse a Actividad
-    public Actividad unirteActividad (Long idActividad , Long idUsuario){
+    public Actividad unirActividad (Long idActividad , Long idUsuario){
         Actividad act = actividadRepository.findById(idActividad)
             .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
         
@@ -208,7 +214,7 @@ public class ActividadService {
     }
 
     //Desapuntarse a Actividad
-    public Actividad desapunrarteActividad (Long idActividad , Long idUsuario){
+    public Actividad desapuntarActividad (Long idActividad , Long idUsuario){
         Actividad act = actividadRepository.findById(idActividad)
             .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
         
