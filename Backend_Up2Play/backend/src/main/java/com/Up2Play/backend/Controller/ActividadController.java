@@ -89,10 +89,13 @@ public class ActividadController {
     }
 
     /*
-     * @PostMapping("/unirseActividad/{id}")
-     * 
-     * @PutMapping("/desapuntarseActividad/{id}")
+     @PostMapping("/unirseActividad/{id}")
+     public ResponseEntity<?> unirActividad (@PathVariable Long idActividad,  @RequestHeader String token) {
+
+     }
      */
+     //@PutMapping("/desapuntarseActividad/{id}")
+     
     // el controlador funciona, pero hay que comprovar si solo puede editar la
     // actividad el creador
     @PutMapping("/editarActividad/{id}")
