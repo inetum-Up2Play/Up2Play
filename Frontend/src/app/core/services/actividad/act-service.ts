@@ -51,7 +51,7 @@ export class ActService {
     );
   }
 
-  listarActividadedsCreadas() {
+  listarActividadesCreadas() {
     return this.http.get(this.baseUrl + '/getCreadas', {}).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
@@ -60,8 +60,18 @@ export class ActService {
       })
     );
   }
+
+
+  listarActividadesNoApuntadas(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getNoApuntadas').pipe(
+      catchError(error => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
+      })
+    );
+  }
   
-    deleteActividad(id: number) {
+  deleteActividad(id: number) {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {

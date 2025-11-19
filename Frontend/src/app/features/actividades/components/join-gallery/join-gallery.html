@@ -1,1 +1,26 @@
-<p>join-gallery works!</p>
+<div class="pb-8 p-20">
+    <div class="grid grid-cols-4">
+      @for (act of visibleActivities; track act.id) {
+        <app-activity-card
+          [titulo]="act.nombre"
+          [fecha]="act.fecha"
+          [hora]="extraerHora(act.fecha)"
+          [ubicacion]="act.ubicacion"
+          [imagen]="act.imagen || '/assets/default.jpg'">
+        </app-activity-card>
+      }
+    </div>
+    
+    <div class="flex justify-end p-8">
+      @if (visibleActivities.length < activities.length) {
+        <p-button 
+          label="Ver más" 
+          variant="outlined" 
+          icon="pi pi-refresh" 
+          severity="contrast" 
+          (onClick)="loadMore()">
+        </p-button>
+      }
+    </div>
+
+</div>
