@@ -5,7 +5,6 @@ public record ActividadDtoResp(
     String nombre,
     String descripcion,
     String fecha,
-    String hora,
     String ubicacion,
     String deporte,
     String nivel,

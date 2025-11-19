@@ -5,7 +5,6 @@ public class EditarActividadDto {
     private String nombre;
     private String descripcion;
     private String fecha;
-    private String hora;
     private String ubicacion;
     private String deporte;
     private String nivel;
@@ -29,12 +28,6 @@ public class EditarActividadDto {
     }
     public void setFecha(String fecha) {
         this.fecha = fecha;
-    }
-    public String getHora() {
-        return hora;
-    }
-    public void setHora(String hora) {
-        this.hora = hora;
     }
     public String getUbicacion() {
         return ubicacion;
