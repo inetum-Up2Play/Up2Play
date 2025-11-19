@@ -4,7 +4,7 @@ package com.Up2Play.backend.Model.enums;
 public enum NivelDificultad {
 
     INICIADO("Iniciado"),
-    PARTICIPANTE("Principiante"),
+    PRINCIPIANTE("Principiante"),
     INTERMEDIO("Intermedio"),
     AVANZADO("Avanzado"),
     EXPERTO("Experto");

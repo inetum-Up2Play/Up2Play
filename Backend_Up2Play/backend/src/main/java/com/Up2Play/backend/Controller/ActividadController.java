@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,14 +50,22 @@ public class ActividadController {
         return actividadService.getAllActividades();
     }
 
-    @GetMapping("/getCreadas")
+   /* @GetMapping("/getCreadas")
     public List<ActividadDtoCreadas> getActividadesCreadas(@RequestHeader String token) {
         String email = jwtService.extractUsername(token);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return actividadService.getActividadesCreadas(usuario);
     }
-
+        */
+    @GetMapping("/getCreadas")
+    public List<ActividadDtoCreadas> getActividadesCreadas(@AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return actividadService.getActividadesCreadas(usuario);
+    }
+    /* 
     @GetMapping("/getApuntadas")
     public List<ActividadDtoResp> getActividadesApuntadas(@RequestHeader String token) {
 
@@ -65,7 +75,16 @@ public class ActividadController {
         Long usuariosId = usuario.getId();
         return actividadService.getActividadesApuntadas(usuariosId);
     }
+    */
+   @GetMapping("/getApuntadas")
+    public List<ActividadDtoResp> getActividadesApuntadas(@AuthenticationPrincipal UserDetails principal) {
 
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Long usuariosId = usuario.getId();
+        return actividadService.getActividadesApuntadas(usuariosId);
+    }
     @GetMapping("/getPorId/{id}")
     public ActividadDtoResp getActividad(@PathVariable Long id) {
         return actividadService.getActividad(id);
@@ -78,6 +97,18 @@ public class ActividadController {
 
     @Transactional
     @PostMapping("/crearActividad")
+    public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        System.out.println("HOLA" + email + usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+        actividadService.crearActividad(actividadDto, usuario);
+        return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva nueva actividad."));
+    }
+
+    /*@Transactional
+    @PostMapping("/crearActividad")
     public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader String token) {
         String email = jwtService.extractUsername(token);
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -86,7 +117,7 @@ public class ActividadController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
         actividadService.crearActividad(actividadDto, usuario);
         return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva nueva actividad."));
-    }
+    } */
 
     /*
      @PostMapping("/unirseActividad/{id}")
