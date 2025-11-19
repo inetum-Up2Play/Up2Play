@@ -12,15 +12,18 @@ import { SelectModule } from 'primeng/select';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ActService } from '../../../../core/services/actividad/act-service';
 
 @Component({
   selector: 'app-crear-actividad',
-  imports: [ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
+  imports: [ActService, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
   templateUrl: './crear-actividad.html',
   styleUrl: './crear-actividad.scss'
 })
 export class CrearActividad {
   messageService = inject(MessageService);
+
+  actService = inject(ActService);
 
   actividadForm: FormGroup;
 
@@ -67,12 +70,6 @@ export class CrearActividad {
         detail: 'Revisa los campos marcados.'
       });
       return;
-    } else {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Formulario correcto',
-        detail: 'Tu actividad ha sido creada.'
-      });
     }
 
     const raw = this.actividadForm.value;
@@ -95,10 +92,19 @@ export class CrearActividad {
     console.log('Payload listo para API:', payload);
 
     // Llamada a servicio
-    // this.miServicio.crearActividad(payload).subscribe({
-    //   next: () => this.messageService.add({severity:'success', summary:'OK', detail:'Actividad creada'}),
-    //   error: (e) => this.messageService.add({severity:'error', summary:'Error', detail:'No se pudo crear'})
-    // });
+    this.actService.crearActividad(payload).subscribe({
+      next: () => this.messageService.add({
+        severity: 'success',
+        summary: 'OK',
+        detail: 'Actividad creada'
+      }),
+      error: (e) => this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo crear'
+      })
+    });
+
   }
 
   isInvalid(controlName: string): boolean {

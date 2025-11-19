@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actividad } from '../../models/Actividad';
 import { Observable, of } from 'rxjs';
+import { AuthService } from '../auth/auth-service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,19 @@ export class ActService {
   private baseUrl = 'http://localhost:8080/actividades';
   private logoutTimer: any;
 
-  crearActividad() { }
+  constructor(private authService: AuthService) { }
+
+  crearActividad(payload: any): Observable<any> {
+    const token = this.authService.token;
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    // POST al endpoint del backend
+    return this.http.post<any>(`${this.baseUrl + '/crearActividad'}`, payload, { headers });
+  }
+
 
   editarActividad() {
 
