@@ -9,7 +9,6 @@ public class EditarActividadDto {
     private String deporte;
     private String nivel;
     private String num_pers_totales;
-    private String precio; //editar precio? que pasa con las personas que ya se ha apuntado?
 
     public String getNombre() {
         return nombre;
@@ -47,12 +46,7 @@ public class EditarActividadDto {
     public void setNum_pers_totales(String num_pers_totales) {
         this.num_pers_totales = num_pers_totales;
     }
-    public String getPrecio() {
-        return precio;
-    }
-    public void setPrecio(String precio) {
-        this.precio = precio;
-    }
+   
     public String getDeporte() {
         return deporte;
     }
