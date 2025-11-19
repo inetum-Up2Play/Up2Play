@@ -12,6 +12,7 @@ import { SelectModule } from 'primeng/select';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ActService } from '../../../../core/services/actividad/act-service';
 
 @Component({
   selector: 'app-crear-actividad',
@@ -22,6 +23,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class CrearActividad {
   messageService = inject(MessageService);
 
+  actService = inject(ActService);
+
   actividadForm: FormGroup;
 
   formSubmitted = false;
@@ -30,22 +33,18 @@ export class CrearActividad {
     return n < 10 ? `0${n}` : `${n}`;
   }
 
-  private formatFecha(d: Date): string {
-    // Resultado: dd-MM-yyyy (sin zonas horarias)
-    const day = this.pad2(d.getDate());
-    const month = this.pad2(d.getMonth() + 1);
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
-  }
+  private formatDateTime(fecha: Date, hora: Date): string {
+    const year = fecha.getFullYear();
+    const month = this.pad2(fecha.getMonth() + 1);
+    const day = this.pad2(fecha.getDate());
 
-  private formatHora(d: Date): string {
-    // Resultado: HH:mm:ss (24h)
-    const hh = this.pad2(d.getHours());
-    const mm = this.pad2(d.getMinutes());
-    const ss = this.pad2(d.getSeconds());
-    return `${hh}:${mm}:${ss}`;
-  }
+    const hh = this.pad2(hora.getHours());
+    const mm = this.pad2(hora.getMinutes());
+    const ss = this.pad2(hora.getSeconds());
 
+    // Resultado: YYYY-MM-DDThh:mm:ss
+    return `${year}-${month}-${day}T${hh}:${mm}:${ss}`;
+  }
 
   constructor(private fb: FormBuilder) {
     this.actividadForm = this.fb.group({
@@ -71,12 +70,6 @@ export class CrearActividad {
         detail: 'Revisa los campos marcados.'
       });
       return;
-    } else {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Formulario correcto',
-        detail: 'Tu actividad ha sido creada.'
-      });
     }
 
     const raw = this.actividadForm.value;
@@ -88,8 +81,7 @@ export class CrearActividad {
     const payload = {
       nombre: raw.nombre?.trim(),
       descripcion: raw.descripcion?.trim(),
-      fecha: this.formatFecha(fechaDate), // "dd-MM-yyyy"
-      hora: this.formatHora(horaDate),    // "HH:mm:ss"
+      fecha: this.formatDateTime(fechaDate, horaDate), // <-- único campo combinado
       ubicacion: raw.ubicacion?.trim(),
       deporte: raw.deporte?.name ?? raw.deporte ?? null, // envia string
       nivel: raw.nivel?.name ?? raw.nivel ?? null, // envia string
@@ -100,10 +92,19 @@ export class CrearActividad {
     console.log('Payload listo para API:', payload);
 
     // Llamada a servicio
-    // this.miServicio.crearActividad(payload).subscribe({
-    //   next: () => this.messageService.add({severity:'success', summary:'OK', detail:'Actividad creada'}),
-    //   error: (e) => this.messageService.add({severity:'error', summary:'Error', detail:'No se pudo crear'})
-    // });
+    this.actService.crearActividad(payload).subscribe({
+      next: () => this.messageService.add({
+        severity: 'success',
+        summary: 'OK',
+        detail: 'Actividad creada'
+      }),
+      error: (e) => this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo crear'
+      })
+    });
+
   }
 
   isInvalid(controlName: string): boolean {

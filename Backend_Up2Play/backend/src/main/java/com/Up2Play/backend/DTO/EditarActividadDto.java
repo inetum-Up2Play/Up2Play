@@ -1,6 +1,6 @@
 package com.Up2Play.backend.DTO;
 
-public class ActividadDto {
+public class EditarActividadDto {
 
     private String nombre;
     private String descripcion;
@@ -8,9 +8,7 @@ public class ActividadDto {
     private String ubicacion;
     private String deporte;
     private String nivel;
-    private String estado;
     private String num_pers_totales;
-    private String precio;
 
     public String getNombre() {
         return nombre;
@@ -30,7 +28,6 @@ public class ActividadDto {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-
     public String getUbicacion() {
         return ubicacion;
     }
@@ -49,24 +46,14 @@ public class ActividadDto {
     public void setNum_pers_totales(String num_pers_totales) {
         this.num_pers_totales = num_pers_totales;
     }
-    public String getPrecio() {
-        return precio;
-    }
-    public void setPrecio(String precio) {
-        this.precio = precio;
-    }
+   
     public String getDeporte() {
         return deporte;
     }
     public void setDeporte(String deporte) {
         this.deporte = deporte;
     }
-    public String getEstado() {
-        return estado;
-    }
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+   
 
     
 
