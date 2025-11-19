@@ -1,0 +1,21 @@
+@use 'styles/variables' as vars;
+
+:host ::ng-deep .card {
+    width: 25rem;
+    overflow: hidden;
+    font-family: vars.$work-sans;
+}
+
+.title {
+    font-weight: bold;
+    font-size: larger;
+}
+
+:host ::ng-deep .button .p-button {
+    background-color: vars.$verde-oliva; 
+    border: none; 
+}
+
+:host ::ng-deep .button .p-button:hover {
+    background-color: #204718; 
+}
