@@ -20,6 +20,7 @@ import com.Up2Play.backend.DTO.ActividadDto;
 import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
+import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.ActividadService;
@@ -41,9 +42,9 @@ public class ActividadController {
 
     @GetMapping("/getAll")
     public List<ActividadDtoResp> getAllActividades() {
-
         return actividadService.getAllActividades();
     }
+
 
    /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
    @GetMapping("/getCreadas")
@@ -55,6 +56,7 @@ public class ActividadController {
     }
     */
 
+
     @GetMapping("/getCreadas")
     public List<ActividadDtoCreadas> getActividadesCreadas(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
@@ -62,6 +64,7 @@ public class ActividadController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         return actividadService.getActividadesCreadas(usuario);
     }
+
 
     /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
     @GetMapping("/getApuntadas")
@@ -76,18 +79,30 @@ public class ActividadController {
     */
 
    @GetMapping("/getApuntadas")
+
     public List<ActividadDtoResp> getActividadesApuntadas(@AuthenticationPrincipal UserDetails principal) {
         //el getUsername recoge el correo, no el username
         String email = principal.getUsername();
         System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();
         return actividadService.getActividadesApuntadas(usuariosId);
     }
+
     @GetMapping("/{id}")
     public ActividadDtoResp getActividad(@PathVariable Long id) {
         return actividadService.getActividad(id);
+    }
+    
+    @GetMapping("getNoApuntadas")
+     public List<ActividadDtoResp> getActividadesNoApuntadas(@AuthenticationPrincipal UserDetails principal) {
+
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Long usuariosId = usuario.getId();
+        return actividadService.getActividadesNoApuntadas(usuariosId);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -97,14 +112,15 @@ public class ActividadController {
 
     @Transactional
     @PostMapping("/crearActividad")
-    public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto,
+            @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         actividadService.crearActividad(actividadDto, usuario);
         return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva actividad."));
     }
+
 
     /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
     @Transactional
@@ -124,7 +140,7 @@ public class ActividadController {
     public ResponseEntity<?> unirActividad (@PathVariable("id") Long idActividad,  @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         actividadService.unirActividad(idActividad, usuario.getId());
         return ResponseEntity.ok(Map.of("message", "Te has unido a la actividad."));
     }
@@ -133,13 +149,12 @@ public class ActividadController {
     public ResponseEntity<?> desapuntarActividad (@PathVariable("id") Long idActividad,  @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         actividadService.desapuntarActividad(idActividad, usuario.getId());
         return ResponseEntity.ok(Map.of("message", "Te has desapuntado de la actividad."));
     }
      
-    // el controlador funciona, pero hay que comprovar si solo puede editar la
-    // actividad el creador
+
     @PutMapping("editarActividad/{id}")
     public ResponseEntity<?> editarActividad(@PathVariable Long id,
             @RequestBody EditarActividadDto editarActividadDto) {
