@@ -63,6 +63,7 @@
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
+			<version>19.3.0.0</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
@@ -129,7 +130,7 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
-		
+
 		<!-- Paquet amb serveis de testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -148,10 +149,10 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-  			<scope>test</scope>
+			<scope>test</scope>
 		</dependency>
 
-		
+
 		<!-- *** Módulo específico Oracle: imprescindible *** -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -196,7 +197,7 @@
 				<configuration>
 					<useModulePath>false</useModulePath>
 					<systemPropertyVariables>
-					<spring.profiles.active>test</spring.profiles.active>
+						<spring.profiles.active>test</spring.profiles.active>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>

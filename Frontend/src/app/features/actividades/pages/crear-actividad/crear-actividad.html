@@ -1,0 +1,110 @@
+<main class="pt-5 pb-5 md:pt-8 md:pb-8">
+    <p-toast position="top-right"></p-toast>
+    <div class="formulario w-[80%] min-w-xs p-4 w-380 md:max-w-5xl md:w-[70%] lg:w-[75%] card flex justify-center">
+        <h1>CREA TU ACTIVIDAD</h1>
+        <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center gap-4 w-full">
+            <div class="flex flex-col gap-1 w-full">
+                <label for="nombre" class="flex items-center gap-2">
+                    <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
+                    Título
+                </label>
+                <input pInputText type="text" id="nombre" formControlName="nombre" [invalid]="isInvalid('nombre')" />
+                @if (isInvalid('nombre')) {
+                <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
+                }
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <label for="descripcion" class="flex items-center gap-2">
+                    <i class="pi pi-receipt"></i> <!-- Icono PrimeIcons -->
+                    Descripción
+                </label>
+                <textarea rows="5" cols="30" pTextarea id="descripcion" formControlName="descripcion"
+                    [invalid]="isInvalid('descripcion')"></textarea>
+                @if (isInvalid('descripcion')) {
+                <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
+                }
+            </div>
+            <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="deporte" class="flex items-center gap-2">
+                        <i class="pi pi-trophy"></i> <!-- Icono PrimeIcons -->
+                        Deporte
+                    </label>
+                    <p-select [options]="deportes" formControlName="deporte" optionLabel="name" [filter]="true"
+                        filterBy="name" [showClear]="true" class="w-full">
+                        <ng-template #selectedItem let-deporteEscogido>
+                            <div class="flex items-center gap-2">
+                                <div>{{ deporteEscogido.name }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-deportes #item>
+                            <div class="flex items-center gap-2">
+                                <div>{{ deportes.name }}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="num_pers_totales" class="flex items-center gap-2">
+                        <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
+                        Máximos participantes
+                    </label>
+                    <p-inputNumber [min]="1" formControlName="num_pers_totales" id="num_pers_totales"
+                        pKeyFilter="int" />
+                </div>
+            </div>
+            <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="num_pers_totales" class="flex items-center gap-2">
+                        <i class="pi pi-calendar-minus"></i> <!-- Icono PrimeIcons -->
+                        Fecha
+                    </label>
+                    <p-datepicker formControlName="fecha" dateFormat="dd-mm-yy" [invalid]="isInvalid('fecha')" />
+                    @if (isInvalid('fecha')) {
+                    <p-message severity="error" size="small" variant="simple">Fecha requerida.</p-message>
+                    }
+                </div>
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="num_pers_totales" class="flex items-center gap-2">
+                        <i class="pi pi-clock"></i> <!-- Icono PrimeIcons -->
+                        Hora
+                    </label>
+                    <p-datepicker inputId="hora" formControlName="hora" [timeOnly]="true"
+                        [invalid]="isInvalid('hora')" />
+                    @if (isInvalid('hora')) {
+                    <p-message severity="error" size="small" variant="simple">Especifica una hora.</p-message>
+                    }
+                </div>
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+                <label for="num_pers_totales" class="flex items-center gap-2">
+                    <i class="pi pi-map-marker"></i> <!-- Icono PrimeIcons -->
+                    Ubicación
+                </label>
+                <input pInputText type="text" formControlName="ubicacion"
+                    placeholder="Ej. Polideportivo Municipal, Calle Mayor 123" [invalid]="isInvalid('ubicacion')" />
+                @if (isInvalid('ubicacion')) {
+                <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
+                }
+            </div>
+            <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="num_pers_totales" class="flex items-center gap-2">
+                        <i class="pi pi-flag"></i> <!-- Icono PrimeIcons -->
+                        Nivel
+                    </label>
+                    <p-select [options]="niveles" formControlName="nivel" optionLabel="name" class="w-full" />
+                </div>
+                <div class="flex flex-col gap-1 w-full">
+                    <label for="num_pers_totales" class="flex items-center gap-2">
+                        <i class="pi pi-euro"></i> <!-- Icono PrimeIcons -->
+                        Precio
+                    </label>
+                    <p-inputnumber formControlName="precio" placeholder="0,00 €" mode="currency"
+                        inputId="currency-germany" currency="EUR" locale="de-DE" />
+                </div>
+            </div>
+            <button pButton severity="secondary" type="submit"><span pButtonLabel>Crear Actividad</span></button>
+        </form>
+    </div>
+</main>
