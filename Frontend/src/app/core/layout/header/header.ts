@@ -4,9 +4,9 @@ import {
   ElementRef,
   inject,
   signal,
-  ViewChild,
+  ViewChild, Renderer2
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { MenubarModule } from 'primeng/menubar';
 import { RippleModule } from 'primeng/ripple';
 import { BadgeModule } from 'primeng/badge';
@@ -49,6 +49,9 @@ export class Header {
   private router = inject(Router);
   visible = false;
 
+  private renderer = inject(Renderer2); // Para manipular el DOM
+  private document = inject(DOCUMENT); // Referencia al Documento
+
   items: MenuItemPages[] = [
     { label: 'Inicio', icon: 'pi pi-home', route: '/' },
     { label: 'Actividades', icon: 'pi pi-bookmark', route: '/actividades' },
@@ -83,6 +86,7 @@ export class Header {
         command: () => this.logout(),
       },
     ];
+    this.renderer.addClass(this.document.body, 'header-background-active');
   }
 
   logout(): void {
@@ -119,6 +123,7 @@ export class Header {
   // Se elimina el recurso si sales del componente(ej login)
   ngOnDestroy() {
     this.ro?.disconnect();
+    this.renderer.removeClass(this.document.body, 'header-background-active');
   }
-    
+
 }

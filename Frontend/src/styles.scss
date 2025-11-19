@@ -65,6 +65,13 @@ Here has to be imported the other style files (from the src/styles/)
   color: vars.$verde-oliva !important;
 }
 
+.header-background-active {
+    background-image: url('/assets/background/fondo_ok.webp'); /* Reemplaza con la URL correcta */
+    background-size: cover; /* Cubre todo el viewport */
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Opcional: para que el fondo no se mueva al hacer scroll */
+}
+
 
 
 
