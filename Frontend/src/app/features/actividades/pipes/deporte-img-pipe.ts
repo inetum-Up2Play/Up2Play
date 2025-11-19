@@ -5,8 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DeporteImgPipe implements PipeTransform {
 
-  
-transform(deporte: string): string {
+
+  transform(deporte: string): string {
     const cdnBase = 'https://cdn.tu-servidor.com/deportes/';
     const map: Record<string, string> = {
       'Arquería': 'arqueria.jpg',
@@ -16,7 +16,6 @@ transform(deporte: string): string {
       'Béisbol': 'beisbol.jpg',
       'Billar': 'billar.jpg',
       'Boxeo': 'boxeo.jpg',
-      'Canotaje': 'canotaje.jpg',
       'Críquet': 'criquet.jpg',
       'Ciclismo': 'ciclismo.jpg',
       'Escalada': 'escalada.jpg',
@@ -31,6 +30,7 @@ transform(deporte: string): string {
       'Natación': 'natacion.jpg',
       'Patinaje': 'patinaje.jpg',
       'Ping Pong': 'pingpong.jpg',
+      'Piragüismo': 'piragüismo.jpg',
       'Rugby': 'rugby.jpg',
       'Remo': 'remo.jpg',
       'Snowboard': 'snowboard.jpg',
@@ -47,6 +47,7 @@ transform(deporte: string): string {
       'Capoeira': 'capoeira.jpg',
       'Crossfit': 'crossfit.jpg',
       'Danza Deportiva': 'danza-deportiva.jpg',
+      'Entrenamiento de fuerza': 'entrenamiento-fuerza.jpg',
       'Equitación': 'equitacion.jpg',
       'Fútbol Americano': 'futbol-americano.jpg',
       'Kickboxing': 'kickboxing.jpg',
@@ -54,7 +55,6 @@ transform(deporte: string): string {
       'Motocross': 'motocross.jpg',
       'Padel': 'padel.jpg',
       'Parkour': 'parkour.jpg',
-      'Pesas': 'pesas.jpg',
       'Raquetbol': 'raquetbol.jpg',
       'Skateboarding': 'skateboarding.jpg',
       'Squash': 'squash.jpg',
