@@ -16,7 +16,7 @@ import { ActService } from '../../../../core/services/actividad/act-service';
 
 @Component({
   selector: 'app-crear-actividad',
-  imports: [ActService, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
+  imports: [ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
   templateUrl: './crear-actividad.html',
   styleUrl: './crear-actividad.scss'
 })
@@ -81,7 +81,7 @@ export class CrearActividad {
     const payload = {
       nombre: raw.nombre?.trim(),
       descripcion: raw.descripcion?.trim(),
-      fechaHora: this.formatDateTime(fechaDate, horaDate), // <-- único campo combinado
+      fecha: this.formatDateTime(fechaDate, horaDate), // <-- único campo combinado
       ubicacion: raw.ubicacion?.trim(),
       deporte: raw.deporte?.name ?? raw.deporte ?? null, // envia string
       nivel: raw.nivel?.name ?? raw.nivel ?? null, // envia string
@@ -131,6 +131,7 @@ export class CrearActividad {
       { name: 'Béisbol' },
       { name: 'Billar' },
       { name: 'Boxeo' },
+      { name: 'Canotaje' },
       { name: 'Críquet' },
       { name: 'Ciclismo' },
       { name: 'Escalada' },
@@ -145,7 +146,6 @@ export class CrearActividad {
       { name: 'Natación' },
       { name: 'Patinaje' },
       { name: 'Ping Pong' },
-      { name: 'Piragüismo' },
       { name: 'Rugby' },
       { name: 'Remo' },
       { name: 'Snowboard' },
@@ -162,7 +162,6 @@ export class CrearActividad {
       { name: 'Capoeira' },
       { name: 'Crossfit' },
       { name: 'Danza Deportiva' },
-      { name: 'Entrenamiento de fuerza' },
       { name: 'Equitación' },
       { name: 'Fútbol Americano' },
       { name: 'Kickboxing' },
@@ -170,6 +169,7 @@ export class CrearActividad {
       { name: 'Motocross' },
       { name: 'Padel' },
       { name: 'Parkour' },
+      { name: 'Pesas' },
       { name: 'Raquetbol' },
       { name: 'Skateboarding' },
       { name: 'Squash' },

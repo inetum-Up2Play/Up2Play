@@ -29,7 +29,7 @@ import com.Up2Play.backend.Service.JwtService;
 import jakarta.transaction.Transactional;
 
 @RestController
-@RequestMapping("/auth/actividades")
+@RequestMapping("/actividades")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ActividadController {
 
@@ -99,6 +99,7 @@ public class ActividadController {
     @PostMapping("/crearActividad")
     public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
+        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         System.out.println("HOLA" + email + usuarioRepository.findByEmail(email)

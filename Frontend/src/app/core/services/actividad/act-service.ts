@@ -18,14 +18,8 @@ export class ActService {
   constructor(private authService: AuthService) { }
 
   crearActividad(payload: any): Observable<any> {
-    const token = this.authService.token;
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     // POST al endpoint del backend
-    return this.http.post<any>(`${this.baseUrl + '/crearActividad'}`, payload, { headers });
+    return this.http.post<any>(`${this.baseUrl + '/crearActividad'}`, payload);
   }
 
 
