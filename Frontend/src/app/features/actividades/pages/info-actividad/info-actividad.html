@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div
     class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 p-4 sm:p-6 md:p-8 lg:p-10 mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto lg:max-w-6xl my-4 sm:my-6 md:my-10 bg-white rounded-lg shadow">
 
@@ -37,10 +38,10 @@
                 <strong> Precio:</strong> {{ act.precio == '0' ? 'Gratuita' : act.precio + '€' }}
             </p>
         </div>
-
-        <p-button label="¡Apúntate!" styleClass="p-button-success" (onClick)="unirse()">
-        </p-button>
-
+        <div>
+            <button (click)="unirse(act.id)"
+                class="bg-lime-800 hover:bg-lime-700 text-white cursor-pointer font-bold py-2 px-4 rounded-3xl">¡Apúntate!</button>
+        </div>
     </div>
 
     <!-- Columna derecha -->
