@@ -1,29 +1,32 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, inject } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { Rating } from 'primeng/rating';
 import { InputIcon } from 'primeng/inputicon';
+import { MessageService } from 'primeng/api';
 
 import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { inject } from '@angular/core/primitives/di';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, Rating, InputIcon, FormsModule, ReactiveFormsModule, MessageService],
+  imports: [CommonModule, CardModule, DividerModule, Rating, InputIcon, FormsModule, ReactiveFormsModule, ButtonModule],
   templateUrl: './info-actividad.html',
-  styleUrl: './info-actividad.scss'
+  styleUrl: './info-actividad.scss',
+  providers: [MessageService]
 })
 export class InfoActividad {
 
   actividad = signal<Actividad | null>(null);
 
-  messageService = inject(MessageService);
+  private messageService = inject(MessageService);
+  private actService = inject(ActService);
 
-  constructor(private actService: ActService) {
+  constructor() {
     // Simulación: obtener actividad por ID
     this.actService.infoActividad(1).subscribe(act => {
       this.actividad.set(act); // Actualizamos la signal con la respuesta
@@ -48,8 +51,28 @@ export class InfoActividad {
     return map[nivel] || 0; // Devuelve 0 si no coincide
   }
 
-  unirse(idActividad: number): void {
-    this.actService.unirteActividad(idActividad).subscribe({
+  // Imagen por deporte
+  /*   getImagenPorDeporte(deporte?: string): string {
+      const map: Record<string, string> = {
+        'Fútbol': 'assets/img/futbol.jpg',
+        'Tenis': 'assets/img/tenis.jpg',
+        'Basket': 'assets/img/basket.jpg'
+      };
+      return deporte ? (map[deporte] || 'assets/img/default.jpg') : 'assets/img/default.jpg';
+    } */
+
+  unirse(): void {
+    const act = this.actividad();
+    if (!act?.id) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Actividad no cargada'
+      });
+      return;
+    }
+
+    this.actService.unirteActividad(act.id).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
@@ -61,12 +84,11 @@ export class InfoActividad {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: e.error?.message ?? 'No se pudo unir a la actividad'
+          detail: e ?? 'No se pudo unir a la actividad'
         });
       }
     });
   }
-
 
 
   // Creo que aquí debería ir la lógica para según el deporte que sea, 

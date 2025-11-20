@@ -86,7 +86,7 @@ export class ActService {
   
   //Metodo apuntarte a actividad
   unirteActividad(idActividad: number): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl + '/unirActividad'}`, idActividad).pipe(
+    return this.http.put<any>(`${this.baseUrl}/actividades/${idActividad}/participantes`, {}).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;

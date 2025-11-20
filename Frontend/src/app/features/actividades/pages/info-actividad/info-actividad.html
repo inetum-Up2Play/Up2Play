@@ -37,10 +37,10 @@
                 <strong> Precio:</strong> {{ act.precio == '0' ? 'Gratuita' : act.precio + '€' }}
             </p>
         </div>
-        <div>
-            <button (click)="unirse(actividad.id)"
-                class="bg-lime-800 hover:bg-lime-700 text-white cursor-pointer font-bold py-2 px-4 rounded-3xl">¡Apúntate!</button>
-        </div>
+
+        <p-button label="¡Apúntate!" styleClass="p-button-success" (onClick)="unirse()">
+        </p-button>
+
     </div>
 
     <!-- Columna derecha -->
