@@ -102,6 +102,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .toList();
     }
@@ -144,6 +145,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .toList();
 
@@ -171,6 +173,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .toList();
     }
@@ -192,6 +195,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
     }
@@ -306,6 +310,7 @@ public class ActividadService {
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
     }
 
@@ -350,6 +355,7 @@ public class ActividadService {
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
 
     }

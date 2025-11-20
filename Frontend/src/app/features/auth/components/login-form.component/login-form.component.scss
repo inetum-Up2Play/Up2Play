@@ -65,12 +65,12 @@ h1 {
     font-weight: 600;
 
     .form-link-register {
-        color: vars.$verde-claro;
+        color: vars.$verde-claro !important;
         cursor: pointer;
         text-decoration: none;
 
         &:hover {
-            color: vars.$verde-oliva;
+            color: vars.$verde-oliva !important;
             transition: 0.3s ease;
         }
     }

@@ -20,10 +20,11 @@
 
     a {
         text-decoration: none;
-        color: vars.$blanco;
+        color: vars.$blanco !important;
         
         &:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) !important;
+            color: vars.$blanco !important
         }
     }
 }
