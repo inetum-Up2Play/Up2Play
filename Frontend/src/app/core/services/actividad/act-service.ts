@@ -71,6 +71,7 @@ export class ActService {
     );
   }
 
+  //Metodo listar actividades a las que el usuario no está apuntado
   listarActividadesNoApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getNoApuntadas').pipe(
       catchError(error => {
@@ -104,6 +105,7 @@ export class ActService {
     );
   }
 
+  //Metodo desapuntarte a actividad
   desapuntarseActividad(idActividad: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${idActividad}/participantes`).pipe(
       catchError((error: HttpErrorResponse) => {

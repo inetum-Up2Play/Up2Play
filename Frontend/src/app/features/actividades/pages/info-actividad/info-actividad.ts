@@ -55,7 +55,6 @@ export class InfoActividad {
     this.actService.getActividad(this.actividadId).subscribe({
       next: act => {
         this.actividad.set(act); // Actualizamos la signal con la respuesta
-        console.log(act);
         this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
       },
       error: e => {
@@ -95,6 +94,7 @@ export class InfoActividad {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
+
   // Imagen por deporte
   /*   getImagenPorDeporte(deporte?: string): string {
       const map: Record<string, string> = {
@@ -118,6 +118,13 @@ export class InfoActividad {
 
     this.actService.unirteActividad(act.id).subscribe({
       next: () => {
+        // Actualización
+        this.actividad.set({
+          ...act,
+          numPersInscritas: (act.numPersInscritas ?? 0) + 1
+        });
+        this.apuntado.set(true);
+
         this.messageService.add({ severity: 'success', summary: '¡Enhorabuena!', detail: 'Te has unido a la actividad' });
       },
       error: (codigo) => {
@@ -129,8 +136,14 @@ export class InfoActividad {
   }
 
   desapuntarse(): void {
+    const act = this.actividad();
+    if (!act) return;
+
     this.actService.desapuntarseActividad(this.actividadId).subscribe({
       next: () => {
+        const nuevosInscritos = Math.max(Number(act.numPersInscritas ?? 0) - 1, 0);
+        this.actividad.set({ ...act, numPersInscritas: nuevosInscritos });
+
         this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado de la actividad' });
         this.apuntado.set(false);
       },
