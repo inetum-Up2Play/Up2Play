@@ -3,14 +3,13 @@ export interface Actividad {
   nombre: string;
   descripcion: string;
   fecha: string;
-  hora: string;
   ubicacion: string;
   nivel: string;
   numPersInscritas: string;
   numPersTotales: string;
   estado: string;
   precio: string;
-  usuarioCreadorId: string;
+  usuarioCreadorNombre: string;
   deporte: string;
   imagen?: string;
 }

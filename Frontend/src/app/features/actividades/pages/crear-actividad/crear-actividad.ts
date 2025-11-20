@@ -5,7 +5,6 @@ import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
-import { FloatLabel } from 'primeng/floatlabel';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
@@ -17,7 +16,7 @@ import { Header } from '../../../../core/layout/header/header';
 
 @Component({
   selector: 'app-crear-actividad',
-  imports: [Header, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
+  imports: [Header, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, InputIconModule, SelectModule, KeyFilterModule],
   templateUrl: './crear-actividad.html',
   styleUrl: './crear-actividad.scss'
 })

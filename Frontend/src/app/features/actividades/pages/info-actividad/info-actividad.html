@@ -8,7 +8,7 @@
     <!-- Columna izquierda -->
     <div class="lg:pr-10">
         <h1 class="text-3xl font-bold mb-2">{{ act.nombre }}</h1>
-        <p class="mb-4 text-sm">Creado por el usuario con id: {{act.usuarioCreadorId}}</p><br>
+        <p class="mb-4 text-sm">Creado por el usuario {{act.usuarioCreadorNombre}}</p><br>
         <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
         </p><br>
@@ -52,9 +52,9 @@
         <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"> -->
 
         <p-card class="w-full">
-            <p><strong>Fecha</strong><br>{{ act.fecha }}</p>
+            <p><strong>Fecha</strong><br>{{ extraerFecha(act.fecha) }}</p>
             <p-divider></p-divider>
-            <p><strong>Hora</strong><br>{{ act.hora }}</p>
+            <p><strong>Hora</strong><br>{{ extraerHora(act.fecha) }}</p>
         </p-card>
 
         <div class="mt-4">
