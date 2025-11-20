@@ -32,7 +32,7 @@
                         Deporte
                     </label>
                     <p-select [options]="deportes" formControlName="deporte" optionLabel="name" [filter]="true"
-                        filterBy="name" [showClear]="true" class="w-full">
+                        filterBy="name" [showClear]="true" class="w-full" [invalid]="isInvalid('deporte')">
                         <ng-template #selectedItem let-deporteEscogido>
                             <div class="flex items-center gap-2">
                                 <div>{{ deporteEscogido.name }}</div>
@@ -44,6 +44,9 @@
                             </div>
                         </ng-template>
                     </p-select>
+                    @if (isInvalid('deporte')) {
+                    <p-message severity="error" size="small" variant="simple">Escoge un deporte.</p-message>
+                    }
                 </div>
                 <div class="flex flex-col gap-1 w-full">
                     <label for="num_pers_totales" class="flex items-center gap-2">
@@ -94,7 +97,11 @@
                         <i class="pi pi-flag"></i> <!-- Icono PrimeIcons -->
                         Nivel
                     </label>
-                    <p-select [options]="niveles" formControlName="nivel" optionLabel="name" class="w-full" />
+                    <p-select [options]="niveles" formControlName="nivel" optionLabel="name" class="w-full"
+                        [invalid]="isInvalid('nivel')" />
+                    @if (isInvalid('nivel')) {
+                    <p-message severity="error" size="small" variant="simple">Elige un nivel.</p-message>
+                    }
                 </div>
                 <div class="flex flex-col gap-1 w-full">
                     <label for="num_pers_totales" class="flex items-center gap-2">

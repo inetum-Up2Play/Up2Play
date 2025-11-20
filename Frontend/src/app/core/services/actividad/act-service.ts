@@ -15,12 +15,20 @@ export class ActService {
   private baseUrl = 'http://localhost:8080/actividades';
   private logoutTimer: any;
 
+
+//Metodo crear actividad
   crearActividad(payload: any): Observable<any> {
-    // POST al endpoint del backend
-    return this.http.post<any>(`${this.baseUrl + '/crearActividad'}`, payload);
+    return this.http.post<any>(`${this.baseUrl + '/crearActividad'}`, payload).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
   }
 
-  editarActividad(id: number, payload: {}) {
+  //Metodo editar actividad 
+  editarActividad(id: number, payload: any): Observable<any> {
     return this.http.put(this.baseUrl + `/editarActividad/${id}`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
@@ -30,8 +38,8 @@ export class ActService {
     );
   }
 
+  //Metodo obtener actividad por id
   getActividad(id: number) {
-
     return this.http.get(this.baseUrl + `/getPorId/${id}`, {}).pipe(
        map(() => true),
       catchError((error: HttpErrorResponse) => {
@@ -41,6 +49,7 @@ export class ActService {
     );
   }
 
+  //Metodo listar todas las actividades
   listarActividades() {
     return this.http.get(this.baseUrl + '/getAll', {}).pipe(
       map(() => true),
@@ -51,6 +60,7 @@ export class ActService {
     );
   }
 
+  //Metodo listar actividades creadas por el usuario
   listarActividadesCreadas() {
     return this.http.get(this.baseUrl + '/getCreadas', {}).pipe(
       map(() => true),
@@ -61,7 +71,6 @@ export class ActService {
     );
   }
 
-
   listarActividadesNoApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getNoApuntadas').pipe(
       catchError(error => {
@@ -71,7 +80,8 @@ export class ActService {
     );
   }
   
-  deleteActividad(id: number) {
+  //Metodo eliminar actividad
+    deleteActividad(id: number) {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {

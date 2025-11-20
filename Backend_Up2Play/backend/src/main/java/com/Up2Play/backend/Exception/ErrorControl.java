@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.Up2Play.backend.DTO.ErrorResponseDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
+import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
+import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreador;
+import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
+import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
@@ -26,276 +30,314 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@RestControllerAdvice //hace que escuche excepciones de controller y vevuelva un JSON
+@RestControllerAdvice // hace que escuche excepciones de controller y vevuelva un JSON
 public class ErrorControl {
 
-    //Mail ya registrado
-    @ExceptionHandler (CorreoRegistradoException.class) //para que el metodo se ejecute automáticamente si ocurre una excepción del tipo especificado
-    public ResponseEntity<ErrorResponseDto> handleCorreoRegistrado(
-        CorreoRegistradoException ex, //spring recoge el error ocurrido
-        HttpServletRequest request //recoge la petición http que ha hecho el usuario, en este caso un POST a /register
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "CORREO_REGISTRADO", //código de error que he decidido definir
-            ex.getMessage(), // el mensaje que vendrá en la excepción
-            HttpStatus.CONFLICT.value(), // código del error - ERROR 409
-            request.getRequestURI(), //la URL que el usuario estaba intentando acceder
-            Instant.now() //fecha y hora actual
-        );
-        return ResponseEntity //devuelve la respuesta http
-            .status(HttpStatus.CONFLICT)  //con estado del error
-            .body(body); //y el cuepo del error creado arriba
-    }
+        // Mail ya registrado
+        @ExceptionHandler(CorreoRegistradoException.class) // para que el metodo se ejecute automáticamente si ocurre
+                                                           // una
+                                                           // excepción del tipo especificado
+        public ResponseEntity<ErrorResponseDto> handleCorreoRegistrado(
+                        CorreoRegistradoException ex, // spring recoge el error ocurrido
+                        HttpServletRequest request // recoge la petición http que ha hecho el usuario, en este caso un
+                                                   // POST a
+                                                   // /register
+        ) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CORREO_REGISTRADO", // código de error que he decidido definir
+                                ex.getMessage(), // el mensaje que vendrá en la excepción
+                                HttpStatus.CONFLICT.value(), // código del error - ERROR 409
+                                request.getRequestURI(), // la URL que el usuario estaba intentando acceder
+                                Instant.now() // fecha y hora actual
+                );
+                return ResponseEntity // devuelve la respuesta http
+                                .status(HttpStatus.CONFLICT) // con estado del error
+                                .body(body); // y el cuepo del error creado arriba
+        }
 
-    //Nombre usuario ya registrado
-    @ExceptionHandler (NombreUsuarioRegistradoException.class) 
-    public ResponseEntity<ErrorResponseDto> handleNombreUsuarioRegistradoException(
-        NombreUsuarioRegistradoException ex, 
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "NOMBRE_USUARIO_REGISTRADO", 
-            ex.getMessage(), 
-            HttpStatus.CONFLICT.value(), //ERROR 409
-            request.getRequestURI(), 
-            Instant.now() 
-        );
-        return ResponseEntity
-            .status(HttpStatus.CONFLICT)  
-            .body(body); 
-    }
+        // Nombre usuario ya registrado
+        @ExceptionHandler(NombreUsuarioRegistradoException.class)
+        public ResponseEntity<ErrorResponseDto> handleNombreUsuarioRegistradoException(
+                        NombreUsuarioRegistradoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "NOMBRE_USUARIO_REGISTRADO",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
 
-    //Usuario no encontrado
-    @ExceptionHandler (UsuarioNoEncontradoException.class) 
-    public ResponseEntity<ErrorResponseDto> handleUsuarioNoEncontrado(
-        UsuarioNoEncontradoException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "USUARIO_NO_ENCONTRADO", 
-            ex.getMessage(), 
-            HttpStatus.NOT_FOUND.value(), //ERROR 404
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.NOT_FOUND) 
-            .body(body); 
-    }
+        // Usuario no encontrado
+        @ExceptionHandler(UsuarioNoEncontradoException.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioNoEncontrado(
+                        UsuarioNoEncontradoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "USUARIO_NO_ENCONTRADO",
+                                ex.getMessage(),
+                                HttpStatus.NOT_FOUND.value(), // ERROR 404
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(body);
+        }
 
-    //Usuario Bloqueado (login)
-    @ExceptionHandler (UsuarioBloqueadoLoginException.class) 
-    public ResponseEntity<ErrorResponseDto> handleUsuarioBloqueadoLogin(
-        UsuarioBloqueadoLoginException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "USUARIO_BLOQUEADO_LOGIN", 
-            ex.getMessage(), 
-            HttpStatus.LOCKED.value(), //ERROR 423
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.LOCKED) 
-            .body(body); 
-    }
+        // Usuario Bloqueado (login)
+        @ExceptionHandler(UsuarioBloqueadoLoginException.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioBloqueadoLogin(
+                        UsuarioBloqueadoLoginException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "USUARIO_BLOQUEADO_LOGIN",
+                                ex.getMessage(),
+                                HttpStatus.LOCKED.value(), // ERROR 423
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.LOCKED)
+                                .body(body);
+        }
 
-    //Usuario no verificado
-    @ExceptionHandler (UsuarioNoVerificadoException.class) 
-    public ResponseEntity<ErrorResponseDto> handleUsuarioNoVerificado(
-        UsuarioNoVerificadoException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "USUARIO_NO_VERIFICADO", 
-            ex.getMessage(), 
-            HttpStatus.FORBIDDEN.value(), //ERROR 403
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.FORBIDDEN) 
-            .body(body); 
-    }
+        // Usuario no verificado
+        @ExceptionHandler(UsuarioNoVerificadoException.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioNoVerificado(
+                        UsuarioNoVerificadoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "USUARIO_NO_VERIFICADO",
+                                ex.getMessage(),
+                                HttpStatus.FORBIDDEN.value(), // ERROR 403
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.FORBIDDEN)
+                                .body(body);
+        }
 
-    //Credenciales erroneas
-    @ExceptionHandler (CredencialesErroneasException.class) 
-    public ResponseEntity<ErrorResponseDto> handleCredencialesErroneas(
-        CredencialesErroneasException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "CREDENCIALES_ERRONEAS", 
-            ex.getMessage(), 
-            HttpStatus.UNAUTHORIZED.value(), //ERROR 401
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.UNAUTHORIZED) 
-            .body(body); 
-    }
+        // Credenciales erroneas
+        @ExceptionHandler(CredencialesErroneasException.class)
+        public ResponseEntity<ErrorResponseDto> handleCredencialesErroneas(
+                        CredencialesErroneasException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CREDENCIALES_ERRONEAS",
+                                ex.getMessage(),
+                                HttpStatus.UNAUTHORIZED.value(), // ERROR 401
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.UNAUTHORIZED)
+                                .body(body);
+        }
 
-    //Código verificación expirado
-    @ExceptionHandler (CodigoExpiradoException.class) 
-    public ResponseEntity<ErrorResponseDto> handleCodigoExpirado(
-        CodigoExpiradoException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "CODIGO_EXPIRADO", 
-            ex.getMessage(), 
-            HttpStatus.GONE.value(), //ERROR 410
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.GONE) 
-            .body(body); 
-    }
+        // Código verificación expirado
+        @ExceptionHandler(CodigoExpiradoException.class)
+        public ResponseEntity<ErrorResponseDto> handleCodigoExpirado(
+                        CodigoExpiradoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CODIGO_EXPIRADO",
+                                ex.getMessage(),
+                                HttpStatus.GONE.value(), // ERROR 410
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.GONE)
+                                .body(body);
+        }
 
-    //Código verificación incorrecto
-    @ExceptionHandler (CodigoIncorrectoException.class) 
-    public ResponseEntity<ErrorResponseDto> handleCodigoIncorrecto(
-        CodigoIncorrectoException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "CODIGO_INCORRECTO", 
-            ex.getMessage(), 
-            HttpStatus.BAD_REQUEST.value(), //ERROR 400
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.BAD_REQUEST) 
-            .body(body); 
-    }
+        // Código verificación incorrecto
+        @ExceptionHandler(CodigoIncorrectoException.class)
+        public ResponseEntity<ErrorResponseDto> handleCodigoIncorrecto(
+                        CodigoIncorrectoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CODIGO_INCORRECTO",
+                                ex.getMessage(),
+                                HttpStatus.BAD_REQUEST.value(), // ERROR 400
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(body);
+        }
 
-    //Cuenta ya verificada
-    @ExceptionHandler (CuentaYaVerificadaException.class) 
-    public ResponseEntity<ErrorResponseDto> handleCuentaYaVerificada(
-        CuentaYaVerificadaException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "CUENTA_YA_VERIFICADA", 
-            ex.getMessage(), 
-            HttpStatus.CONFLICT.value(), //ERROR 409
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.CONFLICT) 
-            .body(body); 
-    }
+        // Cuenta ya verificada
+        @ExceptionHandler(CuentaYaVerificadaException.class)
+        public ResponseEntity<ErrorResponseDto> handleCuentaYaVerificada(
+                        CuentaYaVerificadaException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CUENTA_YA_VERIFICADA",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
 
-    //Correo no existente
-    @ExceptionHandler (CorreoNoCoincideException.class) 
-    public ResponseEntity<ErrorResponseDto> handleCorreoNoCoincide(
-        CorreoNoCoincideException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "CORREO_NO_COINCIDE", 
-            ex.getMessage(), 
-            HttpStatus.CONFLICT.value(), //ERROR 409
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.CONFLICT) 
-            .body(body); 
-    }
+        // Correo no existente
+        @ExceptionHandler(CorreoNoCoincideException.class)
+        public ResponseEntity<ErrorResponseDto> handleCorreoNoCoincide(
+                        CorreoNoCoincideException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CORREO_NO_COINCIDE",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
 
-    //Falta token o correo
-    @ExceptionHandler (TokenCorreoFaltanteException.class) 
-    public ResponseEntity<ErrorResponseDto> handleTokenCorreoFaltante(
-        TokenCorreoFaltanteException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "FALTA_TOKEN_O_CORREO", 
-            ex.getMessage(), 
-            HttpStatus.BAD_REQUEST.value(), //ERROR 400
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.BAD_REQUEST) 
-            .body(body); 
-    }
+        // Falta token o correo
+        @ExceptionHandler(TokenCorreoFaltanteException.class)
+        public ResponseEntity<ErrorResponseDto> handleTokenCorreoFaltante(
+                        TokenCorreoFaltanteException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "FALTA_TOKEN_O_CORREO",
+                                ex.getMessage(),
+                                HttpStatus.BAD_REQUEST.value(), // ERROR 400
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(body);
+        }
 
-    //La fecha y la hora no pueden ser anteriores al momento actual.
+        // La fecha y la hora no pueden ser anteriores al momento actual.
 
-    @ExceptionHandler (FechaYHora.class)
-    public ResponseEntity<ErrorResponseDto> handleFechaYHora(
-        FechaYHora ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "FECHA_Y_HORA_INVALIDAS", 
-            ex.getMessage(), 
-            HttpStatus.BAD_REQUEST.value(), //ERROR 400
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.BAD_REQUEST) 
-            .body(body); 
-    }
+        @ExceptionHandler(FechaYHora.class)
+        public ResponseEntity<ErrorResponseDto> handleFechaYHora(
+                        FechaYHora ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "FECHA_Y_HORA_INVALIDAS",
+                                ex.getMessage(),
+                                HttpStatus.BAD_REQUEST.value(), // ERROR 400
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.BAD_REQUEST)
+                                .body(body);
+        }
 
-    //Actividad no encontrada
-    @ExceptionHandler (ActividadNoEncontrada.class)
-    public ResponseEntity<ErrorResponseDto> handleActividadNoEncontrada(
-        ActividadNoEncontrada ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "ACTIVIDAD_NO_ENCONTRADA", 
-            ex.getMessage(), 
-            HttpStatus.NOT_FOUND.value(), //ERROR 404
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.NOT_FOUND) 
-            .body(body); 
-    }
+        // Actividad no encontrada
+        @ExceptionHandler(ActividadNoEncontrada.class)
+        public ResponseEntity<ErrorResponseDto> handleActividadNoEncontrada(
+                        ActividadNoEncontrada ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ACTIVIDAD_NO_ENCONTRADA",
+                                ex.getMessage(),
+                                HttpStatus.NOT_FOUND.value(), // ERROR 404
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(body);
+        }
 
-    //Usuario ya apuntado a la actividad 
-    @ExceptionHandler (UsuarioYaApuntadoException.class)
-    public ResponseEntity<ErrorResponseDto> handleUsuarioYaApuntado(
-        UsuarioYaApuntadoException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "USUARIO_YA_APUNTADO", 
-            ex.getMessage(), 
-            HttpStatus.CONFLICT.value(), //ERROR 409
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.CONFLICT) 
-            .body(body); 
-    }
+        // Usuario ya apuntado a la actividad
+        @ExceptionHandler(UsuarioYaApuntadoException.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioYaApuntado(
+                        UsuarioYaApuntadoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "USUARIO_YA_APUNTADO",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
 
-    @ExceptionHandler (UsuarioNoApuntadoException.class)
-    public ResponseEntity<ErrorResponseDto> handleUsuarioNoApuntado(
-        UsuarioNoApuntadoException ex,
-        HttpServletRequest request
-    ) {
-        ErrorResponseDto body = new ErrorResponseDto(
-            "USUARIO_NO_APUNTADO", 
-            ex.getMessage(), 
-            HttpStatus.NOT_FOUND.value(), //ERROR 404
-            request.getRequestURI(),
-            Instant.now() 
-        );
-        return ResponseEntity 
-            .status(HttpStatus.CONFLICT) 
-            .body(body); 
-    }
+        @ExceptionHandler(UsuarioNoApuntadoException.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioNoApuntado(
+                        UsuarioNoApuntadoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "USUARIO_NO_APUNTADO",
+                                ex.getMessage(),
+                                HttpStatus.NOT_FOUND.value(), // ERROR 404
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        // Usuario ya apuntado a la actividad
+        @ExceptionHandler(MaximosParticipantes.class)
+        public ResponseEntity<ErrorResponseDto> handleMaximosParticipantes(
+                        MaximosParticipantes ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "MAX_PARTICIPANTES",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        @ExceptionHandler(UsuarioCreador.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorDesapuntar(
+                        UsuarioCreador ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CREADOR_NO_DESAPUNTAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        @ExceptionHandler(UsuarioCreadorEliminar.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorEliminar(
+                        UsuarioCreador ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CREADOR_NO_ELIMINAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        @ExceptionHandler(UsuarioCreadorEditar.class)
+        public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorEditar(
+                        UsuarioCreador ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CREADOR_NO_EDITAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
 }

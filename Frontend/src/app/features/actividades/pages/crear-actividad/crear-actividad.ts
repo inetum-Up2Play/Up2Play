@@ -65,6 +65,13 @@ export class CrearActividad {
     this.formSubmitted = true;
 
     if (this.actividadForm.invalid) {
+      // Marca todos los controles como tocados → dispara validaciones en la vista
+      Object.keys(this.actividadForm.controls).forEach(key => {
+        const control = this.actividadForm.get(key);
+        control?.markAsTouched();
+        control?.updateValueAndValidity();
+      });
+
       this.messageService.add({
         severity: 'warn',
         summary: 'Formulario inválido',

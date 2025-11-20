@@ -43,8 +43,8 @@ public class Actividad {
 
     @Convert(converter = NivelDificultadConverter.class)
     private NivelDificultad nivel;
-    private int num_pers_inscritas;
-    private int num_pers_totales;
+    private int numPersInscritas;
+    private int numPersTotales;
     
     @Convert(converter = EstadoActividadConverter.class)
     private EstadoActividad estado;
@@ -66,7 +66,7 @@ public class Actividad {
     
 
     public Actividad(String nombre, String descripcion, LocalDateTime fecha, String ubicacion, String deporte,
-            NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
+            NivelDificultad nivel, int numPersInscritas, int numPersTotales, EstadoActividad estado, double precio,
             Usuario usuarioCreador, Set<Usuario> usuarios) {
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -74,8 +74,8 @@ public class Actividad {
         this.ubicacion = ubicacion;
         this.deporte = deporte;
         this.nivel = nivel;
-        this.num_pers_inscritas = num_pers_inscritas;
-        this.num_pers_totales = num_pers_totales;
+        this.numPersInscritas = numPersInscritas;
+        this.numPersTotales = numPersTotales;
         this.estado = estado;
         this.precio = precio;
         this.usuarioCreador = usuarioCreador;
@@ -85,7 +85,7 @@ public class Actividad {
 
 
     public Actividad(Long id, String nombre, String descripcion, LocalDateTime fecha, String ubicacion, String deporte,
-            NivelDificultad nivel, int num_pers_inscritas, int num_pers_totales, EstadoActividad estado, double precio,
+            NivelDificultad nivel, int numPersInscritas, int numPersTotales, EstadoActividad estado, double precio,
             Usuario usuarioCreador, Set<Usuario> usuarios) {
         this.id = id;
         this.nombre = nombre;
@@ -94,8 +94,8 @@ public class Actividad {
         this.ubicacion = ubicacion;
         this.deporte = deporte;
         this.nivel = nivel;
-        this.num_pers_inscritas = num_pers_inscritas;
-        this.num_pers_totales = num_pers_totales;
+        this.numPersInscritas = numPersInscritas;
+        this.numPersTotales = numPersTotales;
         this.estado = estado;
         this.precio = precio;
         this.usuarioCreador = usuarioCreador;
@@ -151,20 +151,20 @@ public class Actividad {
         this.nivel = nivel;
     }
 
-    public int getNum_pers_inscritas() {
-        return num_pers_inscritas;
+    public int getNumPersInscritas() {
+        return numPersInscritas;
     }
 
-    public void setNum_pers_inscritas(int num_pers_inscritas) {
-        this.num_pers_inscritas = num_pers_inscritas;
+    public void setNumPersInscritas(int numPersInscritas) {
+        this.numPersInscritas = numPersInscritas;
     }
 
-    public int getNum_pers_totales() {
-        return num_pers_totales;
+    public int getNumPersTotales() {
+        return numPersTotales;
     }
 
-    public void setNum_pers_totales(int num_pers_totales) {
-        this.num_pers_totales = num_pers_totales;
+    public void setNumPersTotales(int numPersTotales) {
+        this.numPersTotales = numPersTotales;
     }
 
     public EstadoActividad getEstado() {

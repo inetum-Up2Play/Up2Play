@@ -8,7 +8,7 @@ public class EditarActividadDto {
     private String ubicacion;
     private String deporte;
     private String nivel;
-    private String num_pers_totales;
+    private String numPersTotales;
 
     public String getNombre() {
         return nombre;
@@ -40,11 +40,11 @@ public class EditarActividadDto {
     public void setNivel(String nivel) {
         this.nivel = nivel;
     }
-    public String getNum_pers_totales() {
-        return num_pers_totales;
+    public String getnumPersTotales() {
+        return numPersTotales;
     }
-    public void setNum_pers_totales(String num_pers_totales) {
-        this.num_pers_totales = num_pers_totales;
+    public void setnumPersTotales(String numPersTotales) {
+        this.numPersTotales = numPersTotales;
     }
    
     public String getDeporte() {
