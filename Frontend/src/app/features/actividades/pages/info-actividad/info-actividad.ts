@@ -10,6 +10,7 @@ import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-info-actividad',
@@ -25,7 +26,10 @@ export class InfoActividad {
   private messageService = inject(MessageService);
   private actService = inject(ActService);
 
-  constructor() {
+  actividadId;
+
+  constructor(private route: ActivatedRoute){
+    this.actividadId = route.snapshot.paramMap.get("id");
     // Simulación: obtener actividad por ID
     this.actService.infoActividad(1).subscribe(act => {
       this.actividad.set(act); // Actualizamos la signal con la respuesta

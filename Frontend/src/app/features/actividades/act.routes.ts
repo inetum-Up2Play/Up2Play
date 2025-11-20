@@ -13,7 +13,7 @@ export const ACT_ROUTES: Routes = [
         component: CrearActividad
     },
     {
-        path: 'info-actividad',
+        path: 'info-actividad/:id',
         component: InfoActividad
     }
 ];
