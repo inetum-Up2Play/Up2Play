@@ -20,7 +20,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 
-
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -65,12 +64,6 @@ export class InfoActividad implements AfterViewInit {
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {
     this.actividadId = Number(route.snapshot.paramMap.get('id'));
-    // Simulación: obtener actividad por ID
-
-    //this.actService.infoActividad(this.actividadId).subscribe(act => {
-    // this.actividad.set(act); // Actualizamos la signal con la respuesta
-    // this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
-    // });
   }
 
   ngAfterViewInit(): void {
@@ -92,111 +85,101 @@ export class InfoActividad implements AfterViewInit {
       });
   }
 
- 
-
-initMap(lat: number, lon: number): void {
-  const marker = new Feature({
-    geometry: new Point(fromLonLat([lon, lat])),
-  });
-
-
-  marker.setStyle(
-    new Style({
-      image: new Icon({
-        src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
-        anchor: [0.5, 1], 
-        scale: 0.08,
-      }),
-    })
-  );
-
-  const vectorLayer = new VectorLayer({
-    source: new VectorSource({
-      features: [marker],
-    }),
-  });
-
-  // Control de zoom personalizado
-
-
-
-const zoomControl = new Zoom({
-  className: 'custom-zoom',
-  zoomInLabel: '',
-  zoomOutLabel: '',
-  zoomInTipLabel: 'Acercar',
-  zoomOutTipLabel: 'Alejar'
-});
-
-
-
-
-  // Inicialización del mapa
-  const map = new Map({
-    target: 'map',
-    layers: [
-      new TileLayer({
-        source: new OSM({
-          attributions: 'Mapa por Up2Play',
-        }),
-      }),
-      vectorLayer,
-    ],
-    view: new View({
-      center: fromLonLat([lon, lat]),
-      zoom: 17,
-    }),
-    controls: [zoomControl], // Usamos nuestro control personalizado
-  });
-
-
-  }
-
-
-ngOnInit(): void {
-  if (!this.actividadId || Number.isNaN(this.actividadId)) {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Atención',
-      detail: 'ID de actividad inválido',
+  initMap(lat: number, lon: number): void {
+    const marker = new Feature({
+      geometry: new Point(fromLonLat([lon, lat])),
     });
-    return;
+
+    marker.setStyle(
+      new Style({
+        image: new Icon({
+          src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+          anchor: [0.5, 1],
+          scale: 0.08,
+        }),
+      })
+    );
+
+    const vectorLayer = new VectorLayer({
+      source: new VectorSource({
+        features: [marker],
+      }),
+    });
+
+    // Control de zoom personalizado
+
+    const zoomControl = new Zoom({
+      className: 'custom-zoom',
+      zoomInLabel: '',
+      zoomOutLabel: '',
+      zoomInTipLabel: 'Acercar',
+      zoomOutTipLabel: 'Alejar',
+    });
+
+    // Inicialización del mapa
+    const map = new Map({
+      target: 'map',
+      layers: [
+        new TileLayer({
+          source: new OSM({
+            attributions: 'Mapa por Up2Play',
+          }),
+        }),
+        vectorLayer,
+      ],
+      view: new View({
+        center: fromLonLat([lon, lat]),
+        zoom: 17,
+      }),
+      controls: [zoomControl], // Usamos nuestro control personalizado
+    });
   }
 
-  this.actService.getActividad(this.actividadId).subscribe({
-    next: (act) => {
-      this.actividad.set(act);
-      console.log('Actividad cargada:', act);
-
-      // Actualizamos el rating
-      this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel));
-
-      // Ahora que tenemos la ubicación, llamamos a Nominatim
-      if (act.ubicacion) {
-        this.http
-          .get<any>(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(act.ubicacion)}`
-          )
-          .subscribe((results) => {
-            if (results.length > 0) {
-              const lat = parseFloat(results[0].lat);
-              const lon = parseFloat(results[0].lon);
-              this.initMap(lat, lon);
-            } else {
-              console.error('No se encontró la ubicación');
-            }
-          });
-      }
-    },
-    error: (e) => {
+  ngOnInit(): void {
+    if (!this.actividadId || Number.isNaN(this.actividadId)) {
       this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: e ?? 'No se pudo cargar la actividad',
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'ID de actividad inválido',
       });
-    },
-  });
+      return;
+    }
 
+    this.actService.getActividad(this.actividadId).subscribe({
+      next: (act) => {
+        this.actividad.set(act);
+        console.log('Actividad cargada:', act);
+
+        // Actualizamos el rating
+        this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel));
+
+        // Ahora que tenemos la ubicación, llamamos a Nominatim
+        if (act.ubicacion) {
+          this.http
+            .get<any>(
+              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+                act.ubicacion
+              )}`
+            )
+            .subscribe((results) => {
+              if (results.length > 0) {
+                const lat = parseFloat(results[0].lat);
+                const lon = parseFloat(results[0].lon);
+                this.initMap(lat, lon);
+              } else {
+                console.error('No se encontró la ubicación');
+              }
+            });
+        }
+      },
+      error: (e) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: e ?? 'No se pudo cargar la actividad',
+        });
+      },
+    });
   }
 
   //Usamos el p-rating como un form
@@ -224,15 +207,6 @@ ngOnInit(): void {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
-  // Imagen por deporte
-  /*   getImagenPorDeporte(deporte?: string): string {
-      const map: Record<string, string> = {
-        'Fútbol': 'assets/img/futbol.jpg',
-        'Tenis': 'assets/img/tenis.jpg',
-        'Basket': 'assets/img/basket.jpg'
-      };
-      return deporte ? (map[deporte] || 'assets/img/default.jpg') : 'assets/img/default.jpg';
-    } */
 
   unirse(): void {
     const act = this.actividad();
@@ -260,9 +234,4 @@ ngOnInit(): void {
       },
     });
   }
-
-  // Creo que aquí debería ir la lógica para según el deporte que sea,
-  // darle un valor al actividad.imagen distinto y así se muestre luego
-  // switch (this.actividad.deporte) {
-  // }
 }
