@@ -9,11 +9,12 @@ import { MessageService } from 'primeng/api';
 import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, Header],
+  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, Header, DeporteImgPipe],
   providers: [MessageService],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss']

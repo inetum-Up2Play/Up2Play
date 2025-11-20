@@ -114,7 +114,7 @@ export class ActService {
       estado: 'Pendiente',
       precio: '0',
       id_usuario_creador: '13',
-      deporte: 'Running',
+      deporte: 'Ciclismo',
       //imagen: 'https://media.gq.com.mx/photos/660304abed6388a71e23c80d/16:9/w_2560%2Cc_limit/GettyImages-629586734.jpg'
     };
 
