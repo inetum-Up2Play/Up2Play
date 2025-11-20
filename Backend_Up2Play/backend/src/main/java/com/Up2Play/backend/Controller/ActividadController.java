@@ -106,8 +106,12 @@ public class ActividadController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteActividad(@PathVariable Long id) {
-        actividadService.deleteActividad(id);
+    public void deleteActividad(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Long usuarioId = usuario.getId();
+        actividadService.deleteActividad(id,usuarioId);
     }
 
     @Transactional

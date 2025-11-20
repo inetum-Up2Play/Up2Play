@@ -281,7 +281,7 @@ public class ErrorControl {
             MaximosParticipantes ex,
             HttpServletRequest request) {
         ErrorResponseDto body = new ErrorResponseDto(
-                "USUARIO_YA_APUNTADO",
+                "MAX_PARTICIPANTES",
                 ex.getMessage(),
                 HttpStatus.CONFLICT.value(), // ERROR 409
                 request.getRequestURI(),
@@ -296,7 +296,7 @@ public class ErrorControl {
             UsuarioCreador ex,
             HttpServletRequest request) {
         ErrorResponseDto body = new ErrorResponseDto(
-                "USUARIO_YA_APUNTADO",
+                "CREADOR_NO_DESAPUNTAR",
                 ex.getMessage(),
                 HttpStatus.CONFLICT.value(), // ERROR 409
                 request.getRequestURI(),
