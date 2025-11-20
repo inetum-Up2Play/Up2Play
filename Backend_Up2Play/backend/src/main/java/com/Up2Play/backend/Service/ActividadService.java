@@ -263,6 +263,7 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         if (!act.getUsuarios().contains(usuario)) {
+
             act.setNumPersInscritas(act.getNumPersInscritas() + 1);
 
             if (act.getNumPersInscritas() > act.getNumPersTotales()) {
@@ -271,6 +272,7 @@ public class ActividadService {
             } else {
                 act.getUsuarios().add(usuario);
                 usuario.getActividadesUnidas().add(act);
+                act.getUsuarios().add(usuario);
 
             }
 
