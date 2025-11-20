@@ -241,7 +241,7 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         if (!act.getUsuarios().contains(usuario)) {
-           
+
             if (act.getNum_pers_inscritas() > act.getNum_pers_totales()) {
 
                 throw new MaximosParticipantes("Se ha alcanzado el numero maximo de participantes en esta actividad");
@@ -257,6 +257,7 @@ public class ActividadService {
 
             throw new UsuarioYaApuntadoException("El usuario ya está apuntado a esta actividad");
         }
+        
         usuarioRepository.save(usuario);
         return new ActividadDtoResp(
                 act.getId(),
