@@ -41,7 +41,7 @@ export class ActService {
   //Metodo obtener actividad por id
   getActividad(id: number): Observable<Actividad> {
     return this.http.get<Actividad>(this.baseUrl + `/${id}`, {}).pipe(
-      // map((res) => res), // innecesario si ya usas genérico
+      // map((res) => res),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
         return throwError(() => errBody?.error ?? 'UNKNOWN');
@@ -104,8 +104,15 @@ export class ActService {
     );
   }
 
+  desapuntarseActividad(idActividad: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${idActividad}/participantes`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
+        return throwError(() => codigo);
+      })
+    );
+  }
 
-  desapuntarteActividad() { }
 
   // Método que devuelve la info de la actividad por ID (mock)
   //infoActividad(id: number): Observable<Actividad> {
@@ -132,5 +139,10 @@ export class ActService {
 
   ComprovarCreador() { }
 
-  estoyApuntado() { }
+  estoyApuntado(idActividad: number): Observable<boolean> {
+    return this.http.get<{ apuntado: boolean }>(`${this.baseUrl}/${idActividad}/participantes/estado`).pipe(
+      map(response => response.apuntado),
+      catchError(() => of(false)) // Si hay error, asumimos que NO está apuntado
+    );
+  }
 }
