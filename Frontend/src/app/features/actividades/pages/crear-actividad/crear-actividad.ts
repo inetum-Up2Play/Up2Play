@@ -56,7 +56,7 @@ export class CrearActividad {
       ubicacion: ['', Validators.required],
       deporte: [null, Validators.required],
       nivel: [null, Validators.required],
-      num_pers_totales: [null, [Validators.required, Validators.min(1)]],
+      numPersTotales: [null, [Validators.required, Validators.min(1)]],
       precio: [0, Validators.required] // valor por defecto
     });
   }
@@ -93,7 +93,7 @@ export class CrearActividad {
       ubicacion: raw.ubicacion?.trim(),
       deporte: raw.deporte?.name ?? raw.deporte ?? null, // envia string
       nivel: raw.nivel?.name ?? raw.nivel ?? null, // envia string
-      num_pers_totales: Number(raw.num_pers_totales), // envia numero
+      numPersTotales: Number(raw.numPersTotales), // envia numero
       precio: Number(raw.precio ?? 0)
     };
 
