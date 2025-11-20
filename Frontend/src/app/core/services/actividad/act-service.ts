@@ -40,7 +40,7 @@ export class ActService {
 
   //Metodo obtener actividad por id
   getActividad(id: number) {
-    return this.http.get(this.baseUrl + `/getPorId/${id}`, {}).pipe(
+    return this.http.get(this.baseUrl + `/${id}`, {}).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
@@ -124,13 +124,4 @@ export class ActService {
   ComprovarCreador() { }
 
   estoyApuntado() { }
-
-  obtenerInfoActividad(id: number): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl + '/getPorID/${id}').pipe(
-      catchError(error => {
-        console.error('Error al obtener actividades', error);
-        return of([]); // Devuelve array vacío si falla
-      })
-    );
-  }
 }
