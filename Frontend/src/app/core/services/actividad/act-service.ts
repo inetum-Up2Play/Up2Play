@@ -83,7 +83,7 @@ export class ActService {
   }
 
   getApuntadas() { }
-  
+
   //Metodo apuntarte a actividad
   unirteActividad(idActividad: number): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/actividades/${idActividad}/participantes`, {}).pipe(
@@ -124,4 +124,13 @@ export class ActService {
   ComprovarCreador() { }
 
   estoyApuntado() { }
+
+  obtenerInfoActividad(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getPorID/${id}').pipe(
+      catchError(error => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
+      })
+    );
+  }
 }
