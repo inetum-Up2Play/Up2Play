@@ -45,18 +45,6 @@ public class ActividadController {
         return actividadService.getAllActividades();
     }
 
-
-   /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
-   @GetMapping("/getCreadas")
-    public List<ActividadDtoCreadas> getActividadesCreadas(@RequestHeader String token) {
-        String email = jwtService.extractUsername(token);
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        return actividadService.getActividadesCreadas(usuario);
-    }
-    */
-
-
     @GetMapping("/getCreadas")
     public List<ActividadDtoCreadas> getActividadesCreadas(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
@@ -65,23 +53,10 @@ public class ActividadController {
         return actividadService.getActividadesCreadas(usuario);
     }
 
-
-    /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
     @GetMapping("/getApuntadas")
-    public List<ActividadDtoResp> getActividadesApuntadas(@RequestHeader String token) {
-
-        String email = jwtService.extractUsername(token);
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Long usuariosId = usuario.getId();
-        return actividadService.getActividadesApuntadas(usuariosId);
-    }
-    */
-
-   @GetMapping("/getApuntadas")
 
     public List<ActividadDtoResp> getActividadesApuntadas(@AuthenticationPrincipal UserDetails principal) {
-        //el getUsername recoge el correo, no el username
+        // el getUsername recoge el correo, no el username
         String email = principal.getUsername();
         System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -94,9 +69,9 @@ public class ActividadController {
     public ActividadDtoResp getActividad(@PathVariable Long id) {
         return actividadService.getActividad(id);
     }
-    
+
     @GetMapping("getNoApuntadas")
-     public List<ActividadDtoResp> getActividadesNoApuntadas(@AuthenticationPrincipal UserDetails principal) {
+    public List<ActividadDtoResp> getActividadesNoApuntadas(@AuthenticationPrincipal UserDetails principal) {
 
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -106,8 +81,12 @@ public class ActividadController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteActividad(@PathVariable Long id) {
-        actividadService.deleteActividad(id);
+    public void deleteActividad(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Long usuarioId = usuario.getId();
+        actividadService.deleteActividad(id, usuarioId);
     }
 
     @Transactional
@@ -122,44 +101,33 @@ public class ActividadController {
         return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva actividad."));
     }
 
-
-    /* ------------POR SI ACASO, BORRAR UNA VEZ COMPROVADO QUE EL OTRO MÉTODO FUNCIONA-----------------
-    @Transactional
-    @PostMapping("/crearActividad")
-    public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto, @RequestHeader String token) {
-        String email = jwtService.extractUsername(token);
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        System.out.println("HOLA" + email + usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
-        actividadService.crearActividad(actividadDto, usuario);
-        return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva nueva actividad."));
-    } */
-
-    
     @PutMapping("/{id}/participantes")
-    public ResponseEntity<?> unirActividad (@PathVariable("id") Long idActividad,  @AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<?> unirActividad(@PathVariable("id") Long idActividad,
+            @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         actividadService.unirActividad(idActividad, usuario.getId());
         return ResponseEntity.ok(Map.of("message", "Te has unido a la actividad."));
     }
-    
+
     @DeleteMapping("/{id}/participantes")
-    public ResponseEntity<?> desapuntarActividad (@PathVariable("id") Long idActividad,  @AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<?> desapuntarActividad(@PathVariable("id") Long idActividad,
+            @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         actividadService.desapuntarActividad(idActividad, usuario.getId());
         return ResponseEntity.ok(Map.of("message", "Te has desapuntado de la actividad."));
     }
-     
 
     @PutMapping("editarActividad/{id}")
     public ResponseEntity<?> editarActividad(@PathVariable Long id,
-            @RequestBody EditarActividadDto editarActividadDto) {
-        actividadService.editarActividad(id, editarActividadDto);
+            @RequestBody EditarActividadDto editarActividadDto, @AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        actividadService.editarActividad(id, editarActividadDto, usuario.getId());
         return ResponseEntity.ok(Map.of("message", "Se ha editado la actividad correctamente."));
     }
 

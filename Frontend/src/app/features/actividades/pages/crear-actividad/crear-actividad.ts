@@ -5,7 +5,6 @@ import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
-import { FloatLabel } from 'primeng/floatlabel';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
@@ -17,7 +16,7 @@ import { Header } from '../../../../core/layout/header/header';
 
 @Component({
   selector: 'app-crear-actividad',
-  imports: [Header, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, FloatLabel, InputIconModule, SelectModule, KeyFilterModule],
+  imports: [Header, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, InputIconModule, SelectModule, KeyFilterModule],
   templateUrl: './crear-actividad.html',
   styleUrl: './crear-actividad.scss'
 })
@@ -56,7 +55,7 @@ export class CrearActividad {
       ubicacion: ['', Validators.required],
       deporte: [null, Validators.required],
       nivel: [null, Validators.required],
-      num_pers_totales: [null, [Validators.required, Validators.min(1)]],
+      numPersTotales: [null, [Validators.required, Validators.min(1)]],
       precio: [0, Validators.required] // valor por defecto
     });
   }
@@ -93,7 +92,7 @@ export class CrearActividad {
       ubicacion: raw.ubicacion?.trim(),
       deporte: raw.deporte?.name ?? raw.deporte ?? null, // envia string
       nivel: raw.nivel?.name ?? raw.nivel ?? null, // envia string
-      num_pers_totales: Number(raw.num_pers_totales), // envia numero
+      numPersTotales: Number(raw.numPersTotales), // envia numero
       precio: Number(raw.precio ?? 0)
     };
 

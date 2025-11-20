@@ -13,5 +13,6 @@ public record ActividadDtoResp(
     String estado,
     double precio,
     Long usuarioCreadorId,
+    String usuarioCreadorNombre,
     String usuarioCreadorEmail
 ) {}
