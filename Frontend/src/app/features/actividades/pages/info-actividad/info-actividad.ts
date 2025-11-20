@@ -9,13 +9,15 @@ import { MessageService } from 'primeng/api';
 import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
+import { ErrorService } from '../../../../core/services/error/error-service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, Header],
-  providers: [MessageService],
+  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, Header, ToastModule, MessageModule],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss']
 })
@@ -25,31 +27,44 @@ export class InfoActividad {
 
   private messageService = inject(MessageService);
   private actService = inject(ActService);
+  private errorService = inject(ErrorService);
 
-  actividadId : number;
+  actividadId: number;
 
-  constructor(private route: ActivatedRoute){
+  constructor(private route: ActivatedRoute) {
     this.actividadId = Number(route.snapshot.paramMap.get("id"));
     // Simulación: obtener actividad por ID
 
     //this.actService.infoActividad(this.actividadId).subscribe(act => {
-     // this.actividad.set(act); // Actualizamos la signal con la respuesta
-     // this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
-   // });
+    // this.actividad.set(act); // Actualizamos la signal con la respuesta
+    // this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
+    // });
   }
 
-  ngOnInit(): void{
-
-    this.actService.getActividad(this.actividadId).subscribe(act => {
-
-      this.actividad.set(act); // Actualizamos la signal con la respuesta
-      console.log(act);
-      
-      this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
-
+  ngOnInit(): void {
+    if (!this.actividadId || Number.isNaN(this.actividadId)) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'ID de actividad inválido'
       });
+      return;
+    }
 
-
+    this.actService.getActividad(this.actividadId).subscribe({
+      next: act => {
+        this.actividad.set(act); // Actualizamos la signal con la respuesta
+        console.log(act);
+        this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
+      },
+      error: e => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: e ?? 'No se pudo cargar la actividad'
+        });
+      }
+    });
   }
 
   //Usamos el p-rating como un form
@@ -92,22 +107,15 @@ export class InfoActividad {
 
     this.actService.unirteActividad(act.id).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'OK',
-          detail: 'Te has unido a la actividad'
-        });
+        this.messageService.add({ severity: 'success', summary: '¡Enhorabuena!', detail: 'Te has unido a la actividad' });
       },
-      error: (e) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: e ?? 'No se pudo unir a la actividad'
-        });
+      error: (codigo) => {
+        console.log('Código de error recibido:', codigo); // Debug
+        const mensaje = this.errorService.getMensajeError(codigo);
+        this.errorService.showError(mensaje);
       }
     });
   }
-
 
   // Creo que aquí debería ir la lógica para según el deporte que sea, 
   // darle un valor al actividad.imagen distinto y así se muestre luego
