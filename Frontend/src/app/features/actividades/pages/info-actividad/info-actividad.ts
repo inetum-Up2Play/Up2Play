@@ -68,7 +68,15 @@ export class InfoActividad {
     };
     return map[nivel] || 0; // Devuelve 0 si no coincide
   }
+  extraerHora(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
+  }
 
+  extraerFecha(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[0] : '';
+  }
   // Imagen por deporte
   /*   getImagenPorDeporte(deporte?: string): string {
       const map: Record<string, string> = {

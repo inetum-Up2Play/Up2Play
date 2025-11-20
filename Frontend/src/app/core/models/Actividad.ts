@@ -3,7 +3,6 @@ export interface Actividad {
   nombre: string;
   descripcion: string;
   fecha: string;
-  hora: string;
   ubicacion: string;
   nivel: string;
   numPersInscritas: string;
