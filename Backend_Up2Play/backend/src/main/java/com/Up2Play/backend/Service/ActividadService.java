@@ -78,6 +78,7 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         act.getUsuarios().add(usuario);
         usuarioApuntado.getActividadesUnidas().add(act);
+        usuarioRepository.save(usuarioApuntado);
 
         Actividad actGuardada = actividadRepository.save(act);
 
