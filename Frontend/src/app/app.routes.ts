@@ -16,23 +16,21 @@ export const routes: Routes = [
 
   {
     path: '',
-    canActivateChild: [
-      (route, state) => {
-        const auth = inject(AuthService);
-        return auth.canActivate(state.url);
-      }
-    ],
+        canActivateChild: [
+            (route, state) => {
+                const auth = inject(AuthService);
+                return auth.canActivate(state.url);
+            }
+        ],
     children: [
+      {
+        path: 'actividades',
+        loadChildren: () => import('./features/actividades/act.routes').then(m => m.ACT_ROUTES),
+      },
       {
         path: '',
         loadComponent: () =>
           import('./features/home/home').then(m => m.Home),
-      },
-      {
-        path: 'actividades',
-        loadComponent: () =>
-          import('./features/actividades/pages/actividades/actividades')
-            .then(m => m.Actividades),
       },
       {
         path: 'prova',
@@ -44,14 +42,6 @@ export const routes: Routes = [
         path: 'my-account',
         component: Profile,
       },
-      {
-        path: 'crear-actividad',
-        component: CrearActividad,
-      },
-      {
-        path: 'act',
-        loadChildren: () => import('./features/actividades/act.routes').then(m => m.ACT_ROUTES),
-      }
     ],
   }
 

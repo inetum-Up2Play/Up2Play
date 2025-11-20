@@ -5,7 +5,7 @@ import { InfoActividad } from './pages/info-actividad/info-actividad';
 
 export const ACT_ROUTES: Routes = [
     { 
-        path: 'actividades', 
+        path: '', 
         component: Actividades 
     },
     { 
@@ -13,7 +13,7 @@ export const ACT_ROUTES: Routes = [
         component: CrearActividad
     },
     {
-        path: 'info-actividad', //Decidir si queremos que sea paramétrica y use el actividad.id la ruta
+        path: 'info-actividad',
         component: InfoActividad
-    },
+    }
 ];
