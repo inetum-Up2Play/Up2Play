@@ -41,7 +41,7 @@ export class ActService {
   //Metodo obtener actividad por id
   getActividad(id: number): Observable<Actividad> {
     return this.http.get<Actividad>(this.baseUrl + `/${id}`, {}).pipe(
-      // map((res) => res), // innecesario si ya usas genérico
+      // map((res) => res),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
         return throwError(() => errBody?.error ?? 'UNKNOWN');
