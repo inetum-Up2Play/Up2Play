@@ -19,7 +19,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
-import { HttpClientModule } from '@angular/common/http';
+
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -37,7 +37,6 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-info-actividad',
   imports: [
-    HttpClientModule,
     CardModule,
     DividerModule,
     RatingModule,
