@@ -1,1 +1,25 @@
-<p>join-gallery works!</p>
+<div class="xl:p-5 2xl:p-15">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 auto-rows-fr">
+      @for (act of visibleActivities; track act.id) {
+        <app-activity-card
+          [titulo]="act.nombre"
+          [fecha]="extraerFecha(act.fecha)"
+          [hora]="extraerHora(act.fecha)"
+          [ubicacion]="act.ubicacion"
+          [imagen]="'https://media.gq.com.mx/photos/660304abed6388a71e23c80d/16:9/w_2560%2Cc_limit/GettyImages-629586734.jpg'">
+        </app-activity-card>
+      }
+    </div>
+    
+    <div class="flex justify-end xl:p-5 2xl:p-15">
+      @if (visibleActivities.length < activities.length) {
+        <p-button 
+          label="Ver más" 
+          variant="outlined" 
+          icon="pi pi-refresh" 
+          severity="contrast" 
+          (onClick)="loadMore()">
+        </p-button>
+      }
+    </div>
+</div>

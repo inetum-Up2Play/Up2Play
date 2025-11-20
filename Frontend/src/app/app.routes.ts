@@ -23,17 +23,15 @@ export const routes: Routes = [
                 return auth.canActivate(state.url);
             }
         ],
-            children: [
+    children: [
+      {
+        path: 'actividades',
+        loadChildren: () => import('./features/actividades/act.routes').then(m => m.ACT_ROUTES),
+      },
       {
         path: '',
         loadComponent: () =>
           import('./features/home/home').then(m => m.Home),
-      },
-      {
-        path: 'actividades',
-        loadComponent: () =>
-          import('./features/actividades/pages/actividades/actividades')
-            .then(m => m.Actividades),
       },
       {
         path: 'prova',
@@ -45,10 +43,6 @@ export const routes: Routes = [
         path: 'my-account',
         component: Profile,
       },
-      {
-        path: 'crear-actividad',
-        component: CrearActividad,
-      }
     ],
   },
 
