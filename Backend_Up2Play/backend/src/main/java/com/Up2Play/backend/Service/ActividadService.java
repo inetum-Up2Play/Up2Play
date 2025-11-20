@@ -55,14 +55,14 @@ public class ActividadService {
         act.setUbicacion(input.getUbicacion());
         act.setNivel(NivelDificultad.fromValue(input.getNivel()));
 
-        act.setNum_pers_inscritas(1);
+        act.setNumPersInscritas(1);
 
-        int num_personas_totales = Integer.parseInt(input.getNum_pers_totales());
+        int num_personas_totales = Integer.parseInt(input.getNumPersTotales());
 
         if (num_personas_totales == 0) {
-            act.setNum_pers_totales(1);
+            act.setNumPersTotales(1);
         } else
-            act.setNum_pers_totales(num_personas_totales);
+            act.setNumPersTotales(num_personas_totales);
 
         act.setDeporte(input.getDeporte());
 
@@ -95,8 +95,8 @@ public class ActividadService {
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
-                        a.getNum_pers_inscritas(),
-                        a.getNum_pers_totales(),
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
@@ -115,8 +115,8 @@ public class ActividadService {
                 a.getUbicacion(),
                 a.getDeporte(),
                 a.getNivel() != null ? a.getNivel().name() : null,
-                a.getNum_pers_inscritas(),
-                a.getNum_pers_totales(),
+                a.getNumPersInscritas(),
+                a.getNumPersTotales(),
                 a.getEstado() != null ? a.getEstado().name() : null,
                 a.getPrecio(),
                 a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
@@ -137,8 +137,8 @@ public class ActividadService {
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
-                        a.getNum_pers_inscritas(),
-                        a.getNum_pers_totales(),
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
@@ -164,8 +164,8 @@ public class ActividadService {
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
-                        a.getNum_pers_inscritas(),
-                        a.getNum_pers_totales(),
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
@@ -185,8 +185,8 @@ public class ActividadService {
                         a.getUbicacion(),
                         a.getDeporte(),
                         a.getNivel() != null ? a.getNivel().name() : null,
-                        a.getNum_pers_inscritas(),
-                        a.getNum_pers_totales(),
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
@@ -214,9 +214,9 @@ public class ActividadService {
         int num_personas_totales = Integer.parseInt(input.getnumPersTotales());
 
         if (num_personas_totales == 0) {
-            act.setNum_pers_totales(1);
+            act.setNumPersTotales(1);
         } else
-            act.setNum_pers_totales(num_personas_totales);
+            act.setNumPersTotales(num_personas_totales);
 
         act.setDeporte(input.getDeporte());
 
@@ -226,8 +226,30 @@ public class ActividadService {
     }
 
     // Eliminar actividad
-    public void deleteActividad(Long id) {
-        actividadRepository.deleteById(id);
+    public void deleteActividad(Long idActividad, Long idUsuario) {
+        Actividad act = actividadRepository.findById(idActividad).orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
+            
+        
+                List<Usuario> usuarios = usuarioRepository.findAll();
+
+                for (Usuario usuario2 : usuarios) {
+
+                    usuario2.getActividadesUnidas().removeIf(actividad -> actividad.getId().equals(idActividad)); 
+                    usuarioRepository.save(usuario2);                 
+                }
+
+
+        act.getUsuarios().clear();
+        usuario.getActividadesUnidas().clear();
+        actividadRepository.deleteById(idActividad);
+    }else{
+
+    
+    }
+
     }
 
     // Unirse a Actividad
@@ -241,13 +263,13 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         if (!act.getUsuarios().contains(usuario)) {
-            act.getUsuarios().add(usuario);
-            if (act.getNum_pers_inscritas() > act.getNum_pers_totales()) {
+            act.setNumPersInscritas(act.getNumPersInscritas() + 1);
+
+            if (act.getNumPersInscritas() > act.getNumPersTotales()) {
 
                 throw new MaximosParticipantes("Se ha alcanzado el numero maximo de participantes en esta actividad");
             } else {
-
-                act.setNum_pers_inscritas(act.getNum_pers_inscritas() + 1);
+                act.getUsuarios().add(usuario);
                 usuario.getActividadesUnidas().add(act);
 
             }
@@ -265,8 +287,8 @@ public class ActividadService {
                 act.getUbicacion(),
                 act.getDeporte(),
                 act.getNivel() != null ? act.getNivel().name() : null,
-                act.getNum_pers_inscritas(),
-                act.getNum_pers_totales(),
+                act.getNumPersInscritas(),
+                act.getNumPersTotales(),
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
@@ -289,7 +311,7 @@ public class ActividadService {
 
                 act.getUsuarios().remove(usuario);
                 usuario.getActividadesUnidas().remove(act);
-                act.setNum_pers_inscritas(act.getNum_pers_inscritas() - 1);
+                act.setNumPersInscritas(act.getNumPersInscritas() - 1);
 
             } else {
                 throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
@@ -309,8 +331,8 @@ public class ActividadService {
                 act.getUbicacion(),
                 act.getDeporte(),
                 act.getNivel() != null ? act.getNivel().name() : null,
-                act.getNum_pers_inscritas(),
-                act.getNum_pers_totales(),
+                act.getNumPersInscritas(),
+                act.getNumPersTotales(),
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
