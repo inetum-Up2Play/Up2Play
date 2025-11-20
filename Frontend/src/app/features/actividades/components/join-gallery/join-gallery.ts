@@ -48,6 +48,13 @@ export class JoinGallery implements OnInit {
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
   }
 
+  
+  extraerFecha(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[0] : '';
+  }
+
+
 
 
 
