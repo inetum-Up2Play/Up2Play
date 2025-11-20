@@ -7,7 +7,7 @@
     <!-- Columna izquierda -->
     <div class="lg:pr-10">
         <h1 class="text-3xl font-bold mb-2">{{ act.nombre }}</h1>
-        <p class="mb-4 text-sm">Creado por el usuario con id: {{act.id_usuario_creador}}</p><br>
+        <p class="mb-4 text-sm">Creado por el usuario con id: {{act.usuarioCreadorId}}</p><br>
         <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
         </p><br>
@@ -57,7 +57,7 @@
         </p-card>
 
         <div class="mt-4">
-            <p class="font-semibold">Personas inscritas {{ act.num_pers_inscritas }} / {{ act.num_pers_totales }}</p>
+            <p class="font-semibold">Personas inscritas {{ act.numPersInscritas }} / {{ act.numPersTotales }}</p>
             <div class="flex mt-2 space-x-2">
             </div>
         </div>
