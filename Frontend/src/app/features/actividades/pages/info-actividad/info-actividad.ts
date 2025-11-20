@@ -1,21 +1,22 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { Rating } from 'primeng/rating';
-import { InputIcon } from 'primeng/inputicon';
+import { RatingModule } from 'primeng/rating';
+import { InputIconModule } from 'primeng/inputicon';
+import { MessageService } from 'primeng/api';
 
 import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
+import { Header } from '../../../../core/layout/header/header';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { inject } from '@angular/core/primitives/di';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, Rating, InputIcon, FormsModule, ReactiveFormsModule, MessageService],
+  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, Header],
+  providers: [MessageService],
   templateUrl: './info-actividad.html',
-  styleUrl: './info-actividad.scss'
+  styleUrls: ['./info-actividad.scss']
 })
 export class InfoActividad {
 
