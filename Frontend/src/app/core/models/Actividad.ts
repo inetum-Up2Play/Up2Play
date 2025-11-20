@@ -9,7 +9,7 @@ export interface Actividad {
   numPersTotales: string;
   estado: string;
   precio: string;
-  usuarioCreadorId: string;
+  usuarioCreadorNombre: string;
   deporte: string;
   imagen?: string;
 }
