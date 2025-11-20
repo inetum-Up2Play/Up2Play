@@ -140,9 +140,9 @@ export class ActService {
   ComprovarCreador() { }
 
   estoyApuntado(idActividad: number): Observable<boolean> {
-    return this.http.get<{ apuntado: boolean }>(`${this.baseUrl}/${idActividad}/participantes/estado`).pipe(
-      map(response => response.apuntado),
+    return this.http.get<boolean>(`${this.baseUrl}/isUsuarioApuntado/${idActividad}`).pipe(
       catchError(() => of(false)) // Si hay error, asumimos que NO está apuntado
     );
   }
+
 }

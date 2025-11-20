@@ -24,6 +24,7 @@ import { MessageModule } from 'primeng/message';
 export class InfoActividad {
 
   actividad = signal<Actividad | null>(null);
+  apuntado = signal<boolean>(false);
 
   private messageService = inject(MessageService);
   private actService = inject(ActService);
@@ -65,6 +66,8 @@ export class InfoActividad {
         });
       }
     });
+    // Consultar si el usuario está apuntado
+    this.actService.estoyApuntado(this.actividadId).subscribe(flag => this.apuntado.set(flag));
   }
 
   //Usamos el p-rating como un form
@@ -119,6 +122,19 @@ export class InfoActividad {
       },
       error: (codigo) => {
         console.log('Código de error recibido:', codigo); // Debug
+        const mensaje = this.errorService.getMensajeError(codigo);
+        this.errorService.showError(mensaje);
+      }
+    });
+  }
+
+  desapuntarse(): void {
+    this.actService.desapuntarseActividad(this.actividadId).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado de la actividad' });
+        this.apuntado.set(false);
+      },
+      error: (codigo) => {
         const mensaje = this.errorService.getMensajeError(codigo);
         this.errorService.showError(mensaje);
       }
