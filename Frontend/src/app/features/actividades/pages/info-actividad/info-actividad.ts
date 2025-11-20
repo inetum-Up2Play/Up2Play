@@ -26,15 +26,30 @@ export class InfoActividad {
   private messageService = inject(MessageService);
   private actService = inject(ActService);
 
-  actividadId;
+  actividadId : number;
 
   constructor(private route: ActivatedRoute){
-    this.actividadId = route.snapshot.paramMap.get("id");
+    this.actividadId = Number(route.snapshot.paramMap.get("id"));
     // Simulación: obtener actividad por ID
-    this.actService.infoActividad(1).subscribe(act => {
+
+    //this.actService.infoActividad(this.actividadId).subscribe(act => {
+     // this.actividad.set(act); // Actualizamos la signal con la respuesta
+     // this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
+   // });
+  }
+
+  ngOnInit(): void{
+
+    this.actService.getActividad(this.actividadId).subscribe(act => {
+
       this.actividad.set(act); // Actualizamos la signal con la respuesta
+      console.log(act);
+      
       this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel)); //Actualizamos el rating según su nivel
-    });
+
+      });
+
+
   }
 
   //Usamos el p-rating como un form
@@ -45,11 +60,11 @@ export class InfoActividad {
   //Método para indicar las banderas según nivel
   getNivelValue(nivel: string): number {
     const map: Record<string, number> = {
-      'Iniciado': 1,
-      'Principiante': 2,
-      'Intermedio': 3,
-      'Avanzado': 4,
-      'Experto': 5
+      'INICIADO': 1,
+      'PRINCIPIANTE': 2,
+      'INTERMEDIO': 3,
+      'AVANZADO': 4,
+      'EXPERTO': 5
     };
     return map[nivel] || 0; // Devuelve 0 si no coincide
   }
