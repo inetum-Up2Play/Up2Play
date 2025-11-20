@@ -13,6 +13,8 @@ import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreador;
+import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
+import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
@@ -195,60 +197,69 @@ public class ActividadService {
     }
 
     // Editar actividad
-    public Actividad editarActividad(Long id, EditarActividadDto input) {
+    public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) {
         Actividad act = actividadRepository.findById(id)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
-        act.setNombre(input.getNombre());
-        act.setDescripcion(input.getDescripcion());
 
-        LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
-        if (fecha.isBefore(LocalDateTime.now())) {
-            throw new FechaYHora("La fecha y hora no pueden ser anteriores al momento actual.");
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
+            act.setNombre(input.getNombre());
+            act.setDescripcion(input.getDescripcion());
+
+            LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
+            if (fecha.isBefore(LocalDateTime.now())) {
+                throw new FechaYHora("La fecha y hora no pueden ser anteriores al momento actual.");
+            } else {
+                act.setFecha(fecha);
+            }
+
+            act.setUbicacion(input.getUbicacion());
+            act.setNivel(NivelDificultad.fromValue(input.getNivel()));
+
+            int num_personas_totales = Integer.parseInt(input.getnumPersTotales());
+
+            if (num_personas_totales == 0) {
+                act.setNumPersTotales(1);
+            } else
+                act.setNumPersTotales(num_personas_totales);
+
+            act.setDeporte(input.getDeporte());
+
+            Actividad actEditada = actividadRepository.save(act);
+            return actEditada;
         } else {
-            act.setFecha(fecha);
+
+            throw new UsuarioCreadorEditar("Solo el usuario creador puede editar la actividad");
         }
-
-        act.setUbicacion(input.getUbicacion());
-        act.setNivel(NivelDificultad.fromValue(input.getNivel()));
-
-        int num_personas_totales = Integer.parseInt(input.getnumPersTotales());
-
-        if (num_personas_totales == 0) {
-            act.setNumPersTotales(1);
-        } else
-            act.setNumPersTotales(num_personas_totales);
-
-        act.setDeporte(input.getDeporte());
-
-        Actividad actEditada = actividadRepository.save(act);
-        return actEditada;
 
     }
 
     // Eliminar actividad
     public void deleteActividad(Long idActividad, Long idUsuario) {
-        Actividad act = actividadRepository.findById(idActividad).orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+        Actividad act = actividadRepository.findById(idActividad)
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
-            
-        
-                List<Usuario> usuarios = usuarioRepository.findAll();
 
-                for (Usuario usuario2 : usuarios) {
+            List<Usuario> usuarios = usuarioRepository.findAll();
 
-                    usuario2.getActividadesUnidas().removeIf(actividad -> actividad.getId().equals(idActividad)); 
-                    usuarioRepository.save(usuario2);                 
-                }
+            for (Usuario usuario2 : usuarios) {
 
+                usuario2.getActividadesUnidas().removeIf(actividad -> actividad.getId().equals(idActividad));
+                usuarioRepository.save(usuario2);
+            }
 
-        act.getUsuarios().clear();
-        usuario.getActividadesUnidas().clear();
-        actividadRepository.deleteById(idActividad);
-    }else{
+            act.getUsuarios().clear();
+            usuario.getActividadesUnidas().clear();
+            actividadRepository.deleteById(idActividad);
+        } else {
 
-    
-    }
+            throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
+
+        }
 
     }
 
@@ -264,13 +275,9 @@ public class ActividadService {
 
         if (!act.getUsuarios().contains(usuario)) {
 
-<<<<<<< HEAD
-            if (act.getNum_pers_inscritas() > act.getNum_pers_totales()) {
-=======
             act.setNumPersInscritas(act.getNumPersInscritas() + 1);
 
             if (act.getNumPersInscritas() > act.getNumPersTotales()) {
->>>>>>> 1fc6c4eaca93cec4a7a6d74af43cb8c05e7c47cb
 
                 throw new MaximosParticipantes("Se ha alcanzado el numero maximo de participantes en esta actividad");
             } else {
@@ -284,7 +291,7 @@ public class ActividadService {
 
             throw new UsuarioYaApuntadoException("El usuario ya está apuntado a esta actividad");
         }
-        
+
         usuarioRepository.save(usuario);
         return new ActividadDtoResp(
                 act.getId(),

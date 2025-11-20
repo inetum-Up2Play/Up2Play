@@ -38,4 +38,16 @@ public class ErroresActividad {
         }
     }
 
+    public static class UsuarioCreadorEliminar extends RuntimeException {
+        public UsuarioCreadorEliminar(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioCreadorEditar extends RuntimeException {
+        public UsuarioCreadorEditar(String message) {
+            super(message);
+        }
+    }
+
 }
