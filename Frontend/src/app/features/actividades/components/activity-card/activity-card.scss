@@ -1,41 +1,48 @@
 @use 'styles/variables' as vars;
 
 
-
 .title {
     font-weight: bold;
     font-size: larger;
-    white-space: normal;      // Permite saltos de línea
-    word-wrap: break-word;    // Rompe palabras largas
+    white-space: normal; // Permite saltos de línea
+    word-wrap: break-word; // Rompe palabras largas
     overflow-wrap: break-word; // Compatibilidad moderna
-    
 }
 
-.btn-editar {
-  background-color: #007ad9;
-  color: white;
+//BTN EDITAR
+:host ::ng-deep .btn-editar {
+    background-color: vars.$verde-claro;
+    color: vars.$verde-oscuro;
+    border: none;
+    border-radius: 20px;
 }
 
+:host ::ng-deep .btn-editar:hover {
+    background-color: #80b43c;
+    border: none;
+    color: vars.$verde-oscuro;
+}
+
+//BTN APUNTARSE
 :host ::ng-deep .btn-apuntarse {
-    background-color: vars.$verde-oliva; 
-    border: none; 
+    background-color: vars.$verde-oliva;
+    border: none;
     border-radius: 20px;
 }
 
 :host ::ng-deep .btn-apuntarse:hover {
-    background-color: #204718; 
-    border: none; 
-
+    background-color: #204718;
+    border: none;
 }
 
+//BTN DESAPUNTARSE
 :host ::ng-deep .btn-desapuntarse {
-    background-color: #757575; 
-    border: none; 
+    background-color: #757575;
+    border: none;
     border-radius: 20px;
 }
 
 :host ::ng-deep .btn-desapuntarse:hover {
-    background-color: vars.$msg-error-oscuro; 
-    border: none; 
-
+    background-color: vars.$msg-error-oscuro;
+    border: none;
 }

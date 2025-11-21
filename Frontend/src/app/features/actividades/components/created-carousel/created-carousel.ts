@@ -1,31 +1,35 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActService } from '../../../../core/services/actividad/act-service';
-import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { Router } from '@angular/router';
+
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { ErrorService } from '../../../../core/services/error/error-service';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { Tag } from 'primeng/tag';
-import { ActivityCard } from '../activity-card/activity-card';
 import { ToastModule } from 'primeng/toast';
 
+import { ActService } from '../../../../core/services/actividad/act-service';
+import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { ActivityCard } from '../activity-card/activity-card';
+
 @Component({
-  selector: 'app-joined-carousel',
+  selector: 'app-created-carousel',
   imports: [MessageModule, Carousel, ButtonModule, Tag, ActivityCard, ToastModule],
-  templateUrl: './joined-carousel.html',
-  styleUrl: './joined-carousel.scss'
+  templateUrl: './created-carousel.html',
+  styleUrl: './created-carousel.scss'
 })
-export class JoinedCarousel implements OnInit {
+export class CreatedCarousel {
 
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
   private messageService = inject(MessageService);
   private errorService = inject(ErrorService);
+  private router = inject(Router);
 
   activities: any[] = [];
 
-    
+
   ngOnInit() {
     this.cargarActividades();
 
@@ -34,9 +38,9 @@ export class JoinedCarousel implements OnInit {
       this.cargarActividades();
     });
   }
-    
+
   cargarActividades() {
-    this.actService.listarActividadesApuntadas().subscribe({
+    this.actService.listarActividadesCreadas().subscribe({
       next: data => {
         this.activities = data;
       },
@@ -47,33 +51,19 @@ export class JoinedCarousel implements OnInit {
     });
   }
 
-  desapuntarse(id: number) {
-    this.actService.desapuntarseActividad(id).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado de la actividad' });
-
-        //bus de recarga de actividaedes
-        this.actUpdateService.notifyUpdate();
-
-        },
-      error: (codigo) => {
-        console.log('Código de error recibido:', codigo); // Debug
-        const mensaje = this.errorService.getMensajeError(codigo);
-        this.errorService.showError(mensaje);
-      }
-    });
+  editar(id: number) {
+    this.router.navigate(['/actividades/editar-actividad/', id]);
   }
 
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
   }
-  
+
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
-
 
 
 }
