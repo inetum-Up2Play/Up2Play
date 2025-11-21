@@ -33,14 +33,15 @@ export class ActivityCard {
   @Input() botonLabel!: string;
   @Input() botonStyle!: string;
 
-  @Input() botonAction!: (id: number) => void;
+  // Accept callbacks that optionally take an id. This lets parents pass either
+  // a function that expects the id or a zero-arg lambda that captures it.
+  @Input() botonAction?: (id: number) => void;
   @Input() actividadId!: number;
 
   handleButtonClick() {
-    if (this.botonAction) {
-      this.botonAction(this.actividadId);
-      console.log('Botón clickeado con id:', this.actividadId);
-    }
+    // Call the passed callback, if provided. Use optional chaining to be safe.
+    this.botonAction?.(this.actividadId);
+    console.log('Botón clickeado con id:', this.actividadId);
   }
 
   infoActividad() {
