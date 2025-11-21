@@ -1,6 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { Actividad } from '../../models/Actividad';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ErrorResponseDto } from '../../models/ErrorResponseDto';
@@ -15,10 +20,23 @@ export class ActService {
   private baseUrl = 'http://localhost:8080/actividades';
   private logoutTimer: any;
 
-
   //Metodo crear actividad
   crearActividad(payload: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl + '/crearActividad'}`, payload).pipe(
+    return this.http
+      .post<any>(`${this.baseUrl + '/crearActividad'}`, payload)
+      .pipe(
+        map(() => true),
+        catchError((error: HttpErrorResponse) => {
+          const errBody = error.error as ErrorResponseDto;
+          return of(errBody?.error ?? 'UNKNOWN');
+        })
+      );
+  }
+
+  //Metodo editar actividad
+  editarActividad(id: number, payload: any): Observable<any> {
+    this.comprobarCreador(id);
+    return this.http.put(`${this.baseUrl}/editarActividad/${id}`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
@@ -27,13 +45,20 @@ export class ActService {
     );
   }
 
-  //Metodo editar actividad 
-  editarActividad(id: number, payload: any): Observable<any> {
-    return this.http.put(this.baseUrl + `/editarActividad/${id}`, payload).pipe(
-      map(() => true),
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> {
+    const idActividad = Number(route.paramMap.get('id'));
+    return this.comprobarCreador(idActividad).pipe(
+      map((isCreador) =>
+        isCreador
+          ? true
+          : this.router.parseUrl(`/actividades`)
+      ),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
+        return throwError(() => errBody?.error ?? 'UNKNOWN');
       })
     );
   }
@@ -74,7 +99,7 @@ export class ActService {
   //Metodo listar actividades a las que el usuario no está apuntado
   listarActividadesNoApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getNoApuntadas').pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error al obtener actividades', error);
         return of([]); // Devuelve array vacío si falla
       })
@@ -102,39 +127,44 @@ export class ActService {
     );
   }
 
-  getApuntadas() { }
+  getApuntadas() {}
 
   //Metodo apuntarte a actividad
   unirteActividad(idActividad: number): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/${idActividad}/participantes`, {}).pipe(
-      // map(() => true),
-      catchError((error: HttpErrorResponse) => {
-        const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
-        return throwError(() => codigo); // Propaga el código al bloque error
-      })
-    );
+    return this.http
+      .put<any>(`${this.baseUrl}/${idActividad}/participantes`, {})
+      .pipe(
+        // map(() => true),
+        catchError((error: HttpErrorResponse) => {
+          const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
+          return throwError(() => codigo); // Propaga el código al bloque error
+        })
+      );
   }
 
   //Metodo desapuntarte a actividad
   desapuntarseActividad(idActividad: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${idActividad}/participantes`).pipe(
-      catchError((error: HttpErrorResponse) => {
-        const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
-        return throwError(() => codigo);
-      })
-    );
+    return this.http
+      .delete<void>(`${this.baseUrl}/${idActividad}/participantes`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
+          return throwError(() => codigo);
+        })
+      );
   }
 
-  comprobarCreador(idActividad: number): Observable<boolean>{
-    return this.http.get<boolean>(`${this.baseUrl}/isCreador/${idActividad}`).pipe(
-      catchError(() => of(false))
-    );      
-   }
+  comprobarCreador(idActividad: number): Observable<boolean> {
+    return this.http
+      .get<boolean>(`${this.baseUrl}/isCreador/${idActividad}`)
+      .pipe(catchError(() => of(false)));
+  }
 
   estoyApuntado(idActividad: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseUrl}/isUsuarioApuntado/${idActividad}`).pipe(
-      catchError(() => of(false)) // Si hay error, asumimos que NO está apuntado
-    );
+    return this.http
+      .get<boolean>(`${this.baseUrl}/isUsuarioApuntado/${idActividad}`)
+      .pipe(
+        catchError(() => of(false)) // Si hay error, asumimos que NO está apuntado
+      );
   }
-  
 }

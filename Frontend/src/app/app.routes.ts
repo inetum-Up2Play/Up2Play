@@ -18,8 +18,8 @@ export const routes: Routes = [
     path: '',
         canActivateChild: [
             (route, state) => {
-                const auth = inject(AuthService);
-                return auth.canActivate(state.url);
+                const authService = inject(AuthService);
+                return authService.canActivate(state.url);
             }
         ],
     children: [
