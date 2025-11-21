@@ -78,7 +78,6 @@ export class JoinGallery implements OnInit {
 
         //bus de recarga de actividaedes
         this.actUpdateService.notifyUpdate();
-        this.cargarActividades();
 
         },
       error: (codigo) => {
