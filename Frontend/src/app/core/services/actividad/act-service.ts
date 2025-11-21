@@ -29,7 +29,7 @@ export class ActService {
 
   //Metodo editar actividad 
   editarActividad(id: number, payload: any): Observable<any> {
-    return this.http.put(this.baseUrl + `/editarActividad/${id}`, payload).pipe(
+    return this.http.put(`${this.baseUrl}/editarActividad/${id}`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;

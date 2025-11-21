@@ -164,12 +164,30 @@ export class EditarActividad {
 
     this.guardando = true;
 
+    const formValue = this.actividadForm.value;
+
+    // Combinar fecha y hora en formato ISO
+    const fechaCompleta = new Date(formValue.fecha);
+    const [horas, minutos] = formValue.hora.split(':');
+    fechaCompleta.setHours(Number(horas), Number(minutos));
+
+    const fechaFormateada = fechaCompleta.toISOString().replace('Z', '').split('.')[0];
+
     // Prepara el payload acorde al backend (strings/números/enum names)
     const payload = {
-      ...this.actividadForm.value,
-      // si tu backend espera nivel/estado como enums name, ya les estás enviando strings compatibles
-      // si espera fecha ISO completa, convierte desde 'datetime-local' de nuevo:
+      nombre: formValue.nombre,
+      descripcion: formValue.descripcion,
+      fecha: fechaFormateada, // formato "yyyy-MM-dd'T'HH:mm:ss"
+      ubicacion: formValue.ubicacion,
+      deporte: formValue.deporte.name, // convertir objeto a string
+      nivel: formValue.nivel.name,     // convertir objeto a string
+      estado: formValue.estado,
+      numPersTotales: formValue.numPersTotales,
+      precio: formValue.precio
     };
+
+    console.log(payload);
+
 
     this.actService.editarActividad(this.actividadId, payload).subscribe({
       next: (ok) => {
