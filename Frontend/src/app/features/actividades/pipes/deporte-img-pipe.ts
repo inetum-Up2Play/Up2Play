@@ -7,7 +7,7 @@ export class DeporteImgPipe implements PipeTransform {
 
 
   transform(deporte: string): string {
-    const cdnBase = 'https://cdn.tu-servidor.com/deportes/';
+    const cdnBase = 'https://u2play-cdn.up2play1.workers.dev/';
     const map: Record<string, string> = {
       'Atletismo': 'atletismo.jpg',
       'Balonmano': 'balonmano.jpg',

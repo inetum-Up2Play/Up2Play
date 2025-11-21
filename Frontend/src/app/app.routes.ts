@@ -33,12 +33,6 @@ export const routes: Routes = [
           import('./features/home/home').then(m => m.Home),
       },
       {
-        path: 'prova',
-        loadComponent: () =>
-          import('./features/home/pruebaPrimeNG/pruebaPrimeNG.component')
-            .then(m => m.PruebaPrimeNGComponent),
-      },
-      {
         path: 'my-account',
         component: Profile,
       },

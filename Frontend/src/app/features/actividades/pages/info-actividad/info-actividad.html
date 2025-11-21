@@ -40,7 +40,12 @@
             </p>
         </div>
         <div>
-            @if (!apuntado()) {
+            @if (isCreador()) {
+            <button (click)="goEditar()" class="cursor-pointer bg-lime-700 hover:bg-lime-600 text-white font-bold py-2 px-4 rounded-3xl">
+                <p-inputicon class="pi pi-pen-to-square"/>
+                Editar
+            </button>
+            } @else if (!apuntado()) {
             <button (click)="unirse()" class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
                 ¡Apúntate!
             </button>
@@ -56,7 +61,7 @@
     <!-- Columna derecha -->
     <div class="mt-8 lg:mt-0">
         <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
-            src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" alt="actividad-img">
+            [src]="act.deporte | deporteImg" alt="actividad-img">
         <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"> -->
 
         <p-card class="w-full">
@@ -72,11 +77,9 @@
         </div>
     </div>
 
-    <!-- Mapa -->
-    <div class="my-8 min-w-xs lg:col-span-full">
-        <img class="rounded-md"
-            src="https://www.esriuk.com/content/dam/esrisites/en-us/maps-we-love/48-os-open-basemaps/banner-main.jpg"
-            alt="actividad-img">
-    </div>
+   <div class="my-8 min-w-xs lg:col-span-full">
+    <div id="map" style="height: 400px; width: 100%;" class="rounded-md"></div>
+</div> 
+
     }
 </div>
