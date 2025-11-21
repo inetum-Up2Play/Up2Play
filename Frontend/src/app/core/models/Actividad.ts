@@ -5,11 +5,12 @@ export interface Actividad {
   fecha: string;
   ubicacion: string;
   nivel: string;
-  numPersInscritas: string;
-  numPersTotales: string;
+  numPersInscritas: number;
+  numPersTotales: number;
   estado: string;
   precio: string;
   usuarioCreadorNombre: string;
+  usuarioCreadorId: number;
   deporte: string;
   imagen?: string;
 }

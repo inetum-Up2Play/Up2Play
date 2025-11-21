@@ -29,6 +29,7 @@ h1 {
 }
 
 .input {
+    color: vars.$blanco;
     font-family: vars.$work-sans;
     font-weight: 600;
     width: 100%;
@@ -111,6 +112,7 @@ h1 {
 
     &:hover {
         font-weight: 500;
+        color: vars.$verde-oscuro !important;
     }
 }
 
