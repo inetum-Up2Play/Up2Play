@@ -196,7 +196,7 @@ export class EditarActividad {
         if (ok === true) {
           this.messageService.add({ severity: 'success', summary: 'Guardado', detail: 'Actividad actualizada correctamente.' });
           setTimeout(() => {
-            this.router.navigate(['/info-actividad', this.actividadId]);
+            this.router.navigate(['/actividades/info-actividad', this.actividadId]);
           }, 2000);
         } else {
           // si tu servicio devuelve códigos en next (por el map(() => true) / of(codigo))

@@ -9,7 +9,7 @@
                     <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
                     Título
                 </label>
-                <input pInputText type="text" id="nombre" formControlName="nombre" [invalid]="isInvalid('nombre')" />
+                <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64" [invalid]="isInvalid('nombre')" />
                 @if (isInvalid('nombre')) {
                 <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
                 }
@@ -53,7 +53,7 @@
                         <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
                         Máximos participantes
                     </label>
-                    <p-inputNumber [min]="1" formControlName="numPersTotales" id="numPersTotales"
+                    <p-inputNumber [min]="1" [max]="999" formControlName="numPersTotales" id="numPersTotales"
                         pKeyFilter="int" />
                 </div>
             </div>
