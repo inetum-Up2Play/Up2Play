@@ -13,7 +13,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-editar-actividad',
@@ -27,6 +27,7 @@ export class EditarActividad {
   private route = inject(ActivatedRoute);
   private actService = inject(ActService);
   private messageService = inject(MessageService);
+  private router = inject(Router);
 
   deportes: { name: string }[] = [];
   deporteEscogido: string | undefined;
@@ -194,6 +195,9 @@ export class EditarActividad {
         this.guardando = false;
         if (ok === true) {
           this.messageService.add({ severity: 'success', summary: 'Guardado', detail: 'Actividad actualizada correctamente.' });
+          setTimeout(() => {
+            this.router.navigate(['/actividades/info-actividad', this.actividadId]);
+          }, 2000);
         } else {
           // si tu servicio devuelve códigos en next (por el map(() => true) / of(codigo))
           this.messageService.add({ severity: 'error', summary: 'Error', detail: String(ok) });
