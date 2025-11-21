@@ -1,24 +1,21 @@
 import { Component, signal, inject, AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { RatingModule } from 'primeng/rating';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 
 import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ErrorService } from '../../../../core/services/error/error-service';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -31,21 +28,10 @@ import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [
-    CardModule,
-    DividerModule,
-    RatingModule,
-    InputIconModule,
-    FormsModule,
-    ReactiveFormsModule,
-    Header,
-    ToastModule,
-    MessageModule,
-  ],
+  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, Header, ToastModule, MessageModule, DeporteImgPipe],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
