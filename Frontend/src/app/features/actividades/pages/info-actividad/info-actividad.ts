@@ -38,7 +38,7 @@ import { Style, Icon } from 'ol/style';
 export class InfoActividad implements AfterViewInit {
   actividad = signal<Actividad | null>(null);
   apuntado = signal<boolean>(false);
-  isCreador = signal<boolean>(true);
+  isCreador = signal<boolean>(false);
 
   private messageService = inject(MessageService);
   private actService = inject(ActService);
@@ -170,6 +170,9 @@ export class InfoActividad implements AfterViewInit {
     });
     // Consultar si el usuario está apuntado
     this.actService.estoyApuntado(this.actividadId).subscribe(flag => this.apuntado.set(flag));
+
+    // Consultar si el usuario es el creador de la actividad y actualizar el signal
+    this.actService.comprobarCreador(this.actividadId).subscribe(flag => this.isCreador.set(flag));
   }
 
   //Usamos el p-rating como un form
