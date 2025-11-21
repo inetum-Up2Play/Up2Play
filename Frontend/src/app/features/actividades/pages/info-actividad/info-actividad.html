@@ -1,13 +1,13 @@
 <app-header></app-header>
 <p-toast position="top-right"></p-toast>
 <div
-    class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 p-4 sm:p-6 md:p-8 lg:p-10 mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto lg:max-w-6xl my-4 sm:my-6 md:my-10 bg-white rounded-lg shadow">
+    class=" overflow-hidden grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-2 lg:gap-10 xl:gap-10  sm:gap-5 md:gap-5  p-12 sm:p-14 md:p-16 lg:p-25 mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto lg:max-w-6xl my-4 sm:my-6 md:my-10 bg-white rounded-lg shadow">
 
     @let act = actividad();
     @if (act) {
     <!-- Columna izquierda -->
     <div class="lg:pr-10">
-        <h1 class="text-3xl font-bold mb-2">{{ act.nombre }}</h1>
+        <h1 class="text-4xl font-bold mb-2">{{ act.nombre }}</h1>
         <p class="mb-4 text-sm">Creado por el usuario {{act.usuarioCreadorNombre}}</p><br>
         <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
@@ -15,7 +15,7 @@
 
         <p class="mb-6 text-justify">{{ act.descripcion }}</p>
 
-        <div class="space-y-2 mb-6">
+        <div class="space-y-6 mb-6">
             <div class="flex items-center space-x-1">
                 <p><p-inputicon class="pi pi-chart-line" style="color: #3D6C3F" />
                     <strong class="mr-1"> Nivel: </strong>
@@ -59,9 +59,10 @@
     </div>
 
     <!-- Columna derecha -->
-    <div class="mt-8 lg:mt-0">
-        <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
-            [src]="act.deporte | deporteImg" alt="actividad-img">
+   <div class="mt-8 lg:mt-0">
+        <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full" 
+            [src]="act.deporte | deporteImg" alt="actividad-img">  
+            
         <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"> -->
 
         <p-card class="w-full">
@@ -77,9 +78,11 @@
         </div>
     </div>
 
+
    <div class="my-8 min-w-xs lg:col-span-full">
     <div id="map" style="height: 300px; width: 100%;" class="rounded-md"></div>
 </div> 
+
 
     }
 </div>
