@@ -1,20 +1,20 @@
 import { Component, signal, inject } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { RatingModule } from 'primeng/rating';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 
 import { Actividad } from '../../../../core/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ErrorService } from '../../../../core/services/error/error-service';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-info-actividad',
