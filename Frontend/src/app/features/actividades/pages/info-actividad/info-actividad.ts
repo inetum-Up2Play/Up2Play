@@ -38,6 +38,7 @@ import { Style, Icon } from 'ol/style';
 export class InfoActividad implements AfterViewInit {
   actividad = signal<Actividad | null>(null);
   apuntado = signal<boolean>(false);
+  isCreador = signal<boolean>(true);
 
   private messageService = inject(MessageService);
   private actService = inject(ActService);
@@ -187,6 +188,7 @@ export class InfoActividad implements AfterViewInit {
     };
     return map[nivel] || 0; // Devuelve 0 si no coincide
   }
+
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
@@ -250,8 +252,8 @@ export class InfoActividad implements AfterViewInit {
     });
   }
 
-  // Creo que aquí debería ir la lógica para según el deporte que sea, 
-  // darle un valor al actividad.imagen distinto y así se muestre luego
-  // switch (this.actividad.deporte) {
-  // }
+  goEditar(): void {
+    
+  }
+
 }
