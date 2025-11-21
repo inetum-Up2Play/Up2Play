@@ -139,12 +139,18 @@ export class ActService {
   //return of(actividadMock); // Devuelve un Observable simulando la respuesta HTTP
 
 
-  ComprovarCreador() { }
+  comprobarCreador(idActividad: number): Observable<boolean>{
+    return this.http.get<boolean>(`${this.baseUrl}/isCreador/${idActividad}`).pipe(
+      catchError(() => of(false))
+    );      
+   }
 
   estoyApuntado(idActividad: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}/isUsuarioApuntado/${idActividad}`).pipe(
       catchError(() => of(false)) // Si hay error, asumimos que NO está apuntado
     );
   }
+
+  
 
 }
