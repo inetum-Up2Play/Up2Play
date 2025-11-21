@@ -5,7 +5,6 @@ import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
-import { Tag } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
 import { ActService } from '../../../../core/services/actividad/act-service';
@@ -15,7 +14,7 @@ import { ActivityCard } from '../activity-card/activity-card';
 
 @Component({
   selector: 'app-created-carousel',
-  imports: [MessageModule, Carousel, ButtonModule, Tag, ActivityCard, ToastModule],
+  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule],
   templateUrl: './created-carousel.html',
   styleUrl: './created-carousel.scss'
 })
@@ -52,7 +51,9 @@ export class CreatedCarousel {
   }
 
   editar(id: number) {
-    this.router.navigate(['/actividades/editar-actividad/', id]);
+
+    return this.router.navigate([`/actividades/info-actividad/${id}`]);
+
   }
 
   extraerHora(fecha: string): string {

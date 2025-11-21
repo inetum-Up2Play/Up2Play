@@ -6,14 +6,14 @@ import { MessageService } from 'primeng/api';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
-import { Tag } from 'primeng/tag';
 import { ActivityCard } from '../activity-card/activity-card';
 import { ToastModule } from 'primeng/toast';
 import { Observable } from 'rxjs/internal/Observable';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-joined-carousel',
-  imports: [MessageModule, Carousel, ButtonModule, Tag, ActivityCard, ToastModule],
+  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule],
   templateUrl: './joined-carousel.html',
   styleUrl: './joined-carousel.scss'
 })
@@ -23,6 +23,8 @@ export class JoinedCarousel implements OnInit {
   private actUpdateService = inject(ActUpdateService);
   private messageService = inject(MessageService);
   private errorService = inject(ErrorService);
+    private router = inject(Router);
+
 
   activities: any[] = [];
     
@@ -71,6 +73,7 @@ export class JoinedCarousel implements OnInit {
 
   editar(id: number) {
 
+    return this.router.navigate([`/actividades/info-actividad/${id}`]);
 
   }
 
