@@ -5,3 +5,17 @@ h1 {
     font-family: vars.$montserrat;
     color: vars.$verde-oliva;
 }
+
+:host ::ng-deep #crear_actividad {
+    background-color: vars.$verde-oliva !important;
+    color: vars.$blanco !important;
+    width: fit-content;
+    border: none;
+    border-radius: 20px;
+}
+
+:host ::ng-deep .btn-editar:hover {
+    background-color: #80b43c;
+    border: none;
+    color: vars.$verde-oscuro;
+}
