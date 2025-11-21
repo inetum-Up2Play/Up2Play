@@ -6,10 +6,11 @@ export interface Actividad {
   ubicacion: string;
   nivel: string;
   numPersInscritas: number;
-  numPersTotales: string;
+  numPersTotales: number;
   estado: string;
   precio: string;
   usuarioCreadorNombre: string;
+  usuarioCreadorId: number;
   deporte: string;
   imagen?: string;
 }
