@@ -143,7 +143,6 @@ export class CrearActividad {
   ngOnInit() {
     // Inicializar deportes
     this.deportes = [
-      { name: 'Arquería' },
       { name: 'Atletismo' },
       { name: 'Balonmano' },
       { name: 'Basquet' },
@@ -159,10 +158,11 @@ export class CrearActividad {
       { name: 'Gimnasia' },
       { name: 'Golf' },
       { name: 'Hockey' },
-      { name: 'ArtesMarciales' },
+      { name: 'Artes Marciales' },
       { name: 'Natación' },
       { name: 'Patinaje' },
       { name: 'Ping Pong' },
+      { name: 'Piragüismo' },
       { name: 'Rugby' },
       { name: 'Remo' },
       { name: 'Snowboard' },
@@ -175,18 +175,18 @@ export class CrearActividad {
       { name: 'Badminton' },
       { name: 'Crossfit' },
       { name: 'Danza Deportiva' },
+      { name: 'Entrenamiento de fuerza' },
       { name: 'Equitación' },
       { name: 'Fútbol Americano' },
       { name: 'Lucha Libre' },
       { name: 'Motocross' },
       { name: 'Padel' },
       { name: 'Parkour' },
-      { name: 'Pesas' },
-      { name: 'Raquetbol' },
       { name: 'Skateboarding' },
       { name: 'Squash' },
       { name: 'Tiro con Arco' },
-      { name: 'Ultimate Frisbee' }
+      { name: 'Frisbee' },
+      { name: 'Senderismo' }
     ];
     this.niveles = [
       { name: 'Iniciado' },
