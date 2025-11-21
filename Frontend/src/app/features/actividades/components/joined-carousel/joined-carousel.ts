@@ -24,6 +24,7 @@ export class JoinedCarousel implements OnInit {
   private errorService = inject(ErrorService);
 
   activities: any[] = [];
+  esCreador = false;
 
     
   ngOnInit() {
@@ -73,6 +74,10 @@ export class JoinedCarousel implements OnInit {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
+
+
+
+
 
   responsiveOptions = [
     {
