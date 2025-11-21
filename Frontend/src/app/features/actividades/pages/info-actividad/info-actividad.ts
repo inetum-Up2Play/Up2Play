@@ -64,13 +64,10 @@ export class InfoActividad implements AfterViewInit {
         )}`
       )
       .subscribe((results) => {
-        console.log('Resultados Nominatim:', results); // Debug
         if (results.length > 0) {
           const lat = parseFloat(results[0].lat);
           const lon = parseFloat(results[0].lon);
           this.initMap(lat, lon);
-        } else {
-          console.error('No se encontró la ubicación');
         }
       });
   }
@@ -156,8 +153,6 @@ export class InfoActividad implements AfterViewInit {
                 const lat = parseFloat(results[0].lat);
                 const lon = parseFloat(results[0].lon);
                 this.initMap(lat, lon);
-              } else {
-                console.error('No se encontró la ubicación');
               }
             });
         }
