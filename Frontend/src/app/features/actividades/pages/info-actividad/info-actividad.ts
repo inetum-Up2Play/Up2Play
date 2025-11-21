@@ -1,6 +1,6 @@
 import { Component, signal, inject, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { CardModule } from 'primeng/card';
@@ -43,6 +43,8 @@ export class InfoActividad implements AfterViewInit {
   private messageService = inject(MessageService);
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
+  private router = inject(Router);
+
 
   actividadId: number;
 
@@ -256,7 +258,7 @@ export class InfoActividad implements AfterViewInit {
   }
 
   goEditar(): void {
-    
+    this.router.navigate(['/actividades/editar-actividad/', this.actividadId]);
   }
 
 }
