@@ -4,11 +4,18 @@
     width: 25rem;
     overflow: hidden;
     font-family: vars.$work-sans;
+    /* Sombra solo arriba e izquierda */
+    box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.25);
+
 }
 
 .title {
     font-weight: bold;
     font-size: larger;
+    white-space: normal;      // Permite saltos de línea
+    word-wrap: break-word;    // Rompe palabras largas
+    overflow-wrap: break-word; // Compatibilidad moderna
+    
 }
 
 :host ::ng-deep .button .p-button {

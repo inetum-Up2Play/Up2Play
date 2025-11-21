@@ -11,7 +11,7 @@ import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-pruebaPrimeNG',
-  imports: [ButtonModule, Toast, Ripple, ActivityCard, InfoActividad, CardModule],
+  imports: [ButtonModule, Toast, Ripple, ActivityCard, CardModule],
   providers: [MessageService],
   templateUrl: './pruebaPrimeNG.component.html',
   styleUrls: ['./pruebaPrimeNG.component.css']

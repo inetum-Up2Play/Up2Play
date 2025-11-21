@@ -5,7 +5,7 @@ export interface Actividad {
   fecha: string;
   ubicacion: string;
   nivel: string;
-  numPersInscritas: string;
+  numPersInscritas: number;
   numPersTotales: string;
   estado: string;
   precio: string;

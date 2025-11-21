@@ -40,8 +40,16 @@
             </p>
         </div>
         <div>
-            <button (click)="unirse()"
-                class="bg-lime-800 hover:bg-lime-700 text-white cursor-pointer font-bold py-2 px-4 rounded-3xl">¡Apúntate!</button>
+            @if (!apuntado()) {
+            <button (click)="unirse()" class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
+                ¡Apúntate!
+            </button>
+            } @else {
+            <button (click)="desapuntarse()"
+                class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
+                Desapúntate...
+            </button>
+            }
         </div>
     </div>
 
@@ -64,11 +72,9 @@
         </div>
     </div>
 
-    <!-- Mapa -->
-    <div class="my-8 min-w-xs lg:col-span-full">
-        <img class="rounded-md"
-            src="https://www.esriuk.com/content/dam/esrisites/en-us/maps-we-love/48-os-open-basemaps/banner-main.jpg"
-            alt="actividad-img">
-    </div>
+   <div class="my-8 min-w-xs lg:col-span-full">
+    <div id="map" style="height: 400px; width: 100%;" class="rounded-md"></div>
+</div> 
+
     }
 </div>
