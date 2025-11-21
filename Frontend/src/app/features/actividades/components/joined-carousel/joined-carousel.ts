@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 import { MessageModule } from 'primeng/message';
@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { ActivityCard } from '../activity-card/activity-card';
 import { ToastModule } from 'primeng/toast';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-joined-carousel',
@@ -24,8 +25,6 @@ export class JoinedCarousel implements OnInit {
   private errorService = inject(ErrorService);
 
   activities: any[] = [];
-  esCreador = false;
-
     
   ngOnInit() {
     this.cargarActividades();
@@ -40,6 +39,11 @@ export class JoinedCarousel implements OnInit {
     this.actService.listarActividadesApuntadas().subscribe({
       next: data => {
         this.activities = data;
+        //Creo la propiedad esCreador en cada actividad
+        this.activities.forEach(act => {
+          this.actService.comprobarCreador(act.id).subscribe(flag => act.esCreador = flag);
+        });
+
       },
       error: err => {
         console.error('Error cargando actividades', err);
@@ -65,6 +69,11 @@ export class JoinedCarousel implements OnInit {
     });
   }
 
+  editar(id: number) {
+
+
+  }
+
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
@@ -74,10 +83,6 @@ export class JoinedCarousel implements OnInit {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
-
-
-
-
 
   responsiveOptions = [
     {
