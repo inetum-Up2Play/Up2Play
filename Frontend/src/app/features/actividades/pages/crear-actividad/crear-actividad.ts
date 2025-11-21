@@ -186,7 +186,10 @@ export class CrearActividad {
       { name: 'Squash' },
       { name: 'Tiro con Arco' },
       { name: 'Frisbee' },
-      { name: 'Senderismo' }
+      { name: 'Senderismo' },
+      { name: 'Running' },
+      { name: 'Petanca' }
+      
     ];
     this.niveles = [
       { name: 'Iniciado' },
