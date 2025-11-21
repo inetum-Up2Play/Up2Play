@@ -52,7 +52,9 @@ export class DeporteImgPipe implements PipeTransform {
       'Squash': 'squash.jpg',
       'Tiro con Arco': 'tiro-con-arco.jpg',
       'Frisbee': 'frisbee.jpg',
-      'Senderismo': 'senderismo.jpg'
+      'Senderismo': 'senderismo.jpg',
+      'Running': 'unning.jp',
+      'Petanca': 'petanca.jpg'
     };
 
     return cdnBase + (map[deporte] || 'default.jpg');

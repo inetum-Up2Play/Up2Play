@@ -1,3 +1,4 @@
+@use 'styles/variables' as vars;
 
 /* Contenedor del mapa */
 #map {
@@ -9,6 +10,19 @@
   margin-top: 20px;
   position: relative;
 }
+
+h1 {
+    font-family: vars.$montserrat;
+}
+
+:host ::ng-deep .p-card {
+  border: 1px solid rgb(202, 202, 202,0.3);
+  box-shadow: 0 4px 4px rgba(168, 168, 168, 0.2);
+
+
+
+}
+
 
 
 
