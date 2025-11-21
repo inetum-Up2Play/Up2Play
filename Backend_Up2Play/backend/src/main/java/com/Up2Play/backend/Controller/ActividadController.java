@@ -90,6 +90,15 @@ public class ActividadController {
         return actividadService.isUsuarioApuntado(id, usuarioId);
     }
 
+    @GetMapping("/isCreador/{id}")
+    public boolean isCreador(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Long usuarioId = usuario.getId();
+        return actividadService.isCreador(id, usuarioId);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteActividad(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();

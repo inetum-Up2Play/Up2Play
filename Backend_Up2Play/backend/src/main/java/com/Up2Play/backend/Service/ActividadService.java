@@ -314,6 +314,7 @@ public class ActividadService {
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
     }
 
+    //Booleano que devuelve si estás o no apuntado a la actividad
     @Transactional
     public boolean isUsuarioApuntado(Long idActividad, Long idUsuario) {
 
@@ -324,6 +325,27 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         if (act.getUsuarios().contains(usuario)) {
+
+            return true;
+
+        } else {
+
+            return false;
+        }
+
+    }
+
+    //Booleano que devuelve si eres o no el creador de la actividad
+    @Transactional
+    public boolean isCreador (Long idActividad, Long idUsuario) {
+
+        Actividad act = actividadRepository.findById(idActividad)
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        if (act.getUsuarioCreador().equals(usuario)) {
 
             return true;
 
