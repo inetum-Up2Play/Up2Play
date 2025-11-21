@@ -40,15 +40,28 @@
             </p>
         </div>
         <div>
-            <button (click)="unirse()"
-                class="bg-lime-800 hover:bg-lime-700 text-white cursor-pointer font-bold py-2 px-4 rounded-3xl">¡Apúntate!</button>
+            @if (isCreador()) {
+            <button (click)="goEditar()" class="cursor-pointer bg-lime-700 hover:bg-lime-600 text-white font-bold py-2 px-4 rounded-3xl">
+                <p-inputicon class="pi pi-pen-to-square"/>
+                Editar
+            </button>
+            } @else if (!apuntado()) {
+            <button (click)="unirse()" class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
+                ¡Apúntate!
+            </button>
+            } @else {
+            <button (click)="desapuntarse()"
+                class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
+                Desapúntate...
+            </button>
+            }
         </div>
     </div>
 
     <!-- Columna derecha -->
     <div class="mt-8 lg:mt-0">
         <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
-            src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" alt="actividad-img">
+            [src]="act.deporte | deporteImg" alt="actividad-img">
         <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"> -->
 
         <p-card class="w-full">

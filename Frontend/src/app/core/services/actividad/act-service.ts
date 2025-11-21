@@ -71,6 +71,7 @@ export class ActService {
     );
   }
 
+  //Metodo listar actividades a las que el usuario no está apuntado
   listarActividadesNoApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getNoApuntadas').pipe(
       catchError(error => {
@@ -124,7 +125,16 @@ export class ActService {
     );
   }
 
-  ComprovarCreador() { }
+  comprobarCreador(idActividad: number): Observable<boolean>{
+    return this.http.get<boolean>(`${this.baseUrl}/isCreador/${idActividad}`).pipe(
+      catchError(() => of(false))
+    );      
+   }
 
-  estoyApuntado() { }
+  estoyApuntado(idActividad: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/isUsuarioApuntado/${idActividad}`).pipe(
+      catchError(() => of(false)) // Si hay error, asumimos que NO está apuntado
+    );
+  }
+  
 }
