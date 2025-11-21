@@ -84,17 +84,6 @@ export class JoinedCarousel implements OnInit {
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
-  responsiveOptions = [
-    {
-      breakpoint: '1279PX', // XL
-      numVisible: 2,
-      numScroll: 1
-    },
-    {
-      breakpoint: '768px', // MD
-      numVisible: 1,
-      numScroll: 1
-    }
-  ];
+
 
 }

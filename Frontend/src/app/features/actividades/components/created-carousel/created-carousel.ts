@@ -1,0 +1,69 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { MessageModule } from 'primeng/message';
+import { MessageService } from 'primeng/api';
+import { Carousel } from 'primeng/carousel';
+import { ButtonModule } from 'primeng/button';
+import { Tag } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
+
+import { ActService } from '../../../../core/services/actividad/act-service';
+import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { ActivityCard } from '../activity-card/activity-card';
+
+@Component({
+  selector: 'app-created-carousel',
+  imports: [MessageModule, Carousel, ButtonModule, Tag, ActivityCard, ToastModule],
+  templateUrl: './created-carousel.html',
+  styleUrl: './created-carousel.scss'
+})
+export class CreatedCarousel {
+
+  private actService = inject(ActService);
+  private actUpdateService = inject(ActUpdateService);
+  private messageService = inject(MessageService);
+  private errorService = inject(ErrorService);
+  private router = inject(Router);
+
+  activities: any[] = [];
+
+
+  ngOnInit() {
+    this.cargarActividades();
+
+    //Recargar al recibir notificación (unirse/desunirse)
+    this.actUpdateService.update$.subscribe(() => {
+      this.cargarActividades();
+    });
+  }
+
+  cargarActividades() {
+    this.actService.listarActividadesCreadas().subscribe({
+      next: data => {
+        this.activities = data;
+      },
+      error: err => {
+        console.error('Error cargando actividades', err);
+        this.activities = [];
+      }
+    });
+  }
+
+  editar(id: number) {
+    this.router.navigate(['/actividades/editar-actividad/', id]);
+  }
+
+  extraerHora(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
+  }
+
+  extraerFecha(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[0] : '';
+  }
+
+
+}

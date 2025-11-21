@@ -61,12 +61,11 @@ export class ActService {
   }
 
   //Metodo listar actividades creadas por el usuario
-  listarActividadesCreadas() {
-    return this.http.get(this.baseUrl + '/getCreadas', {}).pipe(
-      map(() => true),
-      catchError((error: HttpErrorResponse) => {
-        const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
+  listarActividadesCreadas(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getCreadas', {}).pipe(
+      catchError(error => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
       })
     );
   }
@@ -81,7 +80,7 @@ export class ActService {
     );
   }
 
-    listarActividadesApuntadas(): Observable<any[]> {
+  listarActividadesApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
       catchError(error => {
         console.error('Error al obtener actividades', error);
@@ -101,8 +100,6 @@ export class ActService {
       })
     );
   }
-
-  getApuntadas() { }
 
   //Metodo apuntarte a actividad
   unirteActividad(idActividad: number): Observable<any> {
@@ -136,5 +133,5 @@ export class ActService {
       catchError(() => of(false)) // Si hay error, asumimos que NO está apuntado
     );
   }
-  
+
 }
