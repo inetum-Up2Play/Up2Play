@@ -5,12 +5,14 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none;
 }
+
 /* WebKit (Chrome, Safari) */
 input[type="password"]::-webkit-credentials-auto-fill-button {
   visibility: hidden;
   display: none;
   pointer-events: none;
 }
+
 input[type="password"]::-webkit-textfield-decoration-container {
   display: none;
 }
@@ -34,15 +36,16 @@ h1 {
   font-weight: 600;
 
   .form-link-login {
-    color: vars.$verde-claro;
+    color: vars.$verde-claro !important;
     cursor: pointer;
     text-decoration: none;
 
-      &:hover {
-        transition: 0.3s ease;
-        opacity: 0.4;
-      }
+    &:hover {
+      transition: 0.3s ease !important;
+      opacity: 0.4 !important;
+      color: vars.$verde-claro !important;
     }
+  }
 }
 
 .form-field {
@@ -50,39 +53,41 @@ h1 {
 }
 
 .input {
-    font-family: vars.$work-sans;
-    font-weight: 600;
-    width: 100%;
-    background-color: rgba(lightgray, 0.2); // porque 1 - 0.8 = 0.2
+  font-family: vars.$work-sans;
+  font-weight: 600;
+  width: 100%;
+  background-color: rgba(lightgray, 0.2); // porque 1 - 0.8 = 0.2
+  color: vars.$blanco;
+  border-color: vars.$blanco;
+  border-radius: 1rem;
+  padding: 0.8rem;
+  box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
+
+  &::placeholder {
     color: vars.$blanco;
-    border-color: vars.$blanco;
-    border-radius: 1rem; 
-    padding: 0.8rem;
-    box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
+  }
+
+  &:hover {
+    border-color: rgb(184, 184, 184);
+  }
+
+  &:focus {
+    border-color: rgb(184, 184, 184) !important;
+    outline: none; // Elimina el borde azul por defecto del navegador
 
     &::placeholder {
-        color: vars.$blanco;
+      opacity: 0.5;
+      transition: ease 0.3s;
     }
-
-    &:hover {
-        border-color: rgb(184, 184, 184);
-    }
-    
-    &:focus {
-        border-color: rgb(184, 184, 184) !important;
-        outline: none; // Elimina el borde azul por defecto del navegador
-        &::placeholder{
-            opacity: 0.5;
-            transition: ease 0.3s;
-        }
-    }
+  }
 }
 
 .p-inputtext.ng-invalid.ng-touched {
-    border-color: vars.$msg-error-claro !important;
-    &::placeholder{
-        color: #cacaca!important;
-    }
+  border-color: vars.$msg-error-claro !important;
+
+  &::placeholder {
+    color: #cacaca !important;
+  }
 }
 
 :host ::ng-deep .p-message-error {
@@ -91,11 +96,12 @@ h1 {
   color: #facccc !important;
   height: fit-content;
 }
+
 .error {
-    font-family: vars.$work-sans;
-    color: vars.$msg-error-claro;
-    margin-top: 0.3rem;
-    display: flex;
+  font-family: vars.$work-sans;
+  color: vars.$msg-error-claro;
+  margin-top: 0.3rem;
+  display: flex;
 }
 
 .terms {
@@ -103,17 +109,17 @@ h1 {
   gap: 0.35rem;
 
   ::ng-deep .p-checkbox-box {
-    background-color: white !important;     // Fondo blanco
-    border: 0px solid black !important;     // Borde negro
+    background-color: white !important; // Fondo blanco
+    border: 0px solid black !important; // Borde negro
   }
 
   ::ng-deep .p-checkbox-box.p-highlight {
-    background-color: white !important;     // Fondo blanco cuando está marcado
+    background-color: white !important; // Fondo blanco cuando está marcado
     border-color: black !important;
   }
 
   ::ng-deep .p-checkbox-box .p-checkbox-icon {
-    color: black !important;                // Tick negro
+    color: black !important; // Tick negro
   }
 
   .label {
@@ -128,38 +134,40 @@ h1 {
     color: vars.$verde-oscuro;
     cursor: pointer;
 
-    &:hover{
-        font-weight: 500;
+    &:hover {
+      font-weight: 500 !important;
+      color: vars.$verde-oscuro !important;
     }
   }
 }
 
 .btn-register {
-    color: vars.$blanco;
-    font-family: vars.$work-sans;
-    width: 100%;
-    border-radius: 1rem;
-    border: none;
+  color: vars.$blanco;
+  font-family: vars.$work-sans;
+  width: 100%;
+  border-radius: 1rem;
+  border: none;
+  background-color: vars.$verde-oscuro;
+  opacity: 0.9;
+  margin-top: 0.8rem;
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      background-color: vars.$verde-oscuro !important;
+      opacity: 1 !important;
+      font-weight: 500 !important;
+      color: vars.$blanco !important;
+      border: none !important;
+      transition: 0.2s ease;
+    }
+  }
+
+  &:disabled {
     background-color: vars.$verde-oscuro;
-    opacity: 0.9;
-    margin-top: 0.8rem;
-
-    &:enabled{
-        cursor: pointer;
-        &:hover{
-            background-color: vars.$verde-oscuro !important;
-            opacity: 1 !important;
-            font-weight: 500 !important;
-            color: vars.$blanco !important;
-            border: none !important;
-            transition: 0.2s ease;
-        }
-    }
-
-    &:disabled{
-        background-color: vars.$verde-oscuro;
-        opacity: 0.7;
-    }
+    opacity: 0.7;
+  }
 }
 
 //Fixing inputicons position

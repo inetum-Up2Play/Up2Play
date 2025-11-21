@@ -102,6 +102,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .toList();
     }
@@ -144,6 +145,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .toList();
 
@@ -171,6 +173,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .toList();
     }
@@ -192,6 +195,7 @@ public class ActividadService {
                         a.getEstado() != null ? a.getEstado().name() : null,
                         a.getPrecio(),
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
     }
@@ -306,7 +310,50 @@ public class ActividadService {
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
+    }
+
+    //Booleano que devuelve si estás o no apuntado a la actividad
+    @Transactional
+    public boolean isUsuarioApuntado(Long idActividad, Long idUsuario) {
+
+        Actividad act = actividadRepository.findById(idActividad)
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        if (act.getUsuarios().contains(usuario)) {
+
+            return true;
+
+        } else {
+
+            return false;
+        }
+
+    }
+
+    //Booleano que devuelve si eres o no el creador de la actividad
+    @Transactional
+    public boolean isCreador (Long idActividad, Long idUsuario) {
+
+        Actividad act = actividadRepository.findById(idActividad)
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        if (act.getUsuarioCreador().equals(usuario)) {
+
+            return true;
+
+        } else {
+
+            return false;
+        }
+
     }
 
     // Desapuntarse a Actividad
@@ -350,6 +397,7 @@ public class ActividadService {
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
 
     }
