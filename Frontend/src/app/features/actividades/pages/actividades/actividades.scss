@@ -1,0 +1,9 @@
+@use 'styles/variables' as vars;
+
+
+h1 {
+
+    font-family: vars.$montserrat;
+    color: vars.$verde-oliva;
+
+}

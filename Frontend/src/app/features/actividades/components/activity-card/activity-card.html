@@ -1,17 +1,21 @@
 <div class="p-5 2xl:p-10 ml-2 mr-2 h-full flex items-center justify-center">
-    <p-card class="card sh h-full">
+    <p-card class="card sh h-full w-[25rem]">
         <ng-template #title>
             <img alt="Card"
                 src={{imagen()}}/>
         </ng-template>
         <ng-template #subtitle> {{fecha()}} - {{hora()}}h </ng-template>
         <ng-template #content>
-            <p class="title"> {{titulo()}}</p>
+            <p class="title" (click)="infoActividad()"> {{titulo()}}</p>
             {{ubicacion()}}
         </ng-template>
         <ng-template #footer>
             <div class="flex gap-4 mt-1">
-                <p-button label="¡Apúntate!" [rounded]="true" class="button" (onClick)="click()"/>
+                <p-button
+                    [label]="botonLabel"
+                    [styleClass]="botonStyle"
+                    (onClick)="handleButtonClick()">
+                </p-button>
             </div>
         </ng-template>
     </p-card>

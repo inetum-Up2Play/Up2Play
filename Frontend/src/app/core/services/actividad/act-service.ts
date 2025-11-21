@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actividad } from '../../models/Actividad';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, Subject, throwError } from 'rxjs';
 import { ErrorResponseDto } from '../../models/ErrorResponseDto';
 import { AuthService } from '../auth/auth-service';
 
@@ -79,6 +79,16 @@ export class ActService {
       })
     );
   }
+
+    listarActividadesApuntadas(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
+      catchError(error => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
+      })
+    );
+  }
+  
   
   //Metodo eliminar actividad
     deleteActividad(id: number) {
@@ -93,9 +103,25 @@ export class ActService {
 
   getApuntadas() {}
 
-  unirteActividad() {}
+  unirteActividad(idActividad: number): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/${idActividad}/participantes`, {}).pipe(
+      // map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
+        return throwError(() => codigo); // Propaga el código al bloque error
+      })
+    );
+  }
 
-  desapuntarteActividad() {}
+  //Metodo desapuntarte a actividad
+  desapuntarseActividad(idActividad: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${idActividad}/participantes`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
+        return throwError(() => codigo);
+      })
+    );
+  }
 
   // Método que devuelve la info de la actividad por ID (mock)
   infoActividad(id: number): Observable<Actividad> {

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { JoinGallery } from '../../components/join-gallery/join-gallery';
 import { Header } from '../../../../core/layout/header/header';
+import { JoinedCarousel } from '../../components/joined-carousel/joined-carousel';
 
 @Component({
   selector: 'app-actividades',
-  imports: [JoinGallery, Header],
+  imports: [JoinGallery, Header, JoinedCarousel],
   templateUrl: './actividades.html',
   styleUrl: './actividades.scss'
 })

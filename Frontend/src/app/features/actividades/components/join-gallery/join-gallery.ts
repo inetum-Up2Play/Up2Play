@@ -2,17 +2,25 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivityCard } from '../activity-card/activity-card';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
+import { MessageService } from 'primeng/api';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 
 
 @Component({
   selector: 'app-join-gallery',
-  imports: [ActivityCard, ButtonModule],
+  imports: [ActivityCard, ButtonModule, ToastModule, MessageModule],
   templateUrl: './join-gallery.html',
   styleUrl: './join-gallery.scss'
 })
 export class JoinGallery implements OnInit {
 
   private actService = inject(ActService);
+  private messageService = inject(MessageService);
+  private errorService = inject(ErrorService);
+  private actUpdateService = inject(ActUpdateService);
   
   activities: any[] = [];
   visibleActivities: any[] = [];
@@ -20,6 +28,15 @@ export class JoinGallery implements OnInit {
   currentPage = 1;
 
   ngOnInit() {
+    this.cargarActividades();
+
+    //Recargar al recibir notificación (unirse/desunirse)
+    this.actUpdateService.update$.subscribe(() => {
+      this.cargarActividades();
+    });
+  }
+
+  cargarActividades() {
     this.actService.listarActividadesNoApuntadas().subscribe({
       next: data => {
         this.activities = data;
@@ -54,8 +71,23 @@ export class JoinGallery implements OnInit {
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
+  apuntarse(id: number) {
+    this.actService.unirteActividad(id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: '¡Enhorabuena!', detail: 'Te has unido a la actividad' });
 
+        //bus de recarga de actividaedes
+        this.actUpdateService.notifyUpdate();
+        this.cargarActividades();
 
+        },
+      error: (codigo) => {
+        console.log('Código de error recibido:', codigo); // Debug
+        const mensaje = this.errorService.getMensajeError(codigo);
+        this.errorService.showError(mensaje);
+      }
+    });
+  }
 
 
 }
