@@ -8,7 +8,9 @@
     <!-- Columna izquierda -->
     <div class="lg:pr-10">
         <h1 class="text-4xl font-bold mb-2">{{ act.nombre }}</h1>
-        <p class="mb-4 text-sm">Creado por el usuario {{act.usuarioCreadorNombre}}</p><br>
+        <p class="mb-4 text-sm">
+            Creado por <img [src]="getAvatarCreador(act.usuarioCreadorId) | avatar" alt="avatarCreador"> {{act.usuarioCreadorNombre}}
+        </p><br>
         <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
         </p><br>
@@ -41,12 +43,14 @@
         </div>
         <div>
             @if (isCreador()) {
-            <button (click)="goEditar()" class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
-                <p-inputicon class="pi pi-pen-to-square"/>
+            <button (click)="goEditar()"
+                class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
+                <p-inputicon class="pi pi-pen-to-square" />
                 Editar
             </button>
             } @else if (!apuntado()) {
-            <button (click)="unirse()" class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
+            <button (click)="unirse()"
+                class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
                 ¡Apúntate!
             </button>
             } @else {
@@ -59,10 +63,10 @@
     </div>
 
     <!-- Columna derecha -->
-   <div class="mt-8 lg:mt-0">
-        <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full" 
-            [src]="act.deporte | deporteImg" alt="actividad-img">  
-            
+    <div class="mt-8 lg:mt-0">
+        <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
+            [src]="act.deporte | deporteImg" alt="actividad-img">
+
         <!-- <img [src]="act.deporte | deporteImg" alt="{{ act.deporte }}" class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"> -->
 
         <p-card class="w-full">
@@ -79,9 +83,9 @@
     </div>
 
 
-   <div class="my-8 min-w-xs lg:col-span-full">
-    <div id="map" style="height: 300px; width: 100%;" class="rounded-md"></div>
-</div> 
+    <div class="my-8 min-w-xs lg:col-span-full">
+        <div id="map" style="height: 300px; width: 100%;" class="rounded-md"></div>
+    </div>
 
 
     }
