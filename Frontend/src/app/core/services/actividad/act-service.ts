@@ -6,9 +6,9 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Actividad } from '../../models/Actividad';
+import { Actividad } from '../../../shared/models/Actividad';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
-import { ErrorResponseDto } from '../../models/ErrorResponseDto';
+import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 import { AuthService } from '../auth/auth-service';
 
 @Injectable({
