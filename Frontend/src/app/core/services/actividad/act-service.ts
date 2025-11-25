@@ -114,7 +114,6 @@ export class ActService {
     );
   }
   
-  
   //Metodo eliminar actividad
   deleteActividad(id: number) {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(

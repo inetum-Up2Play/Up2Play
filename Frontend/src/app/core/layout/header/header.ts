@@ -1,12 +1,7 @@
 import { Router, RouterModule } from '@angular/router';
-import {
-  Component,
-  ElementRef,
-  inject,
-  signal,
-  ViewChild, Renderer2
-} from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+
 import { MenubarModule } from 'primeng/menubar';
 import { RippleModule } from 'primeng/ripple';
 import { BadgeModule } from 'primeng/badge';
@@ -16,6 +11,8 @@ import { DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
+import { AuthService } from '../../services/auth/auth-service';
+import { UserDataService } from '../../services/auth/user-data-service';
 
 interface MenuItemPages {
   label: string;
@@ -24,29 +21,18 @@ interface MenuItemPages {
   children?: MenuItem[];
 }
 
-interface AvatarItem {
-  label: string;
-  icon: string;
-}
-
 @Component({
   selector: 'app-header',
-  imports: [
-    RouterModule,
-    MenubarModule,
-    RippleModule,
-    BadgeModule,
-    AvatarModule,
-    InputTextModule,
-    DrawerModule,
-    ButtonModule,
-    MenuModule,
-  ],
+  imports: [RouterModule, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule],
   templateUrl: './header.html',
   styleUrls: ['./header.scss'],
 })
-export class Header {
+
+export class Header implements OnInit {
   private router = inject(Router);
+  private authService = inject(AuthService);
+  private userDataService = inject(UserDataService);
+
   visible = false;
 
   private renderer = inject(Renderer2); // Para manipular el DOM
@@ -61,7 +47,7 @@ export class Header {
     { label: 'Mi Cuenta', icon: 'pi pi-cog', route: '/my-account' },
   ];
 
-  trackByLabel(index: number, item: MenuItemPages) {
+  trackByLabel(item: MenuItemPages) {
     return item.label;
   }
 
@@ -70,15 +56,17 @@ export class Header {
     return exact ? this.router.url === route : this.router.url.startsWith(route);
   }
 
+  // Signal que almacena el email una sola vez y no cambia más
+  private userEmailSignal = signal<string>('');
 
-  avatarItems: MenuItem[] = [];
-  userEmail = 'usuario@tu-dominio.com';
-
-  ngOnInit(): void {
-    this.avatarItems = [
+  // avatarItems se construye usando el email almacenado en el signal
+  get avatarItems(): MenuItem[] {
+    const email = this.userEmailSignal();
+    return [
       {
-        label: this.userEmail,
+        label: email && email.length > 0 ? email : 'Mi Cuenta',
         icon: 'pi pi-envelope',
+        command: () => this.router.navigate(['/my-account'])
       },
       {
         label: 'Cerrar sesión',
@@ -86,14 +74,26 @@ export class Header {
         command: () => this.logout(),
       },
     ];
+  }
+
+  ngOnInit(): void {
+    // Obtiene el email la primera vez
+    const email = this.userDataService.getEmail();
+    
+    // Obtiene el email del signal del servicio las posteriores veces
+    if (!email || email.trim() === '') {
+      const serviceEmail = this.userDataService.getEmailSignal()();
+      this.userEmailSignal.set(serviceEmail);
+    } else {
+      this.userEmailSignal.set(email);
+    }
+    
     this.renderer.addClass(this.document.body, 'header-background-active'); //img-fondo
     this.renderer.addClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
   }
 
   logout(): void {
-    // Aquí tu lógica de cierre de sesión
-    // authService.logout(); router.navigate(['/login']);
-    console.log('Cerrar sesión');
+    this.authService.logout();
   }
 
   // Calcular tamaño del header

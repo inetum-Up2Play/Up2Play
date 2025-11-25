@@ -5,6 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LoginResponse } from './auth-types';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
+import { UserDataService } from './user-data-service';
 
 const STORAGE_KEY = 'auth';
 const SKEW_MS = 10_000;
@@ -16,6 +17,7 @@ const SKEW_MS = 10_000;
 export class AuthService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
+  private userDataService = inject(UserDataService);
   private baseUrl = 'http://localhost:8080/auth';
   private logoutTimer: any;
 
@@ -98,7 +100,7 @@ export class AuthService {
 
   // NUEVA CONTRASEÑA
   saveNewPassword(payload: { email: string; password: string }) {
-     return this.http.post(`${this.baseUrl}/saveNewPassword`, payload).pipe(
+    return this.http.post(`${this.baseUrl}/saveNewPassword`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
@@ -109,6 +111,7 @@ export class AuthService {
 
   // LOGIN
   login(payload: { email: string; password: string }) {
+    this.userDataService.setEmail(payload.email);
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload).pipe(
       map((res) => {
         this.setSession(res);
@@ -129,6 +132,7 @@ export class AuthService {
   logout(navigateToLogin = true) {
     if (this.logoutTimer) clearTimeout(this.logoutTimer);
     sessionStorage.removeItem(STORAGE_KEY);
+    this.userDataService.clearEmail();
     if (navigateToLogin) {
       this.router.navigate(['/auth/login'], { queryParams: { reason: 'expired' } });
     }

@@ -25,7 +25,7 @@ export class JoinedCarousel implements OnInit {
   private actUpdateService = inject(ActUpdateService);
   private messageService = inject(MessageService);
   private errorService = inject(ErrorService);
-    private router = inject(Router);
+  private router = inject(Router);
 
 
   activities: any[] = [];
