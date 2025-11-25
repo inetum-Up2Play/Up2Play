@@ -1,19 +1,21 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActService } from '../../../../core/services/actividad/act-service';
-import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { Router } from '@angular/router';
+
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { ErrorService } from '../../../../core/services/error/error-service';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
-import { ActivityCard } from '../activity-card/activity-card';
 import { ToastModule } from 'primeng/toast';
-import { Observable } from 'rxjs/internal/Observable';
-import { Router } from '@angular/router';
+
+import { ActivityCard } from '../activity-card/activity-card';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+import { ActService } from '../../../../core/services/actividad/act-service';
+import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 
 @Component({
   selector: 'app-joined-carousel',
-  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule],
+  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule, DeporteImgPipe],
   templateUrl: './joined-carousel.html',
   styleUrl: './joined-carousel.scss'
 })
