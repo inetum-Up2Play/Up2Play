@@ -7,3 +7,8 @@
     box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.25);
     /* Sombra solo arriba e izquierda */
 }
+
+:host ::ng-deep .p-carousel-indicator-active button {
+    background-color: #3D6C3F !important;
+    opacity: 1; /* Asegura que se vea sólido */
+}
