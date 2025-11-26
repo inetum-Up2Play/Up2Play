@@ -10,9 +10,8 @@ import { UserDataService } from './user-data-service';
 const STORAGE_KEY = 'auth';
 const SKEW_MS = 10_000;
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -22,7 +21,11 @@ export class AuthService {
   private logoutTimer: any;
 
   // REGISTRO
-  register(payload: { email: string; password: string; nombre_usuario: string }) {
+  register(payload: {
+    email: string;
+    password: string;
+    nombre_usuario: string;
+  }) {
     return this.http.post(`${this.baseUrl}/signup`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
@@ -89,13 +92,15 @@ export class AuthService {
 
   // VALIDAR TOKEN
   validateToken(token: string) {
-    return this.http.get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`).pipe(
-      map((res) => res), // ← aquí sí se devuelve el objeto con email
-      catchError((error: HttpErrorResponse) => {
-        const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
-      })
-    );
+    return this.http
+      .get<{ email: string }>(`${this.baseUrl}/validate-token?token=${token}`)
+      .pipe(
+        map((res) => res), // ← aquí sí se devuelve el objeto con email
+        catchError((error: HttpErrorResponse) => {
+          const errBody = error.error as ErrorResponseDto;
+          return of(errBody?.error ?? 'UNKNOWN');
+        })
+      );
   }
 
   // NUEVA CONTRASEÑA
@@ -134,7 +139,9 @@ export class AuthService {
     sessionStorage.removeItem(STORAGE_KEY);
     this.userDataService.clearEmail();
     if (navigateToLogin) {
-      this.router.navigate(['/auth/login'], { queryParams: { reason: 'expired' } });
+      this.router.navigate(['/auth/login'], {
+        queryParams: { reason: 'expired' },
+      });
     }
   }
 
@@ -142,7 +149,9 @@ export class AuthService {
     if (this.isLoggedIn()) {
       return true;
     }
-    return this.router.parseUrl(`/auth/login?redirect=${encodeURIComponent(stateUrl)}`);
+    return this.router.parseUrl(
+      `/auth/login?redirect=${encodeURIComponent(stateUrl)}`
+    );
   }
 
   private setSession(res: LoginResponse) {
@@ -187,6 +196,6 @@ export class AuthService {
   isTokenExpired(): boolean {
     const auth = this.getAuth();
     if (!auth) return true;
-    return Date.now() >= (auth.expiresAt - SKEW_MS);
+    return Date.now() >= auth.expiresAt - SKEW_MS;
   }
 }

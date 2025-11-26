@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Model.converter.EstadoActividadConverter;
 import com.Up2Play.backend.Model.converter.NivelDificultadConverter;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
@@ -111,15 +110,7 @@ public class Actividad {
     }
 
     public void setNombre(String nombre) {
-
-        if (nombre != null && nombre.length() > 64) {
-            throw new LimiteCaracteres("El nombre no puede tener más de 64 caracteres.");
-        } else {
-
-            this.nombre = nombre;
-
-        }
-
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {
@@ -128,14 +119,7 @@ public class Actividad {
 
     public void setDescripcion(String descripcion) {
 
-        if (descripcion != null && descripcion.length() > 500) {
-            throw new LimiteCaracteres("La descripción no puede tener más de 500 caracteres.");
-        } else {
-
-            this.descripcion = descripcion;
-
-        }
-
+        this.descripcion = descripcion;
     }
 
     public LocalDateTime getFecha() {

@@ -341,12 +341,12 @@ public class ErrorControl {
                                 .body(body);
         }
 
-                @ExceptionHandler(LimiteCaracteres.class)
+        @ExceptionHandler(LimiteCaracteres.class)
         public ResponseEntity<ErrorResponseDto> handleLimiteCaracteres(
                         LimiteCaracteres ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
-                                "CREADOR_NO_EDITAR",
+                                "LIMITE_CARACTERES",
                                 ex.getMessage(),
                                 HttpStatus.CONFLICT.value(), // ERROR 409
                                 request.getRequestURI(),
@@ -355,6 +355,5 @@ public class ErrorControl {
                                 .status(HttpStatus.CONFLICT)
                                 .body(body);
         }
-
 
 }
