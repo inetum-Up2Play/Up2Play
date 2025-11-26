@@ -88,7 +88,23 @@
 
 
     <div class="my-8 min-w-xs lg:col-span-full">
-        <div id="map" style="height: 300px; width: 100%;" class="rounded-md"></div>
+
+        <div id="map" style="height: 400px;" [class.error-map]="errorUbicacion()">
+
+        @if (errorUbicacion()) {
+            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="error mapa" style="width: 80px; height: 80px; display: block; margin: 0 auto;"><br>
+            <p class="error-text">{{ errorUbicacion() }}</p>
+           
+            
+        
+        } @else {
+        <ng-container #mapa>
+            
+        </ng-container>
+        }
+
+        </div>
+
     </div>
 
 

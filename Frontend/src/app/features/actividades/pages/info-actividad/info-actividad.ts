@@ -1,7 +1,13 @@
 import { Component, signal, inject, AfterViewInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+
 
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
@@ -34,8 +40,19 @@ import { Usuario } from '../../../../shared/models/usuario.model';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
-    Header, DeporteImgPipe, AvatarPipe],
+  imports: [
+    CardModule,
+    DividerModule,
+    RatingModule,
+    InputIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ToastModule,
+    MessageModule,
+    Header,
+    DeporteImgPipe,
+    AvatarPipe,
+  ],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
@@ -49,10 +66,10 @@ export class InfoActividad implements AfterViewInit {
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
   private router = inject(Router);
-  private userService = inject(UserService)
-
+  private userService = inject(UserService);
 
   actividadId: number;
+  errorUbicacion = signal<string | null>(null);
 
   act = {
     ubicacion: '',
@@ -100,7 +117,6 @@ export class InfoActividad implements AfterViewInit {
     });
 
     // Control de zoom personalizado
-
     const zoomControl = new Zoom({
       className: 'custom-zoom',
       zoomInLabel: '',
@@ -159,6 +175,11 @@ export class InfoActividad implements AfterViewInit {
                 const lat = parseFloat(results[0].lat);
                 const lon = parseFloat(results[0].lon);
                 this.initMap(lat, lon);
+                this.errorUbicacion.set(null); // No hay error
+              } else {
+                this.errorUbicacion.set(
+                  `No se pudo localizar la dirección: ${act.ubicacion}`
+                );
               }
             });
         }
@@ -172,10 +193,14 @@ export class InfoActividad implements AfterViewInit {
       },
     });
     // Consultar si el usuario está apuntado
-    this.actService.estoyApuntado(this.actividadId).subscribe(flag => this.apuntado.set(flag));
+    this.actService
+      .estoyApuntado(this.actividadId)
+      .subscribe((flag) => this.apuntado.set(flag));
 
     // Consultar si el usuario es el creador de la actividad y actualizar el signal
-    this.actService.comprobarCreador(this.actividadId).subscribe(flag => this.isCreador.set(flag));
+    this.actService
+      .comprobarCreador(this.actividadId)
+      .subscribe((flag) => this.isCreador.set(flag));
   }
 
   getAvatarCreador(idCreador: number): string {
@@ -227,7 +252,7 @@ export class InfoActividad implements AfterViewInit {
         // Actualización
         this.actividad.set({
           ...act,
-          numPersInscritas: (act.numPersInscritas ?? 0) + 1
+          numPersInscritas: (act.numPersInscritas ?? 0) + 1,
         });
         this.apuntado.set(true);
 
@@ -251,16 +276,23 @@ export class InfoActividad implements AfterViewInit {
 
     this.actService.desapuntarseActividad(this.actividadId).subscribe({
       next: () => {
-        const nuevosInscritos = Math.max(Number(act.numPersInscritas ?? 0) - 1, 0);
+        const nuevosInscritos = Math.max(
+          Number(act.numPersInscritas ?? 0) - 1,
+          0
+        );
         this.actividad.set({ ...act, numPersInscritas: nuevosInscritos });
 
-        this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado de la actividad' });
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Vaya...',
+          detail: 'Te has desapuntado de la actividad',
+        });
         this.apuntado.set(false);
       },
       error: (codigo) => {
         const mensaje = this.errorService.getMensajeError(codigo);
         this.errorService.showError(mensaje);
-      }
+      },
     });
   }
 
@@ -285,5 +317,4 @@ export class InfoActividad implements AfterViewInit {
   goEditar(): void {
     this.router.navigate(['/actividades/editar-actividad/', this.actividadId]);
   }
-
 }

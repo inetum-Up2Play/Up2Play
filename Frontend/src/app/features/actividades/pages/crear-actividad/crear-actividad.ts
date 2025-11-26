@@ -3,7 +3,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
@@ -13,21 +19,35 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
+import { ErrorService } from '../../../../core/services/error/error-service';
 
 @Component({
   selector: 'app-crear-actividad',
-  imports: [Header, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, InputIconModule, SelectModule, KeyFilterModule],
+  imports: [
+    Header,
+    ReactiveFormsModule,
+    DatePickerModule,
+    InputNumberModule,
+    InputTextModule,
+    TextareaModule,
+    ButtonModule,
+    ToastModule,
+    MessageModule,
+    FormsModule,
+    InputIconModule,
+    SelectModule,
+    KeyFilterModule,
+  ],
   templateUrl: './crear-actividad.html',
-  styleUrl: './crear-actividad.scss'
+  styleUrl: './crear-actividad.scss',
 })
 export class CrearActividad {
-  messageService = inject(MessageService);
+  private messageService = inject(MessageService);
+  private actService = inject(ActService);
+  private errorService = inject(ErrorService);
 
-  actService = inject(ActService);
-
-  actividadForm: FormGroup;
-
-  formSubmitted = false;
+ actividadForm: FormGroup;
+ formSubmitted = false;
 
   private pad2(n: number): string {
     return n < 10 ? `0${n}` : `${n}`;
@@ -56,7 +76,7 @@ export class CrearActividad {
       deporte: [null, Validators.required],
       nivel: [null, Validators.required],
       numPersTotales: [null, [Validators.required, Validators.min(1)]],
-      precio: [0, Validators.required] // valor por defecto
+      precio: [0, Validators.required], // valor por defecto
     });
   }
 
@@ -65,7 +85,7 @@ export class CrearActividad {
 
     if (this.actividadForm.invalid) {
       // Marca todos los controles como tocados → dispara validaciones en la vista
-      Object.keys(this.actividadForm.controls).forEach(key => {
+      Object.keys(this.actividadForm.controls).forEach((key) => {
         const control = this.actividadForm.get(key);
         control?.markAsTouched();
         control?.updateValueAndValidity();
@@ -74,7 +94,7 @@ export class CrearActividad {
       this.messageService.add({
         severity: 'warn',
         summary: 'Formulario inválido',
-        detail: 'Revisa los campos marcados.'
+        detail: 'Revisa los campos marcados.',
       });
       return;
     }
@@ -82,8 +102,10 @@ export class CrearActividad {
     const raw = this.actividadForm.value;
 
     // Defensive: asegura que son Date
-    const fechaDate: Date = raw.fecha instanceof Date ? raw.fecha : new Date(raw.fecha);
-    const horaDate: Date = raw.hora instanceof Date ? raw.hora : new Date(raw.hora);
+    const fechaDate: Date =
+      raw.fecha instanceof Date ? raw.fecha : new Date(raw.fecha);
+    const horaDate: Date =
+      raw.hora instanceof Date ? raw.hora : new Date(raw.hora);
 
     const payload = {
       nombre: raw.nombre?.trim(),
@@ -93,37 +115,42 @@ export class CrearActividad {
       deporte: raw.deporte?.name ?? raw.deporte ?? null, // envia string
       nivel: raw.nivel?.name ?? raw.nivel ?? null, // envia string
       numPersTotales: Number(raw.numPersTotales), // envia numero
-      precio: Number(raw.precio ?? 0)
+      precio: Number(raw.precio ?? 0),
     };
 
     console.log('Payload listo para API:', payload);
 
     // Llamada a servicio
     this.actService.crearActividad(payload).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'OK',
-          detail: 'Actividad creada'
-        });
+      next: (res) => {
+        if (res === true) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'OK',
+            detail: 'Actividad creada',
+          });
 
-        // Vaciar formulario
-        this.actividadForm.reset();
-        this.formSubmitted = false;
+          // Vaciar formulario
+          this.actividadForm.reset();
+          this.formSubmitted = false;
 
-        // Redirigir a la lista de actividades
-        setTimeout(() => {
-          this.actService['router'].navigate(['/actividades']);
-        }, 1500); // espera 1.5 segundos para que se vea el toast
+          // Redirigir a la lista de actividades
+          setTimeout(() => {
+            this.actService['router'].navigate(['/actividades']);
+          }, 1500); // espera 1.5 segundos para que se vea el toast
+        } else {
+          const mensaje = this.errorService.getMensajeError(res); // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje); // Se muestra con PrimeNG
+        }
       },
 
-      error: (e) => this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo crear'
-      })
+      error: (e) =>
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo crear',
+        }),
     });
-
   }
 
   isInvalid(controlName: string): boolean {
@@ -188,15 +215,14 @@ export class CrearActividad {
       { name: 'Frisbee' },
       { name: 'Senderismo' },
       { name: 'Running' },
-      { name: 'Petanca' }
-      
+      { name: 'Petanca' },
     ];
     this.niveles = [
       { name: 'Iniciado' },
       { name: 'Principiante' },
       { name: 'Intermedio' },
       { name: 'Avanzado' },
-      { name: 'Experto' }
+      { name: 'Experto' },
     ];
   }
 }

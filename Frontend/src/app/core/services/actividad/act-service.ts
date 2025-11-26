@@ -52,9 +52,7 @@ export class ActService {
     const idActividad = Number(route.paramMap.get('id'));
     return this.comprobarCreador(idActividad).pipe(
       map((isCreador) =>
-        isCreador
-          ? true
-          : this.router.parseUrl(`/actividades`)
+        isCreador ? true : this.router.parseUrl(`/actividades`)
       ),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
@@ -88,7 +86,7 @@ export class ActService {
   //Metodo listar actividades creadas por el usuario
   listarActividadesCreadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getCreadas', {}).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error al obtener actividades', error);
         return of([]); // Devuelve array vacío si falla
       })
@@ -107,13 +105,13 @@ export class ActService {
 
   listarActividadesApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error al obtener actividades', error);
         return of([]); // Devuelve array vacío si falla
       })
     );
   }
-  
+
   //Metodo eliminar actividad
   deleteActividad(id: number) {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(
