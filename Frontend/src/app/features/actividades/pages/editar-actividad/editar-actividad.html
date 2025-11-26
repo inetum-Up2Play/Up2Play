@@ -19,7 +19,7 @@
                     <i class="pi pi-receipt"></i> <!-- Icono PrimeIcons -->
                     Descripción
                 </label>
-                <textarea rows="5" cols="30" pTextarea id="descripcion" formControlName="descripcion"
+                <textarea rows="5" cols="30" pTextarea id="descripcion" maxlength="499" formControlName="descripcion"
                     [invalid]="isInvalid('descripcion')"></textarea>
                 @if (isInvalid('descripcion')) {
                 <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
