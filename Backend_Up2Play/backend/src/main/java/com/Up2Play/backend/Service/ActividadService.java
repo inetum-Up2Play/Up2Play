@@ -27,6 +27,7 @@ import com.Up2Play.backend.Repository.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 
+
 @Service
 public class ActividadService {
     private ActividadRepository actividadRepository;

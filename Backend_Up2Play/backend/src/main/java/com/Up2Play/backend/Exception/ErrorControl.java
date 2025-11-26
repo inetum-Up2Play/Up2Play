@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.Up2Play.backend.DTO.ErrorResponseDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
+import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreador;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
@@ -339,5 +340,21 @@ public class ErrorControl {
                                 .status(HttpStatus.CONFLICT)
                                 .body(body);
         }
+
+                @ExceptionHandler(LimiteCaracteres.class)
+        public ResponseEntity<ErrorResponseDto> handleLimiteCaracteres(
+                        LimiteCaracteres ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "CREADOR_NO_EDITAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
 
 }

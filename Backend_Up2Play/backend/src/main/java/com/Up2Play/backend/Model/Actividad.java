@@ -1,10 +1,10 @@
 package com.Up2Play.backend.Model;
 
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Model.converter.EstadoActividadConverter;
 import com.Up2Play.backend.Model.converter.NivelDificultadConverter;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
@@ -21,22 +21,25 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name= "ACTIVIDAD")
+@Table(name = "ACTIVIDAD")
 public class Actividad {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    @Column(unique = true, nullable = false) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long id;
 
+    @Size(max = 64)
     private String nombre;
-    
+
     @Lob
     @Column(name = "DESCRIPCION", columnDefinition = "CLOB")
+    @Size(max = 500)
     private String descripcion;
-    
+
     private LocalDateTime fecha;
     private String ubicacion;
     private String deporte;
@@ -45,25 +48,20 @@ public class Actividad {
     private NivelDificultad nivel;
     private int numPersInscritas;
     private int numPersTotales;
-    
+
     @Convert(converter = EstadoActividadConverter.class)
     private EstadoActividad estado;
     private double precio;
-    
-    @ManyToOne
-    @JoinColumn(name="id_usuario_creador", nullable = false)
-    private Usuario usuarioCreador; //usuario creador de actividad
 
-    
+    @ManyToOne
+    @JoinColumn(name = "id_usuario_creador", nullable = false)
+    private Usuario usuarioCreador; // usuario creador de actividad
+
     @ManyToMany(mappedBy = "actividadesUnidas")
     private Set<Usuario> usuarios = new HashSet<>();
 
-    
-
     public Actividad() {
     }
-
-    
 
     public Actividad(String nombre, String descripcion, LocalDateTime fecha, String ubicacion, String deporte,
             NivelDificultad nivel, int numPersInscritas, int numPersTotales, EstadoActividad estado, double precio,
@@ -81,8 +79,6 @@ public class Actividad {
         this.usuarioCreador = usuarioCreador;
         this.usuarios = usuarios;
     }
-
-
 
     public Actividad(Long id, String nombre, String descripcion, LocalDateTime fecha, String ubicacion, String deporte,
             NivelDificultad nivel, int numPersInscritas, int numPersTotales, EstadoActividad estado, double precio,
@@ -115,7 +111,15 @@ public class Actividad {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+        if (nombre != null && nombre.length() > 64) {
+            throw new LimiteCaracteres("El nombre no puede tener más de 64 caracteres.");
+        } else {
+
+            this.nombre = nombre;
+
+        }
+
     }
 
     public String getDescripcion() {
@@ -123,7 +127,15 @@ public class Actividad {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+
+        if (descripcion != null && descripcion.length() > 500) {
+            throw new LimiteCaracteres("La descripción no puede tener más de 500 caracteres.");
+        } else {
+
+            this.descripcion = descripcion;
+
+        }
+
     }
 
     public LocalDateTime getFecha() {
@@ -138,7 +150,6 @@ public class Actividad {
         return ubicacion;
     }
 
-    
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
     }
@@ -199,19 +210,12 @@ public class Actividad {
         this.usuarios = usuarios;
     }
 
-
-
     public String getDeporte() {
         return deporte;
     }
 
-
-
     public void setDeporte(String deporte) {
         this.deporte = deporte;
     }
-
-    
-    
 
 }
