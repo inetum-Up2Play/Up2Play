@@ -7,9 +7,10 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { RatingModule } from 'primeng/rating';
 import { InputIconModule } from 'primeng/inputicon';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 import { Actividad } from '../../../../shared/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
@@ -34,8 +35,9 @@ import { Usuario } from '../../../../shared/models/usuario.model';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
+  imports: [ConfirmDialog, CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
     Header, DeporteImgPipe, AvatarPipe],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
@@ -58,9 +60,11 @@ export class InfoActividad implements AfterViewInit {
     ubicacion: '',
   };
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
+  constructor(private route: ActivatedRoute, private http: HttpClient, private confirmationService: ConfirmationService) {
     this.actividadId = Number(route.snapshot.paramMap.get('id'));
   }
+
+
 
   ngAfterViewInit(): void {
     this.http
@@ -264,22 +268,44 @@ export class InfoActividad implements AfterViewInit {
     });
   }
 
-  eliminarActividad(): void {
-    const act = this.actividad();
-    if (!act) return;
-
-    this.actService.deleteActividad(this.actividadId).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Oh... :(', detail: 'Actividad eliminada correctamente' });
-        setTimeout(() => {
-          this.actService['router'].navigate(['/actividades']);
-        }, 2500); // espera 1.5 segundos para que se vea el toast
+  confirm(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: '¿Seguro que quieres eliminar esta actividad?',
+      header: 'Cuidado!',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
       },
-      error: (codigo) => {
-        const mensaje = this.errorService.getMensajeError(codigo);
-        this.errorService.showError(mensaje);
-      }
-    })
+      acceptButtonProps: {
+        label: 'Eliminar',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        const act = this.actividad();
+        if (!act) return;
+
+        this.actService.deleteActividad(this.actividadId).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Oh... :(', detail: 'Actividad eliminada correctamente' });
+            setTimeout(() => {
+              this.actService['router'].navigate(['/actividades']);
+            }, 2500); // espera 1.5 segundos para que se vea el toast
+          },
+          error: (codigo) => {
+            const mensaje = this.errorService.getMensajeError(codigo);
+            this.errorService.showError(mensaje);
+          }
+        })
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'warn', summary: 'Rechazado', detail: 'Has cancelado la eliminación' });
+      },
+    });
   }
 
   goEditar(): void {
