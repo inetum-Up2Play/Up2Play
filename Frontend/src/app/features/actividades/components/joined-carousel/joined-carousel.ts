@@ -75,7 +75,7 @@ export class JoinedCarousel implements OnInit {
 
   editar(id: number) {
 
-    return this.router.navigate([`/actividades/info-actividad/${id}`]);
+    return this.router.navigate([`/actividades/editar-actividad/${id}`]);
 
   }
 
