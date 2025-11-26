@@ -180,6 +180,28 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Enviar peticioes HTTP en tests -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.4.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Generar datos falsos para tests -->	
+		<dependency>
+			<groupId>net.datafaker</groupId>
+			<artifactId>datafaker</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+
+		<!-- Jqwik per Property Based Testing, monkey test con tests avanzados(fuzzing)-->
+		<dependency>
+			<groupId>net.jqwik</groupId>
+			<artifactId>jqwik</artifactId>
+			<version>1.9.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
