@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-empty-activities',
@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './empty-activities.scss'
 })
 export class EmptyActivities {
-
+  //icono
+  @Input() icon: string = ''; 
+  //título    
+  @Input() title: string = '';
+  //subtitulo    
+  @Input() message: string = '';
 }

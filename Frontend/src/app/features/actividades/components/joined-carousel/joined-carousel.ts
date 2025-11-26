@@ -12,10 +12,11 @@ import { ErrorService } from '../../../../core/services/error/error-service';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { EmptyActivities } from '../empty-activities/empty-activities';
 
 @Component({
   selector: 'app-joined-carousel',
-  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule, DeporteImgPipe],
+  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule, DeporteImgPipe, EmptyActivities],
   templateUrl: './joined-carousel.html',
   styleUrl: './joined-carousel.scss'
 })
