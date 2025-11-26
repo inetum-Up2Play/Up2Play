@@ -1,21 +1,24 @@
 <div class="p-5 2xl:p-10 ml-2 mr-2 h-full flex items-center justify-center">
     <p-card class="card sh h-full w-[25rem]">
         <ng-template #title>
-            <img (click)="infoActividad()" class="infoActividad" alt="Card"
-                src={{imagen()}}/>
+            <img (click)="infoActividad()" class="infoActividad" alt="Card" src={{imagen()}} />
         </ng-template>
         <ng-template #subtitle> {{fecha()}} - {{hora()}}h </ng-template>
         <ng-template #content>
-            <p class="title infoActividad" (click)="infoActividad()"> {{titulo()}}</p>
-            {{ubicacion()}}
+            <p class="title infoActividad text-justify" (click)="infoActividad()"> {{titulo()}}</p>
+            <p class="text-justify">{{ubicacion()}}</p>
         </ng-template>
         <ng-template #footer>
-            <div class="flex gap-4 mt-1">
-                <p-button
-                    [label]="botonLabel"
-                    [styleClass]="botonStyle"
-                    (onClick)="handleButtonClick()">
+            <div class="flex mt-1">
+                <p-toast />
+                <p-confirmdialog />
+                <p-button [label]="botonLabel" [styleClass]="botonStyle" (onClick)="handleButtonClick('boton')">
                 </p-button>
+                @if (eliminarLabel) {
+                <p-button class="ml-4" [label]="eliminarLabel" [styleClass]="eliminarStyle"
+                    (onClick)="handleButtonClick('eliminar')">
+                </p-button>
+                }
             </div>
         </ng-template>
     </p-card>

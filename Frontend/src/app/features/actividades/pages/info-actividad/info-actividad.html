@@ -41,13 +41,15 @@
             </p>
         </div>
         <div>
+            <p-toast />
+            <p-confirmdialog />
             @if (isCreador()) {
             <button (click)="goEditar()"
                 class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
                 <p-inputicon class="pi pi-pen-to-square" />
                 Editar
             </button>
-            <button (click)="eliminarActividad()"
+            <button (click)="confirm($event)"
                 class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
                 <p-inputicon class="pi pi-trash" />
                 Eliminar
