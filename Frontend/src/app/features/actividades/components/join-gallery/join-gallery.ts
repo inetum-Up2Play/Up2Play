@@ -9,12 +9,14 @@ import { ActivityCard } from '../activity-card/activity-card';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { EmptyActivities } from '../empty-activities/empty-activities';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+
 
 
 @Component({
   selector: 'app-join-gallery',
-  imports: [ActivityCard, ButtonModule, ToastModule, MessageModule, DeporteImgPipe],
+  imports: [ActivityCard, ButtonModule, ToastModule, MessageModule, EmptyActivities, DeporteImgPipe],
   templateUrl: './join-gallery.html',
   styleUrl: './join-gallery.scss'
 })
@@ -29,6 +31,7 @@ export class JoinGallery implements OnInit {
   visibleActivities: any[] = [];
   pageSize = 8; // 4 por fila * 2 filas
   currentPage = 1;
+  noHayActividades = true;
 
   ngOnInit() {
     this.cargarActividades();
@@ -44,6 +47,10 @@ export class JoinGallery implements OnInit {
       next: data => {
         this.activities = data;
         this.updateVisibleActivities();
+
+        if (this.activities.length != 0) {
+          this.noHayActividades = false;
+        }
       },
       error: err => {
         console.error('Error cargando actividades', err);

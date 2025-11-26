@@ -12,11 +12,12 @@ import { ActUpdateService } from '../../../../core/services/actividad/act-update
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { ActivityCard } from '../activity-card/activity-card';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+import { EmptyActivities } from '../empty-activities/empty-activities';
 
 
 @Component({
   selector: 'app-created-carousel',
-  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule, DeporteImgPipe],
+  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule, DeporteImgPipe, EmptyActivities],
   templateUrl: './created-carousel.html',
   styleUrl: './created-carousel.scss'
 })

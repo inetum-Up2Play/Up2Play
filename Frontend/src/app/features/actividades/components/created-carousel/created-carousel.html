@@ -1,5 +1,12 @@
 <p-toast position="top-right"></p-toast>
-<div class="xl:p-5 2xl:pl-15 2xl:pr-15 ">
+@if (activities.length === 0 ){
+    <app-empty-activities
+        icon="ph-light ph-users-three"
+        title="¿Tienes algo en mente?"
+        message="¡Crea tu actividad y reúne a tu equipo!">
+    </app-empty-activities>
+} @else {
+   <div class="xl:p-5 2xl:pl-15 2xl:pr-15 ">
     <div class="">
         <p-carousel [value]="activities" [numVisible]="4" [numScroll]="1" [circular]="true" autoplayInterval="5000000">
 
@@ -12,5 +19,6 @@
                 </app-activity-card>
             </ng-template>
         </p-carousel>
+        </div>
     </div>
-</div>
+}
