@@ -5,6 +5,10 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import static io.restassured.RestAssured.given;
@@ -30,7 +34,14 @@ public class ActividadControllerMonkeyTest extends BaseApiTest {
 
     private static final String[] NIVELES = {
         "Iniciado", "Principiante", "Intermedio", "Avanzado", "Experto"
-    };
+    };   
+
+    private String fechaFuturaISO(int dias) {
+    return LocalDateTime.now().plusDays(dias).withNano(0).toString();
+    }
+
+
+
 
     @Test
     void crearActividadYValidar() {
@@ -38,7 +49,7 @@ public class ActividadControllerMonkeyTest extends BaseApiTest {
         Map<String, Object> actividad = new HashMap<>();    
         actividad.put("nombre", generarNombreActividad());
         actividad.put("descripcion", faker.lorem().sentence());
-        actividad.put("fecha", faker.date().future(5, java.util.concurrent.TimeUnit.DAYS).toInstant().toString());
+        actividad.put("fecha", fechaFuturaISO(5));   // ej. 2025-12-01T10:15:30
         actividad.put("ubicacion", faker.address().city());
         actividad.put("nivel", NIVELES[rnd.nextInt(NIVELES.length)]);
         actividad.put("numPersTotales", String.valueOf(rnd.nextInt(5, 15)));
@@ -129,7 +140,7 @@ public class ActividadControllerMonkeyTest extends BaseApiTest {
         Map<String, Object> editar = new HashMap<>();
         editar.put("nombre", generarNombreActividad()); // Ejemplo: "Go hiking"
         editar.put("descripcion", faker.lorem().sentence());
-        editar.put("fecha", faker.date().future(10, java.util.concurrent.TimeUnit.DAYS).toInstant().toString());
+        editar.put("fecha", fechaFuturaISO(10));
         editar.put("ubicacion", faker.address().city());
         editar.put("nivel", NIVELES[rnd.nextInt(NIVELES.length)]);
         editar.put("numPersTotales", String.valueOf(rnd.nextInt(5, 20)));
