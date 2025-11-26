@@ -125,7 +125,7 @@ export class Header implements OnInit {
   ngOnDestroy() {
     this.ro?.disconnect();
     this.renderer.removeClass(this.document.body, 'header-background-active'); //img-fondo
-    this.renderer.addClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
+    this.renderer.removeClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
   }
 
 }
