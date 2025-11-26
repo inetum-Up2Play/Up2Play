@@ -12,7 +12,7 @@
           [fecha]="extraerFecha(act.fecha)"
           [hora]="extraerHora(act.fecha)"
           [ubicacion]="act.ubicacion"
-          [imagen]="'https://media.gq.com.mx/photos/660304abed6388a71e23c80d/16:9/w_2560%2Cc_limit/GettyImages-629586734.jpg'"
+          [imagen]="act.deporte | deporteImg"
           [actividadId]="act.id"
           [botonLabel]="'¡Apúntate!'"
           [botonStyle]="'btn-apuntarse'"

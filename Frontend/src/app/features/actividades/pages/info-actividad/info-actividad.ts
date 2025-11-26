@@ -11,11 +11,13 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 
-import { Actividad } from '../../../../core/models/Actividad';
+import { Actividad } from '../../../../shared/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
 import { ErrorService } from '../../../../core/services/error/error-service';
+import { UserService } from '../../../../core/services/user/user-service';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -28,15 +30,18 @@ import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
+import { Usuario } from '../../../../shared/models/usuario.model';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, Header, ToastModule, MessageModule, DeporteImgPipe],
+  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
+    Header, DeporteImgPipe, AvatarPipe],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
 export class InfoActividad implements AfterViewInit {
   actividad = signal<Actividad | null>(null);
+  usuario = signal<Usuario | null>(null);
   apuntado = signal<boolean>(false);
   isCreador = signal<boolean>(false);
 
@@ -44,6 +49,7 @@ export class InfoActividad implements AfterViewInit {
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
   private router = inject(Router);
+  private userService = inject(UserService)
 
 
   actividadId: number;
@@ -64,13 +70,10 @@ export class InfoActividad implements AfterViewInit {
         )}`
       )
       .subscribe((results) => {
-        console.log('Resultados Nominatim:', results); // Debug
         if (results.length > 0) {
           const lat = parseFloat(results[0].lat);
           const lon = parseFloat(results[0].lon);
           this.initMap(lat, lon);
-        } else {
-          console.error('No se encontró la ubicación');
         }
       });
   }
@@ -156,8 +159,6 @@ export class InfoActividad implements AfterViewInit {
                 const lat = parseFloat(results[0].lat);
                 const lon = parseFloat(results[0].lon);
                 this.initMap(lat, lon);
-              } else {
-                console.error('No se encontró la ubicación');
               }
             });
         }
@@ -175,6 +176,12 @@ export class InfoActividad implements AfterViewInit {
 
     // Consultar si el usuario es el creador de la actividad y actualizar el signal
     this.actService.comprobarCreador(this.actividadId).subscribe(flag => this.isCreador.set(flag));
+  }
+
+  getAvatarCreador(idCreador: number): string {
+    //this.usuario = this.userService.getUser(idCreador);
+    //return this.usuario.avatarId;
+    return ''; //Cuando se haga el método, borrar esta línea
   }
 
   //Usamos el p-rating como un form

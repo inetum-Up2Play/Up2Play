@@ -1,18 +1,22 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivityCard } from '../activity-card/activity-card';
-import { ActService } from '../../../../core/services/actividad/act-service';
+
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
+
+import { ActivityCard } from '../activity-card/activity-card';
+import { ActService } from '../../../../core/services/actividad/act-service';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 import { EmptyActivities } from '../empty-activities/empty-activities';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+
 
 
 @Component({
   selector: 'app-join-gallery',
-  imports: [ActivityCard, ButtonModule, ToastModule, MessageModule, EmptyActivities],
+  imports: [ActivityCard, ButtonModule, ToastModule, MessageModule, EmptyActivities, DeporteImgPipe],
   templateUrl: './join-gallery.html',
   styleUrl: './join-gallery.scss'
 })

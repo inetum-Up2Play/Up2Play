@@ -6,9 +6,9 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Actividad } from '../../models/Actividad';
+import { Actividad } from '../../../shared/models/Actividad';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
-import { ErrorResponseDto } from '../../models/ErrorResponseDto';
+import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 import { AuthService } from '../auth/auth-service';
 
 @Injectable({
@@ -86,12 +86,11 @@ export class ActService {
   }
 
   //Metodo listar actividades creadas por el usuario
-  listarActividadesCreadas() {
-    return this.http.get(this.baseUrl + '/getCreadas', {}).pipe(
-      map(() => true),
-      catchError((error: HttpErrorResponse) => {
-        const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
+  listarActividadesCreadas(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getCreadas', {}).pipe(
+      catchError(error => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
       })
     );
   }
@@ -106,7 +105,7 @@ export class ActService {
     );
   }
 
-    listarActividadesApuntadas(): Observable<any[]> {
+  listarActividadesApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
       catchError(error => {
         console.error('Error al obtener actividades', error);
@@ -114,7 +113,6 @@ export class ActService {
       })
     );
   }
-  
   
   //Metodo eliminar actividad
   deleteActividad(id: number) {
@@ -126,8 +124,6 @@ export class ActService {
       })
     );
   }
-
-  getApuntadas() {}
 
   //Metodo apuntarte a actividad
   unirteActividad(idActividad: number): Observable<any> {
