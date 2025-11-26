@@ -48,6 +48,11 @@
                 <p-inputicon class="pi pi-pen-to-square" />
                 Editar
             </button>
+            <button (click)="eliminarActividad()"
+                class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
+                <p-inputicon class="pi pi-trash" />
+                Eliminar
+            </button>
             } @else if (!apuntado()) {
             <button (click)="unirse()"
                 class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">

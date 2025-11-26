@@ -264,6 +264,24 @@ export class InfoActividad implements AfterViewInit {
     });
   }
 
+  eliminarActividad(): void {
+    const act = this.actividad();
+    if (!act) return;
+
+    this.actService.deleteActividad(this.actividadId).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Oh... :(', detail: 'Actividad eliminada correctamente' });
+        setTimeout(() => {
+          this.actService['router'].navigate(['/actividades']);
+        }, 2500); // espera 1.5 segundos para que se vea el toast
+      },
+      error: (codigo) => {
+        const mensaje = this.errorService.getMensajeError(codigo);
+        this.errorService.showError(mensaje);
+      }
+    })
+  }
+
   goEditar(): void {
     this.router.navigate(['/actividades/editar-actividad/', this.actividadId]);
   }
