@@ -8,9 +8,8 @@
     <!-- Columna izquierda -->
     <div class="lg:pr-10">
         <h1 class="text-4xl font-bold mb-2">{{ act.nombre }}</h1>
-        <p class="mb-4 text-sm">
-            Creado por <img [src]="getAvatarCreador(act.usuarioCreadorId) | avatar" alt="avatarCreador"> {{act.usuarioCreadorNombre}}
-        </p><br>
+        <p class="mb-4 text-sm">Creado por {{act.usuarioCreadorNombre}}  </p><br>
+        <!-- Cuando se modifique la BBD funcionará <img [src]="getAvatarCreador(act.usuarioCreadorId) | avatar" alt="avatarCreador"> -->
         <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
         </p><br>
