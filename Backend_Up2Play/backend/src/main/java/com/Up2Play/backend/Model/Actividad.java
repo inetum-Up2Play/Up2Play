@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Model.converter.EstadoActividadConverter;
 import com.Up2Play.backend.Model.converter.NivelDificultadConverter;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
@@ -21,6 +22,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name= "ACTIVIDAD")
@@ -114,16 +116,34 @@ public class Actividad {
         return nombre;
     }
 
+    @Size(max = 64)
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+        if (nombre != null && nombre.length() > 64) {
+            throw new LimiteCaracteres("El nombre no puede tener más de 64 caracteres.");
+        }else{
+            
+            this.nombre = nombre;
+
+        }
+        
     }
 
     public String getDescripcion() {
         return descripcion;
     }
-
+ 
+    @Size(max = 500)
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+
+        if (descripcion != null && descripcion.length() > 500) {
+            throw new LimiteCaracteres("La descripción no puede tener más de 500 caracteres.");
+        }else{
+
+            this.descripcion = descripcion;
+
+        }
+        
     }
 
     public LocalDateTime getFecha() {
