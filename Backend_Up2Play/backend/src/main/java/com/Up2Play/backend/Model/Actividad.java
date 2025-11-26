@@ -34,8 +34,7 @@ public class Actividad {
     @Size(max = 64)
     private String nombre;
 
-    @Lob
-    @Column(name = "DESCRIPCION", columnDefinition = "CLOB")
+    @Column(name = "DESCRIPCION")
     @Size(max = 500)
     private String descripcion;
 
