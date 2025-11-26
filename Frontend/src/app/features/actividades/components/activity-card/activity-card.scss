@@ -28,6 +28,20 @@
     color: vars.$verde-oscuro;
 }
 
+//BTN ELIMINAR
+:host ::ng-deep .btn-eliminar {
+    background-color: #9d0208;
+    color: vars.$blanco;
+    border: none;
+    border-radius: 20px;
+}
+
+:host ::ng-deep .btn-eliminar:hover {
+    background-color: #6a040f;
+    border: none;
+    color: vars.$blanco;
+}
+
 //BTN APUNTARSE
 :host ::ng-deep .btn-apuntarse {
     background-color: vars.$verde-oliva;
@@ -48,6 +62,6 @@
 }
 
 :host ::ng-deep .btn-desapuntarse:hover {
-    background-color: vars.$msg-error-oscuro;
+    background-color: #5c5c5c;
     border: none;
 }

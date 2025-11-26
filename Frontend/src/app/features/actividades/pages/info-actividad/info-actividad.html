@@ -7,15 +7,14 @@
     @if (act) {
     <!-- Columna izquierda -->
     <div class="lg:pr-10">
-        <h1 class="text-4xl font-bold mb-2">{{ act.nombre }}</h1>
-        <p class="mb-4 text-sm">
-            Creado por <img [src]="getAvatarCreador(act.usuarioCreadorId) | avatar" alt="avatarCreador"> {{act.usuarioCreadorNombre}}
-        </p><br>
+        <h1 class="text-4xl font-bold mb-2 wrap-break-word">{{ act.nombre }}</h1>
+        <p class="mb-4 text-sm">Creado por {{act.usuarioCreadorNombre}}  </p><br>
+        <!-- Cuando se modifique la BBD funcionará <img [src]="getAvatarCreador(act.usuarioCreadorId) | avatar" alt="avatarCreador"> -->
         <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
         </p><br>
 
-        <p class="mb-6 text-justify">{{ act.descripcion }}</p>
+        <p class="mb-6 text-justify wrap-break-word">{{ act.descripcion }}</p>
 
         <div class="space-y-6 mb-6">
             <div class="flex items-center space-x-1">
@@ -34,7 +33,7 @@
                 </form>
             </div>
 
-            <p><p-inputicon class="pi pi-map-marker" style="color: #3D6C3F" />
+            <p class="wrap-break-word"><p-inputicon class="pi pi-map-marker" style="color: #3D6C3F" />
                 <strong> Punto de encuentro:</strong> {{ act.ubicacion }}
             </p>
             <p><p-inputicon class="pi pi-euro" style="color: #3D6C3F" />
@@ -42,11 +41,18 @@
             </p>
         </div>
         <div>
+            <p-toast />
+            <p-confirmdialog />
             @if (isCreador()) {
             <button (click)="goEditar()"
                 class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
                 <p-inputicon class="pi pi-pen-to-square" />
                 Editar
+            </button>
+            <button (click)="confirm($event)"
+                class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
+                <p-inputicon class="pi pi-trash" />
+                Eliminar
             </button>
             } @else if (!apuntado()) {
             <button (click)="unirse()"
@@ -84,7 +90,23 @@
 
 
     <div class="my-8 min-w-xs lg:col-span-full">
-        <div id="map" style="height: 300px; width: 100%;" class="rounded-md"></div>
+
+        <div id="map" style="height: 400px;" [class.error-map]="errorUbicacion()">
+
+        @if (errorUbicacion()) {
+            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="error mapa" style="width: 80px; height: 80px; display: block; margin: 0 auto;"><br>
+            <p class="error-text">{{ errorUbicacion() }}</p>
+           
+            
+        
+        } @else {
+        <ng-container #mapa>
+            
+        </ng-container>
+        }
+
+        </div>
+
     </div>
 
 

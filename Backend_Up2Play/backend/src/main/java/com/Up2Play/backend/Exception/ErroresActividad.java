@@ -50,4 +50,10 @@ public class ErroresActividad {
         }
     }
 
+        public static class LimiteCaracteres extends RuntimeException {
+        public LimiteCaracteres(String message) {
+            super(message);
+        }
+    }
+
 }

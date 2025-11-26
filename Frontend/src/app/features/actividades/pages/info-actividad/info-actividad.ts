@@ -1,15 +1,22 @@
 import { Component, signal, inject, AfterViewInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+
 
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { RatingModule } from 'primeng/rating';
 import { InputIconModule } from 'primeng/inputicon';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 import { Actividad } from '../../../../shared/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
@@ -34,8 +41,9 @@ import { Usuario } from '../../../../shared/models/usuario.model';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
+  imports: [ConfirmDialog, CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
     Header, DeporteImgPipe, AvatarPipe],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
@@ -49,18 +57,20 @@ export class InfoActividad implements AfterViewInit {
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
   private router = inject(Router);
-  private userService = inject(UserService)
-
+  private userService = inject(UserService);
 
   actividadId: number;
+  errorUbicacion = signal<string | null>(null);
 
   act = {
     ubicacion: '',
   };
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
+  constructor(private route: ActivatedRoute, private http: HttpClient, private confirmationService: ConfirmationService) {
     this.actividadId = Number(route.snapshot.paramMap.get('id'));
   }
+
+
 
   ngAfterViewInit(): void {
     this.http
@@ -100,7 +110,6 @@ export class InfoActividad implements AfterViewInit {
     });
 
     // Control de zoom personalizado
-
     const zoomControl = new Zoom({
       className: 'custom-zoom',
       zoomInLabel: '',
@@ -159,6 +168,11 @@ export class InfoActividad implements AfterViewInit {
                 const lat = parseFloat(results[0].lat);
                 const lon = parseFloat(results[0].lon);
                 this.initMap(lat, lon);
+                this.errorUbicacion.set(null); // No hay error
+              } else {
+                this.errorUbicacion.set(
+                  `No se pudo localizar la dirección: ${act.ubicacion}`
+                );
               }
             });
         }
@@ -172,10 +186,14 @@ export class InfoActividad implements AfterViewInit {
       },
     });
     // Consultar si el usuario está apuntado
-    this.actService.estoyApuntado(this.actividadId).subscribe(flag => this.apuntado.set(flag));
+    this.actService
+      .estoyApuntado(this.actividadId)
+      .subscribe((flag) => this.apuntado.set(flag));
 
     // Consultar si el usuario es el creador de la actividad y actualizar el signal
-    this.actService.comprobarCreador(this.actividadId).subscribe(flag => this.isCreador.set(flag));
+    this.actService
+      .comprobarCreador(this.actividadId)
+      .subscribe((flag) => this.isCreador.set(flag));
   }
 
   getAvatarCreador(idCreador: number): string {
@@ -227,7 +245,7 @@ export class InfoActividad implements AfterViewInit {
         // Actualización
         this.actividad.set({
           ...act,
-          numPersInscritas: (act.numPersInscritas ?? 0) + 1
+          numPersInscritas: (act.numPersInscritas ?? 0) + 1,
         });
         this.apuntado.set(true);
 
@@ -251,21 +269,67 @@ export class InfoActividad implements AfterViewInit {
 
     this.actService.desapuntarseActividad(this.actividadId).subscribe({
       next: () => {
-        const nuevosInscritos = Math.max(Number(act.numPersInscritas ?? 0) - 1, 0);
+        const nuevosInscritos = Math.max(
+          Number(act.numPersInscritas ?? 0) - 1,
+          0
+        );
         this.actividad.set({ ...act, numPersInscritas: nuevosInscritos });
 
-        this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado de la actividad' });
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Vaya...',
+          detail: 'Te has desapuntado de la actividad',
+        });
         this.apuntado.set(false);
       },
       error: (codigo) => {
         const mensaje = this.errorService.getMensajeError(codigo);
         this.errorService.showError(mensaje);
-      }
+      },
+    });
+  }
+
+  confirm(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: '¿Seguro que quieres eliminar esta actividad?',
+      header: 'Cuidado!',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Eliminar',
+        severity: 'danger',
+      },
+
+      accept: () => {
+        const act = this.actividad();
+        if (!act) return;
+
+        this.actService.deleteActividad(this.actividadId).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Oh... :(', detail: 'Actividad eliminada correctamente' });
+            setTimeout(() => {
+              this.actService['router'].navigate(['/actividades']);
+            }, 2500); // espera 1.5 segundos para que se vea el toast
+          },
+          error: (codigo) => {
+            const mensaje = this.errorService.getMensajeError(codigo);
+            this.errorService.showError(mensaje);
+          }
+        })
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'warn', summary: 'Rechazado', detail: 'Has cancelado la eliminación' });
+      },
     });
   }
 
   goEditar(): void {
     this.router.navigate(['/actividades/editar-actividad/', this.actividadId]);
   }
-
 }

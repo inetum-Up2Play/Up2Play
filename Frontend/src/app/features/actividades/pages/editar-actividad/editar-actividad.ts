@@ -3,7 +3,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
@@ -14,27 +20,41 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ErrorService } from '../../../../core/services/error/error-service';
 
 @Component({
   selector: 'app-editar-actividad',
-  imports: [Header, ReactiveFormsModule, DatePickerModule, InputNumberModule, InputTextModule, TextareaModule, ButtonModule, ToastModule, MessageModule, FormsModule, InputIconModule, SelectModule, KeyFilterModule],
+  imports: [
+    Header,
+    ReactiveFormsModule,
+    DatePickerModule,
+    InputNumberModule,
+    InputTextModule,
+    TextareaModule,
+    ButtonModule,
+    ToastModule,
+    MessageModule,
+    FormsModule,
+    InputIconModule,
+    SelectModule,
+    KeyFilterModule,
+  ],
   templateUrl: './editar-actividad.html',
-  styleUrl: './editar-actividad.scss'
+  styleUrl: './editar-actividad.scss',
 })
 export class EditarActividad {
-
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private actService = inject(ActService);
   private messageService = inject(MessageService);
   private router = inject(Router);
+  private errorService = inject(ErrorService);
 
   deportes: { name: string }[] = [];
   deporteEscogido: string | undefined;
 
   niveles: { name: string }[] = [];
   nivelEscogido: string | undefined;
-
 
   actividadForm: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.maxLength(120)]],
@@ -43,7 +63,7 @@ export class EditarActividad {
     hora: ['', [Validators.required]],
     ubicacion: ['', [Validators.required, Validators.maxLength(200)]],
     deporte: ['', [Validators.required]],
-    nivel: ['', [Validators.required]],        // mapea a tu enum
+    nivel: ['', [Validators.required]], // mapea a tu enum
     estado: ['', [Validators.required]],
     numPersTotales: [0, [Validators.required, Validators.min(1)]],
     precio: [0, [Validators.required, Validators.min(0)]],
@@ -63,8 +83,11 @@ export class EditarActividad {
           descripcion: act.descripcion,
           fecha: new Date(act.fecha),
           hora: this.extraerHora(act.fecha),
-          deporte: this.deportes.find(d => d.name === act.deporte) ?? null,
-          nivel: this.niveles.find(n => n.name.toUpperCase() === act.nivel.toUpperCase()) ?? null,
+          deporte: this.deportes.find((d) => d.name === act.deporte) ?? null,
+          nivel:
+            this.niveles.find(
+              (n) => n.name.toUpperCase() === act.nivel.toUpperCase()
+            ) ?? null,
           ubicacion: act.ubicacion,
           estado: act.estado,
           numPersTotales: act.numPersTotales,
@@ -76,15 +99,23 @@ export class EditarActividad {
       },
       error: (codigo) => {
         this.cargando = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: `No se pudo cargar la actividad (${codigo})` });
-      }
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `No se pudo cargar la actividad (${codigo})`,
+        });
+      },
     });
   }
 
   ngOnInit(): void {
     this.actividadId = Number(this.route.snapshot.paramMap.get('id'));
     if (!this.actividadId || Number.isNaN(this.actividadId)) {
-      this.messageService.add({ severity: 'warn', summary: 'ID inválido', detail: 'No se pudo leer el ID de la actividad.' });
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'ID inválido',
+        detail: 'No se pudo leer el ID de la actividad.',
+      });
       return;
     }
 
@@ -133,14 +164,14 @@ export class EditarActividad {
       { name: 'Squash' },
       { name: 'Tiro con Arco' },
       { name: 'Frisbee' },
-      { name: 'Senderismo' }
+      { name: 'Senderismo' },
     ];
     this.niveles = [
       { name: 'Iniciado' },
       { name: 'Principiante' },
       { name: 'Intermedio' },
       { name: 'Avanzado' },
-      { name: 'Experto' }
+      { name: 'Experto' },
     ];
 
     this.cargarActividad(this.actividadId);
@@ -159,7 +190,11 @@ export class EditarActividad {
   onSubmit(): void {
     if (this.actividadForm.invalid) {
       this.actividadForm.markAllAsTouched();
-      this.messageService.add({ severity: 'warn', summary: 'Formulario incompleto', detail: 'Revisa los campos obligatorios.' });
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Formulario incompleto',
+        detail: 'Revisa los campos obligatorios.',
+      });
       return;
     }
 
@@ -172,7 +207,10 @@ export class EditarActividad {
     const [horas, minutos] = formValue.hora.split(':');
     fechaCompleta.setHours(Number(horas), Number(minutos));
 
-    const fechaFormateada = fechaCompleta.toISOString().replace('Z', '').split('.')[0];
+    const fechaFormateada = fechaCompleta
+      .toISOString()
+      .replace('Z', '')
+      .split('.')[0];
 
     // Prepara el payload acorde al backend (strings/números/enum names)
     const payload = {
@@ -181,32 +219,42 @@ export class EditarActividad {
       fecha: fechaFormateada, // formato "yyyy-MM-dd'T'HH:mm:ss"
       ubicacion: formValue.ubicacion,
       deporte: formValue.deporte.name, // convertir objeto a string
-      nivel: formValue.nivel.name,     // convertir objeto a string
+      nivel: formValue.nivel.name, // convertir objeto a string
       estado: formValue.estado,
       numPersTotales: formValue.numPersTotales,
-      precio: formValue.precio
+      precio: formValue.precio,
     };
 
     console.log(payload);
 
-
     this.actService.editarActividad(this.actividadId, payload).subscribe({
-      next: (ok) => {
+      next: (res) => {
         this.guardando = false;
-        if (ok === true) {
-          this.messageService.add({ severity: 'success', summary: 'Guardado', detail: 'Actividad actualizada correctamente.' });
+        if (res === true) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Guardado',
+            detail: 'Actividad actualizada correctamente.',
+          });
           setTimeout(() => {
-            this.router.navigate(['/actividades/info-actividad', this.actividadId]);
+            this.router.navigate([
+              '/actividades/info-actividad',
+              this.actividadId,
+            ]);
           }, 2000);
         } else {
-          // si tu servicio devuelve códigos en next (por el map(() => true) / of(codigo))
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: String(ok) });
+          const mensaje = this.errorService.getMensajeError(res); // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);
         }
       },
       error: (codigo) => {
         this.guardando = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: `No se pudo guardar (${codigo})` });
-      }
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `No se pudo guardar (${codigo})`,
+        });
+      },
     });
   }
 

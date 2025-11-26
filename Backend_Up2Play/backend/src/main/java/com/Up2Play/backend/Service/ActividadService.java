@@ -11,6 +11,7 @@ import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
+import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreador;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
@@ -44,8 +45,21 @@ public class ActividadService {
 
         Actividad act = new Actividad();
 
-        act.setNombre(input.getNombre());
-        act.setDescripcion(input.getDescripcion());
+        if (input.getNombre() != null && input.getNombre().length() > 64) {
+            throw new LimiteCaracteres("El nombre no puede tener más de 64 caracteres.");
+        }
+
+        else {
+
+            act.setNombre(input.getNombre());
+        }
+
+        if (input.getDescripcion() != null && input.getDescripcion().length() > 500) {
+            throw new LimiteCaracteres("La descripción no puede tener más de 500 caracteres.");
+        } else {
+
+            act.setDescripcion(input.getDescripcion());
+        }
 
         LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
         if (fecha.isBefore(LocalDateTime.now())) {
@@ -209,9 +223,21 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
-            act.setNombre(input.getNombre());
-            act.setDescripcion(input.getDescripcion());
+            if (input.getNombre() != null && input.getNombre().length() > 64) {
+                throw new LimiteCaracteres("El nombre no puede tener más de 64 caracteres.");
+            }
 
+            else {
+
+                act.setNombre(input.getNombre());
+            }
+
+            if (input.getDescripcion() != null && input.getDescripcion().length() > 500) {
+                throw new LimiteCaracteres("La descripción no puede tener más de 500 caracteres.");
+            } else {
+
+                act.setDescripcion(input.getDescripcion());
+            }
             LocalDateTime fecha = LocalDateTime.parse(input.getFecha());
             if (fecha.isBefore(LocalDateTime.now())) {
                 throw new FechaYHora("La fecha y hora no pueden ser anteriores al momento actual.");
@@ -314,7 +340,7 @@ public class ActividadService {
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
     }
 
-    //Booleano que devuelve si estás o no apuntado a la actividad
+    // Booleano que devuelve si estás o no apuntado a la actividad
     @Transactional
     public boolean isUsuarioApuntado(Long idActividad, Long idUsuario) {
 
@@ -335,9 +361,9 @@ public class ActividadService {
 
     }
 
-    //Booleano que devuelve si eres o no el creador de la actividad
+    // Booleano que devuelve si eres o no el creador de la actividad
     @Transactional
-    public boolean isCreador (Long idActividad, Long idUsuario) {
+    public boolean isCreador(Long idActividad, Long idUsuario) {
 
         Actividad act = actividadRepository.findById(idActividad)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));

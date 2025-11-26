@@ -53,7 +53,7 @@ export class DeporteImgPipe implements PipeTransform {
       'Tiro con Arco': 'tiro-con-arco.jpg',
       'Frisbee': 'frisbee.jpg',
       'Senderismo': 'senderismo.jpg',
-      'Running': 'Running.jpg',
+      'Running': 'running.jpg',
       'Petanca': 'petanca.jpg'
     };
 
