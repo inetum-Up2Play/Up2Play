@@ -10,7 +10,7 @@
         <h1 class="text-4xl font-bold mb-2 wrap-break-word">{{ act.nombre }}</h1>
         <p class="mb-4 text-sm">Creado por {{act.usuarioCreadorNombre}}  </p><br>
         <!-- Cuando se modifique la BBD funcionará <img [src]="getAvatarCreador(act.usuarioCreadorId) | avatar" alt="avatarCreador"> -->
-        <p><p-inputicon class="pi pi-trophy" style="color: #3D6C3F" />
+        <p><i class="pi pi-trophy" style="color:#3D6C3F"></i>
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
         </p><br>
 
@@ -18,25 +18,25 @@
 
         <div class="space-y-6 mb-6">
             <div class="flex items-center space-x-1">
-                <p><p-inputicon class="pi pi-chart-line" style="color: #3D6C3F" />
+                <p><i class="pi pi-chart-line" style="color:#3D6C3F"></i>
                     <strong class="mr-1"> Nivel: </strong>
 
                 <form [formGroup]="formRating" class="ml-2">
                     <p-rating formControlName="rating" [readonly]="true">
                         <ng-template #onicon>
-                            <p-inputicon class="pi pi-flag-fill" />
+                            <i class="pi pi-flag-fill"></i>
                         </ng-template>
                         <ng-template #officon>
-                            <p-inputicon class="pi pi-flag" />
+                            <i class="pi pi-flag"></i>
                         </ng-template>
                     </p-rating>
                 </form>
             </div>
 
-            <p class="wrap-break-word"><p-inputicon class="pi pi-map-marker" style="color: #3D6C3F" />
+            <p class="wrap-break-word"><i class="pi pi-map-marker" style="color:#3D6C3F"></i>
                 <strong> Punto de encuentro:</strong> {{ act.ubicacion }}
             </p>
-            <p><p-inputicon class="pi pi-euro" style="color: #3D6C3F" />
+            <p><i class="pi pi-euro" style="color:#3D6C3F"></i>
                 <strong> Precio:</strong> {{ act.precio == '0' ? 'Gratuita' : act.precio + '€' }}
             </p>
         </div>
@@ -46,12 +46,12 @@
             @if (isCreador()) {
             <button (click)="goEditar()"
                 class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
-                <p-inputicon class="pi pi-pen-to-square" />
+                <i class="pi pi-pen-to-square"></i>
                 Editar
             </button>
             <button (click)="confirm($event)"
                 class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
-                <p-inputicon class="pi pi-trash" />
+                <i class="pi pi-trash"></i>
                 Eliminar
             </button>
             } @else if (!apuntado()) {
