@@ -9,9 +9,18 @@
                     <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
                     Título
                 </label>
-                <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64" [invalid]="isInvalid('nombre')" />
+                <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64"
+                    [invalid]="isInvalid('nombre')" />
+                <!-- Manejo de errores para el TÍTULO -->
                 @if (isInvalid('nombre')) {
-                <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
+                    <!-- Verificación de error específico: profanity -->
+                    @if (actividadForm.get('nombre')?.hasError('profanity')) {
+                        <p-message severity="error" size="small" variant="simple">El título contiene lenguaje inapropiado o soez.</p-message>
+                    }
+                    <!-- Verificación de error específico: required (solo si no hay profanity para evitar duplicados) -->
+                    @else if (actividadForm.get('nombre')?.hasError('required')) {
+                        <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
+                    }
                 }
             </div>
             <div class="flex flex-col gap-1 w-full">
@@ -21,8 +30,14 @@
                 </label>
                 <textarea rows="5" cols="30" pTextarea id="descripcion" maxlength="499" formControlName="descripcion"
                     [invalid]="isInvalid('descripcion')"></textarea>
+                <!-- Manejo de errores para la DESCRIPCIÓN -->
                 @if (isInvalid('descripcion')) {
-                <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
+                    @if (actividadForm.get('descripcion')?.hasError('profanity')) {
+                        <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o soez.</p-message>
+                    }
+                    @else if (actividadForm.get('descripcion')?.hasError('required')) {
+                        <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
+                    }
                 }
             </div>
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
@@ -87,8 +102,14 @@
                 </label>
                 <input pInputText type="text" formControlName="ubicacion"
                     placeholder="Ej. Polideportivo Municipal, Calle Mayor 123" [invalid]="isInvalid('ubicacion')" />
+                <!-- Manejo de errores para la UBICACIÓN -->
                 @if (isInvalid('ubicacion')) {
-                <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
+                    @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
+                        <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o soez.</p-message>
+                    }
+                    @else if (actividadForm.get('ubicacion')?.hasError('required')) {
+                        <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
+                    }
                 }
             </div>
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
