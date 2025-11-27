@@ -1,43 +1,44 @@
 @use 'styles/variables' as vars;
 
 p-menubar {
-    background-color: vars.$verde-oliva;
+  background-color: vars.$verde-oliva;
 }
 
 .logo {
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
-    cursor: pointer;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  cursor: pointer;
 }
 
-.menu-items li, a, h2 {
-    color: vars.$blanco;
+.menu-items li,
+a,
+h2 {
+  color: vars.$blanco;
 
-    :hover, .active {
-      color: vars.$verde-oliva;
-      background-color: vars.$amarillo;
-      margin-right: 1.5rem;
-      margin-right: 0%;
-    }
+  :hover,
+  .active {
+    color: vars.$verde-oliva;
+    background-color: vars.$amarillo;
+    margin-right: 1.5rem;
+    margin-right: 0%;
+  }
 
 }
 
 .drawer-style .p-drawer {
-    top: auto !important;
-    margin-top: 4rem !important;
+  top: auto !important;
+  margin-top: 4rem !important;
 }
 
 
-:host ::ng-deep .boton-hamburguesa .pi-bars{
-  font-size: 2rem !important; 
+:host ::ng-deep .boton-hamburguesa .pi-bars {
+  font-size: 2rem !important;
 }
 
 :host ::ng-deep .contenedor-menubar {
   padding: 1.5rem !important;
-  
 }
 
 :host ::ng-deep .p-drawer {
   top: auto !important;
-  
 }

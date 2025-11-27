@@ -1,7 +1,13 @@
 <p-toast position="top-right"></p-toast>
+@if (activities.length === 0 ){
+<app-empty-activities icon="ph-light ph-sneaker-move" title="Tu lista está vacía..."
+    message="¡Encuentra tu próximo plan y ponte en movimiento!">
+</app-empty-activities>
+} @else {
 <div class="xl:p-5 2xl:pl-15 2xl:pr-15 ">
     <div class="">
-        <p-carousel [value]="activities" [numVisible]="4" [numScroll]="1" [circular]="true" autoplayInterval="5000">
+        <p-carousel [value]="activities" [numVisible]="4" [numScroll]="1" [circular]="true"
+            [autoplayInterval]="5000000" [responsiveOptions]="responsiveOptions">
 
             <ng-template let-activity pTemplate="item">
                 <app-activity-card [titulo]="activity.nombre" [fecha]="extraerFecha(activity.fecha)"
@@ -17,3 +23,4 @@
         </p-carousel>
     </div>
 </div>
+}

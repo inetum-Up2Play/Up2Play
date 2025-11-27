@@ -1,8 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
+
 import {
   FormBuilder,
   FormGroup,
@@ -10,6 +7,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
@@ -17,10 +16,16 @@ import { SelectModule } from 'primeng/select';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { MessageModule } from 'primeng/message';
+import { MessageService } from 'primeng/api';
+
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from '../../../../core/services/error/error-service';
+import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
+
 
 @Component({
   selector: 'app-editar-actividad',
@@ -57,11 +62,11 @@ export class EditarActividad {
   nivelEscogido: string | undefined;
 
   actividadForm: FormGroup = this.fb.group({
-    nombre: ['', [Validators.required, Validators.maxLength(120)]],
-    descripcion: ['', [Validators.required, Validators.maxLength(4000)]],
+    nombre: ['', [Validators.required, prohibidasValidator()]],
+    descripcion: ['', [Validators.required, prohibidasValidator()]],
     fecha: ['', [Validators.required]],
     hora: ['', [Validators.required]],
-    ubicacion: ['', [Validators.required, Validators.maxLength(200)]],
+    ubicacion: ['', [Validators.required, prohibidasValidator()]],
     deporte: ['', [Validators.required]],
     nivel: ['', [Validators.required]], // mapea a tu enum
     estado: ['', [Validators.required]],

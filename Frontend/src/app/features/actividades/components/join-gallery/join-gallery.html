@@ -1,32 +1,41 @@
 <p-toast position="top-right"></p-toast>
-<div class="xl:p-5 2xl:pl-15 2xl:pr-15">
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 auto-rows-fr">
-      @for (act of visibleActivities; track act.id) {
-        <app-activity-card
-          [titulo]="act.nombre"
-          [fecha]="extraerFecha(act.fecha)"
-          [hora]="extraerHora(act.fecha)"
-          [ubicacion]="act.ubicacion"
-          [imagen]="act.deporte | deporteImg"
-          [actividadId]="act.id"
-          [botonLabel]="'¡Apúntate!'"
-          [botonStyle]="'btn-apuntarse'"
-          [botonAction]="apuntarse">
+@if (activities.length === 0 ){
+    <app-empty-activities
+        icon="ph-light ph-trophy"
+        title="¡Wow, ya estás en todas!"
+        message="¿Listo para organizar la siguiente?">
+    </app-empty-activities>
+} @else {
 
-        </app-activity-card>
-      }
-    </div>
-    
-    <div class="flex justify-center md:justify-end ver-mas-container md:px-0">
-      @if (visibleActivities.length < activities.length) {
-        <p-button
-          styleClass="boton-ver-mas" 
-          label="Mostrar más actividades" 
-          variant="outlined" 
-          icon="pi pi-refresh" 
-          severity="contrast" 
-          (onClick)="loadMore()">
-        </p-button>
-      }
-    </div>
-</div>
+  <div class="xl:p-5 xl:px-9 2xl:px-24">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 auto-rows-fr">
+        @for (act of visibleActivities; track act.id) {
+          <app-activity-card
+            [titulo]="act.nombre"
+            [fecha]="extraerFecha(act.fecha)"
+            [hora]="extraerHora(act.fecha)"
+            [ubicacion]="act.ubicacion"
+            [imagen]="act.deporte | deporteImg"
+            [actividadId]="act.id"
+            [botonLabel]="'¡Apúntate!'"
+            [botonStyle]="'btn-apuntarse'"
+            [botonAction]="apuntarse">
+
+          </app-activity-card>
+        }
+      </div>
+      
+      <div class="flex justify-center md:justify-end ver-mas-container md:px-0">
+        @if (visibleActivities.length < activities.length) {
+          <p-button
+            styleClass="boton-ver-mas" 
+            label="Mostrar más actividades" 
+            variant="outlined" 
+            icon="pi pi-refresh" 
+            severity="contrast" 
+            (onClick)="loadMore()">
+          </p-button>
+        }
+      </div>
+  </div>
+}

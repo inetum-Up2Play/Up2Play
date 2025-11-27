@@ -65,3 +65,11 @@
     background-color: #5c5c5c;
     border: none;
 }
+
+:host ::ng-deep .p-card-body{
+    height: 100% !important;
+}
+
+:host ::ng-deep .p-card-footer{
+    height: 100% !important;
+}

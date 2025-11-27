@@ -1,5 +1,5 @@
 import { Router, RouterModule } from '@angular/router';
-import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { MenubarModule } from 'primeng/menubar';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth/auth-service';
 import { UserDataService } from '../../services/auth/user-data-service';
@@ -60,21 +61,27 @@ export class Header implements OnInit {
   private userEmailSignal = signal<string>('');
 
   // avatarItems se construye usando el email almacenado en el signal
-  get avatarItems(): MenuItem[] {
+  
+
+public avatarItems = computed<MenuItem[]>(() => {
     const email = this.userEmailSignal();
-    return [
-      {
-        label: email && email.length > 0 ? email : 'Mi Cuenta',
-        icon: 'pi pi-envelope',
-        command: () => this.router.navigate(['/my-account'])
-      },
-      {
-        label: 'Cerrar sesión',
-        icon: 'pi pi-sign-out',
-        command: () => this.logout(),
-      },
-    ];
-  }
+  return [
+    {
+      label: email && email.length > 0 ? email : 'Mi Cuenta',
+      icon: 'pi pi-envelope',
+      command: () => {
+        this.router.navigate(['/my-account']);
+      }
+    },
+    {
+      label: 'Cerrar sesión',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        this.authService.logout();
+      }
+    }
+  ];
+})
 
   ngOnInit(): void {
     // Obtiene el email la primera vez
@@ -90,10 +97,6 @@ export class Header implements OnInit {
     
     this.renderer.addClass(this.document.body, 'header-background-active'); //img-fondo
     this.renderer.addClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
-  }
-
-  logout(): void {
-    this.authService.logout();
   }
 
   // Calcular tamaño del header
