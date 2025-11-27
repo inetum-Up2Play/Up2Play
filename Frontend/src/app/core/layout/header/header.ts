@@ -1,5 +1,5 @@
 import { Router, RouterModule } from '@angular/router';
-import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { MenubarModule } from 'primeng/menubar';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth/auth-service';
 import { UserDataService } from '../../services/auth/user-data-service';
@@ -62,8 +63,8 @@ export class Header implements OnInit {
   // avatarItems se construye usando el email almacenado en el signal
   
 
-get avatarItems(): MenuItem[] {
-  const email = this.userEmailSignal();
+public avatarItems = computed<MenuItem[]>(() => {
+    const email = this.userEmailSignal();
   return [
     {
       label: email && email.length > 0 ? email : 'Mi Cuenta',
@@ -76,12 +77,11 @@ get avatarItems(): MenuItem[] {
       label: 'Cerrar sesión',
       icon: 'pi pi-sign-out',
       command: () => {
-        console.log('Cerrando sesión...');
         this.authService.logout();
       }
     }
   ];
-}
+})
 
   ngOnInit(): void {
     // Obtiene el email la primera vez
