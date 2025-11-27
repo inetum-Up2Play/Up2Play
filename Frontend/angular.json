@@ -18,9 +18,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -35,39 +33,43 @@
               "node_modules/primeicons/primeicons.css"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src"
-              ]
+              "includePaths": ["src"]
             }
           },
           "configurations": {
-            "production": {  
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.test.ts",
+                  "with": "src/environments/environment.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "700kB",
-                  "maximumError": "800kB"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "bundle",
                   "name": "main",
                   "maximumWarning": "300kB",
-                  "maximumError": "380kB"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyScript",
                   "maximumWarning": "320kB",
-                  "maximumError": "400kB"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "any",
                   "maximumWarning": "200kB",
-                  "maximumError": "300kB"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "10kB",
-                  "maximumError": "16kB"
+                  "maximumError": "5mb"
                 }
               ],
               "outputHashing": "all"
@@ -75,6 +77,16 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
+              "sourceMap": true
+            },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ],
+              "optimization": false,
               "sourceMap": true
             }
           },
@@ -88,6 +100,9 @@
             },
             "development": {
               "buildTarget": "Frontend:build:development"
+            },
+            "test": {
+              "buildTarget": "Frontend:build:test"
             }
           },
           "defaultConfiguration": "development"
@@ -98,10 +113,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [

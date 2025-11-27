@@ -1,5 +1,7 @@
 <main class="main">
   <router-outlet></router-outlet>
-  
+  @if (environment.enableMonkeyTesting) {
+    <app-qa-toolbar></app-qa-toolbar>
+  }
 </main>
 
