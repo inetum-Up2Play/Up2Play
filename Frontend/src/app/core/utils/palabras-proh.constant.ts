@@ -1,0 +1,17 @@
+export const PALABRAS_PROHIBIDAS: string[] = [
+    'imbécil',
+    'idiota',
+    'estúpido',
+    'gilipollas',
+    'tonto',
+    'subnormal',
+    'racista',
+    'machista',
+    'homófobo',
+    'sexista',
+    'nazi',
+    'mierda',
+    'coño',
+    'hostia',
+    'joder',
+];
