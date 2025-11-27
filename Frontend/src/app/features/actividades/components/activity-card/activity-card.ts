@@ -70,10 +70,12 @@ export class ActivityCard {
         accept: () => {
           this.actService.deleteActividad(this.actividadId).subscribe({
             next: () => {
+              console.log(this.actividadId);
+
               this.messageService.add({ severity: 'success', summary: 'Oh... :(', detail: 'Actividad eliminada correctamente' });
               setTimeout(() => {
                 this.actUpdateService.notifyUpdate();
-              }, 2500); // espera 1.5 segundos para que se vea el toast
+              }, 2500); // espera 2.5 segundos para que se vea el toast
             },
             error: (codigo) => {
               const mensaje = this.errorService.getMensajeError(codigo);
