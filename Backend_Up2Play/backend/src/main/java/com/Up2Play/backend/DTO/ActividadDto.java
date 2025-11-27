@@ -1,10 +1,14 @@
 package com.Up2Play.backend.DTO;
 
-public class ActividadDto {
+import com.Up2Play.backend.Exception.ValidarPalabrasProhibidas;
 
+public class ActividadDto {
+    @ValidarPalabrasProhibidas
     private String nombre;
+    @ValidarPalabrasProhibidas
     private String descripcion;
     private String fecha;
+    @ValidarPalabrasProhibidas
     private String ubicacion;
     private String deporte;
     private String nivel;

@@ -26,6 +26,7 @@ import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.ActividadService;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/actividades")
@@ -110,7 +111,7 @@ public class ActividadController {
 
     @Transactional
     @PostMapping("/crearActividad")
-    public ResponseEntity<?> crearActividad(@RequestBody ActividadDto actividadDto,
+    public ResponseEntity<?> crearActividad(@Valid @RequestBody ActividadDto actividadDto,
             @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         System.out.println(email);
@@ -142,7 +143,7 @@ public class ActividadController {
 
     @PutMapping("editarActividad/{id}")
     public ResponseEntity<?> editarActividad(@PathVariable Long id,
-            @RequestBody EditarActividadDto editarActividadDto, @AuthenticationPrincipal UserDetails principal) {
+           @Valid @RequestBody EditarActividadDto editarActividadDto, @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
