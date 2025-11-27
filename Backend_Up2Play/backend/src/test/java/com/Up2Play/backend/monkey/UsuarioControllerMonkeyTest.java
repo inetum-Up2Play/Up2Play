@@ -4,11 +4,13 @@ package com.Up2Play.backend.monkey;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import java.util.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+@SpringBootTest
 public class UsuarioControllerMonkeyTest extends BaseApiTest {
 
     @Test

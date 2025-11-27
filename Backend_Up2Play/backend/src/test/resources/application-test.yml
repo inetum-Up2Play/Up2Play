@@ -4,6 +4,9 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
+  test:
+    email: ${TEST_EMAIL}
+    password: ${TEST_PASSWORD}
 
   jpa:
     hibernate:
@@ -18,7 +21,7 @@ spring:
       mode: never
 
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
     baseline-on-migrate: true
     baseline-version: 1
