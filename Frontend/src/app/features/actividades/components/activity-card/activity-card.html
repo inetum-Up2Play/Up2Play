@@ -1,15 +1,16 @@
 <div class="p-5 2xl:p-10 ml-2 mr-2 h-full flex items-center justify-center">
-    <p-card class="card sh h-full w-[25rem]">
-        <ng-template #title>
+    
+    <p-card #body class="card sh h-full w-[25rem]">    
+            <ng-template #title>
             <img (click)="infoActividad()" class="infoActividad" alt="Card" src={{imagen()}} />
         </ng-template>
         <ng-template #subtitle> {{fecha()}} - {{hora()}}h </ng-template>
         <ng-template #content>
             <p class="title infoActividad" (click)="infoActividad()"> {{titulo()}}</p>
-            <p>{{ubicacion()}}</p>
+            <p class="h-max">{{ubicacion()}}</p>
         </ng-template>
         <ng-template #footer>
-            <div class="flex mt-1">
+            <div class="flex items-end h-full mt-1 mb-0">
                 <p-toast />
                 <p-confirmdialog />
                 <p-button [label]="botonLabel" [styleClass]="botonStyle" (onClick)="handleButtonClick('boton')">
@@ -21,5 +22,6 @@
                 }
             </div>
         </ng-template>
+
     </p-card>
 </div>
