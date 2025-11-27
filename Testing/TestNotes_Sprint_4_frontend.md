@@ -1,0 +1,5 @@
+                  "maximumError": "800kB"
+                  "maximumError": "380kB"
+                  "maximumError": "400kB"
+                  "maximumError": "300kB"
+                  "maximumError": "16kB"
