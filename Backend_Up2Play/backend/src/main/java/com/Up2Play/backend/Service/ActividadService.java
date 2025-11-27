@@ -266,32 +266,28 @@ public class ActividadService {
 
     }
 
-    // Eliminar actividad
-    public void deleteActividad(Long idActividad, Long idUsuario) {
-        Actividad act = actividadRepository.findById(idActividad)
-                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
-        if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
+public void deleteActividad(Long idActividad, Long idUsuario) {
+    Actividad act = actividadRepository.findById(idActividad)
+            .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+    Usuario usuario = usuarioRepository.findById(idUsuario)
+            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-            List<Usuario> usuarios = usuarioRepository.findAll();
+    if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
 
-            for (Usuario usuario2 : usuarios) {
-
-                usuario2.getActividadesUnidas().removeIf(actividad -> actividad.getId().equals(idActividad));
-                usuarioRepository.save(usuario2);
-            }
-
-            act.getUsuarios().clear();
-            usuario.getActividadesUnidas().clear();
-            actividadRepository.deleteById(idActividad);
-        } else {
-
-            throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
-
+        for (Usuario inscrito : act.getUsuarios()) {
+            inscrito.getActividadesUnidas().remove(act);
+            usuarioRepository.save(inscrito);
         }
 
+        act.getUsuarios().clear();
+
+        actividadRepository.delete(act);
+
+    } else {
+        throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
     }
+}
+
 
     // Unirse a Actividad
     @Transactional

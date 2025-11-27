@@ -60,21 +60,28 @@ export class Header implements OnInit {
   private userEmailSignal = signal<string>('');
 
   // avatarItems se construye usando el email almacenado en el signal
-  get avatarItems(): MenuItem[] {
-    const email = this.userEmailSignal();
-    return [
-      {
-        label: email && email.length > 0 ? email : 'Mi Cuenta',
-        icon: 'pi pi-envelope',
-        command: () => this.router.navigate(['/my-account'])
-      },
-      {
-        label: 'Cerrar sesión',
-        icon: 'pi pi-sign-out',
-        command: () => this.logout(),
-      },
-    ];
-  }
+  
+
+get avatarItems(): MenuItem[] {
+  const email = this.userEmailSignal();
+  return [
+    {
+      label: email && email.length > 0 ? email : 'Mi Cuenta',
+      icon: 'pi pi-envelope',
+      command: () => {
+        this.router.navigate(['/my-account']);
+      }
+    },
+    {
+      label: 'Cerrar sesión',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        console.log('Cerrando sesión...');
+        this.authService.logout();
+      }
+    }
+  ];
+}
 
   ngOnInit(): void {
     // Obtiene el email la primera vez
@@ -90,10 +97,6 @@ export class Header implements OnInit {
     
     this.renderer.addClass(this.document.body, 'header-background-active'); //img-fondo
     this.renderer.addClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
-  }
-
-  logout(): void {
-    this.authService.logout();
   }
 
   // Calcular tamaño del header
