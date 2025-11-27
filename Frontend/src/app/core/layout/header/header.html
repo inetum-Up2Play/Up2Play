@@ -38,7 +38,7 @@
 
         <ng-template #end>
             <div class="card flex w-full justify-end md:pr-15">
-                <p-menu #menu [model]="avatarItems" [popup]="true" appendTo="body" styleClass="mobile-menu layout-menu"></p-menu>
+                <p-menu #menu [model]="avatarItems()" appendTo="body" styleClass="mobile-menu layout-menu" [popup]="true"></p-menu>
 
                 <!-- Abres el menú con el avatar -->
                 <p-avatar (click)="menu.toggle($event)"

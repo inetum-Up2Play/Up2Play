@@ -1,7 +1,7 @@
 @use 'styles/variables' as vars;
 
 :host ::ng-deep .card {
-    width: 20rem;
+    max-width: 22rem;
     overflow: hidden;
     font-family: vars.$work-sans;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2),

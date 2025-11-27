@@ -30,7 +30,7 @@ export class JoinedCarousel implements OnInit {
 
 
   activities: any[] = [];
-    
+
   ngOnInit() {
     this.cargarActividades();
 
@@ -39,7 +39,7 @@ export class JoinedCarousel implements OnInit {
       this.cargarActividades();
     });
   }
-    
+
   cargarActividades() {
     this.actService.listarActividadesApuntadas().subscribe({
       next: data => {
@@ -48,7 +48,7 @@ export class JoinedCarousel implements OnInit {
         this.activities.forEach(act => {
           this.actService.comprobarCreador(act.id).subscribe(flag => act.esCreador = flag);
         });
-
+        console.log(this.activities);
       },
       error: err => {
         console.error('Error cargando actividades', err);
@@ -65,7 +65,7 @@ export class JoinedCarousel implements OnInit {
         //bus de recarga de actividaedes
         this.actUpdateService.notifyUpdate();
 
-        },
+      },
       error: (codigo) => {
         console.log('Código de error recibido:', codigo); // Debug
         const mensaje = this.errorService.getMensajeError(codigo);
@@ -84,12 +84,33 @@ export class JoinedCarousel implements OnInit {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
   }
-  
+
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
-
+  responsiveOptions = [
+    {
+      breakpoint: '1840px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1200px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '992px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
 
 }

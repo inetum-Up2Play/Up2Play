@@ -69,5 +69,27 @@ export class CreatedCarousel {
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
+  responsiveOptions = [
+    {
+      breakpoint: '1840px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1200px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '992px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
 
 }

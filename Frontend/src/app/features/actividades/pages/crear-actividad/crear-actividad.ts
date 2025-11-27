@@ -17,9 +17,11 @@ import { SelectModule } from 'primeng/select';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
+
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
 import { ErrorService } from '../../../../core/services/error/error-service';
+import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
 
 @Component({
   selector: 'app-crear-actividad',
@@ -68,11 +70,11 @@ export class CrearActividad {
 
   constructor(private fb: FormBuilder) {
     this.actividadForm = this.fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
+      nombre: ['', [Validators.required, prohibidasValidator()]],
+      descripcion: ['', [Validators.required, prohibidasValidator()]],
       fecha: [null, Validators.required],
       hora: [null, Validators.required],
-      ubicacion: ['', Validators.required],
+      ubicacion: ['', [Validators.required, prohibidasValidator()]],
       deporte: [null, Validators.required],
       nivel: [null, Validators.required],
       numPersTotales: [null, [Validators.required, Validators.min(1)]],
