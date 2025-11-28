@@ -1,0 +1,76 @@
+# Nombre del workflow que aparecerá en GitHub Actions
+name: CI Pipeline
+
+# Evento que dispara el workflow: cada push a las ramas main y develop
+on:
+  push:
+    branches:
+      - main      # Rama principal
+      - develop   # Rama de desarrollo
+      #- feature/* # Cualquier rama que empiece por feature/
+      - feature/testing      
+
+# Definición de los jobs (tareas) que se ejecutarán
+jobs:
+
+  # --- JOB 1: FRONTEND ---
+  frontend:
+    runs-on: ubuntu-latest           # El job se ejecuta en un runner Linux(no pasa nada que tengamos windows)
+    defaults:
+      run:
+        working-directory: Frontend  # Todas las acciones se ejecutan dentro de la carpeta Frontend
+    steps:
+      - uses: actions/checkout@v3    # Descarga el código del repositorio en el runner
+
+      - name: Setup Node.js          # Instala Node.js en la versión especificada
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.17.0'
+
+      - name: Install dependencies   # Instala dependencias del proyecto Angular
+        run: npm install
+
+      - name: Lint boundaries        # Ejecuta ESLint con el plugin boundaries para validar arquitectura
+        run: npm run lint:boundaries
+
+      - name: Build Angular          # Compila el proyecto Angular en modo producción
+        run: npm run build -- --configuration production
+
+  # --- JOB 2: BACKEND ---
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend_UP2Play/backend   # Carpeta del backend (Spring Boot)
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Java             # Instala Java 17 (Temurin)
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven            # Cachea dependencias Maven para acelerar builds
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build & Test Backend   # Compila y ejecuta tests del backend
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+        run: mvn clean test
+
+#Massa temps invertit en algo que ja es comprova. (futur)
+      # - name: Health Check (Actuator) # Levanta la app y comprueba endpoints de salud
+      #   run: |
+      #     mvn spring-boot:run &      # Arranca la aplicación en segundo plano
+      #     sleep 60                   # Espera 30 segundos para que la app esté lista
+      #     curl -f http://localhost:8080/actuator/health || exit 1        # Comprueba salud general
+      #     curl -f http://localhost:8080/actuator/health/readiness || exit 1 # Comprueba readiness
