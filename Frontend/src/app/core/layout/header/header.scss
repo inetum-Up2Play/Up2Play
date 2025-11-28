@@ -10,18 +10,34 @@ p-menubar {
   cursor: pointer;
 }
 
-.menu-items li,
-a,
-h2 {
-  color: vars.$blanco;
+.menu-items a :hover {
+    background-color: transparent !important;
+}
 
-  :hover,
+.menu-items li {
+  padding-right: 2rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+    
   .active {
     color: vars.$verde-oliva;
     background-color: vars.$amarillo;
-    margin-right: 1.5rem;
-    margin-right: 0%;
+    
+
+    
   }
+
+  :hover {
+    color: vars.$verde-oliva;
+    background-color: vars.$amarillo;
+    
+
+  }
+}
+
+
+.menu-items h2, li {
+  color: vars.$blanco;
 
 }
 
