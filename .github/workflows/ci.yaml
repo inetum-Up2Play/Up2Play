@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Backend_UP2Play/backend   # Carpeta del backend (Spring Boot)
+        working-directory: Backend_Up2Play/backend   # Carpeta del backend (Spring Boot)
     steps:
       - uses: actions/checkout@v3
 
