@@ -60,9 +60,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Build sin tests para preparar dependencias
+
+      # Build sin tests con perfil test
       - name: Build backend (skip tests)
-        run: mvn -B -DskipTests clean package
+        run: mvn -B -DskipTests clean package -Dspring.profiles.active=test
 
       # Arrancar la app con perfil test (usa H2)
       - name: Start Spring Boot App
@@ -84,8 +85,10 @@ jobs:
           exit 1
 
       # Ejecutar tests (incluye skeletons y Monkey Tests)
+      # Ejecutar tests con perfil test
       - name: Run tests
-        run: mvn verify -Dspring.profiles.active=test
+        run: mvn verify -Dspring.profiles.active=test -DtrimStackTrace=false
+
 
 
       # Subir reports si falla
