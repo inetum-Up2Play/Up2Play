@@ -85,7 +85,8 @@ jobs:
 
       # Ejecutar tests (incluye skeletons y Monkey Tests)
       - name: Run tests
-        run: mvn -B verify -DtrimStackTrace=false
+        run: mvn verify -Dspring.profiles.active=test
+
 
       # Subir reports si falla
       - name: Upload surefire reports
