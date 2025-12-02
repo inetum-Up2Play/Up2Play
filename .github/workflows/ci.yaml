@@ -38,66 +38,71 @@ jobs:
 
   # --- JOB 2: BACKEND ---
 
-  backend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Backend_Up2Play/backend
-    steps:
-      - uses: actions/checkout@v3
+backend:
+  runs-on: ubuntu-latest
+  defaults:
+    run:
+      working-directory: Backend_Up2Play/backend
+  steps:
+    - uses: actions/checkout@v3
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
 
-      - name: Cache Maven
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+    - name: Cache Maven
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
-      # Construimos sin tests para tener el jar listo
-      - name: Build backend (skip tests)
-        env:
-          SPRING_PROFILES_ACTIVE: test
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_SID: ${{ secrets.DB_SID }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-        run: mvn -B -DskipTests clean package
+    # Build sin tests para preparar dependencias
+    - name: Build backend (skip tests)
+      run: mvn -B -DskipTests clean package
 
-      # Arrancamos la app en segundo plano
-      - name: Start Spring Boot App
-        run: nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > target/app.log 2>&1 &
+    # Arrancar la app con perfil test (usa H2)
+    - name: Start Spring Boot App
+      run: nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > target/app.log 2>&1 &
 
-      # Esperamos a que esté lista (Actuator)
-      - name: Wait for app to be healthy
-        run: |
-          for i in {1..30}; do
-            if curl -sSf http://localhost:8080/actuator/health >/dev/null; then
-              echo "App is healthy"
-              exit 0
-            fi
-            echo "Waiting for app to start..."
-            sleep 2
-          done
-          echo "App did not become healthy in time"
-          tail -n 200 target/app.log || true
-          exit 1
+    # Esperar a que Actuator responda
+    - name: Wait for app to be healthy
+      run: |
+        for i in {1..30}; do
+          if curl -sSf http://localhost:8080/actuator/health >/dev/null; then
+            echo "App is healthy"
+            exit 0
+          fi
+          echo "Waiting for app to start..."
+          sleep 2
+        done
+        echo "App did not become healthy in time"
+        tail -n 200 target/app.log || true
+        exit 1
 
-      # Ejecutamos los tests
-      - name: Run tests
-        run: mvn -B verify
+    # Ejecutar tests (incluye skeletons y Monkey Tests)
+    - name: Run tests
+      run: mvn -B verify -DtrimStackTrace=false
+
+    # Subir reports si falla
+    - name: Upload surefire reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: surefire-reports
+        path: Backend_Up2Play/backend/target/surefire-reports
+
+    # Subir logs del servidor si falla
+    - name: Upload app logs
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-log
+        path: Backend_Up2Play/backend/target/app.log
+
 
 
   # backend:
