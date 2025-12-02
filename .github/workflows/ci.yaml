@@ -37,21 +37,22 @@ jobs:
         run: npm run build -- --configuration production
 
   # --- JOB 2: BACKEND ---
+
   backend:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Backend_Up2Play/backend   # Carpeta del backend (Spring Boot)
+        working-directory: Backend_Up2Play/backend
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Java             # Instala Java 17 (Temurin)
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Maven            # Cachea dependencias Maven para acelerar builds
+      - name: Cache Maven
         uses: actions/cache@v3
         with:
           path: ~/.m2
@@ -59,7 +60,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build & Test Backend   # Compila y ejecuta tests del backend
+      # Construimos sin tests para tener el jar listo
+      - name: Build backend (skip tests)
         env:
           SPRING_PROFILES_ACTIVE: test
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
@@ -72,17 +74,70 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: mvn -B -DskipTests clean package
 
-
+      # Arrancamos la app en segundo plano
       - name: Start Spring Boot App
-        run: mvn spring-boot:run -Dspring-boot.run.profiles=test &
-      - name: Wait for app to start
-        run: sleep 30
-      - name: Run tests
-        run: mvn verify
+        run: nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > target/app.log 2>&1 &
 
-        
-        run: mvn clean test
+      # Esperamos a que esté lista (Actuator)
+      - name: Wait for app to be healthy
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://localhost:8080/actuator/health >/dev/null; then
+              echo "App is healthy"
+              exit 0
+            fi
+            echo "Waiting for app to start..."
+            sleep 2
+          done
+          echo "App did not become healthy in time"
+          tail -n 200 target/app.log || true
+          exit 1
+
+      # Ejecutamos los tests
+      - name: Run tests
+        run: mvn -B verify
+
+
+  # backend:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: Backend_Up2Play/backend   # Carpeta del backend (Spring Boot)
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: Setup Java             # Instala Java 17 (Temurin)
+  #       uses: actions/setup-java@v3
+  #       with:
+  #         java-version: '17'
+  #         distribution: 'temurin'
+
+  #     - name: Cache Maven            # Cachea dependencias Maven para acelerar builds
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.m2
+  #         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-maven-
+
+  #     - name: Build & Test Backend   # Compila y ejecuta tests del backend
+  #       env:
+  #         SPRING_PROFILES_ACTIVE: test
+  #         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+  #         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  #         DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  #         DB_HOST: ${{ secrets.DB_HOST }}
+  #         DB_PORT: ${{ secrets.DB_PORT }}
+  #         DB_SID: ${{ secrets.DB_SID }}
+  #         MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+  #         MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+  #         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+  #         TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+
+  #       run: mvn clean test
 
 #Massa temps invertit en algo que ja es comprova. (futur)
       # - name: Health Check (Actuator) # Levanta la app y comprueba endpoints de salud
