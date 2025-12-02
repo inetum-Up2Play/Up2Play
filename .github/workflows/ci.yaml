@@ -74,6 +74,14 @@ jobs:
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
 
+      - name: Start Spring Boot App
+        run: mvn spring-boot:run -Dspring-boot.run.profiles=test &
+      - name: Wait for app to start
+        run: sleep 30
+      - name: Run tests
+        run: mvn verify
+
+        
         run: mvn clean test
 
 #Massa temps invertit en algo que ja es comprova. (futur)
