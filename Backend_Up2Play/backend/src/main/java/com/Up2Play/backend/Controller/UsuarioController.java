@@ -1,6 +1,7 @@
 package com.Up2Play.backend.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import com.Up2Play.backend.DTO.CambiarPasswordDto;
+import com.Up2Play.backend.DTO.Respuestas.UsuarioDto;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -54,12 +57,16 @@ public class UsuarioController {
     }
 
     // Cambiar contraseña usuario en perfil
-    /*@PutMapping("/{id}")
-    public ResponseEntity<?> updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        usuario.setId(id);
-        return usuarioService.saveUsuario(usuario);
+    @PutMapping("/cambiar-password/{id}")
+    public ResponseEntity<?> cambiarPassword(@AuthenticationPrincipal UserDetails principal, @RequestBody CambiarPasswordDto cambiarPasswordDto) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        usuarioService.cambiarPasswordPerfil(usuario.getId(), cambiarPasswordDto);
+        return  ResponseEntity.ok(Map.of("message", "Se ha cambiado la contraseña correctamente"));
     }
-*/
+
     // Elimina un usuario por ID
     @DeleteMapping("/{id}")
     public void deleteUsuario(@PathVariable Long id) {
@@ -68,12 +75,19 @@ public class UsuarioController {
 
     //Obtiene el usuario autenticado actual ("/usuarios/me")
     @GetMapping("/me")
-    public ResponseEntity<Usuario> usuario(@AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<UsuarioDto> usuario(@AuthenticationPrincipal UserDetails principal) {
 
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
             .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
-        return ResponseEntity.ok(usuario);
+        
+        UsuarioDto usuarioDto = new UsuarioDto(
+            usuario.getId(),
+            usuario.getEmail(),
+            usuario.getNombreUsuario(),
+            usuario.getRol()
+        );
+        return ResponseEntity.ok(usuarioDto);
     }
 
 }

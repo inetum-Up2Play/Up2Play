@@ -422,7 +422,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         
         // Verificar contraseña antigua
-        if (!passwordEncoder.matches(input.getOldPassword(), input.getNewPassword())) {
+        if (!passwordEncoder.matches(input.getOldPassword(), usuario.getPassword())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
