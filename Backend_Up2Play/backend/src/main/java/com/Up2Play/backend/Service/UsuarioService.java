@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Up2Play.backend.DTO.CambiarPasswordDto;
 import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.NewPasswordDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
@@ -413,6 +414,21 @@ public class UsuarioService {
             }
         }
 
+    }
+
+    // Cambiar contraseña desde el perfil
+    public void cambiarPasswordPerfil(Long usuarioId , CambiarPasswordDto input){
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        
+        // Verificar contraseña antigua
+        if (!passwordEncoder.matches(input.getOldPassword(), input.getNewPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        // Guardar la nueva contraseña encriptada
+        usuario.setPassword(passwordEncoder.encode(input.getNewPassword()));
+        usuarioRepository.save(usuario);
     }
 
 }

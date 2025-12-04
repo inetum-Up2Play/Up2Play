@@ -6,7 +6,9 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Usuario } from '../../../shared/models/usuario.model';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +20,7 @@ export class Perfil {
   private logoutTimer: any;
 }
 
-//Método obtener datos de usuario
-//getUsuario(): Observable<Usuario>{
 
-//}
-//Método actualizar datos del ususario
 //Método obtener datos de perfil
 //Método actualizar datos del perfil
 //Método eliminar perfil y usuario
