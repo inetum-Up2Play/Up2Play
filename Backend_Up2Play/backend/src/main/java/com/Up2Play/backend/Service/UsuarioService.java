@@ -44,11 +44,12 @@ public class UsuarioService {
     private EmailService emailService; // Servicio para enviar emails de verificación
     private LoginAttemptService loginAttemptService; // servicio para limitar intentos en inicio de sesión
     private VerificationTokenService verificationTokenService;
+    private PerfilService perfilService;
 
     // Contstuctor
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
-            LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService) {
+            LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService, PerfilService perfilService) {
 
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
@@ -56,6 +57,7 @@ public class UsuarioService {
         this.emailService = emailService;
         this.loginAttemptService = loginAttemptService;
         this.verificationTokenService = verificationTokenService;
+        this.perfilService = perfilService;
     }
 
     // Obtiene todos los usuarios en una lista
@@ -145,7 +147,9 @@ public class UsuarioService {
         user.setEnabled(true);
         user.setVerificationCode(null);
         user.setVerificationCodeExpiresAt(null);
+        perfilService.crearPerfil(user);
         usuarioRepository.save(user);
+
     }
 
     // Autentica un usuario durante login.
