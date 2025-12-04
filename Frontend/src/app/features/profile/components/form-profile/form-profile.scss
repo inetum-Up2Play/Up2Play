@@ -1,0 +1,16 @@
+@use 'styles/variables' as vars;
+@use 'sass:color';
+
+:host ::ng-deep .btn-guardarCambios {
+    background-color: vars.$verde-oliva;
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.2s ease-in-out;
+}
+
+
+:host ::ng-deep .btn-guardarCambios:hover {
+    background-color: vars.$verde-oliva !important;
+    border: none !important;
+    transform: scale(1.05) !important;
+}
