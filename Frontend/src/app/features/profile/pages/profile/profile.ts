@@ -29,6 +29,7 @@ export class Profile {
     this.userService.getUsuario().subscribe({
       next: (data) => {
         this.usuario.set(data);
+        console.log(this.usuario());
       },
       error: (err) => {
         console.error('Error cargando el usuario', err);
@@ -38,7 +39,7 @@ export class Profile {
 
   eliminarCuenta() {
     this.authService.logout();
-    //this.userService.eliminarUsuario();
+    this.userService.eliminarUsuario();
     //this.perfilService.eliminarPerfil();
 
   }
