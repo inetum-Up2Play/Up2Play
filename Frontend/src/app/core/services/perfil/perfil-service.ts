@@ -13,7 +13,7 @@ import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 @Injectable({
   providedIn: 'root'
 })
-export class Perfil {
+export class PerfilService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
   private baseUrl = 'http://localhost:8080/perfil';
