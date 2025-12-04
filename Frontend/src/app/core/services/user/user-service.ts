@@ -41,4 +41,10 @@ export class UserService {
       })
     );
   }
+
+//Eliminar usuario
+  eliminarUsuario()  {
+    
+    
+  }
 }
