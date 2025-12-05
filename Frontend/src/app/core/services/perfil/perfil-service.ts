@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { Usuario } from '../../../shared/models/usuario.model';
+import { Perfil } from '../../../shared/models/Perfil';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 
@@ -18,11 +18,34 @@ export class PerfilService {
   private router = inject(Router);
   private baseUrl = 'http://localhost:8080/perfil';
   private logoutTimer: any;
-}
 
+
+  
 
 //Método obtener datos de perfil
+ getPerfil(id: number): Observable<Perfil>{
+  return this.http.get<Perfil>(`${this.baseUrl}`+`/obtenerPerfil/${id}`).pipe(
+        
+        catchError((error: HttpErrorResponse) => {
+          const errBody = error.error as ErrorResponseDto;
+          return throwError(() => errBody?.error ?? 'UNKNOWN');
+        })
+      );
+  }
+  
 //Método actualizar datos del perfil
-//Método eliminar perfil y usuario
-//Método cambiar contraseña
+ editarPerfil(id: number, payload: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/editarPerfil/${id}`, payload).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
+      })
+    );
+  }
 
+
+
+
+
+}
