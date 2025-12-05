@@ -65,6 +65,14 @@ public class Usuario implements UserDetails {
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
 
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    }
+
     // Constructores
     public Usuario(Long id, String email, String password, String rol, String nombreUsuario) {
         this.id = id;

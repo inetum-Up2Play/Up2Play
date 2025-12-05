@@ -19,30 +19,26 @@ export class PerfilService {
   private baseUrl = 'http://localhost:8080/perfil';
   private logoutTimer: any;
 
-
-  
-
-//Método obtener datos de perfil
- getPerfil(id: number): Observable<Perfil>{
-  return this.http.get<Perfil>(`${this.baseUrl}`+`/obtenerPerfil/${id}`).pipe(
-        
-        catchError((error: HttpErrorResponse) => {
-          const errBody = error.error as ErrorResponseDto;
-          return throwError(() => errBody?.error ?? 'UNKNOWN');
-        })
-      );
-  }
-  
-//Método actualizar datos del perfil
- editarPerfil(id: number, payload: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/editarPerfil/${id}`, payload).pipe(
-      map(() => true),
+  //Método obtener datos de perfil
+  getPerfil(): Observable<Perfil>{
+    return this.http.get<Perfil>(`${this.baseUrl}`+`/obtenerPerfil`).pipe(
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
+        return throwError(() => errBody?.error ?? 'UNKNOWN');
       })
     );
   }
+    
+  //Método actualizar datos del perfil
+  editarPerfil(id: number, payload: any): Observable<any> {
+      return this.http.put(`${this.baseUrl}/editarPerfil/${id}`, payload).pipe(
+        map(() => true),
+        catchError((error: HttpErrorResponse) => {
+          const errBody = error.error as ErrorResponseDto;
+          return of(errBody?.error ?? 'UNKNOWN');
+        })
+      );
+    }
 
 
 

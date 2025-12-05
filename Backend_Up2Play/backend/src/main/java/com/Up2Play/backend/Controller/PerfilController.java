@@ -46,9 +46,12 @@ public class PerfilController {
         return ResponseEntity.ok(Map.of("message", "Se ha editado el perfil correctamente."));
     }
 
-    @GetMapping("/obtenerPerfil/{id}")
-    public PerfilDtoResp obtenerPerfil(@PathVariable Long id) {
-        return perfilService.obtenerPerfil(id);
+    @GetMapping("/obtenerPerfil")
+    public PerfilDtoResp obtenerPerfil(@AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+ 
+        return perfilService.obtenerPerfil(usuario.getPerfil().getId());
     }
-
 }
