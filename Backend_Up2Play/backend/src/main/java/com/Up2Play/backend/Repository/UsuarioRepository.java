@@ -3,6 +3,9 @@ package com.Up2Play.backend.Repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.Up2Play.backend.Model.Usuario;
@@ -22,4 +25,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     // Busca un usuario por su código de verificación.
     Optional<Usuario> findByVerificationCode(String verificationCode);
+
+    @Modifying
+    @Query("DELETE FROM VerificationToken t WHERE t.usuario.id = :usuarioId")
+    int deleteToken(@Param("usuarioId") Long usuarioId);
+
+
 }
