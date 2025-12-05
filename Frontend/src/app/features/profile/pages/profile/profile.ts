@@ -29,6 +29,7 @@ export class Profile {
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
+  perfilActualizado: Perfil = this.perfil()!; // el ! confia que mai sera null
 
   ngOnInit(): void {
     this.userService.getUsuario().subscribe({
@@ -43,7 +44,6 @@ export class Profile {
     this.perfilService.getPerfil().subscribe({
       next: (datosPerfil) => {
         this.perfil.set(datosPerfil);
-        console.log(this.perfil());
       },
       error: (err) => {
         console.error('Error cargando el perfil', err);
@@ -51,11 +51,33 @@ export class Profile {
     });
   }
 
-  onUsuarioChange(nuevoUsuario: Usuario) {
-    this.usuario.set(nuevoUsuario);
+  onCambiosPerfil(guardarPerfil: Perfil) {
+    this.perfilActualizado = guardarPerfil;
+
+    this.perfilService.editarPerfil(this.perfilActualizado.id, this.perfilActualizado).subscribe({
+      next: (res) => {
+        console.error('Guardat');
+        this.ngOnInit();
+
+      },
+      error: () => {
+        console.error('Error editando el usuario');
+      }
+    });
   }
-  onPerfilChange(nuevoPerfil: Perfil) {
-    this.perfil.set(nuevoPerfil);
+
+  onCambiosAvatar (numAvatar: number) {
+    this.perfilActualizado.imagen = numAvatar;
+
+    this.perfilService.editarPerfil(this.perfilActualizado.id, this.perfilActualizado).subscribe({
+      next: (res) => {
+        console.error('Guardat');
+        this.ngOnInit();
+      },
+      error: () => {
+        console.error('Error editando el usuario');
+      }
+    });
   }
 
   eliminarCuenta() {

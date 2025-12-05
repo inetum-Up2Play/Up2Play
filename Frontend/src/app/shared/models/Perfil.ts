@@ -8,5 +8,4 @@ export interface Perfil {
   fecha_nac: Date;
   idiomas: string;
   id_usuario: number;
-
 }

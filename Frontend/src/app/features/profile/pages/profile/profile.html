@@ -7,14 +7,14 @@
                 <app-form-profile
                     [usuario]="usuario()"
                     [perfil]="perfil()"
-                    (cambiosUsuario)="onUsuarioChange($event)"
-                    (cambiosPerfil)="onPerfilChange($event)"
+                    (cambiosPerfil)="onCambiosPerfil($event)"
                 ></app-form-profile>
             </div>
             <div id="a">
                 <app-avatar-profile
                     [usuario]="usuario()"
-                    [perfil]="perfil()"              
+                    [perfil]="perfil()"  
+                    (cambiosAvatar)="onCambiosAvatar($event)"
                  ></app-avatar-profile>
             </div>
             <div class="card flex justify-end p-10">
