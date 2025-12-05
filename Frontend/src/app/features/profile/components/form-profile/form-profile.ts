@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +10,7 @@ import { MessageModule } from 'primeng/message';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { CommonModule } from '@angular/common';
+import { Output, EventEmitter } from '@angular/core';
 
 interface Sexo {
   name: string;
@@ -22,6 +23,14 @@ interface Sexo {
   styleUrl: './form-profile.scss'
 })
 export class FormProfile {
+
+  @Output() formularioEnviado = new EventEmitter<any>();
+
+  @Input() emailUsuario!: string;
+  @Input() passwordUsuario!: string;
+
+  formulario!: FormGroup;
+
   sexos: Sexo[] | undefined;
   sexoSeleccionado: Sexo | undefined;
 
@@ -29,8 +38,6 @@ export class FormProfile {
 
   groupedCities: SelectItemGroup[];
   selectedCity: string | undefined;
-
-  formulario!: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.groupedCities = [
@@ -126,7 +133,7 @@ export class FormProfile {
       fechaNacimiento: [''],
       sexo: [''],
       email: ['', [Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
 
     this.sexos = [
@@ -139,11 +146,9 @@ export class FormProfile {
 
   onSubmit(): void {
     if (this.formulario.valid) {
-      console.log('✅ Datos del formulario:', this.formulario.value);
-      // llamar a tu servicio para enviar los datos al backend
+      this.formularioEnviado.emit(this.formulario.value); // manda el payload al padre
     } else {
-      console.log('❌ Formulario inválido');
-      this.formulario.markAllAsTouched(); // Marca todos los campos para mostrar errores
+      this.formulario.markAllAsTouched();
     }
   }
 }
