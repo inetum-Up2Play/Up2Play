@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, input } from '@angular/core';
+import { Component, effect, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -9,10 +9,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { MessageModule } from 'primeng/message';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { CommonModule } from '@angular/common';
-import { Output, EventEmitter } from '@angular/core';
 import { Usuario } from '../../../../shared/models/usuario.model';
-
 
 interface Sexo {
   name: string;
@@ -20,21 +19,13 @@ interface Sexo {
 
 @Component({
   selector: 'app-form-profile',
-  imports: [ReactiveFormsModule, InputTextModule, ButtonModule, FormsModule, SelectModule, DatePicker, InputNumberModule, MessageModule, InputIconModule, IconFieldModule, CommonModule],
+  imports: [MultiSelectModule ,ReactiveFormsModule, InputTextModule, ButtonModule, FormsModule, SelectModule, DatePicker, InputNumberModule, MessageModule, InputIconModule, IconFieldModule, CommonModule],
   templateUrl: './form-profile.html',
   styleUrl: './form-profile.scss'
 })
 export class FormProfile {
 
-  @Output() formularioEnviado = new EventEmitter<any>();
-
-  @Input() emailUsuario!: string;
-  @Input() passwordUsuario!: string;
-
   usuario = input<Usuario | null>(null);
-
-
-  formulario!: FormGroup;
 
   sexos: Sexo[] | undefined;
   sexoSeleccionado: Sexo | undefined;
@@ -43,6 +34,8 @@ export class FormProfile {
 
   groupedCities: SelectItemGroup[];
   selectedCity: string | undefined;
+
+  formulario!: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.groupedCities = [
@@ -129,6 +122,22 @@ export class FormProfile {
 
   }
 
+  // Se ejecuta en injection context
+  readonly syncUsuarioEffect = effect(() => {
+    const u = this.usuario();           // lee la signal del input
+    if (!u || !this.formulario) return; // protege si aún no existe el form
+
+    // Rellena y asegura disabled
+    this.formulario.patchValue({
+      email: u.email,
+      password: '********',
+    }, { emitEvent: false });
+
+    this.formulario.get('email')?.disable({ emitEvent: false });
+    this.formulario.get('password')?.disable({ emitEvent: false });
+  });
+
+
   ngOnInit(): void {
     this.formulario = this.fb.group({
       nombre: ['', Validators.required],
@@ -137,24 +146,26 @@ export class FormProfile {
       telefono: ['', [Validators.pattern(/[0-9+\-\s]/)]],
       fechaNacimiento: [''],
       sexo: [''],
-      email: ['', [Validators.email]],
-      password: ['', Validators.required],
+      email: [{ value: '', disabled: true }, [Validators.email]],
+      password: [{ value: '', disabled: true }, Validators.required]
     });
 
     this.sexos = [
       { name: 'Masculino' },
       { name: 'Femenino' },
       { name: 'Otro' },
-      { name: 'Prefiero no decirlo' },
     ];
+
   }
 
   onSubmit(): void {
     if (this.formulario.valid) {
-      this.formularioEnviado.emit(this.formulario.value); // manda el payload al padre
+      const payload = this.formulario.getRawValue();
+      console.log('Datos del formulario:', payload);
+      // llamar a tu servicio para enviar los datos al backend
     } else {
-      this.formulario.markAllAsTouched();
+      console.log('Formulario inválido');
+      this.formulario.markAllAsTouched(); // Marca todos los campos para mostrar errores
     }
   }
-
 }
