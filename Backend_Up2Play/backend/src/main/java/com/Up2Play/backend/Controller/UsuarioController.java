@@ -57,7 +57,7 @@ public class UsuarioController {
     }
 
     // Cambiar contraseña usuario en perfil
-    @PutMapping("/cambiar-password/{id}")
+    @PutMapping("/cambiar-password")
     public ResponseEntity<?> cambiarPassword(@AuthenticationPrincipal UserDetails principal, @RequestBody CambiarPasswordDto cambiarPasswordDto) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)

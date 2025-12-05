@@ -33,7 +33,7 @@ export class UserService {
     
 //Método actualizar datos del ususario (cambiar contraseña)
   cambiarContraseñaPerfil(id: number, payload: any): Observable<any> {
-     return this.http.put(`${this.baseUrl}/cambiar-password/${id}`, payload).pipe(
+     return this.http.put(`${this.baseUrl}/cambiar-password`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
