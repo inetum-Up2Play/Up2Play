@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { Usuario } from '../../../../shared/models/usuario.model';
 
 @Component({
   selector: 'app-avatar-profile',
@@ -7,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './avatar-profile.scss'
 })
 export class AvatarProfile {
+
+    usuario = input<Usuario | null>(null);
+
 
 }

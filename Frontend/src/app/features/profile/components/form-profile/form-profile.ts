@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, input } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,6 +11,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { CommonModule } from '@angular/common';
 import { Output, EventEmitter } from '@angular/core';
+import { Usuario } from '../../../../shared/models/usuario.model';
+
 
 interface Sexo {
   name: string;
@@ -28,6 +30,9 @@ export class FormProfile {
 
   @Input() emailUsuario!: string;
   @Input() passwordUsuario!: string;
+
+  usuario = input<Usuario | null>(null);
+
 
   formulario!: FormGroup;
 
@@ -151,4 +156,5 @@ export class FormProfile {
       this.formulario.markAllAsTouched();
     }
   }
+
 }
