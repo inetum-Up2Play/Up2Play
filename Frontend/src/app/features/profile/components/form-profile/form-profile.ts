@@ -16,24 +16,33 @@ export class FormProfile {
   perfil  = input<Perfil  | null>(null);
 
   // Envia dades al pare
-  cambiosUsuario = output<Usuario>();
   cambiosPerfil  = output<Perfil>();
+
+  // Has de posar tots els camps al perfil al nouPerfil, el id, es posa el mateix que hi havia
+  //   id: number;
+  // nombre: string;
+  // apellido: string;
+  // imagen?: number;
+  // telefono: number;
+  // sexo: string;
+  // fecha_nac: Date;
+  // idiomas: string;
+  // id_usuario: number;
   
-
-  
-
-
-  enviarUsuario(formValues: any) {
-    const nuevoUsuario: Usuario = {
+/*
+  enviarPerfil(formValues: any) {
+    const nuevoPerfil: Perfil = {
       id: this.usuario()?.id ?? 0, // o lo que corresponda
-      email: formValues.email,
+      nombre: formValues.nombre,
       contraseña: formValues.contraseña,
       rol: formValues.rol,
       nombre_usuario: formValues.nombre_usuario,
     };
 
-    this.cambiosUsuario.emit(nuevoUsuario);
+
+    this.cambiosPerfil.emit(nuevoPerfil);
   }
+    */
 
 
 
