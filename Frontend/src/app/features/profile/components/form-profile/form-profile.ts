@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { Usuario } from '../../../../shared/models/usuario.model';
 
 @Component({
   selector: 'app-form-profile',
@@ -7,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrl: './form-profile.scss'
 })
 export class FormProfile {
+
+  
+  usuario = input<Usuario | null>(null);
+
+
 
 }

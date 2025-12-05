@@ -29,7 +29,6 @@ export class Profile {
     this.userService.getUsuario().subscribe({
       next: (data) => {
         this.usuario.set(data);
-        console.log(this.usuario());
       },
       error: (err) => {
         console.error('Error cargando el usuario', err);
