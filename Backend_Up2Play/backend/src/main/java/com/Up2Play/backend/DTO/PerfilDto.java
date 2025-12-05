@@ -2,17 +2,21 @@ package com.Up2Play.backend.DTO;
 
 import java.time.LocalDate;
 
+import com.Up2Play.backend.Exception.ValidarPalabrasProhibidas;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.SexoAElegir;
 
 public class PerfilDto {
 
     private Long id;
+    @ValidarPalabrasProhibidas
     private String nombre;
+    @ValidarPalabrasProhibidas
     private String apellido;
     private String telefono;
     private SexoAElegir sexo;
     private LocalDate fechaNacimiento;
+    @ValidarPalabrasProhibidas
     private String idiomas;
     private String email;
     private Usuario usuario;

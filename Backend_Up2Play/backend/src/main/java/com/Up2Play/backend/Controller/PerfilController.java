@@ -19,6 +19,8 @@ import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.PerfilService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/perfil")
 public class PerfilController {
@@ -32,7 +34,7 @@ public class PerfilController {
     }
 
     @PutMapping("editarPerfil/{id}")
-    public ResponseEntity<?> updatePerfil(@PathVariable Long id, @RequestBody PerfilDto perfilDto,
+    public ResponseEntity<?> updatePerfil(@PathVariable Long id,@Valid @RequestBody PerfilDto perfilDto,
             @AuthenticationPrincipal UserDetails principal) {
 
         String email = principal.getUsername();
