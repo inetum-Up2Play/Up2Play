@@ -68,7 +68,7 @@ public class UsuarioController {
     }
 
     // Elimina un usuario por ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminarUsuario/{id}")
     public void deleteUsuario(@PathVariable Long id) {
         usuarioService.deleteUsuario(id);
     }
