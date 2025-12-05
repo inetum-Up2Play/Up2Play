@@ -44,6 +44,7 @@ export class Profile {
     this.perfilService.getPerfil().subscribe({
       next: (datosPerfil) => {
         this.perfil.set(datosPerfil);
+        console.log(this.perfil());
       },
       error: (err) => {
         console.error('Error cargando el perfil', err);
