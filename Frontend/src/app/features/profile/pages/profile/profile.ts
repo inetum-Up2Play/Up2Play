@@ -59,7 +59,6 @@ export class Profile {
       next: (res) => {
         console.error('Guardat');
         this.ngOnInit();
-
       },
       error: () => {
         console.error('Error editando el usuario');
