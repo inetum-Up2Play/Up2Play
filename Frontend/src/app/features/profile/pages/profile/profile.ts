@@ -22,7 +22,7 @@ import { Perfil } from '../../../../shared/models/Perfil';
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile {
+export class Profile implements OnInit {
   private userService = inject(UserService);
   private perfilService = inject(PerfilService);
   private authService = inject(AuthService);
@@ -31,25 +31,38 @@ export class Profile {
   perfil = signal<Perfil | null>(null);
   perfilActualizado: Perfil = this.perfil()!; // el ! confia que mai sera null
 
-  ngOnInit(): void {
-    this.userService.getUsuario().subscribe({
-      next: (datosUsuario) => {
-        this.usuario.set(datosUsuario);
-      },
-      error: (err) => {
-        console.error('Error cargando el usuario', err);
-      },
-    });
+  private cargarDatos(): void {
+      this.userService.getUsuario().subscribe({
+          next: (datosUsuario) => {
+              // Verificación defensiva antes de setear la señal
+              console.log('PADRE: Datos Usuario recibidos:', datosUsuario); 
+              if (datosUsuario) {
+                  this.usuario.set(datosUsuario);
+              } else {
+                   // Si el usuario no existe, asignamos null
+                   this.usuario.set(null); 
+              }
+          },
+          error: (err) => {
+              console.error('Error cargando el usuario', err);
+          },
+      });
 
-    this.perfilService.getPerfil().subscribe({
-      next: (datosPerfil) => {
-        this.perfil.set(datosPerfil);
-        console.log(this.perfil());
-      },
-      error: (err) => {
-        console.error('Error cargando el perfil', err);
-      },
-    });
+      this.perfilService.getPerfil().subscribe({
+          next: (datosPerfil) => {
+              this.perfil.set(datosPerfil);
+              // Inicializa perfilActualizado aquí, después de que los datos estén cargados
+              this.perfilActualizado = datosPerfil;
+              console.log(this.perfil());
+          },
+          error: (err) => {
+              console.error('Error cargando el perfil', err);
+          },
+      });
+  }
+
+  ngOnInit(): void {
+    this.cargarDatos();
   }
 
   onCambiosPerfil(guardarPerfil: Perfil) {
@@ -58,7 +71,7 @@ export class Profile {
     this.perfilService.editarPerfil(this.perfilActualizado.id, this.perfilActualizado).subscribe({
       next: (res) => {
         console.error('Guardat');
-        this.ngOnInit();
+        this.cargarDatos();
       },
       error: () => {
         console.error('Error editando el usuario');
@@ -72,7 +85,7 @@ export class Profile {
     this.perfilService.editarPerfil(this.perfilActualizado.id, this.perfilActualizado).subscribe({
       next: (res) => {
         console.error('Guardat');
-        this.ngOnInit();
+        this.cargarDatos();
       },
       error: () => {
         console.error('Error editando el usuario');
