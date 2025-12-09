@@ -3,10 +3,9 @@ export interface Perfil {
   id: number;
   nombre: string;
   apellido: string;
-  imagen?: number;
+  imagenPerfil?: number;
   telefono: number;
   sexo: string | null;
-  fecha_nac: Date | null;
   idiomas: string;
   id_usuario: number;
 }

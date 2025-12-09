@@ -31,14 +31,14 @@ export class PerfilService {
     
   //Método actualizar datos del perfil
   editarPerfil(id: number, payload: any): Observable<any> {
-      return this.http.put(`${this.baseUrl}/editarPerfil/${id}`, payload).pipe(
-        map(() => true),
-        catchError((error: HttpErrorResponse) => {
-          const errBody = error.error as ErrorResponseDto;
-          return of(errBody?.error ?? 'UNKNOWN');
+    return this.http.put(`${this.baseUrl}/editarPerfil/${id}`, payload).pipe(
+      map(() => true),
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return of(errBody?.error ?? 'UNKNOWN');
         })
-      );
-    }
+    );
+  }
 
 
 

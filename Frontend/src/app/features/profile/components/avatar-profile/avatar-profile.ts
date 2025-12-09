@@ -26,7 +26,7 @@ export class AvatarProfile implements OnInit {
   ngOnInit(): void {
     //Para saber cuál es el avatar y si cambia desde el padre
     effect(() => {
-      const currentImagen = this.perfil()?.imagen;
+      const currentImagen = this.perfil()?.imagenPerfil;
       if (currentImagen) {
         this.selectedAvatarId.set(currentImagen); //Borde verde 
       }

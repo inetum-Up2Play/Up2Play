@@ -241,7 +241,7 @@ export class FormProfile {
       apellido: raw.apellidos,
       telefono: (raw.telefono),
       sexo,
-      fecha_nac: raw.fechaNacimiento ?? null,
+      fechaNacimiento: raw.fechaNacimiento ?? null,
       idiomas: Array.isArray(raw.idiomas) ? raw.idiomas.join(',') : '',
 
       // Asegura relación con usuario si aplica
