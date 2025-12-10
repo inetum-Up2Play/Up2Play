@@ -1,4 +1,4 @@
-import { Component, effect, input, output } from '@angular/core';
+import { Component, effect, input, output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { Perfil } from '../../../../shared/models/Perfil';
 import { Profile } from '../../pages/profile/profile';
+import { ToastModule } from 'primeng/toast';
 
 type SexoEnum = 'MASCULINO' | 'FEMENINO' | 'OTRO'; // ajusta a tu enum real
 
@@ -23,12 +24,13 @@ interface SexoOption { label: string; value: SexoEnum; }
 
 @Component({
   selector: 'app-form-profile',
-  imports: [MultiSelectModule, ReactiveFormsModule, InputTextModule, ButtonModule, FormsModule, SelectModule, DatePicker, InputNumberModule, MessageModule, InputIconModule, IconFieldModule, CommonModule],
+  imports: [ToastModule, MultiSelectModule, ReactiveFormsModule, InputTextModule, ButtonModule, FormsModule, SelectModule, DatePicker, InputNumberModule, MessageModule, InputIconModule, IconFieldModule, CommonModule],
   templateUrl: './form-profile.html',
   styleUrl: './form-profile.scss'
 })
 export class FormProfile {
 
+  private messageService = inject(MessageService);
 
   // Opciones del select de sexo (valor debe coincidir con el enum del backend)
   readonly sexos: SexoOption[] = [
@@ -217,6 +219,7 @@ export class FormProfile {
   /** Submit: construye el payload con los cambios y lo emite al padre */
   onSubmit(): void {
     if (this.formulario.invalid) {
+      this.messageService.add({ severity: 'warn', summary: 'Formulario invalido', detail: 'Porfavor, rellene los campos obligatorios' });
       this.formulario.markAllAsTouched();
       return;
     }
