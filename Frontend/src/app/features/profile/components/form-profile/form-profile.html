@@ -1,4 +1,4 @@
-<div class="max-w-7xl m-4 py-4 px-6 md:m-6 md:py-6 md:px-8 lg:m-8 lg:py-8 lg:px-10 bg-white rounded-lg shadow">
+<div class="py-4 px-6 md:my-2 md:py-6 md:px-8 lg:my-4 lg:py-8 lg:px-10 bg-white rounded-lg shadow">
     <h2 class="text-2xl font-bold text-left mb-6">Mi información</h2>
 
     <form [formGroup]="formulario" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -29,7 +29,8 @@
             </div>
             <div>
                 <label for="sexo" class="block mb-1 font-semibold">Sexo</label>
-                <p-select [options]="sexos" optionLabel="name" id="sexo" formControlName="sexo" class="w-full" />
+                <p-select [options]="sexos" optionLabel="label" optionValue="value" id="sexo" formControlName="sexo"
+                    class="w-full" />
             </div>
             <div>
                 <label for="email" class="block mb-1 font-semibold">Correo electrónico</label>
@@ -52,7 +53,7 @@
             <div>
                 <label for="fechaNacimiento" class="block mb-1 font-semibold">Fecha de nacimiento</label>
                 <p-datepicker dateFormat="dd/mm/yy" id="fechaNacimiento" formControlName="fechaNacimiento"
-                    class="w-full" />
+                    dateFormat="yy-mm-dd" class="w-full" />
             </div>
             <div>
                 <label for="telefono" class="block mb-1 font-semibold">Teléfono</label>

@@ -12,8 +12,12 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
+
 import { AuthService } from '../../services/auth/auth-service';
 import { UserDataService } from '../../services/auth/user-data-service';
+import { AvatarPipe } from '../../../shared/pipes/avatar-pipe';
+import { PerfilService } from '../../services/perfil/perfil-service';
+
 
 interface MenuItemPages {
   label: string;
@@ -24,7 +28,7 @@ interface MenuItemPages {
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule],
+  imports: [RouterModule, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule, AvatarPipe],
   templateUrl: './header.html',
   styleUrls: ['./header.scss'],
 })
@@ -33,6 +37,7 @@ export class Header implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
+  private perfilService = inject(PerfilService);
 
   visible = false;
 
@@ -59,34 +64,33 @@ export class Header implements OnInit {
 
   // Signal que almacena el email una sola vez y no cambia más
   private userEmailSignal = signal<string>('');
+  public userAvatar = signal<number | null>(null);
 
   // avatarItems se construye usando el email almacenado en el signal
-  
-
-public avatarItems = computed<MenuItem[]>(() => {
+  public avatarItems = computed<MenuItem[]>(() => {
     const email = this.userEmailSignal();
-  return [
-    {
-      label: email && email.length > 0 ? email : 'Mi Cuenta',
-      icon: 'pi pi-envelope',
-      command: () => {
-        this.router.navigate(['/my-account']);
+    return [
+      {
+        label: email && email.length > 0 ? email : 'Mi Cuenta',
+        icon: 'pi pi-envelope',
+        command: () => {
+          this.router.navigate(['/my-account']);
+        }
+      },
+      {
+        label: 'Cerrar sesión',
+        icon: 'pi pi-sign-out',
+        command: () => {
+          this.authService.logout();
+        }
       }
-    },
-    {
-      label: 'Cerrar sesión',
-      icon: 'pi pi-sign-out',
-      command: () => {
-        this.authService.logout();
-      }
-    }
-  ];
-})
+    ];
+  })
 
   ngOnInit(): void {
     // Obtiene el email la primera vez
     const email = this.userDataService.getEmail();
-    
+
     // Obtiene el email del signal del servicio las posteriores veces
     if (!email || email.trim() === '') {
       const serviceEmail = this.userDataService.getEmailSignal()();
@@ -94,7 +98,16 @@ public avatarItems = computed<MenuItem[]>(() => {
     } else {
       this.userEmailSignal.set(email);
     }
-    
+
+    this.perfilService.getPerfil().subscribe({
+      next: (perfil) => {
+        if (perfil && perfil.imagenPerfil) {
+          this.userAvatar.set(perfil.imagenPerfil);
+        }
+      },
+      error: () => console.warn('No se pudo cargar el avatar del header')
+    });
+
     this.renderer.addClass(this.document.body, 'header-background-active'); //img-fondo
     this.renderer.addClass(this.document.body, 'header-offset-active'); //necesario para fixed-top
   }

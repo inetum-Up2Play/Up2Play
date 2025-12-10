@@ -1,11 +1,11 @@
 export interface Perfil {
+  fechaNacimiento: any;
   id: number;
   nombre: string;
   apellido: string;
-  imagen?: number;
+  imagenPerfil?: number;
   telefono: number;
-  sexo: string;
-  fecha_nac: Date;
+  sexo: string | null;
   idiomas: string;
   id_usuario: number;
 }
