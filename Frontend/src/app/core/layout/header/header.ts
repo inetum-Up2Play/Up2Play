@@ -37,7 +37,7 @@ export class Header implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
-  private perfilService = inject(PerfilService);
+  public perfilService = inject(PerfilService);
 
   visible = false;
 
@@ -99,13 +99,16 @@ export class Header implements OnInit {
       this.userEmailSignal.set(email);
     }
 
+    //Modifica el avatar del header. Es una signal que se encuentra en PerfilService
     this.perfilService.getPerfil().subscribe({
       next: (perfil) => {
-        if (perfil && perfil.imagenPerfil) {
-          this.userAvatar.set(perfil.imagenPerfil);
-        }
+        const imgAvatar = (perfil as any)?.imagenPerfil ?? 0;
+        this.perfilService.avatarGlobal.set(imgAvatar);
       },
-      error: () => console.warn('No se pudo cargar el avatar del header')
+      error: () => {
+        this.perfilService.avatarGlobal.set(0);
+        console.warn('No se pudo cargar el avatar del header')
+      }
     });
 
     this.renderer.addClass(this.document.body, 'header-background-active'); //img-fondo

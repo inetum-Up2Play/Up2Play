@@ -42,7 +42,7 @@
 
                 <!-- Abres el menú con el avatar -->
                 <p-avatar (click)="menu.toggle($event)"
-                    [image]="userAvatar() | avatarImg"
+                    [image]="perfilService.avatarGlobal() | avatarImg"
                     shape="circle"
                     style="cursor: pointer"
                     size="large">

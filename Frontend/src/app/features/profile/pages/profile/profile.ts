@@ -38,7 +38,7 @@ export class Profile implements OnInit {
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
-  avatarPendiente = signal<number | null>(null);
+  avatarPendiente = signal<number | null>(null); //Es el avatar recibido del avatar-component. Si no se pulsa en "guardar cambios" no se aplicará
 
   private cargarDatos(): void {
     this.userService.getUsuario().subscribe({
@@ -77,6 +77,9 @@ export class Profile implements OnInit {
     this.perfilService.editarPerfil(perfilModificado.id, perfilModificado).subscribe({
       next: () => {
         this.perfil.set(perfilModificado);
+
+        this.perfilService.avatarGlobal.set(this.avatarPendiente() ?? perfilActual?.imagenPerfil ?? 0); //Cambia el avatar del header
+
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente' });
       },
       error: (err) => {
@@ -84,6 +87,7 @@ export class Profile implements OnInit {
         this.errorService.showError(err);
       }
     });
+
   }
 
   onCambiosAvatar(numAvatar: number) {
@@ -98,7 +102,7 @@ export class Profile implements OnInit {
   }
 
   eliminarCuenta() {
-    this.userService.eliminarUsuario();    
+    this.userService.eliminarUsuario();
     this.authService.logout();
     //this.perfilService.eliminarPerfil();
   }
