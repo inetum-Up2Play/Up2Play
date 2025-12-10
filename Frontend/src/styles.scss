@@ -79,6 +79,43 @@ Here has to be imported the other style files (from the src/styles/)
 }
 
 
+.cd-eliminar {
+
+  .p-confirmdialog-reject-button {
+
+    color: vars.$verde-oscuro;
+    background-color: vars.$blanco;
+    border: none;
+
+    &:hover {
+      background-color: vars.$blanco !important;
+      border: none !important;
+      color: vars.$verde-oscuro !important;
+      border-color: none !important;    
+      transform: scale(1.05) !important;
+
+    }
+    
+  }
+
+  .p-confirmdialog-accept-button {
+
+    background-color: vars.$msg-error-oscuro;
+    border: none;
+
+    &:hover {
+      background-color: vars.$msg-error-oscuro !important;
+      border: none !important;
+      border-color: none !important;    
+      transform: scale(1.05) !important;
+
+    }
+  }
+}
+
+
+
+
 
 
 

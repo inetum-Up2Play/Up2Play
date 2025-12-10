@@ -68,9 +68,12 @@ public class UsuarioController {
     }
 
     // Elimina un usuario por ID
-    @DeleteMapping("/eliminarUsuario/{id}")
-    public void deleteUsuario(@PathVariable Long id) {
-        usuarioService.deleteUsuario(id);
+    @DeleteMapping("/eliminarUsuario")
+    public void deleteUsuario(@AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        usuarioService.deleteUsuario(usuario.getId());
     }
 
     //Obtiene el usuario autenticado actual ("/usuarios/me")

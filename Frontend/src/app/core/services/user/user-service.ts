@@ -43,8 +43,8 @@ export class UserService {
   }
 
 //Eliminar usuario   
-  eliminarUsuario(id: number) {
-      return this.http.delete(this.baseUrl + `/eliminarUsuario/${id}`).pipe(
+  eliminarUsuario() {
+      return this.http.delete(this.baseUrl + `/eliminarUsuario`).pipe(
         map(() => true),
         catchError((error: HttpErrorResponse) => {
           const errBody = error.error as ErrorResponseDto;

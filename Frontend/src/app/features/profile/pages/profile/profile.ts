@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { Header } from '../../../../core/layout/header/header';
 import { FormProfile } from '../../components/form-profile/form-profile';
@@ -22,13 +22,23 @@ import { ErrorService } from '../../../../core/services/error/error-service';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 import { Footer } from '../../../../core/layout/footer/footer';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-profile',
-  imports: [Header, Footer, FormProfile, AvatarProfile, ButtonModule, ToastModule, MessageModule],
+  imports: [
+    Header,
+    Footer,
+    FormProfile,
+    AvatarProfile,
+    ButtonModule,
+    ToastModule,
+    MessageModule,
+    ConfirmDialog,
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService],
 })
 export class Profile implements OnInit {
   private userService = inject(UserService);
@@ -36,6 +46,7 @@ export class Profile implements OnInit {
   private authService = inject(AuthService);
   private errorService = inject(ErrorService);
   private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
@@ -73,22 +84,33 @@ export class Profile implements OnInit {
   onCambiosPerfil(datosFormulario: Perfil) {
     const perfilActual = this.perfil();
 
-    const perfilModificado = { ...perfilActual, ...datosFormulario, imagenPerfil: this.avatarPendiente() ?? undefined };
+    const perfilModificado = {
+      ...perfilActual,
+      ...datosFormulario,
+      imagenPerfil: this.avatarPendiente() ?? undefined,
+    };
 
-    this.perfilService.editarPerfil(perfilModificado.id, perfilModificado).subscribe({
-      next: () => {
-        this.perfil.set(perfilModificado);
+    this.perfilService
+      .editarPerfil(perfilModificado.id, perfilModificado)
+      .subscribe({
+        next: () => {
+          this.perfil.set(perfilModificado);
 
-        this.perfilService.avatarGlobal.set(this.avatarPendiente() ?? perfilActual?.imagenPerfil ?? 0); //Cambia el avatar del header
+          this.perfilService.avatarGlobal.set(
+            this.avatarPendiente() ?? perfilActual?.imagenPerfil ?? 0
+          ); //Cambia el avatar del header
 
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente' });
-      },
-      error: (err) => {
-        console.error('Error editando el perfil', err);
-        this.errorService.showError(err);
-      }
-    });
-
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Perfil actualizado correctamente',
+          });
+        },
+        error: (err) => {
+          console.error('Error editando el perfil', err);
+          this.errorService.showError(err);
+        },
+      });
   }
 
   onCambiosAvatar(numAvatar: number) {
@@ -103,8 +125,53 @@ export class Profile implements OnInit {
   }
 
   eliminarCuenta() {
-    //this.userService.eliminarUsuario();
-    this.authService.logout();
+    this.userService.eliminarUsuario().subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Cuenta eliminada correctamente',
+        });
+      },
+      error: (err) => {
+        console.error('Error eliminando la cuenta', err);
+        this.errorService.showError(err);
+      },
+    });
+
+    setTimeout(() => {
+      this.authService.logout();
+    }, 2500);
     //this.perfilService.eliminarPerfil();
+  }
+
+  confirm() {
+    this.confirmationService.confirm({
+      header: 'Confirmación',
+      message: '¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.',
+      icon: 'pi pi-exclamation-circle',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        icon: 'pi pi-times',
+        variant: 'outlined',
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: 'Eliminar cuenta',
+        icon: 'pi pi-check',
+        size: 'small',
+      },
+      accept: () => {
+        this.eliminarCuenta();
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Rejected',
+          detail: 'Has cancelado la eliminación de la cuenta',
+          life: 3000,
+        });
+      },
+    });
   }
 }
