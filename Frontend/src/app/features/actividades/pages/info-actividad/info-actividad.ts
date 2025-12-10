@@ -39,10 +39,12 @@ import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
+import { Avatar } from 'primeng/avatar';
+import { AvatarGroup } from 'primeng/avatargroup';
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [ConfirmDialog, CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
+  imports: [Avatar, AvatarGroup, ConfirmDialog, CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
     Header, DeporteImgPipe, AvatarPipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './info-actividad.html',
