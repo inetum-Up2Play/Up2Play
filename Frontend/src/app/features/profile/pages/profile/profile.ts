@@ -6,83 +6,104 @@ import {
   output,
   signal,
 } from '@angular/core';
+
+import { ButtonModule } from 'primeng/button';
+import { MessageService } from 'primeng/api';
+
 import { Header } from '../../../../core/layout/header/header';
 import { FormProfile } from '../../components/form-profile/form-profile';
 import { AvatarProfile } from '../../components/avatar-profile/avatar-profile';
-import { ButtonModule } from 'primeng/button';
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { PerfilService } from '../../../../core/services/perfil/perfil-service';
 import { UserService } from '../../../../core/services/user/user-service';
 import { AuthService } from '../../../../core/services/auth/auth-service';
 import { Perfil } from '../../../../shared/models/Perfil';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-profile',
-  imports: [Header, FormProfile, AvatarProfile, ButtonModule],
+  imports: [Header, FormProfile, AvatarProfile, ButtonModule, ToastModule, MessageModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
+  providers: [MessageService]
 })
-export class Profile {
+export class Profile implements OnInit {
   private userService = inject(UserService);
   private perfilService = inject(PerfilService);
   private authService = inject(AuthService);
+  private errorService = inject(ErrorService);
+  private messageService = inject(MessageService);
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
-  perfilActualizado: Perfil = this.perfil()!; // el ! confia que mai sera null
+  avatarPendiente = signal<number | null>(null); //Es el avatar recibido del avatar-component. Si no se pulsa en "guardar cambios" no se aplicará
 
-  ngOnInit(): void {
+  private cargarDatos(): void {
     this.userService.getUsuario().subscribe({
       next: (datosUsuario) => {
-        this.usuario.set(datosUsuario);
+        this.usuario.set(datosUsuario || null);
       },
       error: (err) => {
         console.error('Error cargando el usuario', err);
+        this.errorService.showError(err);
       },
     });
 
     this.perfilService.getPerfil().subscribe({
       next: (datosPerfil) => {
         this.perfil.set(datosPerfil);
+        console.log('Perfil cargado:', this.perfil());
+        const imagenActual = (datosPerfil as any).imagenPerfil ?? 0;
+        this.avatarPendiente.set(imagenActual);
       },
       error: (err) => {
         console.error('Error cargando el perfil', err);
+        this.errorService.showError(err);
       },
     });
   }
 
-  onCambiosPerfil(guardarPerfil: Perfil) {
-    this.perfilActualizado = guardarPerfil;
-
-    this.perfilService.editarPerfil(this.perfilActualizado.id, this.perfilActualizado).subscribe({
-      next: (res) => {
-        console.error('Guardat');
-        this.ngOnInit();
-
-      },
-      error: () => {
-        console.error('Error editando el usuario');
-      }
-    });
+  ngOnInit(): void {
+    this.cargarDatos();
   }
 
-  onCambiosAvatar (numAvatar: number) {
-    this.perfilActualizado.imagen = numAvatar;
+  onCambiosPerfil(datosFormulario: Perfil) {
+    const perfilActual = this.perfil();
 
-    this.perfilService.editarPerfil(this.perfilActualizado.id, this.perfilActualizado).subscribe({
-      next: (res) => {
-        console.error('Guardat');
-        this.ngOnInit();
+    const perfilModificado = { ...perfilActual, ...datosFormulario, imagenPerfil: this.avatarPendiente() ?? undefined };
+
+    this.perfilService.editarPerfil(perfilModificado.id, perfilModificado).subscribe({
+      next: () => {
+        this.perfil.set(perfilModificado);
+
+        this.perfilService.avatarGlobal.set(this.avatarPendiente() ?? perfilActual?.imagenPerfil ?? 0); //Cambia el avatar del header
+
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente' });
       },
-      error: () => {
-        console.error('Error editando el usuario');
+      error: (err) => {
+        console.error('Error editando el perfil', err);
+        this.errorService.showError(err);
       }
     });
+
+  }
+
+  onCambiosAvatar(numAvatar: number) {
+    const perfilActual = this.perfil();
+
+    if (!perfilActual) {
+      console.error('❌ ERROR: Intentando cambiar avatar sin perfil cargado.');
+      return;
+    }
+
+    this.avatarPendiente.set(numAvatar);
   }
 
   eliminarCuenta() {
-    this.authService.logout();
     this.userService.eliminarUsuario();
+    this.authService.logout();
     //this.perfilService.eliminarPerfil();
   }
 }

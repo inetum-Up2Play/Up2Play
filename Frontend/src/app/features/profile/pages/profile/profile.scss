@@ -1,17 +1,6 @@
 @use 'styles/variables' as vars;
 
 
-#a {
-
-    border: red solid 1px;
-
-}
-#f {
-
-    border: green solid 1px;
-
-}
-
 //BTN EDITAR
 :host ::ng-deep .btn-eliminar {
     background-color: vars.$msg-error-oscuro;
@@ -25,4 +14,8 @@
     border: none !important;
     border-radius: 20px !important;
     transform: scale(1.05) !important;
+}
+
+h1 {
+    font-family: vars.$montserrat;
 }

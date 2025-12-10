@@ -1,4 +1,4 @@
-import { Component, signal, inject, AfterViewInit } from '@angular/core';
+import { Component, signal, inject, AfterViewInit, Injector, effect, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -19,12 +19,14 @@ import { MessageModule } from 'primeng/message';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 
 import { Actividad } from '../../../../shared/models/Actividad';
+import { Usuario } from '../../../../shared/models/usuario.model';
+import { Perfil } from '../../../../shared/models/Perfil';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
 import { ErrorService } from '../../../../core/services/error/error-service';
-import { UserService } from '../../../../core/services/user/user-service';
+import { PerfilService } from '../../../../core/services/perfil/perfil-service';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -37,7 +39,6 @@ import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
-import { Usuario } from '../../../../shared/models/usuario.model';
 
 @Component({
   selector: 'app-info-actividad',
@@ -47,17 +48,20 @@ import { Usuario } from '../../../../shared/models/usuario.model';
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
-export class InfoActividad implements AfterViewInit {
+export class InfoActividad implements OnInit, AfterViewInit {
   actividad = signal<Actividad | null>(null);
   usuario = signal<Usuario | null>(null);
+  perfil = signal<Perfil | null>(null);
   apuntado = signal<boolean>(false);
   isCreador = signal<boolean>(false);
+  avatarIdCreador = signal<number>(0);
 
   private messageService = inject(MessageService);
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
   private router = inject(Router);
-  private userService = inject(UserService);
+  private perfilService = inject(PerfilService);
+  private injector = inject(Injector);
 
   actividadId: number;
   errorUbicacion = signal<string | null>(null);
@@ -147,6 +151,13 @@ export class InfoActividad implements AfterViewInit {
       return;
     }
 
+    effect(() => {
+      const act = this.actividad();
+      if (act && act.usuarioCreadorId) {
+        this.getAvatarCreador(act.usuarioCreadorId);
+      }
+    }, { injector: this.injector });
+
     this.actService.getActividad(this.actividadId).subscribe({
       next: (act) => {
         this.actividad.set(act);
@@ -194,12 +205,20 @@ export class InfoActividad implements AfterViewInit {
     this.actService
       .comprobarCreador(this.actividadId)
       .subscribe((flag) => this.isCreador.set(flag));
+
+
   }
 
-  getAvatarCreador(idCreador: number): string {
-    //this.usuario = this.userService.getUser(idCreador);
-    //return this.usuario.avatarId;
-    return ''; //Cuando se haga el método, borrar esta línea
+  getAvatarCreador(idCreador: number) {
+    this.perfilService.getPerfilByUserId(idCreador).subscribe({
+      next: (perfil) => {
+        this.avatarIdCreador.set(perfil?.imagenPerfil ?? 0);
+      },
+      error: (err) => {
+        console.error('Error cargando avatar del creador', err);
+        this.avatarIdCreador.set(0);
+      }
+    });
   }
 
   //Usamos el p-rating como un form

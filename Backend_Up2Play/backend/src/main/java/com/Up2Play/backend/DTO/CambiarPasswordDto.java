@@ -31,11 +31,6 @@ public class CambiarPasswordDto {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-
-    
-
-    
-
 }
     
     
