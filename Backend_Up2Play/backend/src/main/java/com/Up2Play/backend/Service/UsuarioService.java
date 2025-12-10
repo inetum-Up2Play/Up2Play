@@ -465,7 +465,7 @@ public class UsuarioService {
 
         // Verificar contraseña antigua
         if (!passwordEncoder.matches(input.getOldPassword(), usuario.getPassword())) {
-            throw new RuntimeException("Contraseña incorrecta");
+            throw new CredencialesErroneasException("Contraseña incorrecta");
         }
 
         // Guardar la nueva contraseña encriptada
