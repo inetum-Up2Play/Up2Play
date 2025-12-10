@@ -40,6 +40,15 @@ export class PerfilService {
     );
   }
 
+  getPerfilByUserId(id: number): Observable<Perfil>{
+    return this.http.get<Perfil>(`${this.baseUrl}`+`/obtenerPerfil/${id}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return throwError(() => errBody?.error ?? 'UNKNOWN');
+      })
+    );
+  }
+
 
 
 
