@@ -11,7 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 import { Header } from '../../../../core/layout/header/header';
-import { FormProfile } from '../../components/form-profile/form-profile';
+import { CambiarPasswordDto, FormProfile } from '../../components/form-profile/form-profile';
 import { AvatarProfile } from '../../components/avatar-profile/avatar-profile';
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { PerfilService } from '../../../../core/services/perfil/perfil-service';
@@ -21,6 +21,7 @@ import { Perfil } from '../../../../shared/models/Perfil';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
@@ -38,6 +39,8 @@ export class Profile implements OnInit {
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
+
+  pwdVisible = false;
 
   private cargarDatos(): void {
     this.userService.getUsuario().subscribe({
@@ -105,9 +108,30 @@ export class Profile implements OnInit {
     });
   }
 
-  eliminarCuenta() {
-    this.userService.eliminarUsuario();    
-    this.authService.logout();
-    //this.perfilService.eliminarPerfil();
+
+  // Recibe el payload del hijo y llama al servicio
+  onChangePassword(payload: CambiarPasswordDto, child?: any) {    
+    this.userService.cambiarContraseñaPerfil(payload)
+      .subscribe({
+        next: () => {
+          // Notificación
+          this.messageService.add({ severity: 'success', summary: 'Contraseña actualizada', detail: 'Se ha cambiado correctamente' });
+          this.pwdVisible = false;
+
+          // Avisar al hijo que terminó, para que quite loading y cierre
+          child?.onRequestFinished?.(true);
+        },
+        error: (err: HttpErrorResponse) => {
+          const errorMsg = (err.error?.error ?? err.error?.message ?? 'Error desconocido');
+          this.messageService.add({ severity: 'error', summary: 'Error al actualizar', detail: errorMsg });
+          child?.onRequestFinished?.(false);
+        }
+      });
   }
+
+eliminarCuenta() {
+  this.userService.eliminarUsuario();
+  this.authService.logout();
+  //this.perfilService.eliminarPerfil();
+}
 }

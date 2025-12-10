@@ -1,4 +1,3 @@
-<p-toast></p-toast>
 <div class="py-4 px-6 md:my-2 md:py-6 md:px-8 lg:my-4 lg:py-8 lg:px-10 bg-white rounded-lg shadow">
     <h2 class="text-2xl font-bold text-left mb-6">Mi información</h2>
 
@@ -66,8 +65,10 @@
             <div>
                 <label for="password" class="block mb-1 font-semibold">Contraseña</label>
                 <p-iconfield>
-                    <input id="password" type="password" pInputText formControlName="password" class="w-full" />
-                    <p-inputicon class="pi pi-pencil" />
+                    <input id="password" type="password" pInputText formControlName="password"
+                        class="w-full cursor-pointer" (click)="passwordDialogVisible.set(true)" readonly />
+                    <p-inputicon class="pi pi-pencil" role="button" tabindex="0"
+                        (click)="passwordDialogVisible.set(true)" (keydown.enter)="showDialog()" />
                 </p-iconfield>
             </div>
         </div>
@@ -77,4 +78,54 @@
             <button pButton type="submit" label="Guardar cambios" class="btn-guardarCambios"></button>
         </div>
     </form>
+
+</div>
+
+<div class="card flex justify-center">
+    <p-dialog header="Cambiar contraseña" [visible]="passwordDialogVisible()"
+        (visibleChange)="passwordDialogVisible.set($event)" [modal]="true" [appendTo]="'body'" [blockScroll]="true"
+        [autoZIndex]="true" [baseZIndex]="1000" [style]="{ width: '25rem' }">
+
+        <!-- form reactivo del diálogo -->
+        <form [formGroup]="pwdForm" (ngSubmit)="$event.preventDefault()">
+            <div class="flex flex-col">
+                <label for="contraseñaActual" class="font-semibold">Contraseña actual</label>
+                <input pInputText type="password" id="contraseñaActual" class="flex-auto" autocomplete="off"
+                    formControlName="oldPassword" />
+                <small class="text-red-500"
+                    *ngIf="pwdForm.get('oldPassword')?.invalid && pwdForm.get('oldPassword')?.touched">
+                    La contraseña actual es obligatoria
+                </small>
+            </div>
+
+            <span class="p-text-secondary block mt-5 mb-2">Recuerda que tu contraseña debe ser segura.</span>
+
+            <div class="flex flex-col mb-2">
+                <label for="nuevaContraseña" class="font-semibold">Nueva contraseña</label>
+                <input pInputText type="password" id="nuevaContraseña" class="flex-auto" autocomplete="off"
+                    formControlName="newPassword" />
+                <small class="text-red-500"
+                    *ngIf="pwdForm.get('newPassword')?.invalid && pwdForm.get('newPassword')?.touched">
+                    Mínimo 8 caracteres
+                </small>
+            </div>
+
+            <div class="flex flex-col mb-4">
+                <label for="repetirContraseña" class="font-semibold">Repetir contraseña</label>
+                <input pInputText type="password" id="repetirContraseña" class="flex-auto" autocomplete="off"
+                    formControlName="repeatPassword" />
+                <small class="text-red-500"
+                    *ngIf="pwdForm.hasError('passwordsNoCoinciden') && pwdForm.get('repeatPassword')?.touched">
+                    Las contraseñas no coinciden
+                </small>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <p-button label="Cancelar" severity="secondary" [raised]="true"
+                    (click)="passwordDialogVisible.set(false)" [disabled]="loading" />
+                <p-button label="Actualizar contraseña" severity="contrast" [raised]="true" (click)="onSubmitPassword()"
+                    [disabled]="loading" />
+            </div>
+        </form>
+    </p-dialog>
 </div>

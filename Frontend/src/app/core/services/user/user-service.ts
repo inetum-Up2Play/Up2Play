@@ -9,6 +9,7 @@ import {
 } from '@angular/router';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
+import { CambiarPasswordDto } from '../../../features/profile/components/form-profile/form-profile';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +22,19 @@ export class UserService {
   private logoutTimer: any;
 
   //Método obtener datos de usuario
-  getUsuario(): Observable<Usuario>{
-  return this.http.get<Usuario>(`${this.baseUrl}`+'/me').pipe(
-        
-        catchError((error: HttpErrorResponse) => {
-          const errBody = error.error as ErrorResponseDto;
-          return throwError(() => errBody?.error ?? 'UNKNOWN');
-        })
-      );
+  getUsuario(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.baseUrl}` + '/me').pipe(
+
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return throwError(() => errBody?.error ?? 'UNKNOWN');
+      })
+    );
   }
-    
-//Método actualizar datos del ususario (cambiar contraseña)
-  cambiarContraseñaPerfil(id: number, payload: any): Observable<any> {
-     return this.http.put(`${this.baseUrl}/cambiar-password`, payload).pipe(
+
+  //Método actualizar datos del ususario (cambiar contraseña)
+  cambiarContraseñaPerfil(payload: CambiarPasswordDto): Observable<any> {
+    return this.http.put(`${this.baseUrl}/cambiar-password`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
         const errBody = error.error as ErrorResponseDto;
@@ -42,11 +43,11 @@ export class UserService {
     );
   }
 
-//Eliminar usuario
-  eliminarUsuario()  {
-    
-    
+  //Eliminar usuario
+  eliminarUsuario() {
+
+
   }
 
-  
+
 }
