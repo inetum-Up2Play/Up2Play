@@ -25,12 +25,14 @@ import { ActService } from '../../../../core/services/actividad/act-service';
 import { Header } from '../../../../core/layout/header/header';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
+import { Footer } from '../../../../core/layout/footer/footer';
 
 
 @Component({
   selector: 'app-editar-actividad',
   imports: [
     Header,
+    Footer,
     ReactiveFormsModule,
     DatePickerModule,
     InputNumberModule,

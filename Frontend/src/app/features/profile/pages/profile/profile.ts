@@ -21,10 +21,11 @@ import { Perfil } from '../../../../shared/models/Perfil';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
+import { Footer } from '../../../../core/layout/footer/footer';
 
 @Component({
   selector: 'app-profile',
-  imports: [Header, FormProfile, AvatarProfile, ButtonModule, ToastModule, MessageModule],
+  imports: [Header, Footer, FormProfile, AvatarProfile, ButtonModule, ToastModule, MessageModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
   providers: [MessageService]
@@ -102,7 +103,7 @@ export class Profile implements OnInit {
   }
 
   eliminarCuenta() {
-    this.userService.eliminarUsuario();
+    //this.userService.eliminarUsuario();
     this.authService.logout();
     //this.perfilService.eliminarPerfil();
   }
