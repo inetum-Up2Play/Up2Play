@@ -1,0 +1,62 @@
+@use 'styles/variables' as vars;
+.footer {
+    background-color: vars.$verde-oliva;
+    color: vars.$blanco;
+}
+
+.separador {
+    border: solid 1px vars.$blanco;
+}
+
+.logo{
+    height: 100px;
+}
+
+
+a:hover {
+
+  color: vars.$verde-oscuro !important;
+
+}
+
+
+/* 
+// Borde base para ver la separación de cada contenedor
+.c-footer,
+.c-row1,
+.na,
+.c-row1-col1,
+.c-row1-col1-row1,
+.c-row1-col1-row2,
+.c-row1-col1-row3,
+.c-row1-col2,
+.c-row1-col2-col1,
+.c-row1-col2-col2,
+.c-row1-col3,
+.c-row2,
+.c-row2-col1,
+.c-row2-col2 {
+  border: 1px dashed #9ca3af; // gray-400 aprox
+  border-radius: 6px;
+}
+
+// Opcional: mejorar contraste en modo oscuro si usas dark:
+@media (prefers-color-scheme: dark) {
+  .c-footer,
+  .c-row1,
+  .na,
+  .c-row1-col1,
+  .c-row1-col1-row1,
+  .c-row1-col1-row2,
+  .c-row1-col1-row3,
+  .c-row1-col2,
+  .c-row1-col2-col1,
+  .c-row1-col2-col2,
+  .c-row1-col3,
+  .c-row2,
+  .c-row2-col1,
+  .c-row2-col2 {
+    border-color: #6b7280; // gray-500 aprox
+  }
+}
+ */

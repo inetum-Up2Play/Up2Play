@@ -38,11 +38,12 @@ import VectorLayer from 'ol/layer/Vector';
 import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
 import { Usuario } from '../../../../shared/models/usuario.model';
+import { Footer } from '../../../../core/layout/footer/footer';
 
 @Component({
   selector: 'app-info-actividad',
   imports: [ConfirmDialog, CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
-    Header, DeporteImgPipe, AvatarPipe],
+    Header, Footer, DeporteImgPipe, AvatarPipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
