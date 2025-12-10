@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CodigoIncorrectoException;
+import com.Up2Play.backend.Exception.ErroresUsuario.CuentaYaVerificadaException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.VerificationToken;
 import com.Up2Play.backend.Repository.VerificationTokenRepository;
@@ -29,14 +32,14 @@ public class VerificationTokenService {
     public Usuario validateToken(String token) {
 
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Token invalido"));
+                .orElseThrow(() -> new CodigoIncorrectoException("Token invalido"));
         if (verificationToken.isUsed()) {
-            throw new RuntimeException("Token ya fue usado");
+            throw new CuentaYaVerificadaException("Token ya fue usado");
         }
 
         if (verificationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
 
-            throw new RuntimeException("Token expirado");
+            throw new CodigoExpiradoException("Token expirado");
         }
 
         verificationToken.setUsed(true);
