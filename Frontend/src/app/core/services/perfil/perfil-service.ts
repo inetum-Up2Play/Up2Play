@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   Router,
@@ -18,6 +18,8 @@ export class PerfilService {
   private router = inject(Router);
   private baseUrl = 'http://localhost:8080/perfil';
   private logoutTimer: any;
+
+  public avatarGlobal = signal<number>(0);
 
   //Método obtener datos de perfil
   getPerfil(): Observable<Perfil>{
