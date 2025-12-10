@@ -27,7 +27,7 @@ export class Calendar {
     buttonText: { today: 'Hoy' },
     locale: 'es',
     displayEventTime: false,
-    firstDay: 1, // semana empieza en lunes
+    firstDay: 1,
     dayHeaderFormat: { weekday: 'narrow' },
 
     eventDidMount: (arg) => {
@@ -51,10 +51,6 @@ export class Calendar {
     map((acts: Actividad[]) => acts.map(actividadToEvent)),
     tap((events) => console.log('[events$]', events))
   );
-
-  handleDateClick(arg: any) {
-    alert('date click! ' + arg.dateStr);
-  }
 }
 
 // ---- helpers (puedes moverlos a un archivo util.ts si prefieres)
