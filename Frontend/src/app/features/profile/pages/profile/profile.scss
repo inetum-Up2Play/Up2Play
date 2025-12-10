@@ -1,17 +1,6 @@
 @use 'styles/variables' as vars;
 
 
-#avatar {
-
-    border: red solid 1px;
-
-}
-#profile {
-
-    border: green solid 1px;
-
-}
-
 //BTN EDITAR
 :host ::ng-deep .btn-eliminar {
     background-color: vars.$msg-error-oscuro;
