@@ -423,4 +423,5 @@ public void deleteActividad(Long idActividad, Long idUsuario) {
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
 
     }
+
 }
