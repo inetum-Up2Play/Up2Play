@@ -2,13 +2,13 @@ package com.Up2Play.backend.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.ActividadDto;
 import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
+import com.Up2Play.backend.DTO.Respuestas.UsuarioDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
@@ -266,7 +266,7 @@ public class ActividadService {
 
     }
 
-public void deleteActividad(Long idActividad, Long idUsuario) {
+    public void deleteActividad(Long idActividad, Long idUsuario) {
     Actividad act = actividadRepository.findById(idActividad)
             .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
     Usuario usuario = usuarioRepository.findById(idUsuario)
@@ -424,4 +424,74 @@ public void deleteActividad(Long idActividad, Long idUsuario) {
 
     }
 
+    // Lista usuarios apuntados a una actividad
+    public List<UsuarioDto> getUsuariosApuntados(Long idActividad) {
+        Actividad actividad = actividadRepository.findById(idActividad)
+            .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+        
+        return actividad.getUsuarios()
+        .stream()
+        .map(u -> new UsuarioDto(
+                u.getId(),
+                u.getEmail(),
+                u.getNombreUsuario(),
+                u.getRol()
+            ))
+            .toList();
+    }
+    
+    // Lista actividades a las que un usuario está apuntad y no ha llegado la fecha ni está cancelado
+    @Transactional
+    public List<ActividadDtoResp> getActividadesApuntadasEnCurso(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        return usuario.getActividadesUnidas().stream()
+         .filter(act -> act.getEstado() == EstadoActividad.PENDIENTE
+                    && act.getFecha().isAfter(LocalDateTime.now()))
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+
+    }
+
+    // Lista actividades por deporte
+    @Transactional
+    public List<ActividadDtoResp> getActividadesNoApuntadasPorDeporte(Long usuarioId, String deporte) {
+    Usuario usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+    return actividadRepository.findAll().stream()
+            .filter(act -> !usuario.getActividadesUnidas().contains(act))
+            .filter(act -> act.getDeporte().equalsIgnoreCase(deporte))
+            .map(a -> new ActividadDtoResp(
+                    a.getId(),
+                    a.getNombre(),
+                    a.getDescripcion(),
+                    a.getFecha() != null ? a.getFecha().toString() : null,
+                    a.getUbicacion(),
+                    a.getDeporte(),
+                    a.getNivel() != null ? a.getNivel().name() : null,
+                    a.getNumPersInscritas(),
+                    a.getNumPersTotales(),
+                    a.getEstado() != null ? a.getEstado().name() : null,
+                    a.getPrecio(),
+                    a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                    a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                    a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null
+            ))
+            .toList();
+}
 }
