@@ -19,10 +19,12 @@ import { UserService } from '../../../../core/services/user/user-service';
 import { AuthService } from '../../../../core/services/auth/auth-service';
 import { Perfil } from '../../../../shared/models/Perfil';
 import { ErrorService } from '../../../../core/services/error/error-service';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-profile',
-  imports: [Header, FormProfile, AvatarProfile, ButtonModule],
+  imports: [Header, FormProfile, AvatarProfile, ButtonModule, ToastModule, MessageModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
   providers: [MessageService]
@@ -36,6 +38,7 @@ export class Profile implements OnInit {
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
+  avatarPendiente = signal<number | null>(null); //Es el avatar recibido del avatar-component. Si no se pulsa en "guardar cambios" no se aplicará
 
   private cargarDatos(): void {
     this.userService.getUsuario().subscribe({
@@ -52,6 +55,8 @@ export class Profile implements OnInit {
       next: (datosPerfil) => {
         this.perfil.set(datosPerfil);
         console.log('Perfil cargado:', this.perfil());
+        const imagenActual = (datosPerfil as any).imagenPerfil ?? 0;
+        this.avatarPendiente.set(imagenActual);
       },
       error: (err) => {
         console.error('Error cargando el perfil', err);
@@ -67,11 +72,14 @@ export class Profile implements OnInit {
   onCambiosPerfil(datosFormulario: Perfil) {
     const perfilActual = this.perfil();
 
-    const perfilModificado = { ...perfilActual, ...datosFormulario };
+    const perfilModificado = { ...perfilActual, ...datosFormulario, imagenPerfil: this.avatarPendiente() ?? undefined };
 
     this.perfilService.editarPerfil(perfilModificado.id, perfilModificado).subscribe({
       next: () => {
         this.perfil.set(perfilModificado);
+
+        this.perfilService.avatarGlobal.set(this.avatarPendiente() ?? perfilActual?.imagenPerfil ?? 0); //Cambia el avatar del header
+
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Perfil actualizado correctamente' });
       },
       error: (err) => {
@@ -79,6 +87,7 @@ export class Profile implements OnInit {
         this.errorService.showError(err);
       }
     });
+
   }
 
   onCambiosAvatar(numAvatar: number) {
@@ -89,22 +98,11 @@ export class Profile implements OnInit {
       return;
     }
 
-    const perfilModificado = { ...perfilActual, imagenPerfil: numAvatar };
-
-    this.perfilService.editarPerfil(perfilModificado.id, perfilModificado).subscribe({
-      next: () => {
-        console.log('✅ Avatar guardado en BD correctamente.');
-        this.perfil.set(perfilModificado);
-      },
-      error: (err) => {
-        console.error('Error editando el avatar del usuario', err);
-        this.errorService.showError(err);
-      }
-    });
+    this.avatarPendiente.set(numAvatar);
   }
 
   eliminarCuenta() {
-    this.userService.eliminarUsuario();    
+    this.userService.eliminarUsuario();
     this.authService.logout();
     //this.perfilService.eliminarPerfil();
   }

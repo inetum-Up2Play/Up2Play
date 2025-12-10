@@ -8,8 +8,11 @@
     <!-- Columna izquierda -->
     <div class="lg:pr-10">
         <h1 class="text-4xl font-bold mb-2 wrap-break-word">{{ act.nombre }}</h1>
-        <p class="mb-4 text-sm">Creado por {{act.usuarioCreadorNombre}}  </p><br>
-        <!-- Cuando se modifique la BBD funcionará <img [src]="getAvatarCreador(act.usuarioCreadorId) | avatar" alt="avatarCreador"> -->
+        <p class="mb-4 text-sm flex items-center gap-2">Creado por
+            <img [src]="avatarIdCreador()| avatarImg" alt="avatarCreador" class="max-w-8">
+            {{act.usuarioCreadorNombre}}
+        </p><br>
+
         <p><i class="pi pi-trophy" style="color:#3D6C3F"></i>
             <span class="font-bold"> Deporte: </span>{{ act.deporte }}
         </p><br>
@@ -93,17 +96,18 @@
 
         <div id="map" style="height: 400px;" [class.error-map]="errorUbicacion()">
 
-        @if (errorUbicacion()) {
-            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="error mapa" style="width: 80px; height: 80px; display: block; margin: 0 auto;"><br>
+            @if (errorUbicacion()) {
+            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="error mapa"
+                style="width: 80px; height: 80px; display: block; margin: 0 auto;"><br>
             <p class="error-text">{{ errorUbicacion() }}</p>
-           
-            
-        
-        } @else {
-        <ng-container #mapa>
-            
-        </ng-container>
-        }
+
+
+
+            } @else {
+            <ng-container #mapa>
+
+            </ng-container>
+            }
 
         </div>
 

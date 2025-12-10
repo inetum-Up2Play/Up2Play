@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   Router,
@@ -19,6 +19,8 @@ export class PerfilService {
   private baseUrl = 'http://localhost:8080/perfil';
   private logoutTimer: any;
 
+  public avatarGlobal = signal<number>(0);
+
   //Método obtener datos de perfil
   getPerfil(): Observable<Perfil>{
     return this.http.get<Perfil>(`${this.baseUrl}`+`/obtenerPerfil`).pipe(
@@ -37,6 +39,15 @@ export class PerfilService {
         const errBody = error.error as ErrorResponseDto;
         return of(errBody?.error ?? 'UNKNOWN');
         })
+    );
+  }
+
+  getPerfilByUserId(id: number): Observable<Perfil>{
+    return this.http.get<Perfil>(`${this.baseUrl}`+`/obtenerPerfil/${id}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const errBody = error.error as ErrorResponseDto;
+        return throwError(() => errBody?.error ?? 'UNKNOWN');
+      })
     );
   }
 

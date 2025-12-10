@@ -54,4 +54,11 @@ public class PerfilController {
  
         return perfilService.obtenerPerfil(usuario.getPerfil().getId());
     }
+
+    @GetMapping("/obtenerPerfil/{id}")
+    public PerfilDtoResp obtenerPerfilByUserId(@PathVariable Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));       
+        return perfilService.obtenerPerfil(usuario.getPerfil().getId());
+    }
 }
