@@ -19,10 +19,12 @@ import { UserService } from '../../../../core/services/user/user-service';
 import { AuthService } from '../../../../core/services/auth/auth-service';
 import { Perfil } from '../../../../shared/models/Perfil';
 import { ErrorService } from '../../../../core/services/error/error-service';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-profile',
-  imports: [Header, FormProfile, AvatarProfile, ButtonModule],
+  imports: [Header, FormProfile, AvatarProfile, ButtonModule, ToastModule, MessageModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
   providers: [MessageService]
