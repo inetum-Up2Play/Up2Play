@@ -34,7 +34,7 @@ public class ActividadScheduler {
         // Actividades de EN_CURSO a COMPLETADA a las 12h
         List<Actividad> enCurso = actividadRepository.findEnCursoParaCompletar(ahora);
         for (Actividad a : enCurso) {
-            if (a.getFecha().plusMinutes(2).isBefore(ahora)) {
+            if (a.getFecha().plusHours(12).isBefore(ahora)) {
                 a.setEstado(EstadoActividad.COMPLETADA);
             }
         }
