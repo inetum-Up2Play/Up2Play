@@ -36,6 +36,7 @@ export class Profile implements OnInit {
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
+  avatarPendiente = signal<number | null>(null);
 
   private cargarDatos(): void {
     this.userService.getUsuario().subscribe({
@@ -52,6 +53,8 @@ export class Profile implements OnInit {
       next: (datosPerfil) => {
         this.perfil.set(datosPerfil);
         console.log('Perfil cargado:', this.perfil());
+        const imagenActual = (datosPerfil as any).imagenPerfil ?? 0;
+        this.avatarPendiente.set(imagenActual);
       },
       error: (err) => {
         console.error('Error cargando el perfil', err);
@@ -67,7 +70,7 @@ export class Profile implements OnInit {
   onCambiosPerfil(datosFormulario: Perfil) {
     const perfilActual = this.perfil();
 
-    const perfilModificado = { ...perfilActual, ...datosFormulario };
+    const perfilModificado = { ...perfilActual, ...datosFormulario, imagenPerfil: this.avatarPendiente() ?? undefined };
 
     this.perfilService.editarPerfil(perfilModificado.id, perfilModificado).subscribe({
       next: () => {
@@ -89,18 +92,7 @@ export class Profile implements OnInit {
       return;
     }
 
-    const perfilModificado = { ...perfilActual, imagenPerfil: numAvatar };
-
-    this.perfilService.editarPerfil(perfilModificado.id, perfilModificado).subscribe({
-      next: () => {
-        console.log('✅ Avatar guardado en BD correctamente.');
-        this.perfil.set(perfilModificado);
-      },
-      error: (err) => {
-        console.error('Error editando el avatar del usuario', err);
-        this.errorService.showError(err);
-      }
-    });
+    this.avatarPendiente.set(numAvatar);
   }
 
   eliminarCuenta() {
