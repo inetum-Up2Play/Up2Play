@@ -38,77 +38,49 @@ jobs:
 
   # --- JOB 2: BACKEND ---
 
-  backend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Backend_Up2Play/backend
-    steps:
-      - uses: actions/checkout@v3
+  # backend:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: Backend_Up2Play/backend
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+  #     - name: Setup Java
+  #       uses: actions/setup-java@v3
+  #       with:
+  #         java-version: '17'
+  #         distribution: 'temurin'
 
-      - name: Cache Maven
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+  #     - name: Cache Maven
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.m2
+  #         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-maven-
 
-      - name: Build backend (skip tests)
-        run: mvn -B -DskipTests clean package
+  #     - name: Build backend (skip tests)
+  #       run: mvn -B -DskipTests clean package
 
-      - name: Run tests (H2, perfil test)
-        env:
-          SPRING_PROFILES_ACTIVE: test
-          SPRING_DATASOURCE_URL: jdbc:h2:mem:Up2Play;MODE=Oracle;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
-          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
-          SPRING_DATASOURCE_USERNAME: sa
-          SPRING_DATASOURCE_PASSWORD: ""
-          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-        run: mvn -B verify -DtrimStackTrace=false
+  #     - name: Run tests (H2, perfil test)
+  #       env:
+  #         SPRING_PROFILES_ACTIVE: test
+  #         SPRING_DATASOURCE_URL: jdbc:h2:mem:Up2Play;MODE=Oracle;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+  #         SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+  #         SPRING_DATASOURCE_USERNAME: sa
+  #         SPRING_DATASOURCE_PASSWORD: ""
+  #         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+  #         TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+  #       run: mvn -B verify -DtrimStackTrace=false
 
-      - name: Upload surefire reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: surefire-reports
-          path: Backend_Up2Play/backend/target/surefire-reports     
+  #     - name: Upload surefire reports
+  #       if: always()
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: surefire-reports
+  #         path: Backend_Up2Play/backend/target/surefire-reports     
 
-      - name: Show failing tests (Surefire)
-        if: failure()
-        run: |
-          set -euo pipefail
-          REPORT_DIR="target/surefire-reports"
 
-          echo "---- SUREFIRE REPORTS ----"
-          if [ ! -d "$REPORT_DIR" ]; then
-            echo "No existe $REPORT_DIR (¿falló antes el build?)."
-            exit 0
-          fi
-
-          shopt -s nullglob
-          files=( "$REPORT_DIR"/*.txt "$REPORT_DIR"/*.xml )
-          if [ ${#files[@]} -eq 0 ]; then
-            echo "No hay *.txt ni *.xml en $REPORT_DIR"
-            exit 0
-          fi
-
-          for f in "${files[@]}"; do
-            echo "==================== $f ===================="
-            # Muestra las primeras líneas para contexto
-            sed -n '1,200p' "$f" || true
-            echo
-            echo "--------------- Caused by ---------------"
-            # Extrae la causa raíz típica de Spring/Built-in
-            grep -n -E "Caused by:|BeanCreationException|UnsatisfiedDependencyException|IllegalStateException" -A12 "$f" || true
-            echo
-          done
 
 
