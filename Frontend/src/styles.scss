@@ -196,6 +196,12 @@ Here has to be imported the other style files (from the src/styles/)
 
 .cd-eliminar {
 
+  .p-dialog {
+
+    padding: 2em !important;
+
+  }
+
   .p-confirmdialog-reject-button {
 
     color: vars.$verde-oscuro;
