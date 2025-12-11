@@ -5,7 +5,7 @@
             <!-- Columna 1: dividida en 3 filas -->
             <div class="c-row1-col1 grid gap-3">
                 <div class="c-row1-col1-row1 logo flex items-center justify-center">
-                    <a href="#">
+                    <a class="logo-enlace" (click)="scrollToTop()">
                         <img src="assets/logo/fondo-oscuro/verdeClaro-FondoOscuro-Corto.png" alt="logo" class="logo">
                     </a>
                 </div>
@@ -15,10 +15,26 @@
                 </div>
                 <div class="c-row1-col1-row3 py-3">
                     <ul class="flex gap-3 justify-center md:justify-start">
-                        <li>X</li>
-                        <li>Instagram</li>
-                        <li>Youtube</li>
-                        <li>Linkedin</li>
+                        <li>
+                            <a href="https://x.com/x">
+                                <img src="../../../../assets/logo-redes/x-logo.svg" alt="X">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/">
+                                <img src="../../../../assets/logo-redes/instagram-logo.svg" alt="Instagram">
+                            </a>
+                        </li>
+                        <li>
+                             <a href="https://www.youtube.com/">
+                                <img src="../../../../assets/logo-redes/youtube-logo.svg" alt="Youtube">
+                            </a>
+                        </li>
+                        <li> 
+                            <a href="https://es.linkedin.com/">
+                                <img src="../../../../assets/logo-redes/linkedin-logo.svg" alt="LinkedIn">
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -34,9 +50,9 @@
                         <!-- Columna 1 -->
                         <div class="c-row1-col2-col1 mb-5 md:mb-0">
                             <ul class="gap-5 md:gap-2 flex md:flex-col justify-center md:justify-start">
-                                <li><a routerLink="/" class="">Inicio</a></li>
-                                <li><a routerLink="/actividades" class="">Actividades</a></li>
-                                <li><a routerLink="/pagos" class="">Pagos</a></li>
+                                <li><a routerLink="/">Inicio</a></li>
+                                <li><a routerLink="/actividades">Actividades</a></li>
+                                <li><a routerLink="/pagos">Pagos</a></li>
                             </ul>
                         </div>
 
@@ -63,10 +79,10 @@
                         <h3 class="font-extrabold text-xl">Contacto</h3>
                     </div>
                     <div class="gap-2 na p-4 md:p-2 md:p-4">
-                        <ul>
-                            <li>up2play1@gmail.com</li>
-                            <li>+ 34 600 123 456</li>
-                            <li>Tarragona, Catalunya</li>
+                        <ul class="text-center md:text-left">
+                            <li><i class="pi pi-envelope px-2"></i>up2play1@gmail.com</li>
+                            <li><i class="pi pi-phone px-2"></i>+ 34 600 123 456</li>
+                            <li><i class="pi pi-map-marker px-2"></i>Tarragona, Catalunya</li>
                         </ul>
                     </div>
                 </div>
@@ -80,10 +96,10 @@
         <div class="c-row2 grid grid-cols-1 md:grid-cols-2 gap-4 py-4 px-2">
             <div class="c-row2-col1 na">
                 <ul class="flex gap-3 justify-center md:justify-start">
-                    <li><a href="">Términos</a></li>
-                    <li><a href="">Privacidad</a></li>
-                    <li><a href="">Cookies</a></li>
-                    <li><a href="">FAQ</a></li>
+                    <li><a href="http://127.0.0.1:5500/Landing/Assets/legal/terminos-y-condiciones.html">Términos</a></li>
+                    <li><a href="http://127.0.0.1:5500/Landing/Assets/legal/politica-privacidad.html">Privacidad</a></li>
+                    <li><a href="https://policies.google.com/technologies/cookies?hl=es&gl=es">Cookies</a></li>
+                    <li><a href="http://127.0.0.1:5500/Landing/">FAQ</a></li>
                 </ul>
             </div>
             <div class="c-row2-col2 text-center md:text-end">

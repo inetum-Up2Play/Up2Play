@@ -169,8 +169,8 @@ export class Profile implements OnInit {
       },
       reject: () => {
         this.messageService.add({
-          severity: 'error',
-          summary: 'Rejected',
+          severity: 'info',
+          summary: 'Cancelado',
           detail: 'Has cancelado la eliminación de la cuenta',
           life: 3000,
         });
