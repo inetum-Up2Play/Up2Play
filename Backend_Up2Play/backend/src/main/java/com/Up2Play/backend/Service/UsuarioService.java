@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.Up2Play.backend.DTO.CambiarPasswordDto;
 import com.Up2Play.backend.DTO.LoginUserDto;
 import com.Up2Play.backend.DTO.NewPasswordDto;
 import com.Up2Play.backend.DTO.RegisterUserDto;
@@ -27,7 +28,11 @@ import com.Up2Play.backend.Exception.ErroresUsuario.TokenCorreoFaltanteException
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
+import com.Up2Play.backend.Model.Actividad;
+import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
+import com.Up2Play.backend.Repository.ActividadRepository;
+import com.Up2Play.backend.Repository.PerfilRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
 import jakarta.mail.MessagingException;
@@ -44,18 +49,26 @@ public class UsuarioService {
     private EmailService emailService; // Servicio para enviar emails de verificación
     private LoginAttemptService loginAttemptService; // servicio para limitar intentos en inicio de sesión
     private VerificationTokenService verificationTokenService;
+    private PerfilService perfilService;
+    private PerfilRepository perfilRepository;
+    private ActividadService actividadService;
+    private ActividadRepository actividadRepository;
 
-    // Contstuctor
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
-            LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService) {
-
+            LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService,
+            PerfilService perfilService, PerfilRepository perfilRepository, ActividadService actividadService,
+            ActividadRepository actividadRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
         this.loginAttemptService = loginAttemptService;
         this.verificationTokenService = verificationTokenService;
+        this.perfilService = perfilService;
+        this.perfilRepository = perfilRepository;
+        this.actividadService = actividadService;
+        this.actividadRepository = actividadRepository;
     }
 
     // Obtiene todos los usuarios en una lista
@@ -69,8 +82,36 @@ public class UsuarioService {
     }
 
     // Elimina un usuario por ID.
+    @Transactional
     public void deleteUsuario(Long id) {
-        usuarioRepository.deleteById(id);
+
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        // eliminar usuario de las actividades en las que esta inscrito
+        List<Actividad> actividades = actividadRepository.findAll();
+
+        for (Actividad act : actividades) {
+            if (!act.getUsuarioCreador().equals(usuario)) {
+
+                act.getUsuarios().removeIf(u -> u.getId().equals(id));
+                actividadRepository.save(act);
+
+            } else {
+                actividadService.deleteActividad(act.getId(), usuario.getId());
+            }
+
+        }
+
+        if (usuario.getPerfil() != null) {
+            Perfil perfil = usuario.getPerfil();
+            usuario.setPerfil(null); // rompe la relación en el grafo
+            perfilRepository.delete(perfil); // borra el perfil existente (managed)
+        }
+
+        usuarioRepository.deleteToken(usuario.getId());
+        usuarioRepository.delete(usuario);
+
     }
 
     /**
@@ -108,7 +149,7 @@ public class UsuarioService {
         try {
             sendVerificationEmail(saved);
         } catch (Exception e) {
-            
+
         }
 
         return saved;
@@ -145,7 +186,9 @@ public class UsuarioService {
         user.setEnabled(true);
         user.setVerificationCode(null);
         user.setVerificationCodeExpiresAt(null);
+        perfilService.crearPerfil(user);
         usuarioRepository.save(user);
+
     }
 
     // Autentica un usuario durante login.
@@ -413,6 +456,21 @@ public class UsuarioService {
             }
         }
 
+    }
+
+    // Cambiar contraseña desde el perfil
+    public void cambiarPasswordPerfil(Long usuarioId, CambiarPasswordDto input) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        // Verificar contraseña antigua
+        if (!passwordEncoder.matches(input.getOldPassword(), usuario.getPassword())) {
+            throw new CredencialesErroneasException("Contraseña incorrecta");
+        }
+
+        // Guardar la nueva contraseña encriptada
+        usuario.setPassword(passwordEncoder.encode(input.getNewPassword()));
+        usuarioRepository.save(usuario);
     }
 
 }

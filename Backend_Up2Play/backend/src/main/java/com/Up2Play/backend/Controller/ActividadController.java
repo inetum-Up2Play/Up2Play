@@ -2,7 +2,6 @@ package com.Up2Play.backend.Controller;
 
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,12 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Up2Play.backend.DTO.ActividadDto;
 import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
+import com.Up2Play.backend.DTO.Respuestas.UsuarioDto;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -50,12 +51,11 @@ public class ActividadController {
     public List<ActividadDtoCreadas> getActividadesCreadas(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         return actividadService.getActividadesCreadas(usuario);
     }
 
     @GetMapping("/getApuntadas")
-
     public List<ActividadDtoResp> getActividadesApuntadas(@AuthenticationPrincipal UserDetails principal) {
         // el getUsername recoge el correo, no el username
         String email = principal.getUsername();
@@ -150,5 +150,31 @@ public class ActividadController {
         actividadService.editarActividad(id, editarActividadDto, usuario.getId());
         return ResponseEntity.ok(Map.of("message", "Se ha editado la actividad correctamente."));
     }
+
+    @GetMapping("/{id}/participantes")
+    public List<UsuarioDto> getUsuariosApuntados(@PathVariable Long id) {
+        return actividadService.getUsuariosApuntados(id);
+    }
+
+    @GetMapping("/getApuntadasEnCurso")
+    public List<ActividadDtoResp> getActividadesApuntadasEnCurso(@AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        System.out.println(email);
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Long usuariosId = usuario.getId();
+        return actividadService.getActividadesApuntadasEnCurso(usuariosId);
+    }
+
+    @GetMapping("/getNoApuntadasPorDeporte")
+    public List<ActividadDtoResp> getActividadesNoApuntadasPorDeporte(@AuthenticationPrincipal UserDetails principal, @RequestParam String deporte) {
+        String email = principal.getUsername();
+        System.out.println(email);
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Long usuariosId = usuario.getId();
+        return actividadService.getActividadesNoApuntadasPorDeporte(usuariosId,deporte);
+    }
+
 
 }

@@ -5,10 +5,11 @@ import { JoinedCarousel } from '../../components/joined-carousel/joined-carousel
 import { CreatedCarousel } from "../../components/created-carousel/created-carousel";
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
+import { Footer } from '../../../../core/layout/footer/footer';
 
 @Component({
   selector: 'app-actividades',
-  imports: [JoinGallery, Header, JoinedCarousel, CreatedCarousel, ButtonModule, RouterModule],
+  imports: [JoinGallery, Header, Footer,  JoinedCarousel, CreatedCarousel, ButtonModule, RouterModule],
   templateUrl: './actividades.html',
   styleUrl: './actividades.scss'
 })

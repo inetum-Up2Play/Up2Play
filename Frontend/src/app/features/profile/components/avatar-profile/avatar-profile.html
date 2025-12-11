@@ -1,0 +1,32 @@
+<div class="justify-center my-4 py-4 px-6 md:my-6 md:py-6 md:px-8 lg:my-8 lg:py-8 lg:px-10 bg-white rounded-lg shadow
+             grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+    <!-- COLUMNA IZQUIERDA: Avatar Actual y Saludo -->
+    <div id="col-izquierda" class="flex items-center gap-4">
+        <img class="rounded-full max-w-40 shrink-0" [src]="selectedAvatarId() | avatarImg" alt="avatar del usuario" >
+        
+        <p class="text xl:text-5xl lg:text-4xl md:text-3xl text-2xl leading-tight break-words hyphens-auto min-w-0">
+            ¡Hola {{usuario()?.nombreUsuario ?? 'usuario desconocido'}}!
+        </p>
+    </div>
+
+    <!-- COLUMNA DERECHA: Selección de Avatares -->
+    <div>
+        <p class="text text-center xl:text-2xl lg:text-xl md:text-lg text-base mb-4">Elige tu avatar</p>
+        
+        <div id="seleccionAvatar" class="grid grid-cols-3 sm:grid-cols-5 justify-items-center gap-4">
+            @for (id of avatars; track id) {
+                <img 
+                    class="rounded-full max-w-20 cursor-pointer transition-all duration-200 hover:opacity-80 hover:scale-105"
+                    [src]="id | avatarImg" 
+                    alt="avatar"
+                    (click)="seleccionarAvatar(id)"
+                    
+                    [class.ring-4]="selectedAvatarId() === id"
+                    [class.ring-green-500]="selectedAvatarId() === id"
+                    [class.ring-offset-2]="selectedAvatarId() === id"
+                >
+            }
+        </div>
+    </div>
+</div>

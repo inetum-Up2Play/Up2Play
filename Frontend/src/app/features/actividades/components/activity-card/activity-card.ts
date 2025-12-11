@@ -14,7 +14,7 @@ import { MessageModule } from 'primeng/message';
 @Component({
   selector: 'app-activity-card',
   imports: [CardModule, ButtonModule, ConfirmDialog, ToastModule, MessageModule],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService],
   templateUrl: './activity-card.html',
   styleUrl: './activity-card.scss'
 })

@@ -17,6 +17,8 @@ import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
+import com.Up2Play.backend.Exception.ErroresPerfil.EditarPerfilDenegadoException;
+import com.Up2Play.backend.Exception.ErroresPerfil.PerfilNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoIncorrectoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CorreoNoCoincideException;
@@ -353,6 +355,38 @@ public class ErrorControl {
                                 Instant.now());
                 return ResponseEntity
                                 .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        // Perfil no encontrado
+        @ExceptionHandler(PerfilNoEncontradoException.class)
+        public ResponseEntity<ErrorResponseDto> handlePerfilNoEncontrado(
+                        PerfilNoEncontradoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "PERFIL_NO_ENCONTRADO",
+                                ex.getMessage(),
+                                HttpStatus.NOT_FOUND.value(), // ERROR 404
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(body);
+        }
+
+        // Sin permiso para editar perfil
+        @ExceptionHandler(EditarPerfilDenegadoException.class)
+        public ResponseEntity<ErrorResponseDto> handleEditarPerfilDenegado(
+                       EditarPerfilDenegadoException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "EDITAR_PERFIL_DENEGADO",
+                                ex.getMessage(),
+                                HttpStatus.FORBIDDEN.value(), // ERROR 403
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.FORBIDDEN)
                                 .body(body);
         }
 

@@ -1,6 +1,5 @@
 <app-header></app-header>
 <main class="pt-5 pb-5 md:pt-8 md:pb-8">
-    <p-toast position="top-right"></p-toast>
     <div class="formulario w-[80%] min-w-xs p-4 w-380 md:max-w-5xl md:w-[70%] lg:w-[75%] card flex justify-center">
         <h1>CREA TU ACTIVIDAD</h1>
         <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center gap-4 w-full">
@@ -137,3 +136,4 @@
         </form>
     </div>
 </main>
+<app-footer></app-footer>

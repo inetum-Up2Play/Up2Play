@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { Home } from './features/home/home';
-import { Profile } from './features/user/pages/profile/profile';
 import { AuthService } from './core/services/auth/auth-service';
 import { inject } from '@angular/core';
 import { CrearActividad } from './features/actividades/pages/crear-actividad/crear-actividad';
+import { Profile } from './features/profile/pages/profile/profile';
 
 export const routes: Routes = [
   {

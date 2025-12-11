@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -61,6 +62,17 @@ public class Usuario implements UserDetails {
     @JoinTable(name = "USUARIO_ACTIVIDAD", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id"))
     private Set<Actividad> actividadesUnidas = new HashSet<>();
 
+    @OneToOne(mappedBy = "usuario")
+    private Perfil perfil;
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    }
+
     // Constructores
     public Usuario(Long id, String email, String password, String rol, String nombreUsuario) {
         this.id = id;
@@ -80,6 +92,22 @@ public class Usuario implements UserDetails {
         this.enabled = enabled;
         this.verificationCode = verificationCode;
         this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas, Perfil perfil) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.perfil = perfil;
     }
 
     public Usuario(String email, String password, String rol, String nombreUsuario) {
