@@ -167,11 +167,36 @@ public class ActividadService {
 
     // Lista de actividades a las que un usuario está apuntado
     @Transactional
-    public List<ActividadDtoResp> getActividadesApuntadas(Long usuarioId) {
+    public List<ActividadDtoResp> getActividadesApuntadasPendientes(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         return usuario.getActividadesUnidas().stream()
         .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+
+    }
+
+        // Lista de actividades a las que un usuario está apuntado
+    @Transactional
+    public List<ActividadDtoResp> getActividadesApuntadas(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        return usuario.getActividadesUnidas().stream()
                 .map(a -> new ActividadDtoResp(
                         a.getId(),
                         a.getNombre(),
