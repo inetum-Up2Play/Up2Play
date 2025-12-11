@@ -95,6 +95,7 @@ public class UsuarioService {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
                 act.getUsuarios().removeIf(u -> u.getId().equals(id));
+                act.setNumPersInscritas(act.getNumPersInscritas()-1);
                 actividadRepository.save(act);
 
             } else {

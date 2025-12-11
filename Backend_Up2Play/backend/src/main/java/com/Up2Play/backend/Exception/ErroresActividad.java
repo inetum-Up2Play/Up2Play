@@ -56,4 +56,10 @@ public class ErroresActividad {
         }
     }
 
+            public static class ActividadCompletadaException extends RuntimeException {
+        public ActividadCompletadaException(String message) {
+            super(message);
+        }
+    }
+
 }
