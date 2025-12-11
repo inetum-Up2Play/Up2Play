@@ -1,4 +1,6 @@
-.spacer{
+@use 'styles/variables' as vars;
+
+.spacer {
     width: 50%;
     margin: auto;
     position: flex;
@@ -6,4 +8,18 @@
     margin-top: 2%;
     margin-bottom: 2%;
     height: auto;
+}
+
+h1 {
+    font-family: vars.$montserrat;
+}
+
+.text-card {
+    font-family: vars.$work-sans;
+}
+
+.p-creados {
+    background-image: url('../../../assets/home/tarjeta-creados.png');
+    background-size: 110%; 
+    background-repeat: no-repeat;
 }
