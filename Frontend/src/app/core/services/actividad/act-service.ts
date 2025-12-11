@@ -164,7 +164,7 @@ export class ActService {
 
   // Recoger todos los usuarios inscritos en una actividad (falta especificar url backend)
   usuariosInscritosActividad(idActividad: number) {
-    return this.http.get<any[]>(this.baseUrl + '/getUsuariosInscritosActividad').pipe(
+    return this.http.get<any[]>(`${this.baseUrl}/${idActividad}/participantes`).pipe(
       catchError((error) => {
         console.error('Error al obtener usuarios', error);
         return of([]); // Devuelve array vacío si falla

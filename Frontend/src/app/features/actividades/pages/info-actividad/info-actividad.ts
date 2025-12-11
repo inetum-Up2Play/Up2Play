@@ -41,6 +41,7 @@ import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
 import { Avatar } from 'primeng/avatar';
 import { AvatarGroup } from 'primeng/avatargroup';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-info-actividad',
@@ -57,6 +58,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
   apuntado = signal<boolean>(false);
   isCreador = signal<boolean>(false);
   avatarIdCreador = signal<number>(0);
+  avatarIdUsuario = signal<number>(0);
 
   private messageService = inject(MessageService);
   private actService = inject(ActService);
@@ -160,6 +162,28 @@ export class InfoActividad implements OnInit, AfterViewInit {
       }
     }, { injector: this.injector });
 
+    this.actService.usuariosInscritosActividad(this.actividadId).pipe(
+      map((participantes: any) =>
+        (participantes ?? [])
+          .map((p: { id: any; }) => p?.id)   // <- ajusta la propiedad aquí
+          .filter((id: null) => id != null)
+      )
+    ).subscribe(ids => {
+      console.log('IDs de usuarios:', ids);
+    });
+
+
+    this.actService.usuariosInscritosActividad(this.actividadId).pipe(
+      map(participantes =>
+        (participantes ?? [])
+          .map(p => p?.nombreUsuario)   // <- ajusta aquí
+          .filter(nombre => typeof nombre === 'string' && nombre.trim() !== '')
+      )
+    ).subscribe(nombres => {
+      console.log('Nombres de usuario:', nombres);
+    });
+
+
     this.actService.getActividad(this.actividadId).subscribe({
       next: (act) => {
         this.actividad.set(act);
@@ -222,6 +246,26 @@ export class InfoActividad implements OnInit, AfterViewInit {
       }
     });
   }
+
+  cargarAvataresConBucle(ids: number[]) {
+    ids.forEach(id => this.getAvatarUsuario(id));
+  }
+
+  getAvatarUsuario(id: number) {
+    this.perfilService.getPerfilByUserId(id).subscribe({
+      next: (perfil) => {
+        this.avatarIdUsuario.set(perfil?.imagenPerfil ?? 0);
+        // Si necesitas diferenciar por usuario, mejor:
+        // this.avataresUsuariosMap.set(id, perfil?.imagenPerfil ?? 0);
+      },
+      error: (err) => {
+        console.error('Error cargando avatar del creador', err);
+        this.avatarIdUsuario.set(0);
+        // o: this.avataresUsuariosMap.set(id, 0);
+      }
+    });
+  }
+
 
   //Usamos el p-rating como un form
   formRating = new FormGroup({

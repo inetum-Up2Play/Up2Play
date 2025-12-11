@@ -106,7 +106,7 @@ export class Profile implements OnInit {
 
 
   // Recibe el payload del hijo y llama al servicio
-  onChangePassword(payload: CambiarPasswordDto, child?: any) {    
+  onChangePassword(payload: CambiarPasswordDto, child?: any) {
     this.userService.cambiarContraseñaPerfil(payload)
       .subscribe({
         next: () => {
@@ -125,9 +125,9 @@ export class Profile implements OnInit {
       });
   }
 
-eliminarCuenta() {
-  this.userService.eliminarUsuario();
-  this.authService.logout();
-  //this.perfilService.eliminarPerfil();
-}
+/*   eliminarCuenta() {
+    this.userService.eliminarUsuario();
+    this.authService.logout();
+    //this.perfilService.eliminarPerfil();
+  } */
 }
