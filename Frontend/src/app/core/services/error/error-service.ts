@@ -33,6 +33,7 @@ export class ErrorService {
     ACTIVIDAD_NO_ENCONTRADA: 'Actividad no encontrada', //404
     USUARIO_YA_APUNTADO: 'El usuario ya está apuntado a la actividad', //409
     USUARIO_NO_APUNTADO: 'El usuario no está apuntado a la actividad', //404
+    ACTIVIDAD_COMPLETADA: 'No te puedes unir a una actividad completada', //409
     MAX_PARTICIPANTES:
       'Se ha alcanzado el número máximo de participantes para esta actividad', //409
     CREADOR_NO_DESAPUNTAR:

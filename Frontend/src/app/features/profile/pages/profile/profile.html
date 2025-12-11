@@ -1,20 +1,21 @@
 <p-toast></p-toast>
-<div>
-    <app-header></app-header>
-    <div
-        class="lg:mx-[clamp(3rem,3vw,20rem)] xl:mx-[clamp(4rem,4vw,25rem)] 2xl:mx-[clamp(6rem,8vw,25rem)] pt-5 md:pt-10">
-        <h1 class="font-extrabold text-2xl md:text-5xl">Edita tu perfil</h1>
+<app-header></app-header>
+<div class="p-5">
+    <div class="lg:mx-[clamp(3rem,3vw,20rem)] xl:mx-[clamp(4rem,4vw,25rem)] 2xl:mx-[clamp(6rem,8vw,25rem)] pt-5 md:pt-10">
+        <h1 class="font-extrabold text-2xl text-center md:text-left md:text-5xl">Edita tu perfil</h1>
         <div class="flex flex-col full-w">
             <div id="avatar">
                 <app-avatar-profile [usuario]="usuario()" [perfil]="perfil()" (cambiosAvatar)="onCambiosAvatar($event)">
                 </app-avatar-profile>
             </div>
             <div id="profile">
-                <app-form-profile [usuario]="usuario()" [perfil]="perfil()" (cambiosPerfil)="onCambiosPerfil($event)">
+                <app-form-profile [usuario]="usuario()" [perfil]="perfil()" (changePassword)="onChangePassword($event)"
+                    [(passwordDialogVisible)]="pwdVisible" (cambiosPerfil)="onCambiosPerfil($event)">
+                    >
                 </app-form-profile>
             </div>
-            <div class="card flex justify-end p-10">
-                <p-confirmdialog styleClass="cd-eliminar">
+            <div class="card flex justify-center md:justify-end p-10">
+                <p-confirmdialog styleClass="cd-eliminar m-5">
                     <ng-template #message let-message>
                         @if (message) {
                         <div
@@ -31,7 +32,6 @@
                 </button>
             </div>
         </div>
-
     </div>
 </div>
 <app-footer></app-footer>
