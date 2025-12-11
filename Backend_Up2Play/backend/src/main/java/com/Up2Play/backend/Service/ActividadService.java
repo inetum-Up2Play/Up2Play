@@ -569,7 +569,7 @@ public class ActividadService {
             return EstadoActividad.PENDIENTE;
         }
 
-        if (ahora.isBefore(inicio.plusMinutes(2))) {
+        if (ahora.isBefore(inicio.plusHours(12))) {
             return EstadoActividad.EN_CURSO;
         }
 
