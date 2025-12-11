@@ -80,3 +80,12 @@ jobs:
         with:
           name: surefire-reports
           path: Backend_Up2Play/backend/target/surefire-reports
+          
+      - name: Show failing tests (Surefire)
+        if: failure()
+        run: |
+          echo "---- SUREFIRE REPORTS ----"
+          for f in Backend_Up2Play/backend/target/surefire-reports/*.txt; do
+            echo "==================== $f ===================="
+            grep -n "Caused by:" -A10 "$f" || true
+
