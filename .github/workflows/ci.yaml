@@ -65,9 +65,20 @@ jobs:
       - name: Build backend (skip tests)
         run: mvn -B -DskipTests clean package -Dspring.profiles.active=test
 
-      # Arrancar la app con perfil test (usa H2)
-      - name: Start Spring Boot App
-        run: nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > target/app.log 2>&1 &
+      # # Arrancar la app con perfil test (usa H2)
+      # - name: Start Spring Boot App
+      #   run: nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > target/app.log 2>&1 &
+
+
+      - name: Run tests (H2)
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          SPRING_DATASOURCE_URL: jdbc:h2:mem:Up2Play;MODE=Oracle;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+          SPRING_DATASOURCE_USERNAME: sa
+          SPRING_DATASOURCE_PASSWORD: ""
+        run: mvn -B verify -DtrimStackTrace=false
+
 
       # Esperar a que Actuator responda
       - name: Wait for app to be healthy
