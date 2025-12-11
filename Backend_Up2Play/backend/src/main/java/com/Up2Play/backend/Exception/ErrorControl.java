@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.Up2Play.backend.DTO.ErrorResponseDto;
+import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
@@ -264,6 +265,22 @@ public class ErrorControl {
                                 Instant.now());
                 return ResponseEntity
                                 .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        // Sin permiso para editar perfil
+        @ExceptionHandler(ActividadCompletadaException.class)
+        public ResponseEntity<ErrorResponseDto> handleActividadCompletada(
+                       ActividadCompletadaException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ACTIVIDAD_COMPLETADA",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.FORBIDDEN)
                                 .body(body);
         }
 
