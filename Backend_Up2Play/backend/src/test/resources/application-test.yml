@@ -45,3 +45,10 @@ management:
 Up2Play:
   security:
     enabled: false
+    
+jwt:
+  secret-key: dummy
+mail:
+  username: dummy
+  password: dummy
+
