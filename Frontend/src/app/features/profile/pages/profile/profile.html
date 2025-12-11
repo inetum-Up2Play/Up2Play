@@ -9,7 +9,9 @@
                 </app-avatar-profile>
             </div>
             <div id="profile">
-                <app-form-profile [usuario]="usuario()" [perfil]="perfil()" (cambiosPerfil)="onCambiosPerfil($event)">
+                <app-form-profile [usuario]="usuario()" [perfil]="perfil()" (changePassword)="onChangePassword($event)"
+                    [(passwordDialogVisible)]="pwdVisible" (cambiosPerfil)="onCambiosPerfil($event)">
+                    >
                 </app-form-profile>
             </div>
             <div class="card flex justify-center md:justify-end p-10">

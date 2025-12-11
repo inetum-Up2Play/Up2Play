@@ -16,3 +16,11 @@
     border: none !important;
     transform: scale(1.05) !important;
 }
+
+.p-dialog {
+    z-index: 1100;
+}
+
+.p-dialog-mask {
+    z-index: 1000;
+}
