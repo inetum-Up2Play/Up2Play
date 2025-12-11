@@ -1,3 +1,4 @@
+// src/app/features/actividades/calendar/calendar.ts
 import { Component, inject } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -5,21 +6,50 @@ import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { ActService } from '../../../../core/services/actividad/act-service';
-import { map, tap } from 'rxjs';
+import { map, tap, BehaviorSubject, switchMap, combineLatest } from 'rxjs';
 import { Actividad } from '../../../../shared/models/Actividad';
 import { Router } from '@angular/router';
+import { HolidaysService } from '../../../../core/services/holidays';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
   imports: [CommonModule, FullCalendarModule, AsyncPipe],
   templateUrl: './calendar.html',
-  styleUrl: './calendar.scss',
+  styleUrls: ['./calendar.scss'],
 })
 export class Calendar {
   private actService = inject(ActService);
   private router = inject(Router);
+  private holidaysService = inject(HolidaysService);
 
+  private year$ = new BehaviorSubject<number>(new Date().getFullYear());
+
+  private events$ = this.actService.listarActividadesApuntadas().pipe(
+    map((acts: Actividad[]) => acts.map(actividadToEvent)),
+    tap((events) => console.log('[events$]', events))
+  );
+
+  private holidays$ = this.year$.pipe(
+    switchMap((year) =>
+      this.holidaysService
+        .getSpainHolidays(year, {
+          includeNational: true,
+          includeCatalonia: true,
+        })
+        .pipe(
+          tap((events) => console.log(`[holidays$ ${year}]`, events.length))
+        )
+    )
+  );
+
+  // Fusión de ambos
+  mergedEvents$ = combineLatest([this.events$, this.holidays$]).pipe(
+    map(([acts, hols]) => [...acts, ...hols]),
+    tap((all) => console.log('[mergedEvents$]', all.length))
+  );
+
+  // Opciones del calendario
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
@@ -30,10 +60,19 @@ export class Calendar {
     firstDay: 1,
     dayHeaderFormat: { weekday: 'narrow' },
 
+    loading: (isLoading) => console.log('Loading events?', isLoading),
+
+    datesSet: (arg) => {
+      const visible = arg.view.currentStart;
+      const year = visible.getFullYear();
+      this.year$.next(year);
+    },
+
     eventDidMount: (arg) => {
       arg.el.title = arg.event.title;
       (arg.el as HTMLElement).style.cursor = 'pointer';
     },
+
     eventClick: (arg) => {
       arg.jsEvent?.preventDefault();
       arg.jsEvent?.stopPropagation();
@@ -45,15 +84,8 @@ export class Calendar {
       this.router.navigate(['/actividades/info-actividad', id]);
     },
   };
-
-  // Cargamos actividades y las mapeamos a eventos de un día
-  events$ = this.actService.listarActividadesApuntadas().pipe(
-    map((acts: Actividad[]) => acts.map(actividadToEvent)),
-    tap((events) => console.log('[events$]', events))
-  );
 }
 
-// ---- helpers (puedes moverlos a un archivo util.ts si prefieres)
 function normalizeToDay(fecha: string): string {
   return fecha.includes('T') ? fecha.split('T')[0] : fecha;
 }

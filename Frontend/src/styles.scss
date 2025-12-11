@@ -167,16 +167,46 @@ Here has to be imported the other style files (from the src/styles/)
   font-weight: 700;
 }
 
+
 .fc .fc-daygrid-event {
-  border-radius: 5%;
-  border-left: 5px solid #3f9c44 !important;
+  /* Variables por defecto (se pueden sobreescribir por clase) */
+  --event-bg: #b1df75be;   /* verde suave */
+  --event-accent: #3f9c44; /* verde acento */
+  --event-text: #152614;
+
+  background: var(--event-bg);
+  border-left: 5px solid var(--event-accent) !important;
   border: none;
   padding: 4px 10px;
-  font-weight: 500;
   margin: 2px 4px;
-  background: #b1df75be;
+  border-radius: 5%;
+  color: var(--event-text);
+  font-weight: 500;
   backdrop-filter: blur(6px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
 }
+
+/* ✔ Tus ACTIVIDADES propias */
+.fc .fc-daygrid-event.actividad {
+  --event-bg: #b1df75be;   /* verde suave */
+  --event-accent: #3f9c44; /* verde acento */
+  --event-text: #152614;
+}
+
+/* ✔ FESTIVOS NACIONALES */
+.fc .fc-daygrid-event.festivo {
+  --event-bg: #fff3cd;     /* amarillo suave */
+  --event-accent: #f1c232; /* amarillo acento */
+  --event-text: #7a5a00;
+}
+
+/* ✔ FESTIVOS CATALUÑA */
+.fc .fc-daygrid-event.festivo-cat {
+  --event-bg: #fff3cd;     /* amarillo suave */
+  --event-accent: #f1c232; /* amarillo acento */
+  --event-text: #7a5a00;
+}
+
 .fc .fc-event {
   box-shadow: 0 10px 24px rgba(0,0,0,0.08);
   transition: transform .12s ease, box-shadow .12s ease;
@@ -232,6 +262,7 @@ Here has to be imported the other style files (from the src/styles/)
 
     }
   }
+
 }
 
 
