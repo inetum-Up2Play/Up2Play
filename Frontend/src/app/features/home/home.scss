@@ -1,9 +1,19 @@
-.spacer{
-    width: 50%;
+.tu_espacio {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     margin: auto;
     position: flex;
-    margin-right: 10%;
     margin-top: 2%;
+    margin-bottom: 2%;
+    height: auto;
+    margin-right: 5rem;
+    margin-left: 5rem;
+}
+
+.calendario {
+    width: 75%;
+    position: flex;
     margin-bottom: 2%;
     height: auto;
 }
