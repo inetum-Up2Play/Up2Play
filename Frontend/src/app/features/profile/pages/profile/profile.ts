@@ -102,7 +102,7 @@ export class Profile implements OnInit {
   }
 
   eliminarCuenta() {
-    this.userService.eliminarUsuario();
+    //this.userService.eliminarUsuario();
     this.authService.logout();
     //this.perfilService.eliminarPerfil();
   }
