@@ -89,6 +89,21 @@
             <div class="flex mt-2 space-x-2">
             </div>
         </div>
+        <div class="card flex pt-2 w-full">
+            <p-avatar-group>
+                <!-- Iteramos sobre 'participante' en lugar de solo 'avatarId' -->
+                @for (participante of avataresUsuarios().slice(0, 5); track $index) {
+                <p-avatar [image]="participante.avatarId | avatarImg" [pTooltip]="participante.nombre"
+                    tooltipPosition="bottom" shape="circle" size="large"
+                    styleClass="border-2 border-white cursor-pointer" />
+                }
+
+                @if (avataresUsuarios().length > 5) {
+                <p-avatar [label]="'+' + (avataresUsuarios().length - 5)" shape="circle" size="large"
+                    styleClass="border-2 border-white bg-slate-200 text-slate-700 font-semibold" />
+                }
+            </p-avatar-group>
+        </div>
     </div>
 
 
