@@ -40,7 +40,6 @@ label i.pi {
 input[pInputText] {
     background-color: vars.$blanco; // color de fondo
     color: vars.$verde-oscuro; // color del texto
-    border: 1px solid vars.$verde-oscuro; // borde inicial
     transition: all 0.3s ease; // animación suave
 
     &:hover {
@@ -59,7 +58,6 @@ input[pInputText] {
 textarea[pTextarea] {
     background-color: vars.$blanco; // color de fondo
     color: vars.$verde-oscuro; // color del texto
-    border: 1px solid vars.$verde-oscuro; // borde inicial
     transition: all 0.3s ease; // animación suave
 
     &:hover {
@@ -77,7 +75,6 @@ textarea[pTextarea] {
 :host ::ng-deep .p-select {
     background-color: vars.$blanco !important; // fondo igual que input
     color: vars.$verde-oscuro !important; // color del texto
-    border: 1px solid vars.$verde-oscuro !important; // borde inicial
     transition: all 0.3s ease !important;
 
     &:hover {
@@ -96,7 +93,6 @@ textarea[pTextarea] {
 
 :host ::ng-deep .p-select-overlay {
     background-color: vars.$blanco !important; // fondo igual que input
-    border: 1px solid vars.$verde-oscuro !important; // borde inicial
 
     &:hover {
         background-color: color.adjust(vars.$blanco, $lightness: 5%) !important;
@@ -106,7 +102,6 @@ textarea[pTextarea] {
 
 :host ::ng-deep .p-select-filter {
     background-color: vars.$blanco !important; // fondo igual que input
-    border: 1px solid vars.$verde-oscuro !important; // borde inicial
     color: vars.$verde-oscuro !important;
 
     &:hover {
@@ -134,7 +129,6 @@ textarea[pTextarea] {
 :host ::ng-deep .p-datepicker-input {
     background-color: vars.$blanco !important;
     color: vars.$verde-oscuro !important;
-    border: 1px solid vars.$verde-oscuro !important;
     transition: all 0.3s ease;
 
     &:hover {
@@ -150,7 +144,6 @@ textarea[pTextarea] {
 
 :host ::ng-deep .p-datepicker-panel {
     background-color: vars.$blanco !important;
-    border: 1px solid vars.$verde-oscuro !important;
 }
 
 :host ::ng-deep .p-datepicker-header {
@@ -201,7 +194,6 @@ textarea[pTextarea] {
 
 :host ::ng-deep .p-datepicker-clear-button {
     color: vars.$verde-oscuro !important;
-    border: 1px solid vars.$verde-oscuro !important;
 
     &:hover {
         background-color: color.adjust(vars.$blanco, $lightness: 5%) !important;
@@ -210,7 +202,6 @@ textarea[pTextarea] {
 
 :host ::ng-deep .p-datepicker-today-button {
     color: vars.$verde-oscuro !important;
-    border: 1px solid vars.$verde-oscuro !important;
 
     &:hover {
         background-color: color.adjust(vars.$blanco, $lightness: 5%) !important;
@@ -232,7 +223,6 @@ textarea[pTextarea] {
 :host ::ng-deep .p-inputtext {
     color: vars.$verde-oscuro !important;
     background: vars.$blanco !important;
-    border: 1px solid vars.$verde-oscuro !important;
 
     &:hover {
         background-color: color.adjust(vars.$blanco, $lightness: 5%) !important;
