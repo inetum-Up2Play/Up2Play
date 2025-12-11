@@ -475,6 +475,8 @@ public class ActividadService {
 
     return actividadRepository.findAll().stream()
             .filter(act -> !usuario.getActividadesUnidas().contains(act))
+            .filter(act -> act.getEstado() == EstadoActividad.PENDIENTE
+                    && act.getFecha().isAfter(LocalDateTime.now()))
             .filter(act -> act.getDeporte().equalsIgnoreCase(deporte))
             .map(a -> new ActividadDtoResp(
                     a.getId(),
@@ -493,5 +495,32 @@ public class ActividadService {
                     a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null
             ))
             .toList();
-}
+    }
+
+    //calcular estado correcto segun fecha
+    private EstadoActividad calcularEstado(Actividad actividad) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime inicio = actividad.getFecha(); // incluye fecha + hora
+
+        if (ahora.isBefore(inicio)) {
+            return EstadoActividad.PENDIENTE;
+        }
+
+        if (ahora.isBefore(inicio.plusHours(12))) {
+            return EstadoActividad.EN_CURSO;
+        }
+
+        return EstadoActividad.COMPLETADA;
+    }
+
+    private void actualizarEstadoSiNecesario(Actividad actividad) {
+        EstadoActividad estadoActual = actividad.getEstado();
+        EstadoActividad estadoCalculado = calcularEstado(actividad);
+
+        if (estadoActual != estadoCalculado) {
+            actividad.setEstado(estadoCalculado);
+            actividadRepository.save(actividad);
+        }
+    }
+
 }
