@@ -4,24 +4,14 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
-  test:
-    email: ${TEST_EMAIL}
-    password: ${TEST_PASSWORD}
-    
-  # application-test.yml
-  spring:
-    devtools:
-      restart:
-        enabled: false
-
 
   jpa:
     hibernate:
       ddl-auto: create-drop
+    open-in-view: false
     properties:
       hibernate:
-       dialect: org.hibernate.dialect.H2Dialect
-      open-in-view: false
+        dialect: org.hibernate.dialect.H2Dialect
 
   sql:
     init:
@@ -33,6 +23,14 @@ spring:
     baseline-on-migrate: true
     baseline-version: 1
 
+  devtools:
+    restart:
+      enabled: false
+
+# Variables propias de tests (secrets en Actions)
+test:
+  email: ${TEST_EMAIL}
+  password: ${TEST_PASSWORD}
 
 management:
   endpoints:

@@ -60,111 +60,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-
-      # Build sin tests con perfil test
       - name: Build backend (skip tests)
-        run: mvn -B -DskipTests clean package -Dspring.profiles.active=test
+        run: mvn -B -DskipTests clean package
 
-      # # Arrancar la app con perfil test (usa H2)
-      # - name: Start Spring Boot App
-      #   run: nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > target/app.log 2>&1 &
-
-
-
-      - name: Run tests (H2)
+      - name: Run tests (H2, perfil test)
         env:
           SPRING_PROFILES_ACTIVE: test
           SPRING_DATASOURCE_URL: jdbc:h2:mem:Up2Play;MODE=Oracle;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
           SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
           SPRING_DATASOURCE_USERNAME: sa
           SPRING_DATASOURCE_PASSWORD: ""
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: mvn -B verify -DtrimStackTrace=false
 
-
-
-      # Esperar a que Actuator responda
-      - name: Wait for app to be healthy
-        run: |
-          for i in {1..30}; do
-            if curl -sSf http://localhost:8080/actuator/health >/dev/null; then
-              echo "App is healthy"
-              exit 0
-            fi
-            echo "Waiting for app to start..."
-            sleep 2
-          done
-          echo "App did not become healthy in time"
-          tail -n 200 target/app.log || true
-          exit 1
-
-      # Ejecutar tests (incluye skeletons y Monkey Tests)
-      # Ejecutar tests con perfil test
-      - name: Run tests
-        run: mvn verify -Dspring.profiles.active=test -DtrimStackTrace=false
-
-
-
-      # Subir reports si falla
       - name: Upload surefire reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
           path: Backend_Up2Play/backend/target/surefire-reports
-
-      # Subir logs del servidor si falla
-      - name: Upload app logs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-log
-          path: Backend_Up2Play/backend/target/app.log
-
-
-
-  # backend:
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: Backend_Up2Play/backend   # Carpeta del backend (Spring Boot)
-  #   steps:
-  #     - uses: actions/checkout@v3
-
-  #     - name: Setup Java             # Instala Java 17 (Temurin)
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         java-version: '17'
-  #         distribution: 'temurin'
-
-  #     - name: Cache Maven            # Cachea dependencias Maven para acelerar builds
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ~/.m2
-  #         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-maven-
-
-  #     - name: Build & Test Backend   # Compila y ejecuta tests del backend
-  #       env:
-  #         SPRING_PROFILES_ACTIVE: test
-  #         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-  #         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  #         DB_USERNAME: ${{ secrets.DB_USERNAME }}
-  #         DB_HOST: ${{ secrets.DB_HOST }}
-  #         DB_PORT: ${{ secrets.DB_PORT }}
-  #         DB_SID: ${{ secrets.DB_SID }}
-  #         MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-  #         MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-  #         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-  #         TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-
-
-  #       run: mvn clean test
-
-#Massa temps invertit en algo que ja es comprova. (futur)
-      # - name: Health Check (Actuator) # Levanta la app y comprueba endpoints de salud
-      #   run: |
-      #     mvn spring-boot:run &      # Arranca la aplicación en segundo plano
-      #     sleep 60                   # Espera 30 segundos para que la app esté lista
-      #     curl -f http://localhost:8080/actuator/health || exit 1        # Comprueba salud general
-      #     curl -f http://localhost:8080/actuator/health/readiness || exit 1 # Comprueba readiness
