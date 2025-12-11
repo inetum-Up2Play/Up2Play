@@ -307,6 +307,12 @@ public class ActividadService {
             } else
                 act.setNumPersTotales(num_personas_totales);
 
+            if (act.getEstado().equals(EstadoActividad.COMPLETADA)) {
+
+                throw new ActividadCompletadaException("No puedes editar una actividad que ya ha sido completada!");
+                
+            }
+            
             act.setDeporte(input.getDeporte());
 
             Actividad actEditada = actividadRepository.save(act);
