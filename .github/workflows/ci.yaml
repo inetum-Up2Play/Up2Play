@@ -70,6 +70,7 @@ jobs:
       #   run: nohup mvn spring-boot:run -Dspring-boot.run.profiles=test > target/app.log 2>&1 &
 
 
+
       - name: Run tests (H2)
         env:
           SPRING_PROFILES_ACTIVE: test
@@ -78,6 +79,7 @@ jobs:
           SPRING_DATASOURCE_USERNAME: sa
           SPRING_DATASOURCE_PASSWORD: ""
         run: mvn -B verify -DtrimStackTrace=false
+
 
 
       # Esperar a que Actuator responda
