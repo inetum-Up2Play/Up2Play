@@ -41,16 +41,23 @@ import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
 import { Avatar } from 'primeng/avatar';
 import { AvatarGroup } from 'primeng/avatargroup';
-import { map } from 'rxjs';
+import { catchError, forkJoin, map, of } from 'rxjs';
+import { TooltipModule } from 'primeng/tooltip';
+
+interface ParticipanteView {
+  nombre: string;
+  avatarId: number;
+}
 
 @Component({
   selector: 'app-info-actividad',
-  imports: [Avatar, AvatarGroup, ConfirmDialog, CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
+  imports: [TooltipModule, Avatar, AvatarGroup, ConfirmDialog, CardModule, DividerModule, RatingModule, InputIconModule, FormsModule, ReactiveFormsModule, ToastModule, MessageModule,
     Header, DeporteImgPipe, AvatarPipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
+
 export class InfoActividad implements OnInit, AfterViewInit {
   actividad = signal<Actividad | null>(null);
   usuario = signal<Usuario | null>(null);
@@ -59,6 +66,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
   isCreador = signal<boolean>(false);
   avatarIdCreador = signal<number>(0);
   avatarIdUsuario = signal<number>(0);
+  idsUsuarios: number[] = []; // aquí tendrás tus ids inscritos
+  avataresUsuarios = signal<ParticipanteView[]>([]); // { [idUsuario]: avatarId 
 
   private messageService = inject(MessageService);
   private actService = inject(ActService);
@@ -162,16 +171,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
       }
     }, { injector: this.injector });
 
-    this.actService.usuariosInscritosActividad(this.actividadId).pipe(
-      map((participantes: any) =>
-        (participantes ?? [])
-          .map((p: { id: any; }) => p?.id)   // <- ajusta la propiedad aquí
-          .filter((id: null) => id != null)
-      )
-    ).subscribe(ids => {
-      console.log('IDs de usuarios:', ids);
-    });
-
+    this.cargarInscritos();
 
     this.actService.usuariosInscritosActividad(this.actividadId).pipe(
       map(participantes =>
@@ -247,22 +247,42 @@ export class InfoActividad implements OnInit, AfterViewInit {
     });
   }
 
-  cargarAvataresConBucle(ids: number[]) {
-    ids.forEach(id => this.getAvatarUsuario(id));
+  cargarAvataresMasivos(participantes: { id: number, nombre: string }[]) {
+    const peticiones = participantes.map(p =>
+      this.perfilService.getPerfilByUserId(p.id).pipe(
+        map(perfil => {
+          // Construimos el objeto final para la vista
+          return {
+            nombre: p.nombre,
+            avatarId: (perfil as any)?.imagen ?? (perfil as any)?.imagenPerfil ?? 0
+          };
+        }),
+        // Si falla, devolvemos el objeto con avatar 0 pero conservando el nombre
+        catchError(() => of({ nombre: p.nombre, avatarId: 0 }))
+      )
+    );
+
+    forkJoin(peticiones).subscribe(resultado => {
+      this.avataresUsuarios.set(resultado);
+    });
   }
 
-  getAvatarUsuario(id: number) {
-    this.perfilService.getPerfilByUserId(id).subscribe({
-      next: (perfil) => {
-        this.avatarIdUsuario.set(perfil?.imagenPerfil ?? 0);
-        // Si necesitas diferenciar por usuario, mejor:
-        // this.avataresUsuariosMap.set(id, perfil?.imagenPerfil ?? 0);
+  cargarInscritos(): void {
+    this.actService.usuariosInscritosActividad(this.actividadId).pipe(
+      map((participantes: any) =>
+        (participantes ?? [])
+          .map((p: any) => ({ id: p?.id, nombre: p?.nombreUsuario ?? 'Usuario' }))
+          .filter((p: any) => p.id != null)
+      )
+    ).subscribe({
+      next: (participantes: { id: number, nombre: string }[]) => {
+        if (participantes.length > 0) {
+          this.cargarAvataresMasivos(participantes);
+        } else {
+          this.avataresUsuarios.set([]);
+        }
       },
-      error: (err) => {
-        console.error('Error cargando avatar del creador', err);
-        this.avatarIdUsuario.set(0);
-        // o: this.avataresUsuariosMap.set(id, 0);
-      }
+      error: (err) => console.error('Error cargando participantes', err)
     });
   }
 
@@ -313,7 +333,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
           numPersInscritas: (act.numPersInscritas ?? 0) + 1,
         });
         this.apuntado.set(true);
-
+        this.cargarInscritos();
+        
         this.messageService.add({
           severity: 'success',
           summary: '¡Enhorabuena!',
@@ -346,6 +367,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
           detail: 'Te has desapuntado de la actividad',
         });
         this.apuntado.set(false);
+        this.cargarInscritos();
+
       },
       error: (codigo) => {
         const mensaje = this.errorService.getMensajeError(codigo);

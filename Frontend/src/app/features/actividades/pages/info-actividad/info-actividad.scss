@@ -39,6 +39,9 @@ h1 {
   box-shadow: 0 4px 4px rgba(168, 168, 168, 0.2);
 }
 
+::ng-deep .p-tooltip-text{
+  background-color: vars.$verde-oliva;
+}
 
 
 
