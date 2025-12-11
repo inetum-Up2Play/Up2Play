@@ -1,1 +1,7 @@
-<p>calendar works!</p>
+<div class="calendar-wrap">
+  <full-calendar
+    [options]="calendarOptions"
+    [events]="events$ | async">
+  </full-calendar>
+</div>
+

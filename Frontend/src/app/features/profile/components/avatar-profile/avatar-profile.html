@@ -3,9 +3,9 @@
 
     <!-- COLUMNA IZQUIERDA: Avatar Actual y Saludo -->
     <div id="col-izquierda" class="flex items-center gap-4">
-        <img class="rounded-full max-w-40" [src]="selectedAvatarId() | avatarImg" alt="avatar del usuario" >
+        <img class="rounded-full max-w-40 shrink-0" [src]="selectedAvatarId() | avatarImg" alt="avatar del usuario" >
         
-        <p class="text xl:text-5xl lg:text-4xl md:text-3xl text-2xl break-words leading-tight">
+        <p class="text xl:text-5xl lg:text-4xl md:text-3xl text-2xl leading-tight break-words hyphens-auto min-w-0">
             ¡Hola {{usuario()?.nombreUsuario ?? 'usuario desconocido'}}!
         </p>
     </div>
