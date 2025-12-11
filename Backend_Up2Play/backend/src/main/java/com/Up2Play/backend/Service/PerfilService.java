@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.PerfilDto;
 import com.Up2Play.backend.DTO.Respuestas.PerfilDtoResp;
+import com.Up2Play.backend.Exception.ErroresPerfil.EditarPerfilDenegadoException;
+import com.Up2Play.backend.Exception.ErroresPerfil.PerfilNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
@@ -44,13 +46,13 @@ public class PerfilService {
     public Perfil EditarPerfil(Long perfilId, PerfilDto perfilDto, Long usuarioId) {
 
         Perfil perfil = perfilRepository.findById(perfilId)
-                .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
+                .orElseThrow(() -> new PerfilNoEncontradoException("Perfil no encontrado"));
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         if (!perfil.getUsuario().getId().equals(usuario.getId())) {
-            throw new RuntimeException("No tienes permiso para editar este perfil");
+            throw new EditarPerfilDenegadoException("No tienes permiso para editar este perfil");
         } else {
 
             perfil.setNombre(perfilDto.getNombre());
@@ -81,7 +83,7 @@ public PerfilDtoResp obtenerPerfil(Long id) {
             p.getEmail(),
             p.getImagenPerfil()
         ))
-        .orElseThrow(() -> new RuntimeException("Perfil no encontrado"));
+        .orElseThrow(() -> new PerfilNoEncontradoException("Perfil no encontrado"));
     return dto;
 }
 
