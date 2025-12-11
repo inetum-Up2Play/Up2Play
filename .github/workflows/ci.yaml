@@ -79,13 +79,36 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
-          path: Backend_Up2Play/backend/target/surefire-reports
-          
+          path: Backend_Up2Play/backend/target/surefire-reports     
+
       - name: Show failing tests (Surefire)
         if: failure()
         run: |
+          set -euo pipefail
+          REPORT_DIR="target/surefire-reports"
+
           echo "---- SUREFIRE REPORTS ----"
-          for f in Backend_Up2Play/backend/target/surefire-reports/*.txt; do
+          if [ ! -d "$REPORT_DIR" ]; then
+            echo "No existe $REPORT_DIR (¿falló antes el build?)."
+            exit 0
+          fi
+
+          shopt -s nullglob
+          files=( "$REPORT_DIR"/*.txt "$REPORT_DIR"/*.xml )
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No hay *.txt ni *.xml en $REPORT_DIR"
+            exit 0
+          fi
+
+          for f in "${files[@]}"; do
             echo "==================== $f ===================="
-            grep -n "Caused by:" -A10 "$f" || true
+            # Muestra las primeras líneas para contexto
+            sed -n '1,200p' "$f" || true
+            echo
+            echo "--------------- Caused by ---------------"
+            # Extrae la causa raíz típica de Spring/Built-in
+            grep -n -E "Caused by:|BeanCreationException|UnsatisfiedDependencyException|IllegalStateException" -A12 "$f" || true
+            echo
+          done
+
 
