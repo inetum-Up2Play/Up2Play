@@ -126,7 +126,7 @@ export class EditarActividad {
 
     // Inicializar deportes
     this.deportes = [
-      { name: 'Atletismo' },
+            { name: 'Atletismo' },
       { name: 'Balonmano' },
       { name: 'Basquet' },
       { name: 'Béisbol' },
@@ -170,6 +170,8 @@ export class EditarActividad {
       { name: 'Tiro con Arco' },
       { name: 'Frisbee' },
       { name: 'Senderismo' },
+      { name: 'Running' },
+      { name: 'Petanca' },
     ];
     this.niveles = [
       { name: 'Iniciado' },
