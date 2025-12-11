@@ -78,6 +78,121 @@ Here has to be imported the other style files (from the src/styles/)
     padding-top: var(--header-h); /* Usamos el valor calculado en el header.component.ts */
 }
 
+/* Forzar recorte con "..." en DayGrid */
+.fc .fc-daygrid-event {
+  overflow: hidden;
+}
+
+.fc .fc-event-main {
+  min-width: 0; /* clave cuando hay flex/inline-flex */
+}
+
+.fc .fc-event-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;   /* 1 línea */
+  max-width: 100%;
+}
+
+/* (Opcional) si alguna vista de horas se usara en el futuro */
+.fc .fc-timegrid-event .fc-event-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendar-wrap {
+  padding: 18px;
+  border-radius: 22px;
+  background:
+    radial-gradient(800px 400px at 10% -10%, rgba(255,255,255,0.9), rgba(255,255,255,0.75)),
+    linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 20px 50px rgba(19, 31, 53, 0.15);
+}
+
+.fc {
+  --fc-page-bg-color: transparent;
+  --fc-border-color: rgba(16,24,40,0.08);
+  --fc-toolbar-text-color: #0f172a;
+
+  /* Botones pastel con glass */
+  --fc-button-bg-color: #3D6C3F;
+  --fc-button-border-color: #3D6C3F;
+  --fc-button-text-color: #ffffff;
+  --fc-button-hover-bg-color: #3f7a41;
+  --fc-button-hover-border-color: #3f7a41;
+  --fc-button-active-bg-color: #3f7a41;
+  --fc-button-active-border-color: #3f7a41;
+
+  --fc-event-text-color: #152614 ;
+  --fc-today-bg-color: rgba(65, 70, 66, 0.062);
+
+}
+
+.fc .fc-toolbar-title {
+  font-family: vars.$montserrat;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+.fc .fc-button {
+  border-radius: 12px;
+  padding: 0.4rem 0.85rem;
+  box-shadow: 0 8px 20px rgba(52, 58, 52, 0.25);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.fc .fc-button:hover { transform: translateY(-1px); }
+
+.fc .fc-col-header-cell {
+  background:rgba(65, 70, 66, 0.16);
+  backdrop-filter: blur(6px);
+  color: #1d1e1f !important;
+  font-weight: 700;
+    .layout-menu li:hover, a:hover {
+      color: #1d1e1f !important;
+    }
+}
+
+.fc .fc-daygrid-day {
+  background: rgba(255,255,255,0.45);
+}
+
+.fc .fc-daygrid-day-number {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.fc .fc-daygrid-event {
+  border-radius: 5%;
+  border-left: 5px solid #3f9c44 !important;
+  border: none;
+  padding: 4px 10px;
+  font-weight: 500;
+  margin: 2px 4px;
+  background: #b1df75be;
+  backdrop-filter: blur(6px);
+}
+.fc .fc-event {
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.fc .fc-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.12);
+}
+
+/* Selección glass */
+.fc .fc-highlight {
+  background: rgba(14, 165, 233, 0.18);
+  backdrop-filter: blur(4px);
+}
+
+
 
 
 
