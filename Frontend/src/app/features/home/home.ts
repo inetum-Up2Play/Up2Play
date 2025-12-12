@@ -1,18 +1,19 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+
 import { Header } from '../../core/layout/header/header';
 import { Footer } from '../../core/layout/footer/footer';
 import { Calendar } from './components/calendar/calendar';
-import { PerfilService } from '../../core/services/perfil/perfil-service';
 import { AvatarPipe } from '../../shared/pipes/avatar-pipe';
+import { PerfilService } from '../../core/services/perfil/perfil-service';
 import { UserService } from '../../core/services/user/user-service';
-import { Usuario } from '../../shared/models/usuario.model';
 import { ActService } from '../../core/services/actividad/act-service';
 import { ProximosPlanes } from './components/proximos-planes/proximos-planes';
+import { StepperInfo } from './components/stepper-info/stepper-info';
 
 @Component({
   selector: 'app-home',
-  imports: [Header, Footer, Calendar, AvatarPipe, ProximosPlanes],
+  imports: [Header, Footer, Calendar, AvatarPipe, ProximosPlanes, StepperInfo],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

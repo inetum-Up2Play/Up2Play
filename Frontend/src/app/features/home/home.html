@@ -6,14 +6,12 @@
 
         <!-- FONDO DE IMAGEN -->
         <div class="absolute top-0 left-0 w-full z-0 overflow-hidden">
-            <img src="../../../assets/home/fondo_home.webp" alt="Fondo home"
+            <img src="../../../assets/home/fondo-home.webp" alt="Fondo home"
                 class="w-full h-full object-cover object-bottom opacity-80">
-            <!-- Gradiente opcional en la parte inferior para fusionar con el blanco del resto de la web -->
-            <div class="absolute bottom-0 left-0 w-full h-32 bg-green-800/20"></div>
         </div>
 
         <!-- TARJETAS -->
-        <div class="relative z-10 container mx-auto px-4 pt-24 pb-10 lg:pt-32 lg:px-20 max-w-7xl">
+        <div class="relative z-10 container mx-auto px-4 pt-24 pb-10 lg:pt-32 lg:px-20 max-w-[70%]">
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -43,10 +41,10 @@
                     <div
                         class="p-creados bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden flex flex-col justify-center h-32 lg:h-auto lg:min-h-[140px] group transition-transform hover:scale-[1.01]">
 
-                        <div class="realtive z-10">
+                        <div class="realtive">
                             <h1 class="font-bold text-green-800 text-lg uppercase tracking-wide">PLANES CREADOS</h1>
                             <div class="flex items-center gap-2 mt-1">
-                                <i class="pi pi-bolt text-9xl text-green-800"></i> <!-- Icono PrimeIcons (ejemplo) -->
+                                <i class="pi pi-bolt text-green-800"></i> <!-- Icono PrimeIcons (ejemplo) -->
                                 <span class="text-5xl font-black text-gray-800">{{ planesCreados() }}</span>
                             </div>
                         </div>
@@ -56,20 +54,32 @@
                     <!-- Planes Unidos -->
                     <div
                         class="p-unidos bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden flex flex-col justify-center h-32 lg:h-auto lg:min-h-[140px] group transition-transform hover:scale-[1.01]">
-                        <h1 class="font-bold text-lime-600 text-lg uppercase tracking-wide z-10">PLANES UNIDOS</h1>
-                        <div class="flex items-center gap-2 z-10">
-                            <i class="pi pi-check-circle text-3xl text-lime-600"></i>
-                            <span class="text-5xl font-black text-gray-800">{{ planesUnidos() }}</span>
+                        
+                        <div class="relative">
+                            <h1 class="font-bold text-lime-600 text-lg uppercase tracking-wide">PLANES UNIDOS</h1>
+                            <div class="flex items-center gap-2 z-10">
+                                <i class="pi pi-check-circle text-lime-600"></i>
+                                <span class="text-5xl font-black text-gray-800">{{ planesUnidos() }}</span>
+                            </div>
                         </div>
+
                     </div>
 
                 </div>
             </div>
         </div>
+
+        <!-- ACORDEON -->
+        <div class="z-10 mt-20 flex relative justify-center">
+            <app-stepper-info class="w-[60%]"></app-stepper-info>
+        </div>
     </div>
 
-    <div class="tu_espacio">
+
+    <!-- TU ESPACIO -->
+    <div class="tu-espacio z-10">
         <app-proximos-planes class="w-[23%]"></app-proximos-planes>
+        
         <div class="calendario">
             <app-calendar></app-calendar>
         </div>

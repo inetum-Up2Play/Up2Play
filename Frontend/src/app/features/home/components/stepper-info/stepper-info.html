@@ -1,0 +1,71 @@
+<div class="card">
+    <p-stepper [value]="1">
+        <p-step-item [value]="1">
+            <p-step>¿POR DÓNDE EMPEZAR?</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <div class="flex flex-col h-48">
+                        <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 
+                            dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+                            <i class="mx-12 ph ph-sneaker-move text-7xl text-green-900"></i>
+                            <p>
+                                <strong>Descubre tu punto de partida</strong><br>
+                                Explora actividades deportivas cerca de ti y conoce personas con tus mismos intereses.
+                                <strong>¡Empieza a moverte y a conectar!</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="py-6">
+                        <p-button label="Siguiente" (onClick)="activateCallback(2)" />
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+
+        <p-step-item [value]="2">
+            <p-step>ORGANIZA PLANES</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <div class="flex flex-col h-48">
+                        <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 
+                            dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+                            <i class="mx-12 ph ph-baseball-cap text-7xl text-green-900"></i>
+                            <p>
+                                <strong>Crea tus propios eventos deportivos</strong><br>
+                                Elige la actividad, el lugar y la hora, y reúne a otros <strong>apasionados del
+                                    deporte</strong>
+                                para compartir <strong>experiencias.</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex py-6">
+                        <p-button class="mr-4" label="Siguiente" (onClick)="activateCallback(3)" />
+                        <p-button label="Anterior" severity="secondary" (onClick)="activateCallback(1)" />
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+
+        <p-step-item [value]="3">
+            <p-step>APÚNTATE A PLANES</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <div class="flex flex-col h-48">
+                        <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 
+                            dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+                            <i class="mx-12 ph ph-target text-7xl text-green-900"></i>
+                            <p>
+                                <strong>Únete a actividades organizadas por otros</strong><br>
+                                Encuentra el <strong>deporte</strong> que te gusta, haz <strong>nuevos amigos</strong>
+                                y <strong>disfruta</strong> de cada momento.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="py-6">
+                        <p-button label="Anterior" severity="secondary" (onClick)="activateCallback(2)" />
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+    </p-stepper>
+</div>
