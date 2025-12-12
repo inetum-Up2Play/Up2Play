@@ -18,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 
@@ -57,6 +58,9 @@ public class Actividad {
     @ManyToMany(mappedBy = "actividadesUnidas")
     private Set<Usuario> usuarios = new HashSet<>();
 
+    @OneToMany(mappedBy = "ID_ACTIVIDAD")
+    private Notificacion notificacion;
+
     public Actividad() {
     }
 
@@ -93,6 +97,26 @@ public class Actividad {
         this.precio = precio;
         this.usuarioCreador = usuarioCreador;
         this.usuarios = usuarios;
+    }
+
+    public Actividad(Long id, @Size(max = 64) String nombre, @Size(max = 500) String descripcion, LocalDateTime fecha,
+            String ubicacion, String deporte, NivelDificultad nivel, int numPersInscritas, int numPersTotales,
+            EstadoActividad estado, double precio, Usuario usuarioCreador, Set<Usuario> usuarios,
+            Notificacion notificacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.ubicacion = ubicacion;
+        this.deporte = deporte;
+        this.nivel = nivel;
+        this.numPersInscritas = numPersInscritas;
+        this.numPersTotales = numPersTotales;
+        this.estado = estado;
+        this.precio = precio;
+        this.usuarioCreador = usuarioCreador;
+        this.usuarios = usuarios;
+        this.notificacion = notificacion;
     }
 
     public Long getId() {
@@ -198,6 +222,14 @@ public class Actividad {
 
     public void setDeporte(String deporte) {
         this.deporte = deporte;
+    }
+
+    public Notificacion getNotificacion() {
+        return notificacion;
+    }
+
+    public void setNotificacion(Notificacion notificacion) {
+        this.notificacion = notificacion;
     }
 
 }

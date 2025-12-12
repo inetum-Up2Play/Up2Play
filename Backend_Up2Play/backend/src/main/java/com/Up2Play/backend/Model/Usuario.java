@@ -62,6 +62,10 @@ public class Usuario implements UserDetails {
     @JoinTable(name = "USUARIO_ACTIVIDAD", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id"))
     private Set<Actividad> actividadesUnidas = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "USUARIO_NOTIFICACION")
+    private Set<Notificacion> notificaciones = new HashSet<>();
+
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
 
@@ -115,6 +119,24 @@ public class Usuario implements UserDetails {
         this.password = password;
         this.rol = rol;
         this.nombreUsuario = nombreUsuario;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas, Set<Notificacion> notificaciones,
+            Perfil perfil) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.notificaciones = notificaciones;
+        this.perfil = perfil;
     }
 
     public Usuario() {
@@ -239,6 +261,14 @@ public class Usuario implements UserDetails {
 
     public void setActividadesUnidas(Set<Actividad> actividadesUnidas) {
         this.actividadesUnidas = actividadesUnidas;
+    }
+
+    public Set<Notificacion> getNotificaciones() {
+        return notificaciones;
+    }
+
+    public void setNotificaciones(Set<Notificacion> notificaciones) {
+        this.notificaciones = notificaciones;
     }
 
 }
