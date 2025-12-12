@@ -16,6 +16,7 @@ h3 {
 :host ::ng-deep .p-step-title {
     color: vars.$verde-oscuro !important;
     font-weight: 400;
+    font-size: 1.8rem !important;
     &:hover {
         scale: 1.01;
     }
@@ -25,6 +26,9 @@ h3 {
     color: vars.$verde-oliva !important;
     border-color: vars.$verde-oliva !important;
     background-color: transparent !important;
+    height: 3.3rem !important;
+    width: 3.3rem !important;
+    font-size: 1.5rem !important;
 }
 
 :host ::ng-deep .p-stepper-separator {
@@ -46,6 +50,7 @@ h3 {
     background-color: vars.$verde-claro !important;
     color: vars.$verde-oscuro !important;
     border: none !important;
+    font-size: 1.1rem;
 
     &.p-button-secondary {
         background-color: lightgrey !important;
