@@ -1,19 +1,19 @@
 @if (activities.length === 0 ){
 <app-empty-activities icon="ph-light ph-users-three" title="¿Tienes algo en mente?"
-    message="¡Crea tu actividad y reúne a tu equipo!">
+    message="¡Crea tu actividad y reúne a tu equipo!" aria-live="polite" aria-atomic="true">
 </app-empty-activities>
 } @else {
 <div class="xl:p-5 2xl:pl-15 2xl:pr-15 ">
     <div class="">
-        <p-carousel [value]="activities" [numVisible]="4" [numScroll]="1" [circular]="true"
-            [autoplayInterval]="5000000" [responsiveOptions]="responsiveOptions">
+        <p-carousel [value]="activities" [numVisible]="4" [numScroll]="1" [circular]="true" [autoplayInterval]="5000000"
+            [responsiveOptions]="responsiveOptions" aria-roledescription="Carrusel" aria-label="Actividades">
 
             <ng-template let-activity pTemplate="item">
-                <app-activity-card [titulo]="activity.nombre" [fecha]="extraerFecha(activity.fecha)"
+                <app-activity-card [attr.aria-label]="activity.nombre" [titulo]="activity.nombre" [fecha]="extraerFecha(activity.fecha)"
                     [hora]="extraerHora(activity.fecha)" [ubicacion]="activity.ubicacion"
                     [imagen]="activity.deporte | deporteImg" [botonLabel]="'Editar'" [botonStyle]="'btn-editar'"
                     [botonAction]="editar" [eliminarLabel]="'Eliminar'" [eliminarStyle]="'btn-eliminar'"
-                    [actividadId]="activity.id">
+                    [actividadId]="activity.id" [attr.aria-label]="activity.nombre">
                 </app-activity-card>
             </ng-template>
         </p-carousel>
