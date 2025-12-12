@@ -1,5 +1,38 @@
 @use 'styles/variables' as vars;
 
+
+h1 {
+    font-family: vars.$montserrat;
+}
+
+.hero{
+
+    height: 100dvh;
+} 
+
+.text-card {
+    font-family: vars.$work-sans;
+}
+
+.p-creados {
+    background-image: url('../../../assets/home/fondo_creados.svg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.p-unidos {
+    background-image: url('../../../assets/home/fondo_unidos.svg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.calendario {
+    width: 75%;
+    position: flex;
+    margin-bottom: 2%;
+    height: auto;
+}
+
 .tu_espacio {
     display: flex;
     flex-direction: row;
@@ -11,33 +44,4 @@
     height: auto;
     margin-right: 5rem;
     margin-left: 5rem;
-}
-
-h1 {
-    font-family: vars.$montserrat;
-}
-
-.text-card {
-    font-family: vars.$work-sans;
-}
-
-.p-creados {
-    background-image: url('../../../assets/home/tarjeta-creados.png');
-    background-size: 105%; 
-    background-repeat: no-repeat;
-}
-
-.p-unidos {
-    background-image: url('../../../assets/home/tarjeta-unidos.png');
-    background-size: 105%; 
-    background-repeat: no-repeat;
-    margin-right: 5rem;
-    margin-left: 5rem;
-}
-
-.calendario {
-    width: 75%;
-    position: flex;
-    margin-bottom: 2%;
-    height: auto;
 }
