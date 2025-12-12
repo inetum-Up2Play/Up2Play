@@ -17,28 +17,37 @@ import { ActService } from '../../core/services/actividad/act-service';
 })
 export class Home implements OnInit {
 
-  private perfilService = inject(PerfilService);
+  public perfilService = inject(PerfilService);
   private userService = inject(UserService);
   private actService = inject(ActService);
 
   private userEmailSignal = signal<string>('');
-  public currentUser = toSignal(
-    this.userService.getUsuario(), 
-    { initialValue: null } // Usuario | null
-  );
-  
-  //public actApuntadas = this.actService.listarActividadesApuntadas().length();
+  public currentUsuario = toSignal(this.userService.getUsuario(), { initialValue: null });
 
-  ngOnInit(): void {
-    const user = this.currentUser();
-    if (user) {
-      this.userEmailSignal.set(user.email);
-    }
+  public planesUnidos = signal<number>(0);
+  public planesCreados = signal<number>(0); 
+
+  private cargarDatos(): void {
+    // 1. Cargar Actividades Apuntadas
+    this.actService.listarActividadesApuntadas().subscribe({
+      next: (data) => {
+        const cantidad = data ? data.length : 0;
+        this.planesUnidos.set(cantidad);
+      }
+    });
+
+    // 2. Cargar Actividades Creadas
+    this.actService.listarActividadesCreadas().subscribe({
+      next: (data) => {
+        const cantidad = data ? data.length : 0;
+        this.planesCreados.set(cantidad);
+      }
+    });
+    
   }
 
-
-
-
-
+  ngOnInit(): void {
+    this.cargarDatos();
+  }
 
 }

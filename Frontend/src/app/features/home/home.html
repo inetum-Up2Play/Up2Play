@@ -22,14 +22,14 @@
                     h-full p-8 lg:text-left lg:flex-row lg:gap-8  min-h-[250px]">
                     <!-- Avatar -->
                     <div class="relative shrink-0">
-                        <!-- <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
-                            class="w-32 h-32 rounded-full shadow-sm object-cover"> -->
+                        <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
+                            class="w-32 h-32 rounded-full shadow-sm object-cover">
                     </div>
 
                     <div class="flex flex-col gap-2 w-full">
                         <h1 class="text-4xl font-extrabold text-gray-900 leading-tight">
                             ¡Hola, <br>
-                            <span class="text-gray-900">{{ currentUser()!.nombreUsuario }}</span>
+                            <span class="text-gray-900">{{ currentUsuario()!.nombreUsuario }}</span>
                         </h1>
                         <div class="w-full h-0.5 bg-gray-200 my-2"></div> <!-- Separador -->
                         <p class="text-gray-500 italic text-lg">¿Listo para una nueva aventura?</p>
@@ -47,7 +47,7 @@
                             <h1 class="font-bold text-green-800 text-lg uppercase tracking-wide">PLANES CREADOS</h1>
                             <div class="flex items-center gap-2 mt-1">
                                 <i class="pi pi-bolt text-9xl text-green-800"></i> <!-- Icono PrimeIcons (ejemplo) -->
-                                <span class="text-5xl font-black text-gray-800">15</span>
+                                <span class="text-5xl font-black text-gray-800">{{ planesCreados() }}</span>
                             </div>
                         </div>
 
@@ -55,11 +55,11 @@
 
                     <!-- Planes Unidos -->
                     <div
-                        class="bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden flex flex-col justify-center h-32 lg:h-auto lg:min-h-[140px] group transition-transform hover:scale-[1.01]">
+                        class="p-unidos bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden flex flex-col justify-center h-32 lg:h-auto lg:min-h-[140px] group transition-transform hover:scale-[1.01]">
                         <h1 class="font-bold text-lime-600 text-lg uppercase tracking-wide z-10">PLANES UNIDOS</h1>
                         <div class="flex items-center gap-2 z-10">
                             <i class="pi pi-check-circle text-3xl text-lime-600"></i>
-                            <span class="text-5xl font-black text-gray-800">30</span>
+                            <span class="text-5xl font-black text-gray-800">{{ planesUnidos() }}</span>
                         </div>
                     </div>
 
