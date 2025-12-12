@@ -1,12 +1,12 @@
 @if (activities.length === 0 ){
 <app-empty-activities icon="ph-light ph-sneaker-move" title="Tu lista está vacía..."
-    message="¡Encuentra tu próximo plan y ponte en movimiento!">
+    message="¡Encuentra tu próximo plan y ponte en movimiento!" aria-live="polite" aria-atomic="true">
 </app-empty-activities>
 } @else {
 <div class="xl:p-5 2xl:pl-15 2xl:pr-15 ">
     <div class="">
         <p-carousel [value]="activities" [numVisible]="4" [numScroll]="1" [circular]="true"
-            [autoplayInterval]="5000000" [responsiveOptions]="responsiveOptions">
+            [autoplayInterval]="5000000" [responsiveOptions]="responsiveOptions" aria-roledescription="Carrusel" aria-label="Actividades">
 
             <ng-template let-activity pTemplate="item">
                 <app-activity-card [titulo]="activity.nombre" [fecha]="extraerFecha(activity.fecha)"
@@ -16,7 +16,9 @@
                     [botonStyle]="activity.esCreador ? 'btn-editar' : 'btn-desapuntarse'"
                     [botonAction]="activity.esCreador ? editar : desapuntarse"
                     [eliminarLabel]="activity.esCreador ? 'Eliminar' : undefined"
-                    [eliminarStyle]="activity.esCreador ?  'btn-eliminar' : undefined" [actividadId]="activity.id">
+                    [eliminarStyle]="activity.esCreador ?  'btn-eliminar' : undefined" [actividadId]="activity.id"
+                    [attr.aria-label]="activity.nombre">
+>
                 </app-activity-card>
             </ng-template>
         </p-carousel>
