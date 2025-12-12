@@ -1,12 +1,12 @@
 <div class="py-5 2xl:p-10 ml-2 mr-2 h-full flex items-center justify-center">
-    
-    <p-card #body class="card sh h-full">    
-            <ng-template #title>
-            <img (click)="infoActividad()" class="infoActividad" alt="Card" src={{imagen()}} />
+
+    <p-card #body class="card sh h-full">
+        <ng-template #title>
+            <img (click)="infoActividad()" class="infoActividad" aria-label="Ver información de la actividad" src={{imagen()}} />
         </ng-template>
         <ng-template #subtitle> {{fecha()}} - {{hora()}}h </ng-template>
         <ng-template #content>
-            <p class="title infoActividad" (click)="infoActividad()"> {{titulo()}}</p>
+            <p class="title infoActividad" aria-label="Detalles de la actividad" (click)="infoActividad()"> {{titulo()}}</p>
             <p class="h-max">{{ubicacion()}}</p>
         </ng-template>
         <ng-template #footer>

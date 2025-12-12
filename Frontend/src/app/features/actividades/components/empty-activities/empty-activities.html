@@ -3,13 +3,14 @@
             max-auto
             my-5 
             px-5 py-16
-            bg-white rounded-lg shadow-lg" >
+            bg-white rounded-lg shadow-lg">
 
     <i [class]="icon + ' text-6xl '"></i>
 
     <h2 class="text-xl 
                 font-bold 
-                text-gray-800">
+                text-gray-800"
+                aria-hidden="true" focusable="false">
         {{ title }}
     </h2>
 
@@ -19,4 +20,3 @@
         {{ message }}
     </p>
 </div>
-
