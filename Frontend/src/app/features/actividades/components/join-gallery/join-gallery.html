@@ -2,7 +2,7 @@
     <app-empty-activities
         icon="ph-light ph-trophy"
         title="¡Wow, ya estás en todas!"
-        message="¿Listo para organizar la siguiente?">
+        message="¿Listo para organizar la siguiente?" aria-live="polite" aria-atomic="true">
     </app-empty-activities>
 } @else {
 
@@ -18,7 +18,8 @@
             [actividadId]="act.id"
             [botonLabel]="'¡Apúntate!'"
             [botonStyle]="'btn-apuntarse'"
-            [botonAction]="apuntarse">
+            [botonAction]="apuntarse"
+            [attr.aria-label]="act.nombre">
 
           </app-activity-card>
         }
@@ -32,7 +33,8 @@
             variant="outlined" 
             icon="pi pi-refresh" 
             severity="contrast" 
-            (onClick)="loadMore()">
+            (onClick)="loadMore()"
+            [attr.aria-label]="'Mostrar más actividades'">
           </p-button>
         }
       </div>
