@@ -104,6 +104,7 @@ public class ActividadService {
     @Transactional // (readOnly = true)
     public List<ActividadDtoResp> getAllActividadesPendientes() {
         return actividadRepository.findAll().stream()
+        .peek(this::actualizarEstadoSiNecesario)
         .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
                 .map(a -> new ActividadDtoResp(
                         a.getId(),
@@ -126,6 +127,7 @@ public class ActividadService {
         @Transactional // (readOnly = true)
     public List<ActividadDtoResp> getAllActividades() {
         return actividadRepository.findAll().stream()
+       .peek(this::actualizarEstadoSiNecesario)
                 .map(a -> new ActividadDtoResp(
                         a.getId(),
                         a.getNombre(),
@@ -148,6 +150,7 @@ public class ActividadService {
     @Transactional // (readOnly = true)
     public List<ActividadDtoCreadas> getActividadesCreadas(Usuario usuario) {
         return actividadRepository.findByUsuarioCreador(usuario).stream()
+       .peek(this::actualizarEstadoSiNecesario)
         .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
         .map(a -> new ActividadDtoCreadas(
                 a.getId(),
@@ -167,11 +170,37 @@ public class ActividadService {
 
     // Lista de actividades a las que un usuario está apuntado
     @Transactional
+    public List<ActividadDtoResp> getActividadesApuntadasPendientes(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        return usuario.getActividadesUnidas().stream()
+       .peek(this::actualizarEstadoSiNecesario)
+        .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+
+    }
+
+        // Lista de actividades a las que un usuario está apuntado
+    @Transactional
     public List<ActividadDtoResp> getActividadesApuntadas(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         return usuario.getActividadesUnidas().stream()
-        .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
                 .map(a -> new ActividadDtoResp(
                         a.getId(),
                         a.getNombre(),
@@ -199,6 +228,7 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         return actividadRepository.findAll().stream()
+        .peek(this::actualizarEstadoSiNecesario)
                 .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
                 .filter(act -> !usuario.getActividadesUnidas().contains(act))
                 .map(a -> new ActividadDtoResp(
@@ -222,24 +252,29 @@ public class ActividadService {
     // Lista actividad por id
     @Transactional
     public ActividadDtoResp getActividad(Long id) {
-        return actividadRepository.findById(id)
-                .map(a -> new ActividadDtoResp(
-                        a.getId(),
-                        a.getNombre(),
-                        a.getDescripcion(),
-                        a.getFecha() != null ? a.getFecha().toString() : null,
-                        a.getUbicacion(),
-                        a.getDeporte(),
-                        a.getNivel() != null ? a.getNivel().name() : null,
-                        a.getNumPersInscritas(),
-                        a.getNumPersTotales(),
-                        a.getEstado() != null ? a.getEstado().name() : null,
-                        a.getPrecio(),
-                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
-                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
-                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+        Actividad act = actividadRepository.findById(id)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+
+        actualizarEstadoSiNecesario(act);
+
+        return new ActividadDtoResp(
+                act.getId(),
+                act.getNombre(),
+                act.getDescripcion(),
+                act.getFecha() != null ? act.getFecha().toString() : null,
+                act.getUbicacion(),
+                act.getDeporte(),
+                act.getNivel() != null ? act.getNivel().name() : null,
+                act.getNumPersInscritas(),
+                act.getNumPersTotales(),
+                act.getEstado() != null ? act.getEstado().name() : null,
+                act.getPrecio(),
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null
+            );
     }
+
 
     // Editar actividad
     public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) {
@@ -282,6 +317,12 @@ public class ActividadService {
             } else
                 act.setNumPersTotales(num_personas_totales);
 
+            if (act.getEstado().equals(EstadoActividad.COMPLETADA)) {
+
+                throw new ActividadCompletadaException("No puedes editar una actividad que ya ha sido completada!");
+                
+            }
+            
             act.setDeporte(input.getDeporte());
 
             Actividad actEditada = actividadRepository.save(act);
@@ -476,6 +517,7 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         return usuario.getActividadesUnidas().stream()
+                .peek(this::actualizarEstadoSiNecesario)
                 .filter(act -> act.getEstado() == EstadoActividad.PENDIENTE
                         && act.getFecha().isAfter(LocalDateTime.now()))
                 .map(a -> new ActividadDtoResp(
@@ -504,6 +546,7 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         return actividadRepository.findAll().stream()
+                .peek(this::actualizarEstadoSiNecesario)
                 .filter(act -> !usuario.getActividadesUnidas().contains(act))
                 .filter(act -> act.getDeporte().equalsIgnoreCase(deporte))
                 .map(a -> new ActividadDtoResp(
@@ -523,4 +566,30 @@ public class ActividadService {
                         a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
                 .toList();
     }
+
+    private EstadoActividad calcularEstado(Actividad actividad) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime inicio = actividad.getFecha(); // incluye fecha + hora
+
+        if (ahora.isBefore(inicio)) {
+            return EstadoActividad.PENDIENTE;
+        }
+
+        if (ahora.isBefore(inicio.plusHours(12))) {
+            return EstadoActividad.EN_CURSO;
+        }
+
+        return EstadoActividad.COMPLETADA;
+    }
+
+    private void actualizarEstadoSiNecesario(Actividad actividad) {
+    EstadoActividad estadoActual = actividad.getEstado();
+    EstadoActividad estadoCalculado = calcularEstado(actividad);
+
+    if (estadoActual != estadoCalculado) {
+        actividad.setEstado(estadoCalculado);
+        actividadRepository.save(actividad);
+    }
+}
+
 }
