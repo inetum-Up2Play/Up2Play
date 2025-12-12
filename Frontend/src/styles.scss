@@ -193,6 +193,14 @@ Here has to be imported the other style files (from the src/styles/)
   --event-text: #152614;
 }
 
+
+/* Forzar borde en DayGrid */
+.fc .fc-daygrid-event.event-owner {
+  border-color: #b1df75be !important;
+  background-color: #3d6c3fd5 !important;
+}
+
+
 /* ✔ FESTIVOS NACIONALES */
 .fc .fc-daygrid-event.festivo {
   --event-bg: #fff3cd;     /* amarillo suave */
