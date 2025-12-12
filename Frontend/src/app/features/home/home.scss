@@ -1,6 +1,5 @@
 @use 'styles/variables' as vars;
 
-
 h1 {
     font-family: vars.$montserrat;
 }
@@ -33,7 +32,7 @@ h1 {
     height: auto;
 }
 
-.tu_espacio {
+.tu-espacio {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
