@@ -8,10 +8,11 @@ import { AvatarPipe } from '../../shared/pipes/avatar-pipe';
 import { UserService } from '../../core/services/user/user-service';
 import { Usuario } from '../../shared/models/usuario.model';
 import { ActService } from '../../core/services/actividad/act-service';
+import { ProximosPlanes } from './components/proximos-planes/proximos-planes';
 
 @Component({
   selector: 'app-home',
-  imports: [Header, Footer, Calendar, AvatarPipe],
+  imports: [Header, Footer, Calendar, AvatarPipe, ProximosPlanes],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

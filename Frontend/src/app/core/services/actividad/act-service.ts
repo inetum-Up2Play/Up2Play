@@ -104,7 +104,7 @@ export class ActService {
   }
 
   listarActividadesApuntadas(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
+    return this.http.get<any[]>(this.baseUrl + '/getApuntadasCalendario').pipe(
       catchError((error) => {
         console.error('Error al obtener actividades', error);
         return of([]); // Devuelve array vacío si falla
@@ -162,7 +162,7 @@ export class ActService {
       );
   }
 
-  // Recoger todos los usuarios inscritos en una actividad (falta especificar url backend)
+  // Recoger todos los usuarios inscritos en una actividad
   usuariosInscritosActividad(idActividad: number) {
     return this.http.get<any[]>(`${this.baseUrl}/${idActividad}/participantes`).pipe(
       catchError((error) => {
