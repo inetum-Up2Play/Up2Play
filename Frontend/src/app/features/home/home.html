@@ -1,15 +1,15 @@
-<div class="min-h-screen flex flex-col bg-gray-50">
+<div class="min-h-screen flex flex-col">
     <app-header></app-header>
 
     <!-- SECCIÓN HERO -->
     <div class="relative w-full">
 
         <!-- FONDO DE IMAGEN -->
-        <div class="absolute top-0 left-0 w-full h-[500px] lg:h-[600px] z-0 overflow-hidden">
+        <div class="absolute top-0 left-0 w-full z-0 overflow-hidden">
             <img src="../../../assets/home/fondo_home.webp" alt="Fondo home"
-                class="w-full h-full object-cover object-center opacity-90">
+                class="w-full h-full object-cover object-bottom opacity-80">
             <!-- Gradiente opcional en la parte inferior para fusionar con el blanco del resto de la web -->
-            <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-50 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 w-full h-32 bg-green-800/20"></div>
         </div>
 
         <!-- TARJETAS -->
@@ -18,21 +18,21 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                 <!-- 1. TARJETA IZQUIERDA -->
-                <div class="bg-white rounded-2xl shadow-xl flex flex-col justify-center items-center text-center 
+                <div class=" text-card bg-white rounded-2xl shadow-xl flex flex-col justify-center items-center text-center 
                     h-full p-8 lg:text-left lg:flex-row lg:gap-8  min-h-[250px]">
                     <!-- Avatar -->
                     <div class="relative shrink-0">
-                        <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
-                            class="w-32 h-32 rounded-full shadow-sm object-cover">
+                        <!-- <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
+                            class="w-32 h-32 rounded-full shadow-sm object-cover"> -->
                     </div>
 
                     <div class="flex flex-col gap-2 w-full">
-                        <h1 class="text-4xl font-extrabold text-gray-800 leading-tight">
+                        <h1 class="text-4xl font-extrabold text-gray-900 leading-tight">
                             ¡Hola, <br>
-                            <!-- <span class="text-gray-900">{{ usuario()?.nombre_usuario || 'viajero' }}!</span> -->
+                            <span class="text-gray-900">{{ currentUser()!.nombreUsuario }}</span>
                         </h1>
                         <div class="w-full h-0.5 bg-gray-200 my-2"></div> <!-- Separador -->
-                        <p class="text-gray-500 italic text-lg text-card">¿Listo para una nueva aventura?</p>
+                        <p class="text-gray-500 italic text-lg">¿Listo para una nueva aventura?</p>
                     </div>
                 </div>
 
@@ -40,7 +40,8 @@
                 <div class="flex flex-col gap-6">
 
                     <!-- Planes Creados -->
-                    <div class="p-creados bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden flex flex-col justify-center h-32 lg:h-auto lg:min-h-[140px] group transition-transform hover:scale-[1.01]">
+                    <div
+                        class="p-creados bg-white rounded-2xl shadow-xl p-6 relative overflow-hidden flex flex-col justify-center h-32 lg:h-auto lg:min-h-[140px] group transition-transform hover:scale-[1.01]">
 
                         <div class="realtive z-10">
                             <h1 class="font-bold text-green-800 text-lg uppercase tracking-wide">PLANES CREADOS</h1>

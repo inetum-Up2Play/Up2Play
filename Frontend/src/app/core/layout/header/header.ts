@@ -38,11 +38,14 @@ export class Header implements OnInit {
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
   public perfilService = inject(PerfilService);
-
-  visible = false;
-
   private renderer = inject(Renderer2); // Para manipular el DOM
   private document = inject(DOCUMENT); // Referencia al Documento
+
+  // Signal que almacena el email una sola vez y no cambia más
+  private userEmailSignal = signal<string>('');
+  public userAvatar = signal<number | null>(null);
+
+  visible = false;
 
   items: MenuItemPages[] = [
     { label: 'Inicio', icon: 'pi pi-home', route: '/' },
@@ -61,10 +64,6 @@ export class Header implements OnInit {
   isActive(route: string, exact = true): boolean {
     return exact ? this.router.url === route : this.router.url.startsWith(route);
   }
-
-  // Signal que almacena el email una sola vez y no cambia más
-  private userEmailSignal = signal<string>('');
-  public userAvatar = signal<number | null>(null);
 
   // avatarItems se construye usando el email almacenado en el signal
   public avatarItems = computed<MenuItem[]>(() => {
