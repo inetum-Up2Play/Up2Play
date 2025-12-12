@@ -4,11 +4,11 @@ import { ActService } from '../../../../core/services/actividad/act-service';
 import { Actividad } from '../../../../shared/models/Actividad';
 import { Router, RouterLink } from '@angular/router';
 import { map, tap } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe, SlicePipe } from '@angular/common';
 
 @Component({
   selector: 'app-proximos-planes',
-  imports: [AsyncPipe, RouterLink],
+  imports: [AsyncPipe, RouterLink, SlicePipe, DatePipe],
   templateUrl: './proximos-planes.html',
   styleUrl: './proximos-planes.scss',
 })
@@ -19,21 +19,40 @@ export class ProximosPlanes {
   // Observable original
   proximosPlanes$ = this.actService.listarActividadesApuntadas();
 
-  // Nuevo observable con solo nombre, fecha (normalizada) y ubicacion
+  // Ordena por fecha más cercana (ascendente) y limita a 5.
   actividadesMin$ = this.proximosPlanes$.pipe(
-    map((actividades: Actividad[]) =>
-      actividades.map(a => ({
-        id: a.id,
-        nombre: a.nombre,
-        fecha: normalizeToDay(a.fecha),
-        ubicacion: a.ubicacion,
-      }))
-    ),
-  );
-}
+    map((actividades: Actividad[]) => {
+      const toEpoch = (value: unknown): number => {
+        if (value == null) return Number.POSITIVE_INFINITY;
 
-// ---- helpers (puedes moverlos a un archivo util.ts si prefieres)
-function normalizeToDay(fecha: string): string {
-  return fecha.includes('T') ? fecha.split('T')[0] : fecha;
+        // Si es string, intentamos formato ISO
+        const s = String(value).trim();
+        if (!s) return Number.POSITIVE_INFINITY;
+
+        // Caso ISO "yyyy-MM-ddTHH:mm:ss(.SSS)"
+        const isoDate = new Date(s);
+        if (!isNaN(isoDate.getTime())) {
+          return isoDate.getTime();
+        }
+
+        // Formato desconocido
+        return Number.POSITIVE_INFINITY;
+      };
+      
+      const now = Date.now();
+
+      return [...actividades]
+        .filter(a => toEpoch(a.fecha as any) >= now)
+        .sort((a, b) => toEpoch(a.fecha as any) - toEpoch(b.fecha as any)) // ascendente
+        .slice(0, 5)
+        .map(a => ({
+          id: a.id,
+          nombre: a.nombre,
+          fecha: a.fecha,   
+          ubicacion: a.ubicacion,
+        }));
+    }),
+  );
+
 }
 
