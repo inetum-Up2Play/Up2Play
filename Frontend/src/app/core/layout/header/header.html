@@ -1,10 +1,12 @@
-<header #menuSuperior class="fixed top-0 w-full z-[20]">
+<header #menuSuperior class="fixed top-0 w-full z-[20]" role="banner Superior">
     <p-menubar styleClass="contenedor-menubar !border-none !rounded-none" [model]="[]">
-        <p-drawer styleClass="drawer m-6 !w-55 md:!w-80 !top-[var(--header-h)] !h-[calc(75%)] !rounded-border !border-emerald-700/0" 
-        #drawerRef [(visible)]="visible" [style]="{ 'top': 'var(--header-h)' }">
+        <p-drawer
+            styleClass="drawer m-6 !w-55 md:!w-80 !top-[var(--header-h)] !h-[calc(75%)] !rounded-border !border-emerald-700/0"
+            #drawerRef [(visible)]="visible" [style]="{ 'top': 'var(--header-h)' }" role="dialog" aria-modal="true"
+            aria-labelledby="menu-title" cdkFocusInitial>
             <ng-template #headless>
                 <div class="flex flex-col">
-                    <nav aria-label="Menú principal" class="overflow-y-auto menu-items">    
+                    <nav aria-label="Menú principal" class="overflow-y-auto menu-items">
                         <h2 class="pl-6 pt-6 text-2xl font-extrabold">Menú</h2>
                         <ul class="list-none pt-4 pl-6 m-0">
                             @for (item of items; track item.route ?? item.label) {
@@ -12,13 +14,13 @@
                                 @if (item.route) {
                                 <a pRipple [routerLink]="item.route" [class.active]="isActive(item.route)"
                                     class="flex items-center p-4 rounded-border duration-150 p-ripple">
-                                    <i class="{{ item.icon }} mr-2"></i>
+                                    <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>
                                     <span class="font-extrabold">{{ item.label }}</span>
                                 </a>
                                 } @else {
                                 <button styleClass="boton-header" pRipple type="button"
                                     class="flex items-center w-full text-left p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors duration-150 p-ripple">
-                                    <i class="{{ item.icon }} mr-2"></i>
+                                    <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>
                                     <span class="font-medium">{{ item.label }}</span>
                                 </button>
                                 }
@@ -31,21 +33,22 @@
         </p-drawer>
         <ng-template #start>
             <div class="flex items-center md:pl-15 gap-5 xl:gap-10 aspect-3/1v min-w-36">
-                <p-button (click)="visible = true" icon="pi pi-bars" styleClass="!bg-emerald-700/0 !border-emerald-700/0 boton-hamburguesa" />
-                <img class="logo h-10" src="../../../../assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png" alt="Up2Play" routerLink="/"/>
+                <p-button (click)="visible = true" icon="pi pi-bars"
+                    styleClass="!bg-emerald-700/0 !border-emerald-700/0 boton-hamburguesa"
+                    [attr.aria-label]="'Abrir menú de navegación'" />
+                <img class="logo h-10" src="../../../../assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png"
+                    alt="Up2Play" routerLink="/" aria-label="Ir a la página principal" />
             </div>
         </ng-template>
 
         <ng-template #end>
             <div class="card flex w-full justify-end md:pr-15">
-                <p-menu #menu [model]="avatarItems()" appendTo="body" styleClass="mobile-menu layout-menu" [popup]="true"></p-menu>
+                <p-menu #menu [model]="avatarItems()" appendTo="body" styleClass="mobile-menu layout-menu"
+                    [popup]="true"></p-menu>
 
                 <!-- Abres el menú con el avatar -->
-                <p-avatar (click)="menu.toggle($event)"
-                    [image]="perfilService.avatarGlobal() | avatarImg"
-                    shape="circle"
-                    style="cursor: pointer"
-                    size="large">
+                <p-avatar (click)="menu.toggle($event)" [image]="perfilService.avatarGlobal() | avatarImg"
+                    shape="circle" style="cursor: pointer" size="large" [attr.aria-label]="'Abrir menú de usuario'">
                 </p-avatar>
             </div>
         </ng-template>
