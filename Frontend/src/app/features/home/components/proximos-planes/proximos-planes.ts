@@ -2,17 +2,17 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PrimeIcons } from 'primeng/api';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Actividad } from '../../../../shared/models/Actividad';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { map, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-proximos-planes',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, RouterLink],
   templateUrl: './proximos-planes.html',
   styleUrl: './proximos-planes.scss',
 })
-export class ProximosPlanes implements OnInit {
+export class ProximosPlanes {
   private actService = inject(ActService);
   private router = inject(Router);
 
@@ -29,18 +29,7 @@ export class ProximosPlanes implements OnInit {
         ubicacion: a.ubicacion,
       }))
     ),
-    tap(min => {
-      console.log('Solo nombre, fecha, ubicacion:', min);
-      console.table(min);
-    })
   );
-
-  ngOnInit(): void {
-    this.proximosPlanes$.subscribe((actividades: Actividad[]) => {
-      console.log('Actividades apuntadas (array):', actividades);
-      console.table(actividades);
-    });
-  }
 }
 
 // ---- helpers (puedes moverlos a un archivo util.ts si prefieres)

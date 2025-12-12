@@ -23,7 +23,8 @@
             } @else {
             @for (a of actividadesMin$ | async; track a.id) {
             <li class="pb-4 pt-4">
-                <a href="#" class="min-w-0 flex flex-row justify-between items-center">
+                <a [routerLink]="['/actividades/info-actividad', a.id]"
+                    class="min-w-0 flex flex-row justify-between items-center">
                     <div>
                         <p class="text-sm text-black-600">
                             {{ (a.fecha) }}
@@ -62,7 +63,8 @@
         <!-- Botón Crear actividad -->
         <div class="pt-4 flex justify-center">
             <button type="button"
-                class="cursor-pointer block w-[80%] rounded-2xl bg-[#3D6C3F] px-6 py-3 text-center text-xl font-semibold text-white shadow-md transition hover:bg-[#3d6c3fe8] active:translate-y-[1px]">
+                class="cursor-pointer block w-[80%] rounded-2xl bg-[#3D6C3F] px-6 py-3 text-center text-xl font-semibold text-white shadow-md transition hover:bg-[#3d6c3fe8] active:translate-y-[1px]"
+                [routerLink]="['/actividades', 'crear-actividad']">
                 Crear actividad
             </button>
         </div>
