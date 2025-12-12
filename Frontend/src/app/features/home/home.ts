@@ -4,16 +4,18 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Header } from '../../core/layout/header/header';
 import { Footer } from '../../core/layout/footer/footer';
 import { Calendar } from './components/calendar/calendar';
+
 import { AvatarPipe } from '../../shared/pipes/avatar-pipe';
 import { PerfilService } from '../../core/services/perfil/perfil-service';
 import { UserService } from '../../core/services/user/user-service';
 import { ActService } from '../../core/services/actividad/act-service';
 import { ProximosPlanes } from './components/proximos-planes/proximos-planes';
 import { StepperInfo } from './components/stepper-info/stepper-info';
+import { CarrouselDeportes } from './components/carrousel-deportes/carrousel-deportes';
 
 @Component({
   selector: 'app-home',
-  imports: [Header, Footer, Calendar, AvatarPipe, ProximosPlanes, StepperInfo],
+  imports: [Header, Footer, Calendar, AvatarPipe, ProximosPlanes, StepperInfo, CarrouselDeportes],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
