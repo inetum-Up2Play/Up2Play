@@ -16,6 +16,9 @@ h3 {
 :host ::ng-deep .p-step-title {
     color: vars.$verde-oscuro !important;
     font-weight: 400;
+    &:hover {
+        scale: 1.01;
+    }
 }
 
 :host ::ng-deep .p-step-number {
