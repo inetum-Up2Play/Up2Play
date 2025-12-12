@@ -28,12 +28,13 @@ public class Notificacion {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @Size(max = 64)
-    @Column(name = "TITULO")
+
+    @Size(max = 64) // ajusta a 255 si la columna es 255
+    @Column(name = "TITULO", length = 64)
     private String titulo;
 
-    @Column(name = "DESCRIPCION")
     @Size(max = 500)
+    @Column(name = "DESCRIPCION")
     private String descripcion;
 
     @Column(name = "FECHA")
@@ -49,7 +50,7 @@ public class Notificacion {
     @JoinColumn(name = "ID_ACTIVIDAD", nullable = false)
     private Actividad id_actividad;
 
-    @ManyToMany(mappedBy = "USUARIO_NOTIFICACION")
+    @ManyToMany(mappedBy = "notificaciones")
     private Set<Usuario> usuarios = new HashSet<>();
 
     public Notificacion(Long id, @Size(max = 64) String titulo, @Size(max = 500) String descripcion, LocalDate fecha,
