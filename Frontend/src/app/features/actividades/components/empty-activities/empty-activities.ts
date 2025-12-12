@@ -14,3 +14,5 @@ export class EmptyActivities {
   //subtitulo    
   @Input() message: string = '';
 }
+
+
