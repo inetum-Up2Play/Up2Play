@@ -33,15 +33,29 @@ export class CarrouselDeportes {
 
   ngOnInit() {
     
-    this.cargarPorDeporte(this.deporteActual);
+     this.cargarActividades();
 
     //Recargar al recibir notificación (unirse/desunirse)
     this.actUpdateService.update$.subscribe(() => {
-      this.cargarPorDeporte(this.deporteActual);
+      this.cargarActividades();
     });
     
   }
   
+  cargarActividades() {
+    this.actService.listarActividadesNoApuntadas().subscribe({
+      next: data => {
+        this.activities = data;
+        
+      },
+      error: err => {
+        console.error('Error cargando actividades', err);
+        this.activities = [];
+      }
+    });
+  }
+
+ 
 
   cargarPorDeporte(deporte: string) {
     this.deporteActual = deporte;
