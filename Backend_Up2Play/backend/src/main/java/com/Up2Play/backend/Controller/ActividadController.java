@@ -59,7 +59,6 @@ public class ActividadController {
     public List<ActividadDtoResp> getActividadesApuntadasPendientes(@AuthenticationPrincipal UserDetails principal) {
         // el getUsername recoge el correo, no el username
         String email = principal.getUsername();
-        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();
@@ -70,7 +69,6 @@ public class ActividadController {
     public List<ActividadDtoResp> getActividadesApuntadas(@AuthenticationPrincipal UserDetails principal) {
         // el getUsername recoge el correo, no el username
         String email = principal.getUsername();
-        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();

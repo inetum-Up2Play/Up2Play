@@ -48,13 +48,17 @@ public class Notificacion {
 
     @ManyToOne
     @JoinColumn(name = "ID_ACTIVIDAD", nullable = false)
-    private Actividad id_actividad;
+    private Actividad actividad;
 
     @ManyToMany(mappedBy = "notificaciones")
     private Set<Usuario> usuarios = new HashSet<>();
+    
+    @ManyToOne
+    @JoinColumn(name = "ID_USUARIO_GENERADOR", nullable = false)
+    private Usuario usuarioCreador;
 
     public Notificacion(Long id, @Size(max = 64) String titulo, @Size(max = 500) String descripcion, LocalDate fecha,
-            boolean leido, EstadoNotificacion estadoNotificacion, Actividad id_actividad,
+            boolean leido, EstadoNotificacion estadoNotificacion, Actividad actividad,
             Set<Usuario> usuarios) {
         this.id = id;
         this.titulo = titulo;
@@ -62,7 +66,7 @@ public class Notificacion {
         this.fecha = fecha;
         this.leido = leido;
         this.estadoNotificacion = estadoNotificacion;
-        this.id_actividad = id_actividad;
+        this.actividad = actividad;
         this.usuarios = usuarios;
     }
 
@@ -117,12 +121,12 @@ public class Notificacion {
         this.estadoNotificacion = estadoNotificacion;
     }
 
-    public Actividad getId_actividad() {
-        return id_actividad;
+    public Actividad getActividad() {
+        return actividad;
     }
 
-    public void setId_actividad(Actividad id_actividad) {
-        this.id_actividad = id_actividad;
+    public void setActividad(Actividad actividad) {
+        this.actividad = actividad;
     }
 
     public Set<Usuario> getUsuarios() {
@@ -132,5 +136,15 @@ public class Notificacion {
     public void setUsuarios(Set<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
+
+    public Usuario getUsuarioCreador() {
+        return usuarioCreador;
+    }
+
+    public void setUsuarioCreador(Usuario usuarioCreador) {
+        this.usuarioCreador = usuarioCreador;
+    }
+
+    
 
 }
