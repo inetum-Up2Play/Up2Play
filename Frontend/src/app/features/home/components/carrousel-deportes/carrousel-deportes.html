@@ -8,7 +8,7 @@
                 (click)="cargarPorDeporte('Futbol')">
                 <div class="px-4 flex flex-col items-center justify-center text-center cursor-pointer">
                     <div class="w-25 h-25 rounded-full bg-white hover:scale-[0.95]! shadow-md flex items-center justify-center">
-                            <i class="ph-light ph-soccer-ball text-7xl"></i>
+                            <i class="ph-soccer-ball text-7xl"></i>
                     </div>
                             <span class="font-semibold text-xl md:text-xl pl-2 mt-2">Fútbol</span>
                 </div>
@@ -18,7 +18,7 @@
                 (click)="cargarPorDeporte('Senderismo')">
                 <div class="px-4 flex flex-col items-center justify-center text-center cursor-pointer">
                     <div class="w-25 h-25 rounded-full bg-white hover:scale-[0.95]! shadow-md flex items-center justify-center">
-                            <i class="ph-light ph-person-simple-hike text-7xl"></i>
+                            <i class="ph-person-simple-hike text-7xl"></i>
                     </div>
                             <span class="font-semibold text-xl md:text-xl pl-2 mt-2">Senderismo</span>
                 </div>
@@ -28,7 +28,7 @@
                 (click)="cargarPorDeporte('Fuerza')">
                 <div class="px-4 flex flex-col items-center justify-center text-center cursor-pointer">
                     <div class="w-25 h-25 rounded-full bg-white hover:scale-[0.95]! shadow-md flex items-center justify-center">
-                            <i class="ph-light ph-barbell text-7xl"></i>
+                            <i class="ph-barbell text-7xl"></i>
                     </div>
                             <span class="font-semibold text-xl md:text-xl pl-2 mt-2">Fuerza</span>
                 </div>
@@ -38,7 +38,7 @@
                 (click)="cargarPorDeporte('Natacion')">
                 <div class="px-4 flex flex-col items-center justify-center text-center cursor-pointer">
                     <div class="w-25 h-25 rounded-full bg-white hover:scale-[0.95]! shadow-md flex items-center justify-center">
-                            <i class="ph-light ph-person-simple-swim text-7xl"></i>
+                            <i class="ph-person-simple-swim text-7xl"></i>
                     </div>
                             <span class="font-semibold text-xl md:text-xl pl-2 mt-2">Natación</span>
                 </div>
@@ -48,7 +48,7 @@
                 (click)="cargarPorDeporte('Ciclismo')">
                 <div class="px-4 flex flex-col items-center justify-center text-center cursor-pointer">
                     <div class="w-25 h-25 rounded-full bg-white hover:scale-[0.95]! shadow-md flex items-center justify-center">
-                            <i class="ph-light ph-bicycle text-7xl"></i>
+                            <i class="ph-bicycle text-7xl"></i>
                     </div>
                             <span class="font-semibold text-xl md:text-xl pl-2 mt-2">Ciclismo</span>
                 </div>
@@ -58,7 +58,7 @@
                 (click)="cargarPorDeporte('Boxeo')">
                 <div class="px-4 flex flex-col items-center justify-center text-center cursor-pointer">
                     <div class="w-25 h-25 rounded-full bg-white hover:scale-[0.95]! shadow-md flex items-center justify-center">
-                            <i class="ph-light ph-boxing-glove text-7xl"></i>
+                            <i class="ph-boxing-glove text-7xl"></i>
                     </div>
                             <span class="font-semibold text-xl md:text-xl pl-2 mt-2">Boxeo</span>
                 </div>
@@ -68,7 +68,7 @@
                 (click)="cargarPorDeporte('Tenis')">
                 <div class="px-4 flex flex-col items-center justify-center text-center cursor-pointer">
                     <div class="w-25 h-25 rounded-full bg-white hover:scale-[0.95]! shadow-md flex items-center justify-center">
-                            <i class="ph-light ph-racquet text-7xl"></i>
+                            <i class="ph-racquet text-7xl"></i>
                     </div>
                             <span class="font-semibold text-xl md:text-xl pl-2 mt-2">Tenis</span>
                 </div>
@@ -77,7 +77,7 @@
         </div>
     </div>
     @if (activities.length === 0 ){
-        <app-empty-activities icon="ph-light ph-ghost" title="La lista está vacía..."
+        <app-empty-activities icon="ph-ghost" title="La lista está vacía..."
             message="¡Toma la iniciativa y crea tú el plan!">
             <button class="mt-3 xl:mt-0 hover:bg-[#4D834F]!" id="crear_actividad" pButton
                     [routerLink]="['/actividades', 'crear-actividad']">
