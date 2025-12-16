@@ -23,7 +23,6 @@ import { ButtonModule } from 'primeng/button';
 export class Notificaciones implements OnInit{
   //   customers!: Customer[];
 
-
   tipos!: any[];
 
   loading: boolean = false;

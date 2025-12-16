@@ -45,10 +45,7 @@ export class ActService {
     );
   }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     const idActividad = Number(route.paramMap.get('id'));
     return this.comprobarCreador(idActividad).pipe(
       map((isCreador) =>
