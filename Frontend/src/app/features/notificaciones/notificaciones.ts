@@ -49,11 +49,13 @@ export class Notificaciones implements OnInit {
     this.tipos = [
       { label: 'INSCRITO', value: 'INSCRITO' },
       { label: 'PAGADO', value: 'PAGADO' },
+      { label: 'CREADA', value: 'CREADA' },
       { label: 'ACTUALIZADO', value: 'ACTUALIZADO' },
+      { label: 'EDITADA', value: 'EDITADA' },
       { label: 'DESAPUNTADO', value: 'DESAPUNTADO' },
       { label: 'CANCELADA', value: 'CANCELADA' },
-      { label: 'CREADA', value: 'CREADA' },
-      { label: 'EDITADA', value: 'EDITADA' },
+
+
     ];
   }
 
