@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { Home } from './features/home/home';
-import { AuthService } from './core/services/auth/auth-service';
 import { inject } from '@angular/core';
-import { CrearActividad } from './features/actividades/pages/crear-actividad/crear-actividad';
+import { AuthService } from './core/services/auth/auth-service';
+import { Home } from './features/home/home';
 import { Profile } from './features/profile/pages/profile/profile';
+import { Notificaciones } from './features/notificaciones/notificaciones';
 
 export const routes: Routes = [
   {
@@ -29,13 +29,16 @@ export const routes: Routes = [
       },
       {
         path: '',
-        loadComponent: () =>
-          import('./features/home/home').then(m => m.Home),
+        component: Home,
       },
       {
-        path: 'my-account',
+        path: 'perfil',
         component: Profile,
       },
+      {
+        path: 'notificaciones',
+        component: Notificaciones
+      }
     ],
   }
 
