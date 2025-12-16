@@ -1,9 +1,87 @@
-<div class="content min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col">
     <app-header></app-header>
-    
-    <div class="spacer">
-    <app-calendar></app-calendar>
+
+    <!-- SECCIÓN HERO -->
+    <div class="hero relative w-full">
+
+        <!-- FONDO DE IMAGEN -->
+        <div class="absolute top-0 left-0 w-full z-0 overflow-hidden invisible lg:visible">
+            <img src="../../../assets/home/FondoHero.png" alt="Fondo home"
+                class="object-cover object-bottom opacity-80">
+        </div>
+
+        <!-- TARJETAS -->
+        <div
+            class="h-fit relative z-10 container mx-auto px-4 pt-12 pb-10 md:pt-20 lg:pt-36 lg:px-20 max-w-[80%] lg:max-w-[95%] 2xl:max-w-[85%]">
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- 1. TARJETA IZQUIERDA -->
+                <div class=" text-card bg-white rounded-2xl shadow-xl flex flex-col justify-center items-center text-center 
+                    h-full md:p-4 lg:p-6 lg:text-left lg:flex-row lg:gap-8 min-h-[250px] transition-transform hover:scale-[1.01]">
+                    <!-- Avatar -->
+                        <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
+                            class="my-2 md:my-0 w-24 h-24 md:w-26 md:h-26 xl:w-38 xl:h-38 2xl:w-50 2xl:h-50 rounded-full shadow-sm object-cover aspect-square">
+                    <!-- Texto bienvenida -->
+                    <div class="flex flex-col gap-2 w-full">
+                        <h1 class="text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl font-extrabold text-gray-900 leading-tight">
+                            ¡Hola, <br>
+                            <span class="text-gray-900">{{ currentUsuario()!.nombreUsuario }}!</span>
+                        </h1>
+                        <div class="w-full h-0.5 bg-gray-200 my-2"></div> <!-- Separador -->
+                        <p class="px-2 mb-2 md:mb-0 text-gray-500 italic text-lg">¿Listo para una nueva aventura?</p>
+                    </div>
+                </div>
+
+                <!-- 2. COLUMNA DERECHA -->
+                <div class="h-90 flex flex-col gap-6">
+                    <!-- Planes Creados -->
+                    <div class="p-creados h-full rounded-2xl shadow-xl p-5 relative overflow-hidden flex flex-col justify-center transition-transform hover:scale-[1.01]">
+                        <div class="z-10">
+                            <h1 class="font-bold text-[#3D6C3F] text-lg lg:text-3xl xl:text-4xl 2xl:text-5xl uppercase tracking-wide">
+                                PLANES CREADOS</h1>
+                            <div class="flex items-center gap-2">
+                                <i class="ph ph-lightning text-[#3D6C3F] text-5xl lg:text-6xl 2xl:text-7xl"></i>
+                                <span class="text-5xl lg:text-5xl 2xl:text-7xl font-black text-[#3D6C3F]">{{
+                                    planesCreados() }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Planes Unidos -->
+                    <div
+                        class="p-unidos h-full rounded-2xl shadow-xl p-5 relative overflow-hidden flex flex-col justify-center transition-transform hover:scale-[1.01]">
+                        <h1 class="font-bold text-[#B1DF75] text-2xl lg:text-4xl 2xl:text-5xl uppercase tracking-wide">
+                            PLANES UNIDOS</h1>
+                        <div class="flex items-center gap-2">
+                            <i class="ph ph-hand-peace text-[#B1DF75] text-5xl lg:text-6xl 2xl:text-7xl"></i>
+                            <span class="text-5xl lg:text-6xl 2xl:text-7xl font-black text-[#B1DF75]">{{
+                                planesUnidos() }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
+    <!-- ACORDEON -->
+    <div class="z-10 flex relative justify-center mt-20 2xl:mt-0">
+        <app-stepper-info class="w-[90%] md:2-[85%]"></app-stepper-info>
+    </div>
+
+    <!-- TU ESPACIO -->
+    <div class="flex flex-col gap-16 xl:flex-row justify-between relative h-auto mt-16 mb-[2%] mx-6 md:mx-12 lg:mx-20 2xl:mx-34 z-10 ">
+        <app-proximos-planes class="w-auto xl:w-[23%]"></app-proximos-planes>
+
+        <div class="w-auto xl:w-[73%] h-auto mb-[2%] relative">
+            <app-calendar></app-calendar>
+        </div>
+    </div>
+
+    <!-- CARROUSEL DEPORTES -->
+    <div class="mt-10 xl:mt-4">
+        <app-carrousel-deportes></app-carrousel-deportes>
+    </div>
+
+    <!-- FOOTER -->
     <app-footer class="mt-auto"></app-footer>
 </div>
