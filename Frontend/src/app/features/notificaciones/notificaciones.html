@@ -1,0 +1,77 @@
+<div class="card">
+    <!-- PROPIEDADES TABLA -->
+    <p-table #dt2 dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+        [tableStyle]="{ 'min-width': '75rem' }"> <!-- [value]="customers" -->
+        <ng-template #header>
+            <tr>
+                <th style="width:10%"><i class="pi pi-eye"></i></th>
+                <th style="width:22%">Tipo</th>
+                <th style="width:36%">Descripción</th>
+                <th style="width:22%">Fecha</th>
+                <th style="width:10%"></th>
+            </tr>
+            <!-- FILTROS -->
+            <tr>
+                <th>
+                    <p-columnFilter type="boolean" field="read"></p-columnFilter>
+                </th>
+
+                <th>
+                    <p-columnFilter field="tipo" matchMode="equals" [showMenu]="false">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <p-select [options]="tipos" (onChange)="filter($event.value)"
+                                placeholder="Selecciona un tipo" [showClear]="true" style="min-width: 12rem">
+                                <ng-template let-option #item>
+                                    <p-tag [value]="option.value" [severity]="getSeverity(option.value)" />
+                                </ng-template>
+                            </p-select>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+
+                <th>
+                    <p-columnFilter type="text" field="descripción" placeholder="Escribe para buscar"
+                        ariaLabel="Filtro descripción" filterOn="input"></p-columnFilter>
+                </th>
+
+                <th>
+                    <p-columnFilter type="date" field="fecha" display="menu" placeholder="Busca por fecha"
+                        ariaLabel="Filtero fecha"></p-columnFilter>
+                </th>
+
+                <th>
+                </th>
+            </tr>
+        </ng-template>
+        <!-- NOTIFICACIONES -->
+        <ng-template #body let-notificacion>
+            <tr>
+                <td>
+                    {{ notificacion.isRead }}
+                </td>
+                <td>
+                    <div class="flex items-center">
+                        <p-tag [severity]="getSeverity(notificacion.tipo)" [value]="notificacion.tipo"></p-tag>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center">
+                        <span>{{ notificacion.tipo }}</span>
+                    </div>
+                </td>
+                <td>
+                    <span>{{ notificacion.fecha }}</span> 
+                </td>
+                <td>
+                    <p-button icon="pi pi-trash" severity="danger" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="5">No customers found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
