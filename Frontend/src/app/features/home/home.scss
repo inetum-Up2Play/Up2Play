@@ -5,7 +5,6 @@ h1 {
 }
 
 .hero {
-
     height: 80dvh;
 }
 
@@ -28,23 +27,4 @@ h1 {
     background-repeat: no-repeat;
     background-position: center bottom;
     background-color: white;
-}
-
-.calendario {
-    width: 73%;
-    position: flex;
-    margin-bottom: 2%;
-    height: auto;
-}
-
-.tu-espacio {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    position: flex;
-    margin-top: 8rem;
-    margin-bottom: 2%;
-    height: auto;
-    margin-right: 8.5rem;
-    margin-left: 8.5rem;
 }

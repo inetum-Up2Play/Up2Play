@@ -3,12 +3,12 @@
     <section class="mx-auto p-7">
         <!-- Cabecera -->
         <header class="flex items-center justify-between">
-            <h1 class="text-3xl font-extrabold uppercase">
+            <h1 class="text-2xl 2xl:text-3xl font-extrabold uppercase">
                 Próximos<br />planes
             </h1>
 
             <!-- Icono reloj -->
-            <i class="pi pi-clock" style="color: #3D6C3F; font-size: 3.5rem"></i>
+            <i class="pi pi-clock" style="color: #3D6C3F; font-size: 3rem"></i>
         </header>
 
         <!-- Separador superior -->
@@ -63,7 +63,8 @@
         <!-- Botón Crear actividad -->
         <div class="pt-4 flex justify-center">
             <button type="button"
-                class="cursor-pointer block w-[80%] rounded-2xl bg-[#3D6C3F] px-6 py-3 text-center text-xl font-semibold text-white shadow-md transition hover:bg-[#3d6c3fe8] active:translate-y-[1px]"
+                class="cursor-pointer block w-[80%] rounded-2xl bg-[#3D6C3F] px-auto py-3 text-center text-lg xl:text-xl font-semibold
+                text-white shadow-md transition hover:bg-[#3d6c3fe8] active:translate-y-[1px] whitespace-nowrap"
                 [routerLink]="['/actividades', 'crear-actividad']">
                 Crear actividad
             </button>

@@ -10,6 +10,7 @@ import { map, tap, BehaviorSubject, switchMap, combineLatest, forkJoin } from 'r
 import { Actividad } from '../../../../shared/models/Actividad';
 import { Router } from '@angular/router';
 import { HolidaysService } from '../../../../core/services/holidays';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -105,9 +106,6 @@ export class Calendar {
     },
   };
 }
-
-// Helpers
-import { of } from 'rxjs';
 
 function normalizeToDay(fecha: string): string {
   return fecha.includes('T') ? fecha.split('T')[0] : fecha;
