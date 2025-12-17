@@ -1,6 +1,6 @@
 <div class="card">
     <p-stepper [value]="1">
-        <p-step-item class="text-lg md:text-xl lg:text-2xl text-wrap" [value]="1">
+        <p-step-item class="text-base md:text-lg lg:text-xl text-wrap" [value]="1">
             <p-step>¿POR DÓNDE EMPEZAR?</p-step>
             <p-step-panel>
                 <ng-template #content let-activateCallback="activateCallback">
@@ -23,7 +23,7 @@
             </p-step-panel>
         </p-step-item>
 
-        <p-step-item class="text-lg md:text-xl lg:text-2xl" [value]="2">
+        <p-step-item class="text-base md:text-lg lg:text-xl text-wrap" [value]="2">
             <p-step>ORGANIZA PLANES</p-step>
             <p-step-panel>
                 <ng-template #content let-activateCallback="activateCallback">
@@ -40,7 +40,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="flex py-6">
+                    <div class="py-2 lg:py-4 xl:py-6">
                         <p-button class="mr-4" label="Siguiente" (onClick)="activateCallback(3)" />
                         <p-button label="Anterior" severity="secondary" (onClick)="activateCallback(1)" />
                     </div>
@@ -48,7 +48,7 @@
             </p-step-panel>
         </p-step-item>
 
-        <p-step-item class="text-lg md:text-xl lg:text-2xl" [value]="3">
+        <p-step-item class="text-base md:text-lg lg:text-xl text-wrap" [value]="3">
             <p-step>APÚNTATE A PLANES</p-step>
             <p-step-panel>
                 <ng-template #content let-activateCallback="activateCallback">
@@ -64,7 +64,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="py-6">
+                    <div class="py-2 lg:py-4 xl:py-6">
                         <p-button label="Anterior" severity="secondary" (onClick)="activateCallback(2)" />
                     </div>
                 </ng-template>
