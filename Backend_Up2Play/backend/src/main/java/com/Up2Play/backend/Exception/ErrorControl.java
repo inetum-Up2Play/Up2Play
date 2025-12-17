@@ -18,6 +18,7 @@ import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
+import com.Up2Play.backend.Exception.ErroresNotificacion.NotificacionNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresPerfil.EditarPerfilDenegadoException;
 import com.Up2Play.backend.Exception.ErroresPerfil.PerfilNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
@@ -271,7 +272,7 @@ public class ErrorControl {
         // Sin permiso para editar perfil
         @ExceptionHandler(ActividadCompletadaException.class)
         public ResponseEntity<ErrorResponseDto> handleActividadCompletada(
-                       ActividadCompletadaException ex,
+                        ActividadCompletadaException ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
                                 "ACTIVIDAD_COMPLETADA",
@@ -394,7 +395,7 @@ public class ErrorControl {
         // Sin permiso para editar perfil
         @ExceptionHandler(EditarPerfilDenegadoException.class)
         public ResponseEntity<ErrorResponseDto> handleEditarPerfilDenegado(
-                       EditarPerfilDenegadoException ex,
+                        EditarPerfilDenegadoException ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
                                 "EDITAR_PERFIL_DENEGADO",
@@ -404,6 +405,21 @@ public class ErrorControl {
                                 Instant.now());
                 return ResponseEntity
                                 .status(HttpStatus.FORBIDDEN)
+                                .body(body);
+        }
+
+        @ExceptionHandler(NotificacionNoEncontrada.class)
+        public ResponseEntity<ErrorResponseDto> handleNotificacionNoEncontrada(
+                        NotificacionNoEncontrada ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "NOTIFICACION_NO_ENCONTRADA",
+                                ex.getMessage(),
+                                HttpStatus.NOT_FOUND.value(), // ERROR 404
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
                                 .body(body);
         }
 
