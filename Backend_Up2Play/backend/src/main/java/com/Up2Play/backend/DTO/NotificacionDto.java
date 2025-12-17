@@ -1,15 +1,13 @@
 package com.Up2Play.backend.DTO;
-
-import java.time.LocalDate;
-
-import com.Up2Play.backend.Model.Actividad;
-import com.Up2Play.backend.Model.enums.EstadoNotificacion;
-
 public class NotificacionDto {
 
     private boolean leido;
 
+    public boolean isLeido() {
+        return leido;
+    }
 
-
-
+    public void setLeido(boolean leido) {
+        this.leido = leido;
+    }
 }

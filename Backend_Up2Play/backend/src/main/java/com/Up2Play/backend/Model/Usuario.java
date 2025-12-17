@@ -62,9 +62,8 @@ public class Usuario implements UserDetails {
     @JoinTable(name = "USUARIO_ACTIVIDAD", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id"))
     private Set<Actividad> actividadesUnidas = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "USUARIO_NOTIFICACION")
-    private Set<Notificacion> notificaciones = new HashSet<>();
+    @OneToMany(mappedBy = "usuario")
+    private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
 
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
@@ -123,7 +122,8 @@ public class Usuario implements UserDetails {
 
     public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
             boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
-            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas, Set<Notificacion> notificaciones,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones,
             Perfil perfil) {
         this.id = id;
         this.email = email;
@@ -135,7 +135,7 @@ public class Usuario implements UserDetails {
         this.verificationCodeExpiresAt = verificationCodeExpiresAt;
         this.actividadesCreadas = actividadesCreadas;
         this.actividadesUnidas = actividadesUnidas;
-        this.notificaciones = notificaciones;
+        this.usuarioNotificaciones = usuarioNotificaciones;
         this.perfil = perfil;
     }
 
@@ -157,10 +157,6 @@ public class Usuario implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswordU() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -263,12 +259,11 @@ public class Usuario implements UserDetails {
         this.actividadesUnidas = actividadesUnidas;
     }
 
-    public Set<Notificacion> getNotificaciones() {
-        return notificaciones;
+    public Set<UsuarioNotificacion> getUsuarioNotificaciones() {
+        return usuarioNotificaciones;
     }
 
-    public void setNotificaciones(Set<Notificacion> notificaciones) {
-        this.notificaciones = notificaciones;
+    public void setUsuarioNotificaciones(Set<UsuarioNotificacion> usuarioNotificaciones) {
+        this.usuarioNotificaciones = usuarioNotificaciones;
     }
-
 }

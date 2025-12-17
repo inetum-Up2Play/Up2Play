@@ -1,6 +1,6 @@
 package com.Up2Play.backend.Model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 
@@ -28,7 +28,6 @@ public class Notificacion {
     @Column(unique = true, nullable = false)
     private Long id;
 
-
     @Size(max = 64) // ajusta a 255 si la columna es 255
     @Column(name = "TITULO", length = 64)
     private String titulo;
@@ -38,10 +37,7 @@ public class Notificacion {
     private String descripcion;
 
     @Column(name = "FECHA")
-    private LocalDate fecha;
-
-    @Column(name = "LEIDO")
-    private boolean leido;
+    private LocalDateTime fecha;
 
     @Convert(converter = EstadoNotificacionConverter.class)
     private EstadoNotificacion estadoNotificacion;
@@ -50,24 +46,25 @@ public class Notificacion {
     @JoinColumn(name = "ID_ACTIVIDAD", nullable = false)
     private Actividad actividad;
 
-    @ManyToMany(mappedBy = "notificaciones")
-    private Set<Usuario> usuarios = new HashSet<>();
-    
+    @OneToMany(mappedBy = "notificacion")
+    private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
+
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO_GENERADOR", nullable = false)
     private Usuario usuarioCreador;
 
-    public Notificacion(Long id, @Size(max = 64) String titulo, @Size(max = 500) String descripcion, LocalDate fecha,
-            boolean leido, EstadoNotificacion estadoNotificacion, Actividad actividad,
-            Set<Usuario> usuarios) {
+    public Notificacion(Long id, @Size(max = 64) String titulo, @Size(max = 500) String descripcion,
+            LocalDateTime fecha,
+            EstadoNotificacion estadoNotificacion, Actividad actividad, Set<UsuarioNotificacion> usuarioNotificaciones,
+            Usuario usuarioCreador) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha = fecha;
-        this.leido = leido;
         this.estadoNotificacion = estadoNotificacion;
         this.actividad = actividad;
-        this.usuarios = usuarios;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.usuarioCreador = usuarioCreador;
     }
 
     public Notificacion() {
@@ -97,20 +94,12 @@ public class Notificacion {
         this.descripcion = descripcion;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
-    }
-
-    public boolean isLeido() {
-        return leido;
-    }
-
-    public void setLeido(boolean leido) {
-        this.leido = leido;
     }
 
     public EstadoNotificacion getEstadoNotificacion() {
@@ -129,14 +118,6 @@ public class Notificacion {
         this.actividad = actividad;
     }
 
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
-
     public Usuario getUsuarioCreador() {
         return usuarioCreador;
     }
@@ -145,6 +126,11 @@ public class Notificacion {
         this.usuarioCreador = usuarioCreador;
     }
 
-    
+    public Set<UsuarioNotificacion> getUsuarioNotificaciones() {
+        return usuarioNotificaciones;
+    }
 
+    public void setUsuarioNotificaciones(Set<UsuarioNotificacion> usuarioNotificaciones) {
+        this.usuarioNotificaciones = usuarioNotificaciones;
+    }
 }
