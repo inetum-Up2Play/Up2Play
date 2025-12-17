@@ -74,6 +74,13 @@ export class EditarActividad {
     return `${year}-${month}-${day}T${hh}:${mm}:${ss}`;
   }
 
+  private extraerHoraDate(fechaIso: string): Date | null {
+    if (!fechaIso) return null;
+
+    const d = new Date(fechaIso); // parsea "2025-12-17T18:30:00"
+    return new Date(1970, 0, 1, d.getHours(), d.getMinutes(), d.getSeconds());
+  }
+
   deportes: { name: string }[] = [];
   deporteEscogido: string | undefined;
 
@@ -106,7 +113,7 @@ export class EditarActividad {
           nombre: act.nombre,
           descripcion: act.descripcion,
           fecha: new Date(act.fecha),
-          hora: this.extraerHora(act.fecha),
+          hora: this.extraerHoraDate(act.fecha),
           deporte: this.deportes.find((d) => d.name === act.deporte) ?? null,
           nivel:
             this.niveles.find(
@@ -231,10 +238,8 @@ export class EditarActividad {
     const raw = this.actividadForm.value;
 
     // Combinar fecha y hora en formato ISO
-    const fechaDate: Date =
-      raw.fecha instanceof Date ? raw.fecha : new Date(raw.fecha);
-    const horaDate: Date =
-      raw.hora instanceof Date ? raw.hora : new Date(raw.hora);
+    const fechaDate: Date = raw.fecha instanceof Date ? raw.fecha : new Date(raw.fecha);
+    const horaDate: Date = raw.hora; // ya es Date
 
     // Prepara el payload acorde al backend (strings/números/enum names)
     const payload = {
