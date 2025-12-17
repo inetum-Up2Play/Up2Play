@@ -11,7 +11,7 @@ p-menubar {
 }
 
 .menu-items a :hover {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .menu-items li {
@@ -22,16 +22,11 @@ p-menubar {
   .active {
     color: vars.$verde-oliva;
     background-color: vars.$amarillo;
-    
-
-    
   }
 
   :hover {
     color: vars.$verde-oliva;
     background-color: vars.$amarillo;
-    
-
   }
 }
 

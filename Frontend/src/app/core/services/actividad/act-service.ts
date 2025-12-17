@@ -162,7 +162,7 @@ export class ActService {
       );
   }
 
-  // Recoger todos los usuarios inscritos en una actividad (falta especificar url backend)
+  // Recoger todos los usuarios inscritos en una actividad
   usuariosInscritosActividad(idActividad: number) {
     return this.http.get<any[]>(`${this.baseUrl}/${idActividad}/participantes`).pipe(
       catchError((error) => {
@@ -172,13 +172,16 @@ export class ActService {
     );
   }
 
-  // Recoger todas las actividades mas populares (falta especificar url backend)
-  listarActividadesMasPopulares(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl + '/getActividadesMasPopulares').pipe(
+  // Método listar actividades por deporte
+  listarActividadesPorDeporte(deporte: string): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getNoApuntadasPorDeporte', {
+      params: { deporte: deporte }}).pipe(
       catchError((error) => {
         console.error('Error al obtener actividades', error);
         return of([]); // Devuelve array vacío si falla
       })
     );
   }
+
+
 }

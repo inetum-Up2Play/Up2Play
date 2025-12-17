@@ -57,6 +57,23 @@ export class EditarActividad {
   private router = inject(Router);
   private errorService = inject(ErrorService);
 
+  private pad2(n: number): string {
+    return n < 10 ? `0${n}` : `${n}`;
+  }
+
+  private formatDateTime(fecha: Date, hora: Date): string {
+    const year = fecha.getFullYear();
+    const month = this.pad2(fecha.getMonth() + 1);
+    const day = this.pad2(fecha.getDate());
+
+    const hh = this.pad2(hora.getHours());
+    const mm = this.pad2(hora.getMinutes());
+    const ss = this.pad2(hora.getSeconds());
+
+    // Resultado: YYYY-MM-DDThh:mm:ss
+    return `${year}-${month}-${day}T${hh}:${mm}:${ss}`;
+  }
+
   deportes: { name: string }[] = [];
   deporteEscogido: string | undefined;
 
@@ -128,7 +145,7 @@ export class EditarActividad {
 
     // Inicializar deportes
     this.deportes = [
-            { name: 'Atletismo' },
+      { name: 'Atletismo' },
       { name: 'Balonmano' },
       { name: 'Basquet' },
       { name: 'Béisbol' },
@@ -211,21 +228,19 @@ export class EditarActividad {
 
     const formValue = this.actividadForm.value;
 
-    // Combinar fecha y hora en formato ISO
-    const fechaCompleta = new Date(formValue.fecha);
-    const [horas, minutos] = formValue.hora.split(':');
-    fechaCompleta.setHours(Number(horas), Number(minutos));
+    const raw = this.actividadForm.value;
 
-    const fechaFormateada = fechaCompleta
-      .toISOString()
-      .replace('Z', '')
-      .split('.')[0];
+    // Combinar fecha y hora en formato ISO
+    const fechaDate: Date =
+      raw.fecha instanceof Date ? raw.fecha : new Date(raw.fecha);
+    const horaDate: Date =
+      raw.hora instanceof Date ? raw.hora : new Date(raw.hora);
 
     // Prepara el payload acorde al backend (strings/números/enum names)
     const payload = {
       nombre: formValue.nombre,
       descripcion: formValue.descripcion,
-      fecha: fechaFormateada, // formato "yyyy-MM-dd'T'HH:mm:ss"
+      fecha: this.formatDateTime(fechaDate, horaDate), // formato "yyyy-MM-dd'T'HH:mm:ss"
       ubicacion: formValue.ubicacion,
       deporte: formValue.deporte.name, // convertir objeto a string
       nivel: formValue.nivel.name, // convertir objeto a string

@@ -316,7 +316,7 @@ public class ErrorControl {
         }
 
         @ExceptionHandler(UsuarioCreador.class)
-        public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorDesapuntar(
+        public ResponseEntity<ErrorResponseDto> handleUsuarioCreador(
                         UsuarioCreador ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
@@ -332,7 +332,7 @@ public class ErrorControl {
 
         @ExceptionHandler(UsuarioCreadorEliminar.class)
         public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorEliminar(
-                        UsuarioCreador ex,
+                        UsuarioCreadorEliminar ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
                                 "CREADOR_NO_ELIMINAR",
@@ -347,7 +347,7 @@ public class ErrorControl {
 
         @ExceptionHandler(UsuarioCreadorEditar.class)
         public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorEditar(
-                        UsuarioCreador ex,
+                        UsuarioCreadorEditar ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
                                 "CREADOR_NO_EDITAR",
