@@ -27,19 +27,23 @@ import com.Up2Play.backend.Model.enums.NivelDificultad;
 import com.Up2Play.backend.Repository.ActividadRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
 @Service
 public class ActividadService {
     private ActividadRepository actividadRepository;
     private UsuarioRepository usuarioRepository;
-
-    public ActividadService(ActividadRepository actividadRepository, UsuarioRepository usuarioRepository) {
-        this.actividadRepository = actividadRepository;
-        this.usuarioRepository = usuarioRepository;
-    }
+    private NotificacionService notificacionService;
 
     // CRUD
+
+    public ActividadService(ActividadRepository actividadRepository, UsuarioRepository usuarioRepository,
+            NotificacionService notificacionService) {
+        this.actividadRepository = actividadRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.notificacionService = notificacionService;
+    }
 
     // Crear Actividad
     public Actividad crearActividad(ActividadDto input, Usuario usuario) {
@@ -277,7 +281,7 @@ public class ActividadService {
 
 
     // Editar actividad
-    public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) {
+    public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) throws MessagingException {
         Actividad act = actividadRepository.findById(id)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
 
@@ -319,11 +323,12 @@ public class ActividadService {
 
             if (act.getEstado().equals(EstadoActividad.COMPLETADA)) {
 
-                throw new ActividadCompletadaException("No puedes editar una actividad que ya ha sido completada!");
-                
+                throw new ActividadCompletadaException("No puedes editar una actividad que ya ha sido completada!"); 
             }
             
             act.setDeporte(input.getDeporte());
+
+            notificacionService.ActividadEditada(usuario, act);
 
             Actividad actEditada = actividadRepository.save(act);
             return actEditada;
@@ -334,7 +339,7 @@ public class ActividadService {
 
     }
 
-    public void deleteActividad(Long idActividad, Long idUsuario) {
+    public void deleteActividad(Long idActividad, Long idUsuario) throws MessagingException {
         Actividad act = actividadRepository.findById(idActividad)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
         Usuario usuario = usuarioRepository.findById(idUsuario)
@@ -348,6 +353,8 @@ public class ActividadService {
             }
 
             act.getUsuarios().clear();
+
+            notificacionService.ActividadEliminada(usuario, act);
 
             actividadRepository.delete(act);
 

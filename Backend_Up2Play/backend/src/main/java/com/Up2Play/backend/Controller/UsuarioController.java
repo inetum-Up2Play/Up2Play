@@ -23,6 +23,8 @@ import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.UsuarioService;
 
+import jakarta.mail.MessagingException;
+
 //Controlador REST para operaciones CRUD de usuarios. Incluye endpoints que conectan con Angular en localhost:4200) pueda hacer peticiones a este backend.
 @RestController
 @RequestMapping("/usuarios")
@@ -57,7 +59,7 @@ public class UsuarioController {
 
     // Cambiar contraseña usuario en perfil
     @PutMapping("/cambiar-password")
-    public ResponseEntity<?> cambiarPassword(@AuthenticationPrincipal UserDetails principal, @RequestBody CambiarPasswordDto cambiarPasswordDto) {
+    public ResponseEntity<?> cambiarPassword(@AuthenticationPrincipal UserDetails principal, @RequestBody CambiarPasswordDto cambiarPasswordDto) throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
@@ -68,7 +70,7 @@ public class UsuarioController {
 
     // Elimina un usuario por ID
     @DeleteMapping("/eliminarUsuario")
-    public void deleteUsuario(@AuthenticationPrincipal UserDetails principal) {
+    public void deleteUsuario(@AuthenticationPrincipal UserDetails principal) throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
