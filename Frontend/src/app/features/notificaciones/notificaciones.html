@@ -2,9 +2,9 @@
 
 <body class="flex items-center justify-center">
     <div class="w-[95%] md:w-[90%] 2xl:w-[85%] p-6 md:p-10">
-        <div class="flex justify-between items-center mb-4">
+        <div class="justify-between items-left mb-4 flex flex-col md:flex md:flex-row md:items-center">
             <h1 class="text-4xl font-bold">Notificaciones</h1>
-            <p-button class="filtros" label="Limpiar filtros" [outlined]="true" icon="pi pi-filter-slash"
+            <p-button class="filtros pt-2 md:pt-0" label="Limpiar filtros" [outlined]="true" icon="pi pi-filter-slash"
                 (onClick)="clear(dt2)" />
         </div>
         <div class="tabla overflow-hidden rounded-[15px] mt-4 mb-4">
