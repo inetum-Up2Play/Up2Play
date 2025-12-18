@@ -4,11 +4,11 @@ import { ActService } from '../../../../core/services/actividad/act-service';
 import { Actividad } from '../../../../shared/models/Actividad';
 import { Router, RouterLink } from '@angular/router';
 import { map, tap } from 'rxjs';
-import { AsyncPipe, DatePipe, SlicePipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-proximos-planes',
-  imports: [AsyncPipe, RouterLink, SlicePipe, DatePipe],
+  imports: [AsyncPipe, RouterLink, DatePipe],
   templateUrl: './proximos-planes.html',
   styleUrl: './proximos-planes.scss',
 })
