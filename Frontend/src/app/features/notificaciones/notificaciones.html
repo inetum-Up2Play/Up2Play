@@ -1,62 +1,38 @@
-<div>
-    <app-header></app-header>
-    
-    <div class="card">
-        <p-table #dt2 [value]="customers" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+<app-header></app-header>
+
+<div class="p-6 md:p-10">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold">Notificaciones</h1>
+        <p-button label="Limpiar filtros" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt2)" />
+    </div>
+    <div class="rounded-[10px] mb-4">
+
+        <!-- TABLA -->
+        <p-table #dt2 [value]="notificaciones()" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
             [loading]="loading" [paginator]="true"
-            [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-            [tableStyle]="{ 'min-width': '75rem' }">
-            <ng-template #caption>
-                <div class="flex">
-                    <p-iconfield iconPosition="left" class="ml-auto">
-                        <p-inputicon>
-                            <i class="pi pi-search"></i>
-                        </p-inputicon>
-                        <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
-                            placeholder="Search keyword" />
-                    </p-iconfield>
-                </div>
-            </ng-template>
+            [globalFilterFields]="['titulo', 'descripcion', 'estadoNotificacion', 'fecha']"
+            [tableStyle]="{ 'min-width': '75rem' }" styleClass="p-datatable-striped">
+
+            <!-- HEADER DE COLUMNAS -->
             <ng-template #header>
                 <tr>
-                    <th style="width:22%">Name</th>
-                    <th style="width:22%">Country</th>
-                    <th style="width:22%">Agent</th>
-                    <th style="width:22%">Status</th>
-                    <th style="width:12%">Verified</th>
+                    <th style="width:5%"><i class="pi pi-eye"></i></th>
+                    <th style="width:15%">Tipo</th>
+                    <th style="width:45%">Asunto</th>
+                    <th style="width:20%">Fecha</th>
+                    <th style="width:15%"></th>
                 </tr>
+                <!-- FILTROS -->
                 <tr>
                     <th>
-                        <p-columnFilter type="text" field="name" placeholder="Type to search" ariaLabel="Filter Name"
-                            filterOn="input"></p-columnFilter>
+                        <p-columnFilter type="boolean" field="leido"></p-columnFilter>
                     </th>
+
                     <th>
-                        <p-columnFilter type="text" field="country.name" placeholder="Enter key to search"
-                            ariaLabel="Filter Country"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p-columnFilter field="representative" matchMode="in" [showMenu]="false">
+                        <p-columnFilter field="estadoNotificacion" matchMode="equals" [showMenu]="false">
                             <ng-template #filter let-value let-filter="filterCallback">
-                                <p-multiselect [(ngModel)]="value" [options]="representatives" placeholder="Any"
-                                    (onChange)="filter($event.value)" optionLabel="name" style="min-width: 14rem"
-                                    [panelStyle]="{ minWidth: '16rem' }">
-                                    <ng-template let-option #item>
-                                        <div class="flex items-center gap-2">
-                                            <img [alt]="option.label"
-                                                src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}"
-                                                style="width: 32px" />
-                                            <span>{{ option.name }}</span>
-                                        </div>
-                                    </ng-template>
-                                </p-multiselect>
-                            </ng-template>
-                        </p-columnFilter>
-                    </th>
-                    <th>
-                        <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
-                            <ng-template #filter let-value let-filter="filterCallback">
-                                <p-select [(ngModel)]="value" [options]="statuses" (onChange)="filter($event.value)"
-                                    placeholder="Select One" [showClear]="true" style="min-width: 12rem">
+                                <p-select [options]="tipos" (onChange)="filter($event.value)" placeholder="Todos"
+                                    [showClear]="true" appendTo="body" class="w-full">
                                     <ng-template let-option #item>
                                         <p-tag [value]="option.value" [severity]="getSeverity(option.value)" />
                                     </ng-template>
@@ -64,48 +40,80 @@
                             </ng-template>
                         </p-columnFilter>
                     </th>
+
                     <th>
-                        <p-columnFilter type="boolean" field="verified"></p-columnFilter>
+                        <p-columnFilter type="text" field="titulo" placeholder="Buscar por título..."
+                            ariaLabel="Filtro titulo" filterOn="input" matchMode="contains"></p-columnFilter>
+                    </th>
+
+                    <th>
+                        <p-columnFilter type="date" field="fecha" display="menu" placeholder="Busca por fecha"
+                            ariaLabel="Filtero fecha"></p-columnFilter>
+                    </th>
+
+                    <th>
+                        <!-- Celda vacía para eliminar notificación -->
                     </th>
                 </tr>
             </ng-template>
-            <ng-template #body let-customer>
-                <tr>
-                    <td>
-                        {{ customer.name }}
+
+            <!-- NOTIFICACIONES -->
+            <ng-template #body let-notificacion>
+                <tr class="cursor-pointer hover:bg-gray-100 transition-colors" [pRowToggler]="notificacion"
+                    [class.font-bold]="!notificacion.leido">
+
+                    <td class="text-center">
+                        @if (notificacion.leido) {
+                        <i class="pi pi-circle text-green-900" pTooltip="Leída"></i>
+                        } @else {
+                        <i class="pi pi-circle-fill text-green-900" pTooltip="No leída"></i>
+                        }
                     </td>
+
                     <td>
-                        <div class="flex items-center gap-2">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
-                                [class]="'flag flag-' + customer.country.code" style="width: 20px" />
-                            <span>{{ customer.country.name }}</span>
+                        <p-tag [severity]="getSeverity(notificacion.estadoNotificacion)"
+                            [value]="notificacion.estadoNotificacion"></p-tag>
+                    </td>
+
+                    <td>
+                        <div class="flex flex-col">
+                            <span class="text-lg">{{ notificacion.titulo }}</span>
+                            <span class="text-sm text-gray-500 font-normal">{{ notificacion.descripcion }}</span>
                         </div>
                     </td>
+
                     <td>
-                        <div class="flex items-center gap-2">
-                            <img [alt]="customer.representative.name"
-                                src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}"
-                                width="32" style="vertical-align: middle" />
-                            <span>{{ customer.representative.name }}</span>
-                        </div>
+                        <span>{{ notificacion.fecha | date:'dd/MM/yyyy' }}</span>
                     </td>
-                    <td>
-                        <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" />
-                    </td>
-                    <td>
-                        <i class="pi" [ngClass]="{
-                            'text-green-500 pi-check-circle': customer.verified,
-                            'text-red-500 pi-times-circle': !customer.verified
-                        }"></i>
+
+                    <td (click)="$event.stopPropagation()">
+                        <p-button icon="pi pi-trash" [text]="true" severity="danger" pTooltip="Eliminar"
+                            (onClick)="eliminarNotificacion(notificacion)" />
                     </td>
                 </tr>
             </ng-template>
+
+            <!-- DESCRIPCIÓN OCULTA -->
+            <ng-template #rowexpansion let-notificacion>
+                <tr>
+                    <td colspan="5">
+                        <div class="p-4 bg-gray-50 border-l-4 border-gray-300 ml-4 rounded-r-md">
+                            <h4 class="font-bold text-gray-700 mb-2">Descripción:</h4>
+                            <p class="text-gray-600 text-base leading-relaxed">{{ notificacion.descripcion }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
             <ng-template #emptymessage>
                 <tr>
-                    <td colspan="5">No customers found.</td>
+                    <td colspan="5" class="text-center p-8 text-gray-500">
+                        <i class="pi pi-inbox text-4xl mb-2 block"></i>No se han encontrado notificaciones.
+                    </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
-    <app-footer></app-footer>
 </div>
+
+<app-footer></app-footer>
