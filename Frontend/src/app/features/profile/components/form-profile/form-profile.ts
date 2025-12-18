@@ -67,50 +67,50 @@ export class FormProfile {
 
   groupedCities: SelectItemGroup[] = [
     {
-      label: 'Germany',
+      label: 'Alemania',
       value: 'de',
       items: [
-        { label: 'German', value: 'German' },
+        { label: 'Alemán', value: 'German' },
       ]
     },
     {
       label: 'USA',
       value: 'us',
       items: [
-        { label: 'English', value: 'English' },
-        { label: 'Spanish', value: 'Spanish' }
+        { label: 'Inglés', value: 'English' },
+        { label: 'Español', value: 'Spanish' }
       ]
     },
     {
-      label: 'Japan',
+      label: 'Japón',
       value: 'jp',
       items: [
-        { label: 'Japanese', value: 'Japanese' }
+        { label: 'Japonés', value: 'Japanese' }
       ]
     },
     {
-      label: 'Spain',
+      label: 'España',
       value: 'es',
       items: [
-        { label: 'Spanish', value: 'Spanish' },
-        { label: 'Catalan', value: 'Catalan' },
-        { label: 'Galician', value: 'Galician' },
-        { label: 'Basque', value: 'Basque' }
+        { label: 'Español', value: 'Spanish' },
+        { label: 'Catalán', value: 'Catalan' },
+        { label: 'Gallego', value: 'Galician' },
+        { label: 'Basco', value: 'Basque' }
       ]
     },
     {
-      label: 'France',
+      label: 'Francia',
       value: 'fr',
       items: [
-        { label: 'French', value: 'French' }
+        { label: 'Francés', value: 'French' }
       ]
     },
     {
-      label: 'Canada',
+      label: 'Canadá',
       value: 'ca',
       items: [
-        { label: 'English', value: 'English' },
-        { label: 'French', value: 'French' }
+        { label: 'Inglés', value: 'English' },
+        { label: 'Francés', value: 'French' }
       ]
     },
     {
@@ -118,8 +118,7 @@ export class FormProfile {
       value: 'in',
       items: [
         { label: 'Hindi', value: 'Hindi' },
-        { label: 'English', value: 'English' },
-        { label: 'Bengali', value: 'Bengali' },
+        { label: 'Bengalí', value: 'Bengali' },
         { label: 'Tamil', value: 'Tamil' }
       ]
     },
@@ -127,7 +126,7 @@ export class FormProfile {
       label: 'Brazil',
       value: 'br',
       items: [
-        { label: 'Portuguese', value: 'Portuguese' }
+        { label: 'Portugués', value: 'Portuguese' }
       ]
     },
     {
@@ -135,14 +134,14 @@ export class FormProfile {
       value: 'cn',
       items: [
         { label: 'Mandarin', value: 'Mandarin' },
-        { label: 'Cantonese', value: 'Cantonese' }
+        { label: 'Cantonés', value: 'Cantonese' }
       ]
     },
     {
-      label: 'Russia',
+      label: 'Rusia',
       value: 'ru',
       items: [
-        { label: 'Russian', value: 'Russian' }
+        { label: 'Ruso', value: 'Russian' }
       ]
     }
   ];
