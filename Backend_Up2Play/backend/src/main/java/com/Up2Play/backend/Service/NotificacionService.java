@@ -18,6 +18,7 @@ import com.Up2Play.backend.Repository.NotificacionRepository;
 import com.Up2Play.backend.Repository.UsuarioNotificacionRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -26,16 +27,9 @@ public class NotificacionService {
         private UsuarioRepository usuarioRepository;
         private NotificacionRepository notificacionRepository;
         private UsuarioNotificacionRepository usuarioNotificacionRepository;
+        private EmailService emailService;
 
         // CRUD
-
-        public NotificacionService(UsuarioRepository usuarioRepository,
-                        NotificacionRepository notificacionRepository,
-                        UsuarioNotificacionRepository usuarioNotificacionRepository) {
-                this.usuarioRepository = usuarioRepository;
-                this.notificacionRepository = notificacionRepository;
-                this.usuarioNotificacionRepository = usuarioNotificacionRepository;
-        }
 
         @Transactional
         public List<NotificacionDtoResp> getNotificacionesUsuario(Long usuarioId) {
@@ -56,6 +50,14 @@ public class NotificacionService {
                                 n.getNotificacion().getEstadoNotificacion().toString(),
                                 n.getNotificacion().getActividad().getId())).toList();
 
+        }
+
+        public NotificacionService(UsuarioRepository usuarioRepository, NotificacionRepository notificacionRepository,
+                        UsuarioNotificacionRepository usuarioNotificacionRepository, EmailService emailService) {
+                this.usuarioRepository = usuarioRepository;
+                this.notificacionRepository = notificacionRepository;
+                this.usuarioNotificacionRepository = usuarioNotificacionRepository;
+                this.emailService = emailService;
         }
 
         @Transactional
@@ -111,5 +113,112 @@ public class NotificacionService {
                 usuarioNotificacionRepository.save(usuarioNotificacion);
 
                 return true;
+        }
+
+                // Envía el email de verificación al usuario. Usa plantilla simple con código y
+        // expiración.
+        public void cambioDeContraseña(Usuario user) throws MessagingException {
+                String subject = "Cambio de contraseña";
+
+                String body = """
+                                <!DOCTYPE html>
+                                <html lang="es">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <title>Cambio de contraseña</title>
+                                </head>
+                                <body style="margin: auto; padding: 0; background-color: #ffffffff; font-family: 'Segoe UI', Roboto, Arial, sans-serif;">
+                                    <table width="100%%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 40px auto; background-color: #f7f7f7; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+                                        <tr>
+                                            <td style="padding: 30px;">
+                                                <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">🔐 Se ha cambiado tu contraseña en UP2Play</h2>
+                                                <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
+                                                <p style="font-size: 15px; color: #555555;">Este es un correo de aviso, ya que se ha cambiado tu contraseña en <strong>UP2Play</strong>.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el soporte de la aplicacion!.</p>
+                                                <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
+                                                <p style="font-size: 12px; color: #cccccc; text-align: center;">Este correo fue generado automáticamente. Por favor, no respondas.</p>
+                                                <p style="font-size: 12px; color: #cccccc; text-align: center;">© 2025 UP2Play. Todos los derechos reservados.</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </body>
+                                </html>
+                                """
+                                .formatted(
+                                user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario");
+
+                emailService.enviarCorreo(user.getEmail(), subject, body);
+        }
+
+                // Envía el email de verificación al usuario. Usa plantilla simple con código y
+        // expiración.
+        public void ActividadEditada(Usuario user, Actividad actividad) throws MessagingException {
+                String subject = "Actividad editada";
+
+                String body = """
+                                <!DOCTYPE html>
+                                <html lang="es">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <title>Actividad editada</title>
+                                </head>
+                                <body style="margin: auto; padding: 0; background-color: #ffffffff; font-family: 'Segoe UI', Roboto, Arial, sans-serif;">
+                                    <table width="100%%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 40px auto; background-color: #f7f7f7; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+                                        <tr>
+                                            <td style="padding: 30px;">
+                                                <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">✏️ Se ha editado una actividad a la que estas apuntado</h2>
+                                                <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
+                                                <p style="font-size: 15px; color: #555555;">Este es un correo de aviso, ya que se ha editado la actividad: <strong>%s</strong> a la que estas apuntado en <strong>UP2Play</strong>.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el soporte de la aplicacion!.</p>
+                                                <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
+                                                <p style="font-size: 12px; color: #cccccc; text-align: center;">Este correo fue generado automáticamente. Por favor, no respondas.</p>
+                                                <p style="font-size: 12px; color: #cccccc; text-align: center;">© 2025 UP2Play. Todos los derechos reservados.</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </body>
+                                </html>
+                                """
+                                .formatted(
+                                user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario",
+                                actividad.getNombre());
+
+                emailService.enviarCorreo(user.getEmail(), subject, body);
+        }
+
+                // Envía el email de verificación al usuario. Usa plantilla simple con código y
+        // expiración.
+        public void ActividadEliminada(Usuario user, Actividad actividad) throws MessagingException {
+                String subject = "Actividad eliminada";
+
+                String body = """
+                                <!DOCTYPE html>
+                                <html lang="es">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <title>Actividad eliminada</title>
+                                </head>
+                                <body style="margin: auto; padding: 0; background-color: #ffffffff; font-family: 'Segoe UI', Roboto, Arial, sans-serif;">
+                                    <table width="100%%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 40px auto; background-color: #f7f7f7; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+                                        <tr>
+                                            <td style="padding: 30px;">
+                                                <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">🗑️ Se ha eliminado una actividad a la que estas apuntado</h2>
+                                                <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
+                                                <p style="font-size: 15px; color: #555555;">Este es un correo de aviso, ya que se ha eliminado la actividad: <strong>%s</strong> a la que estas apuntado en <strong>UP2Play</strong>.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el soporte de la aplicacion!.</p>
+                                                <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
+                                                <p style="font-size: 12px; color: #cccccc; text-align: center;">Este correo fue generado automáticamente. Por favor, no respondas.</p>
+                                                <p style="font-size: 12px; color: #cccccc; text-align: center;">© 2025 UP2Play. Todos los derechos reservados.</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </body>
+                                </html>
+                                """
+                                .formatted(
+                                user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario",
+                                actividad.getNombre());
+
+                emailService.enviarCorreo(user.getEmail(), subject, body);
         }
 }
