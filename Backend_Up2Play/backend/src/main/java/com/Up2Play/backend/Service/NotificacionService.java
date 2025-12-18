@@ -61,6 +61,52 @@ public class NotificacionService {
         }
 
         @Transactional
+        public List<NotificacionDtoResp> getNotificacionesUsuarioNoLeidas(Long usuarioId) {
+
+                Usuario usuario = usuarioRepository.findById(usuarioId)
+                                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+                // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
+                // l'usuari
+                return usuario.getUsuarioNotificaciones().stream().filter(n -> !n.isLeido())
+                                .map(n -> new NotificacionDtoResp(
+
+                                                n.getNotificacion().getId(),
+                                                n.getNotificacion().getTitulo(),
+                                                n.getNotificacion().getDescripcion(),
+                                                n.getNotificacion().getFecha() != null
+                                                                ? n.getNotificacion().getFecha().toString()
+                                                                : null,
+                                                n.isLeido(),
+                                                n.getNotificacion().getEstadoNotificacion().toString(),
+                                                n.getNotificacion().getActividad().getId()))
+                                .toList();
+        }
+
+        @Transactional
+        public List<NotificacionDtoResp> getNotificacionesUsuarioLeidas(Long usuarioId) {
+
+                Usuario usuario = usuarioRepository.findById(usuarioId)
+                                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+                // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
+                // l'usuari
+                return usuario.getUsuarioNotificaciones().stream().filter(n -> n.isLeido())
+                                .map(n -> new NotificacionDtoResp(
+
+                                                n.getNotificacion().getId(),
+                                                n.getNotificacion().getTitulo(),
+                                                n.getNotificacion().getDescripcion(),
+                                                n.getNotificacion().getFecha() != null
+                                                                ? n.getNotificacion().getFecha().toString()
+                                                                : null,
+                                                n.isLeido(),
+                                                n.getNotificacion().getEstadoNotificacion().toString(),
+                                                n.getNotificacion().getActividad().getId()))
+                                .toList();
+        }
+
+        @Transactional
         public Notificacion crearNotificacion(String titulo, String descripcion, LocalDateTime fecha,
                         EstadoNotificacion estadoNotificacion, Actividad actividad, Set<Usuario> usuarios,
                         Usuario usuarioCreador) {
@@ -96,12 +142,12 @@ public class NotificacionService {
         }
 
         @Transactional
-        public Boolean Leer(Long id, Long usuarioId) {
+        public Boolean LeerNotificacion(Long notificaionId, Long usuarioId) {
 
                 Usuario usuario = usuarioRepository.findById(usuarioId)
                                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-                Notificacion notificacion = notificacionRepository.findById(id)
+                Notificacion notificacion = notificacionRepository.findById(notificaionId)
                                 .orElseThrow(() -> new NotificacionNoEncontrada("Notificación no encontrada"));
 
                 UsuarioNotificacion usuarioNotificacion = usuarioNotificacionRepository.findByUsuarioAndNotificacion(
@@ -220,5 +266,24 @@ public class NotificacionService {
                                 actividad.getNombre());
 
                 emailService.enviarCorreo(user.getEmail(), subject, body);
+        }
+
+        @Transactional
+        public Boolean EliminarNotificacion(Long notificaionId, Long usuarioId) {
+
+                Usuario usuario = usuarioRepository.findById(usuarioId)
+                                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+                Notificacion notificacion = notificacionRepository.findById(notificaionId)
+                                .orElseThrow(() -> new NotificacionNoEncontrada("Notificación no encontrada"));
+
+                UsuarioNotificacion usuarioNotificacion = usuarioNotificacionRepository.findByUsuarioAndNotificacion(
+                                usuario,
+                                notificacion);
+
+                usuarioNotificacionRepository.deleteById(usuarioNotificacion.getId());
+
+                return true;
+
         }
 }
