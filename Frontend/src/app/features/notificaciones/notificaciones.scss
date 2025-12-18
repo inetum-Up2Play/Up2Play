@@ -1,7 +1,34 @@
-.card {
-  background: var(--card-bg);
-  border: var(--card-border);
-  padding: 2rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
+@use 'styles/variables' as vars;
+
+.h1 {
+    font-family: vars.$montserrat;
+}
+
+:host ::ng-deep .filtros .p-button {
+    color: vars.$verde-oliva !important;
+    border-color: vars.$verde-oliva !important;
+    .hover{
+        background-color: black !important;
+    }
+}
+
+:host ::ng-deep .eliminar .p-button {
+    color: red;
+}
+
+:host ::ng-deep .p-paginator-page {
+    color: vars.$verde-oscuro !important;
+    background-color: #b1df7565 !important;
+}
+
+:host ::ng-deep .p-paginator {
+    border-radius: 0px;
+}
+
+:host ::ng-deep .p-ripple {
+    color: vars.$verde-oscuro;
+}
+
+.th {
+    color: vars.$verde-oscuro
 }
