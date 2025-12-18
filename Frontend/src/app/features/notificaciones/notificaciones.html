@@ -7,12 +7,12 @@
             <p-button class="filtros" label="Limpiar filtros" [outlined]="true" icon="pi pi-filter-slash"
                 (onClick)="clear(dt2)" />
         </div>
-        <div class="overflow-hidden rounded-[15px] mt-4 mb-4">
+        <div class="tabla overflow-hidden rounded-[15px] mt-4 mb-4">
 
             <!-- TABLA -->
             <p-table #dt2 [value]="notificaciones()" dataKey="id" [rows]="10" [loading]="loading" [paginator]="true"
                 [globalFilterFields]="['titulo', 'descripcion', 'estadoNotificacion', 'fecha']"
-                [tableStyle]="{ 'min-width': '75rem' }" styleClass="p-datatable-striped">
+                [tableStyle]="{ 'min-width': '75rem' }">
 
                 <!-- HEADER DE COLUMNAS -->
                 <ng-template #header>
@@ -44,7 +44,7 @@
 
                         <th>
                             <p-columnFilter type="text" field="titulo" placeholder="Buscar por título..."
-                                ariaLabel="Filtro titulo" filterOn="input" matchMode="contains"></p-columnFilter>
+                                ariaLabel="Filtro titulo" filterOn="input" matchMode="contains" [showMenu]="false"></p-columnFilter>
                         </th>
 
                         <th>
@@ -60,8 +60,8 @@
 
                 <!-- NOTIFICACIONES -->
                 <ng-template #body let-notificacion>
-                    <tr class="cursor-pointer hover:bg-gray-100 transition-colors" [pRowToggler]="notificacion"
-                        [class.font-bold]="!notificacion.leido">
+                    <tr class="cursor-pointer transition-colors font-light" [pRowToggler]="notificacion"
+                        [class.font-medium]="!notificacion.leido" [class.!bg-gray-100]="notificacion.leido">
 
                         <td class="text-center">
                             @if (notificacion.leido) {
@@ -78,18 +78,26 @@
 
                         <td>
                             <div class="flex flex-col">
-                                <span class="text-lg">{{ notificacion.titulo }}</span>
-                                <span class="text-sm text-gray-500 font-normal">{{ notificacion.descripcion }}</span>
+                                <p-accordion [value]="['0']">
+                                    <p-accordion-panel value="0" [ngClass]="{ 'noti-leida': notificacion.leido, 'noti-no-leida': !notificacion.leido }">
+                                        <p-accordion-header (click)="marcarComoLeida(notificacion)"><ng-template #toggleicon let-active="inactive"></ng-template> <span class="text-lg">{{ notificacion.titulo }}</span>
+                                        </p-accordion-header>
+                                        <p-accordion-content>
+                                            <span class="text-sm text-gray-500 font-normal">{{ notificacion.descripcion
+                                                }}</span>
+                                        </p-accordion-content>
+                                    </p-accordion-panel>
+                                </p-accordion>
                             </div>
                         </td>
 
-                        <td>
+                        <td class="text-black">
                             <span>{{ notificacion.fecha | date:'dd/MM/yyyy' }}</span>
                         </td>
 
                         <td (click)="$event.stopPropagation()">
-                            <p-button class="eliminar" icon="pi pi-trash" [text]="true" severity="danger" pTooltip="Eliminar"
-                                (onClick)="eliminarNotificacion(notificacion)" />
+                            <p-button class="eliminar" icon="pi pi-trash" [text]="true" severity="danger"
+                                pTooltip="Eliminar" (onClick)="eliminarNotificacion(notificacion)" />
                         </td>
                     </tr>
                 </ng-template>
@@ -109,7 +117,7 @@
                 <ng-template #emptymessage>
                     <tr>
                         <td colspan="5" class="text-center p-8 text-gray-500">
-                            <i class="pi pi-inbox text-4xl mb-2 block"></i>No se han encontrado notificaciones.
+                            <i class="pi pi-inbox text-4xl ml-1 mr-10 mb-2 block"></i> No se han encontrado notificaciones.
                         </td>
                     </tr>
                 </ng-template>

@@ -12,6 +12,7 @@ import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { AccordionModule } from 'primeng/accordion';
 
 
 // Tus servicios y modelos
@@ -22,7 +23,7 @@ import { Footer } from '../../core/layout/footer/footer';
 
 @Component({
   selector: 'app-notificaciones',
-  imports: [TableModule, TagModule, IconFieldModule, InputTextModule, InputIconModule, MultiSelectModule, SelectModule, HttpClientModule, CommonModule, ButtonModule, Header, Footer],
+  imports: [AccordionModule, TableModule, TagModule, IconFieldModule, InputTextModule, InputIconModule, MultiSelectModule, SelectModule, HttpClientModule, CommonModule, ButtonModule, Header, Footer],
   //providers: [CustomerService],
   templateUrl: './notificaciones.html',
   styleUrl: './notificaciones.scss',
@@ -120,10 +121,14 @@ export class Notificaciones implements OnInit {
     ];
 
     setTimeout(() => {
-      this.notificaciones.set(mockData);
+      const datosTransformados = mockData.map(datos => ({
+        ...datos,
+        fecha: new Date(datos.fecha)
+      }));
+
+      this.notificaciones.set(datosTransformados as unknown as Notificacion[]);
       this.loading = false;
     }, 500);
-
 
   }
 
@@ -154,6 +159,7 @@ export class Notificaciones implements OnInit {
   }
 
   marcarComoLeida(notificacion: Notificacion) {
+    if (notificacion.leido) return;
     notificacion.leido = true;
     console.log('Marcar como leída:', notificacion.id, notificacion.titulo);
     // Aquí llamarías a tu servicio: this.notificacionesService.markAsRead(notificacion.id)...
