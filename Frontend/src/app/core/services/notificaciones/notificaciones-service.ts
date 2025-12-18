@@ -10,7 +10,7 @@ import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 export class NotificacionesService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/actividades';
+  private baseUrl = 'http://localhost:8080/notificaciones';
 
   //Lista de notificaciones
   getNotificaciones (): Observable<any> {
