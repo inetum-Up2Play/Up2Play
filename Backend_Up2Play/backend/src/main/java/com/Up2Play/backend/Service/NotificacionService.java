@@ -7,7 +7,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.Respuestas.NotificacionDtoResp;
-import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
+import com.Up2Play.backend.Exception.ErroresNotificacion.NotificacionNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Notificacion;
@@ -40,7 +40,7 @@ public class NotificacionService {
         @Transactional
         public List<NotificacionDtoResp> getNotificacionesUsuario(Long usuarioId) {
 
-                Usuario usuario = usuarioRepository.findById(591L)
+                Usuario usuario = usuarioRepository.findById(usuarioId)
                                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
                 // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
@@ -146,7 +146,7 @@ public class NotificacionService {
                                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
                 Notificacion notificacion = notificacionRepository.findById(notificaionId)
-                                .orElseThrow(() -> new ActividadNoEncontrada("Notificación no encontrada"));
+                                .orElseThrow(() -> new NotificacionNoEncontrada("Notificación no encontrada"));
 
                 UsuarioNotificacion usuarioNotificacion = usuarioNotificacionRepository.findByUsuarioAndNotificacion(
                                 usuario,
@@ -166,7 +166,7 @@ public class NotificacionService {
                                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
                 Notificacion notificacion = notificacionRepository.findById(notificaionId)
-                                .orElseThrow(() -> new ActividadNoEncontrada("Notificación no encontrada"));
+                                .orElseThrow(() -> new NotificacionNoEncontrada("Notificación no encontrada"));
 
                 UsuarioNotificacion usuarioNotificacion = usuarioNotificacionRepository.findByUsuarioAndNotificacion(
                                 usuario,
