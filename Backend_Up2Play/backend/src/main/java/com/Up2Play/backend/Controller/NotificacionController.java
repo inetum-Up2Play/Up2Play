@@ -45,7 +45,7 @@ public class NotificacionController {
     }
 
     @Transactional
-    @GetMapping("/getNotificacionesUsuario")
+    @GetMapping("/getNotificacionesUsuarioNoLeidas")
     public List<NotificacionDtoResp> getNotificacionesUsuarioNoLeidas(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
@@ -55,7 +55,7 @@ public class NotificacionController {
     }
 
     @Transactional
-    @GetMapping("/getNotificacionesUsuario")
+    @GetMapping("/getNotificacionesUsuarioLeidas")
     public List<NotificacionDtoResp> getNotificacionesUsuarioLeidas(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
