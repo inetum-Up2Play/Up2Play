@@ -451,14 +451,13 @@ public class ActividadService {
         usuarioRepository.save(usuario);
 
         //Enviar notificacion
-            Set<Usuario> usuariosUnidos = act.getUsuarios();
-            notificacionService.crearNotificacion(
+            
+            notificacionService.crearNotificacionPerfil(
             "¡Te has inscrito a  "+act.getNombre()+"!" , 
             "¡Te has inscrito a  "+act.getNombre()+"! Revisa los detalles del evento y prepárate para disfrutar. Te notificaremos si hay cambios importantes.", 
             LocalDateTime.now(),
-            EstadoNotificacion.fromValue("EDITADA"),
+            EstadoNotificacion.fromValue("INSCRITO"),
             act,
-            usuariosUnidos,
             usuario);
 
         return new ActividadDtoResp(

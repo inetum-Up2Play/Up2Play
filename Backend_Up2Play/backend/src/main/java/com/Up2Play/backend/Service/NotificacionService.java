@@ -142,6 +142,31 @@ public class NotificacionService {
     }
 
     @Transactional
+    public Notificacion crearNotificacionPerfil(String titulo, String descripcion, LocalDateTime fecha,
+            EstadoNotificacion estadoNotificacion, Actividad actividad, Usuario usuarioCreador) {
+
+        // Creo instancia de notificacion
+        Notificacion n = new Notificacion();
+
+        n.setTitulo(titulo);
+        n.setDescripcion(descripcion);
+        n.setFecha(fecha);
+        n.setEstadoNotificacion(estadoNotificacion);
+        n.setActividad(actividad);
+        n.setUsuarioCreador(usuarioCreador);
+
+        // La guardo
+        Notificacion notificacionGuardada = notificacionRepository.save(n);
+
+        UsuarioNotificacion usuarioNotificacion = new UsuarioNotificacion(usuarioCreador, notificacionGuardada, false);
+
+        // Guardo la lista en la base de datos
+        usuarioNotificacionRepository.save(usuarioNotificacion);
+
+        return notificacionGuardada;
+    }
+
+    @Transactional
     public Boolean LeerNotificacion(Long notificaionId, Long usuarioId) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)

@@ -1,5 +1,5 @@
 import { Router, RouterModule } from '@angular/router';
-import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { MenubarModule } from 'primeng/menubar';
@@ -17,6 +17,7 @@ import { AuthService } from '../../services/auth/auth-service';
 import { UserDataService } from '../../services/auth/user-data-service';
 import { AvatarPipe } from '../../../shared/pipes/avatar-pipe';
 import { PerfilService } from '../../services/perfil/perfil-service';
+import { SnowService } from '../../services/navidad/snow-service';
 
 
 interface MenuItemPages {
@@ -40,6 +41,18 @@ export class Header implements OnInit {
   public perfilService = inject(PerfilService);
   private renderer = inject(Renderer2); // Para manipular el DOM
   private document = inject(DOCUMENT); // Referencia al Documento
+
+  
+
+  private snow = inject(SnowService);
+
+  // Este es el botón que ya tienes
+  toggleSnow() {
+    this.snow.toggle();
+  }
+
+
+
 
   // Signal que almacena el email una sola vez y no cambia más
   private userEmailSignal = signal<string>('');
