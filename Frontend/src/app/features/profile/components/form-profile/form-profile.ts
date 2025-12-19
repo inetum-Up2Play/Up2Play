@@ -16,6 +16,8 @@ import { Perfil } from '../../../../shared/models/Perfil';
 import { Profile } from '../../pages/profile/profile';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
+import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
+
 
 type SexoEnum = 'MASCULINO' | 'FEMENINO' | 'OTRO'; // ajusta a tu enum real
 
@@ -151,13 +153,13 @@ export class FormProfile {
   ngOnInit(): void {
     // Form principal
     this.formulario = this.fb.group({
-      nombre: ['', Validators.required],
-      apellidos: ['', Validators.required],
+      nombre: ['',  [Validators.required, prohibidasValidator()]],
+      apellidos: ['',  [Validators.required, prohibidasValidator()]],
       idiomas: [[]],
       telefono: ['', [Validators.pattern(/[0-9+\-\s]/)]],
       fechaNacimiento: [null as Date | null],
       sexo: [null as SexoEnum | null],
-      email: [{ value: '', disabled: true }, [Validators.email]],
+      email: [{ value: '', disabled: true }, [Validators.email, prohibidasValidator()]],
       // Campo “falso” para mostrar que la contraseña se edita desde el diálogo
       password: [{ value: '********' }]
     });
