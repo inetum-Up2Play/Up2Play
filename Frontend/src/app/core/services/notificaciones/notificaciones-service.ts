@@ -1,9 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
+import {
+  Notificacion
 
+} from '../../../shared/models/Notificacion';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,23 +16,41 @@ export class NotificacionesService {
   private baseUrl = 'http://localhost:8080/notificaciones';
 
   //Lista de notificaciones
-  getNotificaciones (): Observable<any> {
-    return this.http.get(this.baseUrl + '/getNotificacionesUsuario', {}).pipe(
-      map(() => true),
-      catchError((error: HttpErrorResponse) => {
-        const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
-      })
-    );
+  getNotificacionesUsuario(): Observable<Notificacion[]> {
+    return this.http
+      .get<Notificacion[]>(`${this.baseUrl}/getNotificacionesUsuario`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const errBody = error.error as ErrorResponseDto;
+          return throwError(() => new Error(errBody?.error ?? 'UNKNOWN'));
+        })
+      );
   }
+
 
   //Decir que la notifcación está leída
-  setLeida() {
-
+  marcarComoLeida(id: number): Observable<{ message: string }> {
+    return this.http
+      .put<{ message: string }>(`${this.baseUrl}/leerNotificacion/${id}`, {})
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const errBody = error.error as ErrorResponseDto;
+          return throwError(() => new Error(errBody?.error ?? 'UNKNOWN'));
+        })
+      );
   }
 
-  eliminarNotificacion() {
-    
+
+  eliminarNotificacion(id: number): Observable<{ message: string }> {
+    return this.http
+      .delete<{ message: string }>(`${this.baseUrl}/eliminarNotificacion/${id}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          const errBody = error.error as ErrorResponseDto;
+          return throwError(() => new Error(errBody?.error ?? 'UNKNOWN'));
+        })
+      );
   }
+
 
 }
