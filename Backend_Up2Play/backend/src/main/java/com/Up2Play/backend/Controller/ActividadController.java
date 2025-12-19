@@ -26,6 +26,7 @@ import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.ActividadService;
 
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
@@ -110,7 +111,7 @@ public class ActividadController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteActividad(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
+    public void deleteActividad(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
@@ -123,7 +124,6 @@ public class ActividadController {
     public ResponseEntity<?> crearActividad(@Valid @RequestBody ActividadDto actividadDto,
             @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
-        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         actividadService.crearActividad(actividadDto, usuario);
@@ -152,7 +152,7 @@ public class ActividadController {
 
     @PutMapping("editarActividad/{id}")
     public ResponseEntity<?> editarActividad(@PathVariable Long id,
-           @Valid @RequestBody EditarActividadDto editarActividadDto, @AuthenticationPrincipal UserDetails principal) {
+           @Valid @RequestBody EditarActividadDto editarActividadDto, @AuthenticationPrincipal UserDetails principal) throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));

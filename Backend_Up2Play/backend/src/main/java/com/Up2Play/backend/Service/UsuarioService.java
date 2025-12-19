@@ -53,12 +53,13 @@ public class UsuarioService {
     private PerfilRepository perfilRepository;
     private ActividadService actividadService;
     private ActividadRepository actividadRepository;
+    private NotificacionService notificacionService;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
             LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService,
             PerfilService perfilService, PerfilRepository perfilRepository, ActividadService actividadService,
-            ActividadRepository actividadRepository) {
+            ActividadRepository actividadRepository, NotificacionService notificacionService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -69,6 +70,7 @@ public class UsuarioService {
         this.perfilRepository = perfilRepository;
         this.actividadService = actividadService;
         this.actividadRepository = actividadRepository;
+        this.notificacionService = notificacionService;
     }
 
     // Obtiene todos los usuarios en una lista
@@ -83,7 +85,7 @@ public class UsuarioService {
 
     // Elimina un usuario por ID.
     @Transactional
-    public void deleteUsuario(Long id) {
+    public void deleteUsuario(Long id) throws MessagingException {
 
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
@@ -95,7 +97,7 @@ public class UsuarioService {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
                 act.getUsuarios().removeIf(u -> u.getId().equals(id));
-                act.setNumPersInscritas(act.getNumPersInscritas()-1);
+                act.setNumPersInscritas(act.getNumPersInscritas() - 1);
                 actividadRepository.save(act);
 
             } else {
@@ -460,7 +462,7 @@ public class UsuarioService {
     }
 
     // Cambiar contraseña desde el perfil
-    public void cambiarPasswordPerfil(Long usuarioId, CambiarPasswordDto input) {
+    public void cambiarPasswordPerfil(Long usuarioId, CambiarPasswordDto input) throws MessagingException {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
@@ -471,6 +473,7 @@ public class UsuarioService {
 
         // Guardar la nueva contraseña encriptada
         usuario.setPassword(passwordEncoder.encode(input.getNewPassword()));
+        notificacionService.cambioDeContraseña(usuario);
         usuarioRepository.save(usuario);
     }
 

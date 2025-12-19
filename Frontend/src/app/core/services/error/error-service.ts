@@ -42,6 +42,9 @@ export class ErrorService {
     CREADOR_NO_EDITAR: 'Solo el creador puede editar la actividad', //409
     LIMITE_CARACTERES:
       'Se ha superado el límite de caracteres permitido en uno o más campos.', //409
+    PERFIL_NO_ENCONTRADO: 'No se ha encontrado el perfil solicitado.', //404
+    EDITAR_PERFIL_DENEGADO: 'No tienes permiso para editar este perfil.', //403
+    NOTIFICACION_NO_ENCONTRADA: 'Notificación no encontrada.', //404
     UNKNOWN: 'Ha ocurrido un error desconocido.', // ?
   };
 

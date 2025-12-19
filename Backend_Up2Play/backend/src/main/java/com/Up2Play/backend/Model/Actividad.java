@@ -58,8 +58,8 @@ public class Actividad {
     @ManyToMany(mappedBy = "actividadesUnidas")
     private Set<Usuario> usuarios = new HashSet<>();
 
-    @OneToMany(mappedBy = "ID_ACTIVIDAD")
-    private Notificacion notificacion;
+    @OneToMany(mappedBy = "actividad")
+    private Set<Notificacion> notificaciones = new HashSet<>();
 
     public Actividad() {
     }
@@ -102,7 +102,7 @@ public class Actividad {
     public Actividad(Long id, @Size(max = 64) String nombre, @Size(max = 500) String descripcion, LocalDateTime fecha,
             String ubicacion, String deporte, NivelDificultad nivel, int numPersInscritas, int numPersTotales,
             EstadoActividad estado, double precio, Usuario usuarioCreador, Set<Usuario> usuarios,
-            Notificacion notificacion) {
+            Set<Notificacion> notificaciones) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -116,7 +116,7 @@ public class Actividad {
         this.precio = precio;
         this.usuarioCreador = usuarioCreador;
         this.usuarios = usuarios;
-        this.notificacion = notificacion;
+        this.notificaciones = notificaciones;
     }
 
     public Long getId() {
@@ -224,12 +224,12 @@ public class Actividad {
         this.deporte = deporte;
     }
 
-    public Notificacion getNotificacion() {
-        return notificacion;
+    public Set<Notificacion> getNotificaciones() {
+        return notificaciones;
     }
 
-    public void setNotificacion(Notificacion notificacion) {
-        this.notificacion = notificacion;
+    public void setNotificaciones(Set<Notificacion> notificaciones) {
+        this.notificaciones = notificaciones;
     }
 
 }
