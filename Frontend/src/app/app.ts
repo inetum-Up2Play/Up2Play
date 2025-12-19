@@ -7,10 +7,11 @@ import { SnowfallComponent } from './features/navidad/components/snowfall-compon
 import { Header } from './core/layout/header/header';
 import { AuthHeaderComponent} from './features/auth/components/auth-header.component/auth-header.component';
 import { SnowService } from './core/services/navidad/snow-service';
+import { SantaComponent } from './features/navidad/components/santa-component/santa-component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Toast, SnowfallComponent, Header, AuthHeaderComponent],
+  imports: [RouterOutlet, Toast, SnowfallComponent, Header, AuthHeaderComponent, SantaComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

@@ -1,0 +1,40 @@
+/* Contenedor que hace la órbita */
+.santa-orbit {
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    z-index: 9999;
+    transform-origin: center;
+    animation: orbit var(--orbit-duration, 14s) var(--orbit-timing, linear) infinite;
+    /* No uses aquí otra animación que también toque transform */
+    will-change: transform;
+}
+
+/* Imagen interior que "flota" y puede contra-rotar */
+.santa-stable {
+    width: clamp(128px, 100vw, 254px);
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+    /* Flotación vertical */
+    animation:
+    bob 1.8s ease-in-out infinite,
+    counter var(--orbit-duration, 14s) var(--orbit-timing, linear) infinite;
+    will-change: transform;
+}
+
+/* Gira el contenedor y lo traslada en X → órbita alrededor del centro */
+@keyframes orbit {
+    from { transform: rotate(0deg) translateX(var(--orbit-radius, 25vw)); }
+    to   { transform: rotate(var(--orbit-rotation, 360deg)) translateX(var(--orbit-radius, 25vw)); }
+}
+
+/* Contra-rotación para que Santa no "dé vueltas" sobre sí mismo */
+@keyframes counter {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(calc(-1 * var(--orbit-rotation, 360deg))); }
+}
+
+/* Flotación vertical */
+@keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-1.5vh); }
+}
