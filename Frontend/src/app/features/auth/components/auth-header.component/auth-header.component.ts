@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { Menu, MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
+import { SnowService } from '../../../../core/services/navidad/snow-service';
 
 @Component({
   selector: 'app-auth-header',
@@ -17,6 +18,15 @@ export class AuthHeaderComponent {
   IniciarSesionUrl = '/auth/login'
   RegistrarseUrl = '/auth/register'
   VerificarUrl = '/auth/verification'
+
+  private snow = inject(SnowService);
+
+  // Este es el botón que ya tienes
+  toggleSnow() {
+    this.snow.toggle();
+  }
+
+
 
   constructor(private router: Router) {
   }
