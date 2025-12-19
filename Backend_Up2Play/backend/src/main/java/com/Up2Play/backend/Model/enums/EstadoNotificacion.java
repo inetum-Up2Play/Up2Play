@@ -4,11 +4,11 @@ public enum EstadoNotificacion {
 
     INSCRITO("Inscrito"),
     PAGADO("Pagado"),
-    ACTUALIZADO("Actualizado"),
+    ACTUALIZADO("Actualizado"), //editar perfil
     DESAPUNTADO("Desapuntado"),
     CANCELADA("Cancelada"),
     CREADA("Creada"),
-    EDITADA("Editada");
+    EDITADA("Editada"); //editar actividad
  
     // iniciar atributo que va dentro del enum
     private final String valorBD;

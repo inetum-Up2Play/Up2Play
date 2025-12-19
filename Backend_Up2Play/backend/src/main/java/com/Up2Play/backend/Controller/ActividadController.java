@@ -124,7 +124,6 @@ public class ActividadController {
     public ResponseEntity<?> crearActividad(@Valid @RequestBody ActividadDto actividadDto,
             @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
-        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         actividadService.crearActividad(actividadDto, usuario);
