@@ -9,6 +9,10 @@ i{
    color: vars.$verde-oliva; 
 }
 
+.icon-plus {
+    color: vars.$blanco;
+}
+
 span {
     font-family: vars.$montserrat;
 }
@@ -38,6 +42,17 @@ span {
 :host ::ng-deep .p-carousel-indicator-active button {
     background-color: #3D6C3F !important;
     opacity: 1; /* Asegura que se vea sólido */
+}
+
+:host ::ng-deep .boton-ver-mas p-button {
+    border-radius: 20px !important;
+    border-color: vars.$verde-oliva !important;
+}
+
+:host ::ng-deep .boton-ver-mas {
+    border-color: vars.$verde-oliva; 
+    border-radius: 20px;
+    color: vars.$verde-oliva;
 }
 
 
