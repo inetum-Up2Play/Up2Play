@@ -13,8 +13,8 @@
 
 
 .error-map {
-  background-color: #faf5f5; 
-  border: 2px solid #d9534f; 
+  background-color: #faf5f5;
+  border: 2px solid #d9534f;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,18 +31,18 @@
 
 
 h1 {
-    font-family: vars.$montserrat;
+  font-family: vars.$montserrat;
 }
 
 :host ::ng-deep .p-card {
-  border: 1px solid rgb(202, 202, 202,0.3);
+  border: 1px solid rgb(202, 202, 202, 0.3);
   box-shadow: 0 4px 4px rgba(168, 168, 168, 0.2);
 }
 
-::ng-deep .p-tooltip-text{
+::ng-deep .p-tooltip-text {
   background-color: vars.$verde-oliva !important;
 }
 
-
-
-
+::ng-deep .p-tooltip-bottom .p-tooltip-arrow {
+  border-bottom-color: vars.$verde-oliva;
+}
