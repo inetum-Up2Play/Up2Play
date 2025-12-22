@@ -376,26 +376,18 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
-/*
-             //Enviar notificacion
-            Set<Usuario> usuariosUnidos = act.getUsuarios();
-            notificacionService.crearNotificacion(
-            "La actividad "+act.getNombre()+" se ha sido cancelada." , 
-            "La actividad "+act.getNombre()+"  ha sido cancelada. Lamentamos los inconvenientes y esperamos verte en próximas actividades.", 
-            LocalDateTime.now(),
-            EstadoNotificacion.fromValue("CANCELADA"),
-            act,
-            usuariosUnidos,
-            usuario); */
+ 
+             
             
             List<String> emails = act.getUsuarios().stream()
-            .map(Usuario::getEmail)
-            .toList();
+                    .map(Usuario::getEmail)
+                    .toList();
 
             String titulo = act.getNombre();
 
-            notificacionService.ActividadEliminada(usuario, act, emails,titulo);
+            notificacionService.ActividadEliminada(usuario, act, emails, titulo);
 
             for (Usuario inscrito : act.getUsuarios()) {
                 inscrito.getActividadesUnidas().remove(act);
@@ -404,11 +396,7 @@ public class ActividadService {
 
             act.getUsuarios().clear();
 
-            
-
             actividadRepository.delete(act);
-
-
 
         } else {
             throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
@@ -547,18 +535,8 @@ public class ActividadService {
         }
 
         usuarioRepository.save(usuario);
-        /*
-         //Enviar notificacion
-            Set<Usuario> usuariosUnidos = act.getUsuarios();
-            notificacionService.crearNotificacion(
-            "Has cancelado tu inscripción en la actividad "+act.getNombre()+"." , 
-            "Has cancelado tu inscripción en la actividad "+act.getNombre()+". Esperamos verte en otras actividades próximamente.", 
-            LocalDateTime.now(),
-            EstadoNotificacion.fromValue("DESAPUNTADO"),
-            act,
-            usuariosUnidos,
-            usuario);
-        */
+        
+        
 
         return new ActividadDtoResp(
                 act.getId(),
