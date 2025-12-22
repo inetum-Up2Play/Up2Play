@@ -23,6 +23,7 @@ import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Actividad;
+import com.Up2Play.backend.Model.Notificacion;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
@@ -378,9 +379,18 @@ public class ActividadService {
 
 
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
+
+             //Enviar notificacion
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+            "La actividad "+act.getNombre()+" ha sido cancelada." , 
+            "La actividad "+act.getNombre()+" ha sido cancelada.  Lamentamos los inconvenientes y esperamos verte en próximas actividades.", 
+            LocalDateTime.now(),
+            EstadoNotificacion.fromValue("CANCELADA"),
+            act,
+            usuariosUnidos,
+            usuario);
  
-             
-            
             List<String> emails = act.getUsuarios().stream()
                     .map(Usuario::getEmail)
                     .toList();
@@ -388,6 +398,12 @@ public class ActividadService {
             String titulo = act.getNombre();
 
             notificacionService.ActividadEliminada(usuario, act, emails, titulo);
+
+            for (Notificacion n : act.getNotificaciones()) {
+                n.setActividad(null);
+            }
+            act.getNotificaciones().clear();
+
 
             for (Usuario inscrito : act.getUsuarios()) {
                 inscrito.getActividadesUnidas().remove(act);
