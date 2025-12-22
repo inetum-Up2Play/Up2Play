@@ -376,18 +376,10 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
-/*
-             //Enviar notificacion
-            Set<Usuario> usuariosUnidos = act.getUsuarios();
-            notificacionService.crearNotificacion(
-            "La actividad "+act.getNombre()+" se ha sido cancelada." , 
-            "La actividad "+act.getNombre()+"  ha sido cancelada. Lamentamos los inconvenientes y esperamos verte en próximas actividades.", 
-            LocalDateTime.now(),
-            EstadoNotificacion.fromValue("CANCELADA"),
-            act,
-            usuariosUnidos,
-            usuario); */
+ 
+             
             
             List<String> emails = act.getUsuarios().stream()
             .map(Usuario::getEmail)
@@ -404,9 +396,8 @@ public class ActividadService {
 
             act.getUsuarios().clear();
 
-            
-
             actividadRepository.delete(act);
+
 
 
 
@@ -547,18 +538,8 @@ public class ActividadService {
         }
 
         usuarioRepository.save(usuario);
-        /*
-         //Enviar notificacion
-            Set<Usuario> usuariosUnidos = act.getUsuarios();
-            notificacionService.crearNotificacion(
-            "Has cancelado tu inscripción en la actividad "+act.getNombre()+"." , 
-            "Has cancelado tu inscripción en la actividad "+act.getNombre()+". Esperamos verte en otras actividades próximamente.", 
-            LocalDateTime.now(),
-            EstadoNotificacion.fromValue("DESAPUNTADO"),
-            act,
-            usuariosUnidos,
-            usuario);
-        */
+        
+        
 
         return new ActividadDtoResp(
                 act.getId(),
