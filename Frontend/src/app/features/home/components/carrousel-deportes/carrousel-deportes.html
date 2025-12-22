@@ -129,16 +129,16 @@
         
     </div>
     }
-    <div class="flex justify-center md:justify-end ver-mas-container md:px-0">
-    <p-button
-            [routerLink]="['/actividades']"
-            styleClass="boton-ver-mas" 
-            label="Todas las actividades" 
-            variant="outlined" 
-            icon="pi pi-plus icon-plus" 
-            severity="contrast" 
-            [attr.aria-label]="'Todas las actividades'">
-          </p-button> 
-    </div>
 
+    <div class="flex justify-center md:justify-end ver-mas-container md:px-0 pb-10 mr-21">
+            <p-button
+                styleClass="boton-ver-mas" 
+                label="Ver mas actividades" 
+                variant="outlined" 
+                icon="pi pi-plus"
+                [routerLink]="['/actividades']"
+                severity="contrast" 
+                [attr.aria-label]="'Ver mas actividades'">
+            </p-button>
+    </div>
 </div>
