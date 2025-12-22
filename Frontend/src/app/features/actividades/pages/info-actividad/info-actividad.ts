@@ -328,11 +328,6 @@ import { TooltipModule } from 'primeng/tooltip';
 
       this.actService.unirteActividad(act.id).subscribe({
         next: () => {
-          // Actualización
-          this.actividad.set({
-            ...act,
-            numPersInscritas: (act.numPersInscritas ?? 0) + 1,
-          });
           this.apuntado.set(true);
           this.cargarInscritos();
 
@@ -356,11 +351,6 @@ import { TooltipModule } from 'primeng/tooltip';
 
       this.actService.desapuntarseActividad(this.actividadId).subscribe({
         next: () => {
-          const nuevosInscritos = Math.max(
-            Number(act.numPersInscritas ?? 0) - 1,
-            0
-          );
-          this.actividad.set({ ...act, numPersInscritas: nuevosInscritos });
 
           this.messageService.add({
             severity: 'info',
