@@ -29,23 +29,41 @@ export class CarrouselDeportes {
   private router = inject(Router);
 
   activities: any[] = [];
-  deporteActual: string = 'Futbol';
+  deporteActual: string | null = null;
 
   ngOnInit() {
     
-     this.cargarActividades();
+ const deporte = this.actUpdateService.getDeporte();
 
-    //Recargar al recibir notificación (unirse/desunirse)
-    this.actUpdateService.update$.subscribe(() => {
+  if (this.deporteActual) {
+    this.cargarPorDeporte(this.deporteActual);
+  } else {
+    this.cargarActividades();
+  }
+
+  this.actUpdateService.update$.subscribe(() => {
+    if (this.deporteActual) {
+      this.cargarPorDeporte(this.deporteActual);
+    } else {
       this.cargarActividades();
-    });
+    }
+  });
     
+  }
+
+  private mezclarYLimitar(activities: any[], limite: number = 10): any[] {
+  return activities
+    .sort(() => Math.random() - 0.5) 
+    .slice(0, limite);               
   }
   
   cargarActividades() {
+    this.deporteActual = null;
+    this.actUpdateService.setDeporte(null);
+
     this.actService.listarActividadesNoApuntadas().subscribe({
       next: data => {
-        this.activities = data;
+        this.activities =  this.mezclarYLimitar(data,10);
         
       },
       error: err => {
@@ -59,16 +77,18 @@ export class CarrouselDeportes {
 
   cargarPorDeporte(deporte: string) {
     this.deporteActual = deporte;
+    this.actUpdateService.setDeporte(deporte); 
 
-    this.actService. listarActividadesPorDeporte(deporte).subscribe({
+    this.actService.listarActividadesPorDeporte(deporte).subscribe({
       next: data => {
-        this.activities = data;
-      },
-      error: err => {
-        console.error('Error cargando actividades', err);
-        this.activities = [];
-      }
-    });
+        this.activities=data;
+
+    },
+    error: err => {
+      this.activities = [];
+      
+    }
+  });
   }
 
  apuntarse(id: number) {

@@ -87,13 +87,13 @@
     </div>  
 
     <!-- Carousel -->
-    @if (activities.length === 0 ){
+    @if (activities.length === 0){
     <app-empty-activities icon="ph-light ph-ghost" title="La lista está vacía..."
         message="¡Toma la iniciativa y crea tú el plan!">
         <button class="mt-3 xl:mt-0 hover:bg-[#4D834F]!" id="crear_actividad" pButton
             [routerLink]="['/actividades', 'crear-actividad']">
             <div class="px-4 flex items-center">
-                <i class="pi pi-plus" pButtonIcon></i>
+                <i class="pi pi-plus icon-plus" pButtonIcon></i>
                 <span class="font-bold text-xl md:text-2xl pl-2" pButtonLabel>Nueva Actividad</span>
             </div>
         </button>
@@ -101,18 +101,44 @@
     } @else {
     <div class="xl:p-5 2xl:pl-15 2xl:pr-15 ">
         <div class="">
-            <p-carousel [value]="activities" [numVisible]="4" [numScroll]="1" [circular]="true"
-                [autoplayInterval]="5000000" [responsiveOptions]="responsiveOptions">
+            
+            <p-carousel 
+                [value]="activities" 
+                [numVisible]="4" 
+                [numScroll]="1" 
+                [circular]="true"
+                [autoplayInterval]="5000000" 
+                [responsiveOptions]="responsiveOptions">
 
                 <ng-template let-activity pTemplate="item">
-                    <app-activity-card [titulo]="activity.nombre" [fecha]="extraerFecha(activity.fecha)"
-                        [hora]="extraerHora(activity.fecha)" [ubicacion]="activity.ubicacion"
-                        [imagen]="activity.deporte | deporteImg" [botonLabel]="'¡Apúntate!'"
-                        [botonStyle]="'btn-apuntarse'" [botonAction]="apuntarse" [actividadId]="activity.id">
+                    <app-activity-card 
+                        [titulo]="activity.nombre" 
+                        [fecha]="extraerFecha(activity.fecha)"
+                        [hora]="extraerHora(activity.fecha)" 
+                        [ubicacion]="activity.ubicacion"
+                        [imagen]="activity.deporte | deporteImg" 
+                        [botonLabel]="'¡Apúntate!'"
+                        [botonStyle]="'btn-apuntarse'" 
+                        [botonAction]="apuntarse" 
+                        [actividadId]="activity.id">
                     </app-activity-card>
                 </ng-template>
             </p-carousel>
+            
         </div>
+        
     </div>
     }
+
+    <div class="flex justify-center md:justify-end ver-mas-container md:px-0 pb-10 mr-21">
+            <p-button
+                styleClass="boton-ver-mas" 
+                label="Ver mas actividades" 
+                variant="outlined" 
+                icon="pi pi-plus"
+                [routerLink]="['/actividades']"
+                severity="contrast" 
+                [attr.aria-label]="'Ver mas actividades'">
+            </p-button>
+    </div>
 </div>

@@ -33,6 +33,7 @@ export class JoinGallery implements OnInit {
   currentPage = 1;
   noHayActividades = true;
 
+
   ngOnInit() {
     this.cargarActividades();
 
