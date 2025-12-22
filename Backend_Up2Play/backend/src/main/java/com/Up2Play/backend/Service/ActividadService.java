@@ -382,12 +382,12 @@ public class ActividadService {
              
             
             List<String> emails = act.getUsuarios().stream()
-            .map(Usuario::getEmail)
-            .toList();
+                    .map(Usuario::getEmail)
+                    .toList();
 
             String titulo = act.getNombre();
 
-            notificacionService.ActividadEliminada(usuario, act, emails,titulo);
+            notificacionService.ActividadEliminada(usuario, act, emails, titulo);
 
             for (Usuario inscrito : act.getUsuarios()) {
                 inscrito.getActividadesUnidas().remove(act);
@@ -397,9 +397,6 @@ public class ActividadService {
             act.getUsuarios().clear();
 
             actividadRepository.delete(act);
-
-
-
 
         } else {
             throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
