@@ -2,6 +2,8 @@ package com.Up2Play.backend.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.ActividadDto;
@@ -23,6 +25,7 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
+import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Model.enums.NivelDificultad;
 import com.Up2Play.backend.Repository.ActividadRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -97,8 +100,18 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         act.getUsuarios().add(usuario);
         usuarioApuntado.getActividadesUnidas().add(act);
-
         Actividad actGuardada = actividadRepository.save(act);
+        
+        //Enviar notificacion
+        Set<Usuario> usuariosUnidos = act.getUsuarios();
+        notificacionService.crearNotificacion(
+            "La actividad "+act.getNombre()+" se ha creado correctamente." , 
+            "La actividad "+act.getNombre()+" se ha registrado con éxito en el sistema. Ahora puedes revisar los detalles, realizar modificaciones si lo deseas y esperar a que otros participantes se unan al evento.", 
+            LocalDateTime.now(),
+            EstadoNotificacion.fromValue("CREADA"),
+            act,
+            usuariosUnidos,
+            usuario);
 
         return actGuardada;
     }
@@ -280,6 +293,7 @@ public class ActividadService {
     }
 
     // Editar actividad
+    @Transactional
     public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) throws MessagingException {
         Actividad act = actividadRepository.findById(id)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
@@ -329,6 +343,18 @@ public class ActividadService {
 
             Actividad actEditada = actividadRepository.save(act);
 
+            //Enviar notificacion
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+                "La actividad "+act.getNombre()+"  ha sido modificada." , 
+                "Se ha cambiado algún detalle de la actividad '"+act.getNombre()+"'. Revisa la información de la actividad para confirmar que sigues interesado en asistir al evento.", 
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("EDITADA"),
+                act,
+                usuariosUnidos,
+                usuario);
+
+
             List<String> emails = act.getUsuarios().stream()
                     .map(Usuario::getEmail)
                     .toList();
@@ -343,6 +369,7 @@ public class ActividadService {
 
     }
 
+    @Transactional
     public void deleteActividad(Long idActividad, Long idUsuario) throws MessagingException {
         Actividad act = actividadRepository.findById(idActividad)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
@@ -350,7 +377,18 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
-
+/*
+             //Enviar notificacion
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+            "La actividad "+act.getNombre()+" se ha sido cancelada." , 
+            "La actividad "+act.getNombre()+"  ha sido cancelada. Lamentamos los inconvenientes y esperamos verte en próximas actividades.", 
+            LocalDateTime.now(),
+            EstadoNotificacion.fromValue("CANCELADA"),
+            act,
+            usuariosUnidos,
+            usuario); */
+            
             List<String> emails = act.getUsuarios().stream()
                     .map(Usuario::getEmail)
                     .toList();
@@ -365,6 +403,8 @@ public class ActividadService {
             }
 
             act.getUsuarios().clear();
+
+            
 
             actividadRepository.delete(act);
 
@@ -407,6 +447,17 @@ public class ActividadService {
         }
 
         usuarioRepository.save(usuario);
+
+        //Enviar notificacion
+            
+            notificacionService.crearNotificacionPerfil(
+            "¡Te has inscrito a  "+act.getNombre()+"!" , 
+            "¡Te has inscrito a  "+act.getNombre()+"! Revisa los detalles del evento y prepárate para disfrutar. Te notificaremos si hay cambios importantes.", 
+            LocalDateTime.now(),
+            EstadoNotificacion.fromValue("INSCRITO"),
+            act,
+            usuario);
+
         return new ActividadDtoResp(
                 act.getId(),
                 act.getNombre(),
@@ -494,6 +545,19 @@ public class ActividadService {
         }
 
         usuarioRepository.save(usuario);
+        /*
+         //Enviar notificacion
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+            "Has cancelado tu inscripción en la actividad "+act.getNombre()+"." , 
+            "Has cancelado tu inscripción en la actividad "+act.getNombre()+". Esperamos verte en otras actividades próximamente.", 
+            LocalDateTime.now(),
+            EstadoNotificacion.fromValue("DESAPUNTADO"),
+            act,
+            usuariosUnidos,
+            usuario);
+        */
+
         return new ActividadDtoResp(
                 act.getId(),
                 act.getNombre(),
