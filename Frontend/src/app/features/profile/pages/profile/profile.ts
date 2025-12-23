@@ -53,6 +53,8 @@ export class Profile implements OnInit {
   perfil = signal<Perfil | null>(null);
   avatarPendiente = signal<number | null>(null); //Es el avatar recibido del avatar-component. Si no se pulsa en "guardar cambios" no se aplicará
 
+  loadingPerfil = signal(false);
+
   pwdVisible = false;
 
   private cargarDatos(): void {
@@ -103,6 +105,8 @@ export class Profile implements OnInit {
             this.avatarPendiente() ?? perfilActual?.imagenPerfil ?? 0
           ); //Cambia el avatar del header
 
+          this.loadingPerfil.set(false);
+
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -111,6 +115,7 @@ export class Profile implements OnInit {
         },
         error: (err) => {
           console.error('Error editando el perfil', err);
+          this.loadingPerfil.set(false);
           this.errorService.showError(err);
         },
       });
@@ -197,5 +202,5 @@ export class Profile implements OnInit {
         }
       });
   }
-  
+
 }
