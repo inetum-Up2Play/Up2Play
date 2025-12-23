@@ -360,7 +360,7 @@ public class ActividadService {
                     .map(Usuario::getEmail)
                     .toList();
 
-            notificacionService.ActividadEditada(usuario, act, emails);
+            notificacionService.ActividadEditada(act, emails);
 
             return actEditada;
         } else {
@@ -395,9 +395,7 @@ public class ActividadService {
                     .map(Usuario::getEmail)
                     .toList();
 
-            String titulo = act.getNombre();
-
-            notificacionService.ActividadEliminada(usuario, act, emails, titulo);
+            notificacionService.ActividadEliminada(act, emails);
 
             for (Notificacion n : act.getNotificaciones()) {
                 n.setActividad(null);
