@@ -74,7 +74,7 @@ export class LoginFormComponent {
       next: (res) => {
         if (res === true) {
           this.userDataService.setEmail(payload.email);
-          this.router.navigate(['/perfil']);
+          this.router.navigate(['/']);
         } else {
           const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
           this.errorService.showError(mensaje);                    // Se muestra con PrimeNG

@@ -39,17 +39,25 @@ public class NotificacionService {
 
         // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
         // l'usuari
-        return usuario.getUsuarioNotificaciones().stream().map(n -> new NotificacionDtoResp(
+        return usuario.getUsuarioNotificaciones()
+                .stream()
+                .map(relUsuarioNotificacion -> {
+                    var notificacion = relUsuarioNotificacion.getNotificacion();
 
-                n.getNotificacion().getId(),
-                n.getNotificacion().getTitulo(),
-                n.getNotificacion().getDescripcion(),
-                n.getNotificacion().getFecha() != null ? n.getNotificacion().getFecha().toString()
-                        : null,
-                n.isLeido(),
-                n.getNotificacion().getEstadoNotificacion().toString(),
-                n.getNotificacion().getActividad().getId())).toList();
+                    Long actividadId = (notificacion.getActividad() != null)
+                            ? notificacion.getActividad().getId()
+                            : null;
 
+                    return new NotificacionDtoResp(
+                            notificacion.getId(),
+                            notificacion.getTitulo(),
+                            notificacion.getDescripcion(),
+                            notificacion.getFecha() != null ? notificacion.getFecha().toString() : null,
+                            relUsuarioNotificacion.isLeido(),
+                            notificacion.getEstadoNotificacion().toString(),
+                            actividadId);
+                })
+                .toList();
     }
 
     public NotificacionService(UsuarioRepository usuarioRepository, NotificacionRepository notificacionRepository,
@@ -68,18 +76,24 @@ public class NotificacionService {
 
         // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
         // l'usuari
-        return usuario.getUsuarioNotificaciones().stream().filter(n -> !n.isLeido())
-                .map(n -> new NotificacionDtoResp(
+        return usuario.getUsuarioNotificaciones()
+                .stream().filter(relUsuarioNotificacion -> !relUsuarioNotificacion.isLeido())
+                .map(relUsuarioNotificacion -> {
+                    var notificacion = relUsuarioNotificacion.getNotificacion();
 
-                        n.getNotificacion().getId(),
-                        n.getNotificacion().getTitulo(),
-                        n.getNotificacion().getDescripcion(),
-                        n.getNotificacion().getFecha() != null
-                                ? n.getNotificacion().getFecha().toString()
-                                : null,
-                        n.isLeido(),
-                        n.getNotificacion().getEstadoNotificacion().toString(),
-                        n.getNotificacion().getActividad().getId()))
+                    Long actividadId = (notificacion.getActividad() != null)
+                            ? notificacion.getActividad().getId()
+                            : null;
+
+                    return new NotificacionDtoResp(
+                            notificacion.getId(),
+                            notificacion.getTitulo(),
+                            notificacion.getDescripcion(),
+                            notificacion.getFecha() != null ? notificacion.getFecha().toString() : null,
+                            relUsuarioNotificacion.isLeido(),
+                            notificacion.getEstadoNotificacion().toString(),
+                            actividadId);
+                })
                 .toList();
     }
 
@@ -91,18 +105,24 @@ public class NotificacionService {
 
         // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
         // l'usuari
-        return usuario.getUsuarioNotificaciones().stream().filter(n -> n.isLeido())
-                .map(n -> new NotificacionDtoResp(
+        return usuario.getUsuarioNotificaciones()
+                .stream().filter(relUsuarioNotificacion -> relUsuarioNotificacion.isLeido())
+                .map(relUsuarioNotificacion -> {
+                    var notificacion = relUsuarioNotificacion.getNotificacion();
 
-                        n.getNotificacion().getId(),
-                        n.getNotificacion().getTitulo(),
-                        n.getNotificacion().getDescripcion(),
-                        n.getNotificacion().getFecha() != null
-                                ? n.getNotificacion().getFecha().toString()
-                                : null,
-                        n.isLeido(),
-                        n.getNotificacion().getEstadoNotificacion().toString(),
-                        n.getNotificacion().getActividad().getId()))
+                    Long actividadId = (notificacion.getActividad() != null)
+                            ? notificacion.getActividad().getId()
+                            : null;
+
+                    return new NotificacionDtoResp(
+                            notificacion.getId(),
+                            notificacion.getTitulo(),
+                            notificacion.getDescripcion(),
+                            notificacion.getFecha() != null ? notificacion.getFecha().toString() : null,
+                            relUsuarioNotificacion.isLeido(),
+                            notificacion.getEstadoNotificacion().toString(),
+                            actividadId);
+                })
                 .toList();
     }
 
