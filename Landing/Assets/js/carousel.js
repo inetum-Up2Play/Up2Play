@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <p class="text-sm font-bold text-green-700 mt-auto">${slide.description}</p>
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-primary"><a href="http://localhost:4200/auth/register"></a>${slide.button}</button>
+                                        <button class="btn btn-primary"><a href="http://localhost:4200/auth/register">${slide.button}</a></button>
                                     </div>
                                 </div>
                             </div>
