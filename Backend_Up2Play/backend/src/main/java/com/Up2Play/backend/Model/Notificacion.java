@@ -43,7 +43,7 @@ public class Notificacion {
     private EstadoNotificacion estadoNotificacion;
 
     @ManyToOne
-    @JoinColumn(name = "ID_ACTIVIDAD", nullable = false)
+    @JoinColumn(name = "ID_ACTIVIDAD", nullable = true)
     private Actividad actividad;
 
     @OneToMany(mappedBy = "notificacion")

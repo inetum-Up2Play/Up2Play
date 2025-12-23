@@ -2,7 +2,9 @@ package com.Up2Play.backend.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -39,17 +41,25 @@ public class NotificacionService {
 
         // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
         // l'usuari
-        return usuario.getUsuarioNotificaciones().stream().map(n -> new NotificacionDtoResp(
+        return usuario.getUsuarioNotificaciones()
+                .stream()
+                .map(relUsuarioNotificacion -> {
+                    var notificacion = relUsuarioNotificacion.getNotificacion();
 
-                n.getNotificacion().getId(),
-                n.getNotificacion().getTitulo(),
-                n.getNotificacion().getDescripcion(),
-                n.getNotificacion().getFecha() != null ? n.getNotificacion().getFecha().toString()
-                        : null,
-                n.isLeido(),
-                n.getNotificacion().getEstadoNotificacion().toString(),
-                n.getNotificacion().getActividad().getId())).toList();
+                    Long actividadId = (notificacion.getActividad() != null)
+                            ? notificacion.getActividad().getId()
+                            : null;
 
+                    return new NotificacionDtoResp(
+                            notificacion.getId(),
+                            notificacion.getTitulo(),
+                            notificacion.getDescripcion(),
+                            notificacion.getFecha() != null ? notificacion.getFecha().toString() : null,
+                            relUsuarioNotificacion.isLeido(),
+                            notificacion.getEstadoNotificacion().toString(),
+                            actividadId);
+                })
+                .toList();
     }
 
     public NotificacionService(UsuarioRepository usuarioRepository, NotificacionRepository notificacionRepository,
@@ -68,18 +78,24 @@ public class NotificacionService {
 
         // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
         // l'usuari
-        return usuario.getUsuarioNotificaciones().stream().filter(n -> !n.isLeido())
-                .map(n -> new NotificacionDtoResp(
+        return usuario.getUsuarioNotificaciones()
+                .stream().filter(relUsuarioNotificacion -> !relUsuarioNotificacion.isLeido())
+                .map(relUsuarioNotificacion -> {
+                    var notificacion = relUsuarioNotificacion.getNotificacion();
 
-                        n.getNotificacion().getId(),
-                        n.getNotificacion().getTitulo(),
-                        n.getNotificacion().getDescripcion(),
-                        n.getNotificacion().getFecha() != null
-                                ? n.getNotificacion().getFecha().toString()
-                                : null,
-                        n.isLeido(),
-                        n.getNotificacion().getEstadoNotificacion().toString(),
-                        n.getNotificacion().getActividad().getId()))
+                    Long actividadId = (notificacion.getActividad() != null)
+                            ? notificacion.getActividad().getId()
+                            : null;
+
+                    return new NotificacionDtoResp(
+                            notificacion.getId(),
+                            notificacion.getTitulo(),
+                            notificacion.getDescripcion(),
+                            notificacion.getFecha() != null ? notificacion.getFecha().toString() : null,
+                            relUsuarioNotificacion.isLeido(),
+                            notificacion.getEstadoNotificacion().toString(),
+                            actividadId);
+                })
                 .toList();
     }
 
@@ -91,18 +107,24 @@ public class NotificacionService {
 
         // Crido a usuarioNotificaciones(taula M:N) per obtenir les notificacions de
         // l'usuari
-        return usuario.getUsuarioNotificaciones().stream().filter(n -> n.isLeido())
-                .map(n -> new NotificacionDtoResp(
+        return usuario.getUsuarioNotificaciones()
+                .stream().filter(relUsuarioNotificacion -> relUsuarioNotificacion.isLeido())
+                .map(relUsuarioNotificacion -> {
+                    var notificacion = relUsuarioNotificacion.getNotificacion();
 
-                        n.getNotificacion().getId(),
-                        n.getNotificacion().getTitulo(),
-                        n.getNotificacion().getDescripcion(),
-                        n.getNotificacion().getFecha() != null
-                                ? n.getNotificacion().getFecha().toString()
-                                : null,
-                        n.isLeido(),
-                        n.getNotificacion().getEstadoNotificacion().toString(),
-                        n.getNotificacion().getActividad().getId()))
+                    Long actividadId = (notificacion.getActividad() != null)
+                            ? notificacion.getActividad().getId()
+                            : null;
+
+                    return new NotificacionDtoResp(
+                            notificacion.getId(),
+                            notificacion.getTitulo(),
+                            notificacion.getDescripcion(),
+                            notificacion.getFecha() != null ? notificacion.getFecha().toString() : null,
+                            relUsuarioNotificacion.isLeido(),
+                            notificacion.getEstadoNotificacion().toString(),
+                            actividadId);
+                })
                 .toList();
     }
 
@@ -137,6 +159,31 @@ public class NotificacionService {
 
         // Guardo la lista en la base de datos
         usuarioNotificacionRepository.saveAll(enlaces);
+
+        return notificacionGuardada;
+    }
+
+    @Transactional
+    public Notificacion crearNotificacionPerfil(String titulo, String descripcion, LocalDateTime fecha,
+            EstadoNotificacion estadoNotificacion, Actividad actividad, Usuario usuarioCreador) {
+
+        // Creo instancia de notificacion
+        Notificacion n = new Notificacion();
+
+        n.setTitulo(titulo);
+        n.setDescripcion(descripcion);
+        n.setFecha(fecha);
+        n.setEstadoNotificacion(estadoNotificacion);
+        n.setActividad(actividad);
+        n.setUsuarioCreador(usuarioCreador);
+
+        // La guardo
+        Notificacion notificacionGuardada = notificacionRepository.save(n);
+
+        UsuarioNotificacion usuarioNotificacion = new UsuarioNotificacion(usuarioCreador, notificacionGuardada, false);
+
+        // Guardo la lista en la base de datos
+        usuarioNotificacionRepository.save(usuarioNotificacion);
 
         return notificacionGuardada;
     }
@@ -181,7 +228,7 @@ public class NotificacionService {
                                 <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">🔐 Se ha cambiado tu contraseña</h2>
                                 <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
                                 <p style="font-size: 15px; color: #555555;">Este es un correo de aviso, ya que se ha cambiado tu contraseña en <strong>UP2Play</strong>.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el soporte de la aplicacion!.</p>
-                                                                                <a href="http://localhost:4200/"
+                                <a href="http://localhost:4200/"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Ir a UP2Play
                                 </a>
@@ -200,12 +247,11 @@ public class NotificacionService {
         emailService.enviarCorreo(user.getEmail(), subject, body);
     }
 
-    // Envía el email de verificación al usuario. Usa plantilla simple con código y
-    // expiración.
-    public void ActividadEditada(Usuario user, Actividad actividad, List<String> emails) throws MessagingException {
+    // En NotificacionService
+    public void ActividadEditada(Actividad actividad, List<String> emails) throws MessagingException {
         String subject = "Actividad editada";
 
-        String body = """
+        String htmlTemplate = """
                 <!DOCTYPE html>
                 <html lang="es">
                 <head>
@@ -219,10 +265,16 @@ public class NotificacionService {
                             <td style="padding: 30px;">
                                 <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">✏️ Se ha editado una actividad</h2>
                                 <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
-                                <p style="font-size: 15px; color: #555555;">Este es un correo de aviso, ya que se ha editado la actividad: <strong>%s</strong> a la que estas apuntado en <strong>UP2Play</strong>.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el soporte de la aplicacion!.</p>
+                                <p style="font-size: 15px; color: #555555;">
+                                    Este es un correo de aviso, ya que se ha editado la actividad:
+                                    <strong>%s</strong> a la que estás apuntado en <strong>UP2Play</strong>.
+                                </p>
+                                <p style="font-size: 13px; color: #999999; margin-top: 30px;">
+                                    Si no fuiste tú, contacta con el soporte de la aplicación.
+                                </p>
                                 <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
-                                                                                <a href="http://localhost:4200/"
-                                style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
+                                <a href="http://localhost:4200/"
+                                   style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px; width: 100%%; text-align: center; font-weight: bold;">
                                     Ir a UP2Play
                                 </a>
                                 <p style="font-size: 12px; color: #cccccc; text-align: center;">Este correo fue generado automáticamente. Por favor, no respondas.</p>
@@ -232,27 +284,28 @@ public class NotificacionService {
                     </table>
                 </body>
                 </html>
-                """
-                .formatted(
-                        user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario",
-                        actividad.getNombre());
+                """;
+
+        // Construye un mapa email → nombre a partir de la actividad
+        Map<String, String> nombresPorEmail = actividad.getUsuarios().stream()
+                .filter(u -> u.getEmail() != null)
+                .collect(Collectors.toMap(
+                        Usuario::getEmail,
+                        u -> u.getNombreUsuario() != null ? u.getNombreUsuario() : "usuario"));
 
         for (String email : emails) {
-
+            String nombre = nombresPorEmail.getOrDefault(email, "usuario");
+            String body = String.format(htmlTemplate, nombre, actividad.getNombre());
             emailService.enviarCorreo(email, subject, body);
-
         }
-
     }
 
-    // Envía el email de verificación al usuario. Usa plantilla simple con código y
-    // expiración.
-    public void ActividadEliminada(Usuario user, Actividad actividad, List<String> emails, String titulo)
-            throws MessagingException {
+    
+    // En NotificacionService
+    public void ActividadEliminada(Actividad actividad, List<String> emails) throws MessagingException {
         String subject = "Actividad eliminada";
-        String nombreActividad = titulo;
 
-        String body = """
+        String htmlTemplate = """
                 <!DOCTYPE html>
                 <html lang="es">
                 <head>
@@ -279,15 +332,19 @@ public class NotificacionService {
                     </table>
                 </body>
                 </html>
-                """
-                .formatted(
-                        user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario",
-                        nombreActividad);
+                """;
+
+        // Construye un mapa email → nombre a partir de la actividad
+        Map<String, String> nombresPorEmail = actividad.getUsuarios().stream()
+                .filter(u -> u.getEmail() != null)
+                .collect(Collectors.toMap(
+                        Usuario::getEmail,
+                        u -> u.getNombreUsuario() != null ? u.getNombreUsuario() : "usuario"));
 
         for (String email : emails) {
-
+            String nombre = nombresPorEmail.getOrDefault(email, "usuario");
+            String body = String.format(htmlTemplate, nombre, actividad.getNombre());
             emailService.enviarCorreo(email, subject, body);
-
         }
     }
 

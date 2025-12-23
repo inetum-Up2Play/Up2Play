@@ -16,6 +16,8 @@ import { Perfil } from '../../../../shared/models/Perfil';
 import { Profile } from '../../pages/profile/profile';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
+import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
+
 
 type SexoEnum = 'MASCULINO' | 'FEMENINO' | 'OTRO'; // ajusta a tu enum real
 
@@ -151,13 +153,13 @@ export class FormProfile {
   ngOnInit(): void {
     // Form principal
     this.formulario = this.fb.group({
-      nombre: ['', Validators.required],
-      apellidos: ['', Validators.required],
+      nombre: ['', [Validators.required, prohibidasValidator()]],
+      apellidos: ['', [Validators.required, prohibidasValidator()]],
       idiomas: [[]],
       telefono: ['', [Validators.pattern(/[0-9+\-\s]/)]],
       fechaNacimiento: [null as Date | null],
       sexo: [null as SexoEnum | null],
-      email: [{ value: '', disabled: true }, [Validators.email]],
+      email: [{ value: '', disabled: true }, [Validators.email, prohibidasValidator()]],
       // Campo “falso” para mostrar que la contraseña se edita desde el diálogo
       password: [{ value: '********' }]
     });
@@ -194,7 +196,7 @@ export class FormProfile {
       apellidos: current.apellidos || (p as any).apellido || '',
       idiomas: (current.idiomas && current.idiomas.length) ? current.idiomas : idiomas,
       telefono: current.telefono || (p as any).telefono || '',
-      fechaNacimiento: fechaUI,
+      fechaNacimiento: current.fechaNacimiento ?? fechaUI,
       sexo: current.sexo ?? ((p as any).sexo ?? null),
       email: u?.email ?? '',
       password: '********',
@@ -265,7 +267,11 @@ export class FormProfile {
       apellido: raw.apellidos,
       telefono: raw.telefono,
       sexo: (raw.sexo ?? null) as SexoEnum | null,
-      fechaNacimiento: raw.fechaNacimiento ?? null,
+      fechaNacimiento:
+        raw.fechaNacimiento
+          ? this.toLocalDateString(raw.fechaNacimiento)   // "yyyy-MM-dd"
+          : null,
+
       idiomas: Array.isArray(raw.idiomas) ? raw.idiomas.join(',') : '',
       id_usuario: (original as any).id_usuario ?? u?.id ?? (original as any).id_usuario,
     };

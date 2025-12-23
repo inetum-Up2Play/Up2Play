@@ -18,8 +18,6 @@ import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.NotificacionService;
 import jakarta.transaction.Transactional;
-//import java.time.LocalDateTime;
-//import com.Up2Play.backend.Repository.ActividadRepository;
 
 @RestController
 @RequestMapping("/notificaciones")
@@ -89,33 +87,4 @@ public class NotificacionController {
 
         return ResponseEntity.ok(Map.of("message", "Has eliminado una notificación"));
     }
-
-    // Pruebas CRUD
-/* 
-     private final ActividadRepository actividadRepository;
-
-     public NotificacionController(NotificacionService notificacionService, UsuarioRepository usuarioRepository,
-            ActividadRepository actividadRepository) {
-        this.notificacionService = notificacionService;
-        this.usuarioRepository = usuarioRepository;
-        this.actividadRepository = actividadRepository;
-    } 
-
-    @Transactional
-    @PostMapping("/crearNotificacion")
-    public ResponseEntity<?> crearNotificacion(@AuthenticationPrincipal UserDetails principal) {
-
-        String email = principal.getUsername();
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
-
-        Actividad actividad = actividadRepository.findById(330L)
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada"));
-
-        Set<Usuario> usuariosUnidos = actividad.getUsuarios();
-
-        notificacionService.crearNotificacion("tiiitul", "descripciooo", LocalDateTime.now(), EstadoNotificacion.INSCRITO,
-                actividad, usuariosUnidos, usuario);
-        return ResponseEntity.ok(Map.of("message", "Se ha creado una nueva notificación."));
-    } */
 }

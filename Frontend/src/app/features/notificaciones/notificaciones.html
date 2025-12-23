@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<body class="flex items-center justify-center">
+<body class="flex items-center justify-center min-h-[50vh]">
     <div class="w-[95%] md:w-[90%] 2xl:w-[85%] p-6 md:p-10">
         <div class="justify-between items-left mb-4 flex flex-col md:flex md:flex-row md:items-center">
             <h1 class="text-4xl font-bold">Notificaciones</h1>
@@ -44,8 +44,7 @@
 
                         <th>
                             <p-columnFilter type="text" field="titulo" placeholder="Buscar por título..."
-                                ariaLabel="Filtro titulo" filterOn="input" matchMode="contains"
-                                [showMenu]="false"></p-columnFilter>
+                                ariaLabel="Filtro titulo" filterOn="input" matchMode="contains" [showMenu]="false"></p-columnFilter>
                         </th>
 
                         <th>
@@ -80,11 +79,8 @@
                         <td>
                             <div class="flex flex-col">
                                 <p-accordion [value]="['0']">
-                                    <p-accordion-panel value="0"
-                                        [ngClass]="{ 'noti-leida': notificacion.leido, 'noti-no-leida': !notificacion.leido }">
-                                        <p-accordion-header (click)="marcarComoLeida(notificacion)"><ng-template
-                                                #toggleicon let-active="inactive"></ng-template> <span
-                                                class="text-lg">{{ notificacion.titulo }}</span>
+                                    <p-accordion-panel value="0" [ngClass]="{ 'noti-leida': notificacion.leido, 'noti-no-leida': !notificacion.leido }">
+                                        <p-accordion-header (click)="marcarComoLeida(notificacion)"><ng-template #toggleicon let-active="inactive"></ng-template> <span class="text-lg">{{ notificacion.titulo }}</span>
                                         </p-accordion-header>
                                         <p-accordion-content>
                                             <span class="text-sm text-gray-500 font-normal">{{ notificacion.descripcion
@@ -121,8 +117,7 @@
                 <ng-template #emptymessage>
                     <tr>
                         <td colspan="5" class="text-center p-8 text-gray-500">
-                            <i class="pi pi-inbox text-4xl ml-1 mr-10 mb-2 block"></i> No se han encontrado
-                            notificaciones.
+                            <i class="pi pi-inbox text-4xl ml-1 mr-10 mb-2 block"></i> No se han encontrado notificaciones.
                         </td>
                     </tr>
                 </ng-template>
