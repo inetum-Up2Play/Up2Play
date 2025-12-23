@@ -69,9 +69,17 @@ export class Notificaciones implements OnInit {
 
     this.notificacionesService.getNotificacionesUsuario().subscribe({
       next: (data) => {
-        this.notificaciones.set(data);
+        // Ordenar por fecha DESC (más recientes primero)
+        const ordenadas = [...(data ?? [])].sort((a, b) => {
+          const fa = new Date(a.fecha as any).getTime();
+          const fb = new Date(b.fecha as any).getTime();
+          return fb - fa;
+        });
+
+        this.notificaciones.set(ordenadas);
         this.loading = false;
       },
+
       error: (err) => {
         console.error('❌ Error cargando notificaciones:', err);
       }
