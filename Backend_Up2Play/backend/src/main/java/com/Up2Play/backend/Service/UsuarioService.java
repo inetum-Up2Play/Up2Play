@@ -33,7 +33,9 @@ import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Repository.ActividadRepository;
+import com.Up2Play.backend.Repository.NotificacionRepository;
 import com.Up2Play.backend.Repository.PerfilRepository;
+import com.Up2Play.backend.Repository.UsuarioNotificacionRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
 import jakarta.mail.MessagingException;
@@ -55,12 +57,16 @@ public class UsuarioService {
     private ActividadService actividadService;
     private ActividadRepository actividadRepository;
     private NotificacionService notificacionService;
+    private final NotificacionRepository notificacionRepository;
+    private final UsuarioNotificacionRepository usuarioNotificacionRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
             LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService,
             PerfilService perfilService, PerfilRepository perfilRepository, ActividadService actividadService,
-            ActividadRepository actividadRepository, NotificacionService notificacionService) {
+            ActividadRepository actividadRepository, NotificacionService notificacionService,
+            NotificacionRepository notificacionRepository,
+            UsuarioNotificacionRepository usuarioNotificacionRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -72,6 +78,8 @@ public class UsuarioService {
         this.actividadService = actividadService;
         this.actividadRepository = actividadRepository;
         this.notificacionService = notificacionService;
+        this.notificacionRepository = notificacionRepository;
+        this.usuarioNotificacionRepository = usuarioNotificacionRepository;
     }
 
     // Obtiene todos los usuarios en una lista
@@ -93,7 +101,7 @@ public class UsuarioService {
 
         // eliminar usuario de las actividades en las que esta inscrito
         List<Actividad> actividades = actividadRepository.findAll();
-
+        
         for (Actividad act : actividades) {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
