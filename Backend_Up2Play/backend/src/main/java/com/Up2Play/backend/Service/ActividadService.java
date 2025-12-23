@@ -535,6 +535,14 @@ public class ActividadService {
 
             if (!act.getUsuarioCreador().equals(usuario)) {
 
+                //Enviar notificacion
+                notificacionService.crearNotificacionPerfil(
+                "Te has desapuntdo de "+act.getNombre()+"." , 
+                "Has cancelado tu inscripción en la actividad "+act.getNombre()+". Esperamos verte en otras actividades próximamente.", 
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("DESAPUNTADO"),
+                act,
+                usuario);
                 act.getUsuarios().remove(usuario);
                 usuario.getActividadesUnidas().remove(act);
                 act.setNumPersInscritas(act.getNumPersInscritas() - 1);
@@ -549,8 +557,6 @@ public class ActividadService {
         }
 
         usuarioRepository.save(usuario);
-        
-        
 
         return new ActividadDtoResp(
                 act.getId(),
