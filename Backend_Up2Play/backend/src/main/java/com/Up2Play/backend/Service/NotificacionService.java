@@ -360,8 +360,11 @@ public class NotificacionService {
         UsuarioNotificacion usuarioNotificacion = usuarioNotificacionRepository.findByUsuarioAndNotificacion(
                 usuario,
                 notificacion);
-
-        usuarioNotificacionRepository.deleteById(usuarioNotificacion.getId());
+        
+        if (usuarioNotificacion != null) {
+            usuarioNotificacionRepository.deleteById(usuarioNotificacion.getId());
+            }
+        
 
         return true;
 
