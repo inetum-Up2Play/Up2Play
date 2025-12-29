@@ -29,7 +29,6 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginExcepti
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
 import com.Up2Play.backend.Model.Actividad;
-import com.Up2Play.backend.Model.Notificacion;
 import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
@@ -85,7 +84,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    // Elimina un usuario por ID.
+   // Elimina un usuario por ID.
     @Transactional
     public void deleteUsuario(Long id) throws MessagingException {
         Usuario usuario = usuarioRepository.findById(id)
@@ -95,9 +94,6 @@ public class UsuarioService {
 
         // eliminar usuario de las actividades en las que esta inscrito
         List<Actividad> actividades = actividadRepository.findAll();
-
-        Long idNotificacion;
-
         for (Actividad act : actividades) {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
@@ -108,31 +104,21 @@ public class UsuarioService {
             } else {
                 actividadService.deleteActividad(act.getId(), usuario.getId());
 
-                for (Notificacion notificacion : act.getNotificaciones()) {
-
-                    idNotificacion = notificacion.getId();
-                    notificacionService.EliminarNotificacion(idNotificacion, usuario.getId());
-                }
-
             }
-
         }
-    }
 
-    notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
+        notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
 
-    if(usuario.getPerfil()!=null)
+        if (usuario.getPerfil() != null) {
+            Perfil perfil = usuario.getPerfil();
+            usuario.setPerfil(null); // rompe la relación en el grafo
+            perfilRepository.delete(perfil); // borra el perfil existente (managed)
+        }
 
-    {
-        Perfil perfil = usuario.getPerfil();
-        usuario.setPerfil(null); // rompe la relación en el grafo
-        perfilRepository.delete(perfil); // borra el perfil existente (managed)
-    }
-
-    usuarioRepository.deleteToken(usuario.getId());usuarioRepository.delete(usuario);
+        usuarioRepository.deleteToken(usuario.getId());
+        usuarioRepository.delete(usuario);
 
     }
-}
 
     /**
      * Registra un nuevo usuario con verificación por email.
