@@ -7,6 +7,7 @@ import java.util.Set;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Model.converter.EstadoNotificacionConverter;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -46,11 +47,12 @@ public class Notificacion {
     @JoinColumn(name = "ID_ACTIVIDAD", nullable = true)
     private Actividad actividad;
 
-    @OneToMany(mappedBy = "notificacion")
+    @OneToMany(mappedBy = "notificacion", cascade = CascadeType.ALL,
+           orphanRemoval = true)
     private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO_GENERADOR", nullable = false)
+    @JoinColumn(name = "ID_USUARIO_GENERADOR", nullable = true)
     private Usuario usuarioCreador;
 
     public Notificacion(Long id, @Size(max = 64) String titulo, @Size(max = 500) String descripcion,

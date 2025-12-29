@@ -34,9 +34,7 @@ import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Repository.ActividadRepository;
-import com.Up2Play.backend.Repository.NotificacionRepository;
 import com.Up2Play.backend.Repository.PerfilRepository;
-import com.Up2Play.backend.Repository.UsuarioNotificacionRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
 import jakarta.mail.MessagingException;
@@ -58,16 +56,12 @@ public class UsuarioService {
     private ActividadService actividadService;
     private ActividadRepository actividadRepository;
     private NotificacionService notificacionService;
-    private final NotificacionRepository notificacionRepository;
-    private final UsuarioNotificacionRepository usuarioNotificacionRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
             LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService,
             PerfilService perfilService, PerfilRepository perfilRepository, ActividadService actividadService,
-            ActividadRepository actividadRepository, NotificacionService notificacionService,
-            NotificacionRepository notificacionRepository,
-            UsuarioNotificacionRepository usuarioNotificacionRepository) {
+            ActividadRepository actividadRepository, NotificacionService notificacionService) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -79,8 +73,6 @@ public class UsuarioService {
         this.actividadService = actividadService;
         this.actividadRepository = actividadRepository;
         this.notificacionService = notificacionService;
-        this.notificacionRepository = notificacionRepository;
-        this.usuarioNotificacionRepository = usuarioNotificacionRepository;
     }
 
     // Obtiene todos los usuarios en una lista
@@ -96,15 +88,16 @@ public class UsuarioService {
     // Elimina un usuario por ID.
     @Transactional
     public void deleteUsuario(Long id) throws MessagingException {
-
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
 
         // eliminar usuario de las actividades en las que esta inscrito
         List<Actividad> actividades = actividadRepository.findAll();
 
         Long idNotificacion;
-        
+
         for (Actividad act : actividades) {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
@@ -114,26 +107,32 @@ public class UsuarioService {
 
             } else {
                 actividadService.deleteActividad(act.getId(), usuario.getId());
+
                 for (Notificacion notificacion : act.getNotificaciones()) {
 
-                   idNotificacion = notificacion.getId();
-                   notificacionService.EliminarNotificacion(idNotificacion, usuario.getId());
+                    idNotificacion = notificacion.getId();
+                    notificacionService.EliminarNotificacion(idNotificacion, usuario.getId());
                 }
 
             }
 
         }
+    }
 
-        if (usuario.getPerfil() != null) {
-            Perfil perfil = usuario.getPerfil();
-            usuario.setPerfil(null); // rompe la relación en el grafo
-            perfilRepository.delete(perfil); // borra el perfil existente (managed)
-        }
+    notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
 
-        usuarioRepository.deleteToken(usuario.getId());
-        usuarioRepository.delete(usuario);
+    if(usuario.getPerfil()!=null)
+
+    {
+        Perfil perfil = usuario.getPerfil();
+        usuario.setPerfil(null); // rompe la relación en el grafo
+        perfilRepository.delete(perfil); // borra el perfil existente (managed)
+    }
+
+    usuarioRepository.deleteToken(usuario.getId());usuarioRepository.delete(usuario);
 
     }
+}
 
     /**
      * Registra un nuevo usuario con verificación por email.

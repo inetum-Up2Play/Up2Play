@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,14 +56,17 @@ public class Usuario implements UserDetails {
     @Column(name = "VERIFICATION_EXPIRES_AT")
     private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
 
-    @OneToMany(mappedBy = "usuarioCreador")
+    @OneToMany(mappedBy = "usuarioCreador",
+           cascade = CascadeType.ALL,
+           orphanRemoval = true)
     Set<Actividad> actividadesCreadas = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "USUARIO_ACTIVIDAD", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id"))
     private Set<Actividad> actividadesUnidas = new HashSet<>();
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL,
+           orphanRemoval = true)
     private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
 
     @OneToOne(mappedBy = "usuario")
