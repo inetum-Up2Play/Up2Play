@@ -1,5 +1,7 @@
 package com.Up2Play.backend.Repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,9 +12,7 @@ import com.Up2Play.backend.Model.Notificacion;
 
 @Repository
 public interface NotificacionRepository extends JpaRepository<Notificacion, Long> {
-    @Modifying
-@Query("DELETE FROM Notificacion n WHERE n.usuarioCreador.id = :id")
-void deleteByUsuarioCreador(@Param("id") Long id);
-
+    
+    List<Notificacion> findByUsuarioCreador_Id(Long usuarioId);
 
 }

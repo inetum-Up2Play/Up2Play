@@ -32,6 +32,7 @@ import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Notificacion;
 import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
+import com.Up2Play.backend.Model.UsuarioNotificacion;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Repository.ActividadRepository;
 import com.Up2Play.backend.Repository.NotificacionRepository;
@@ -96,13 +97,13 @@ public class UsuarioService {
     // Elimina un usuario por ID.
     @Transactional
     public void deleteUsuario(Long id) throws MessagingException {
-
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+        notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
+
         // eliminar usuario de las actividades en las que esta inscrito
         List<Actividad> actividades = actividadRepository.findAll();
-               
         for (Actividad act : actividades) {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
@@ -114,13 +115,9 @@ public class UsuarioService {
                 actividadService.deleteActividad(act.getId(), usuario.getId());
 
             }
-
-            for (Notificacion notificacion : act.getNotificaciones()) {
- 
-                   Long idNotificacion = notificacion.getId();
-                   notificacionService.EliminarNotificacion(idNotificacion, usuario.getId());
-                }
         }
+
+        notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
 
         if (usuario.getPerfil() != null) {
             Perfil perfil = usuario.getPerfil();

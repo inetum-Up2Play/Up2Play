@@ -52,7 +52,7 @@ public class Notificacion {
     private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO_GENERADOR", nullable = false)
+    @JoinColumn(name = "ID_USUARIO_GENERADOR", nullable = true)
     private Usuario usuarioCreador;
 
     public Notificacion(Long id, @Size(max = 64) String titulo, @Size(max = 500) String descripcion,

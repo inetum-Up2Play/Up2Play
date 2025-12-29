@@ -348,6 +348,7 @@ public class NotificacionService {
         }
     }
 
+    // Se eliminar en laabla M:N
     @Transactional
     public Boolean EliminarNotificacion(Long notificaionId, Long usuarioId) {
 
@@ -361,10 +362,34 @@ public class NotificacionService {
                 usuario,
                 notificacion);
         
-        if (usuarioNotificacion != null) {
-            usuarioNotificacionRepository.deleteById(usuarioNotificacion.getId());
-            }
+        usuarioNotificacionRepository.deleteById(usuarioNotificacion.getId());
+        return true;
+
+    }
+
+        // Se eliminar en laabla M:N, y se pone en null
+    @Transactional
+    public Boolean EliminarNotificacionesAlEliminarUsuario(Long usuarioId) {
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        List<Notificacion> notificaciones = notificacionRepository.findByUsuarioCreador_Id(usuarioId);
+
+        List<UsuarioNotificacion> usuarioNotificacion = usuarioNotificacionRepository.findByUsuario(usuario);
+
         
+        for (UsuarioNotificacion eliminarUsuarioNotificacion : usuarioNotificacion) {
+
+            usuarioNotificacionRepository.deleteById(eliminarUsuarioNotificacion.getId());
+        }
+
+        for (Notificacion modificarNotificacion : notificaciones) {
+
+            modificarNotificacion.setUsuarioCreador(null);
+            notificacionRepository.save(modificarNotificacion);
+
+        }
 
         return true;
 
