@@ -2,29 +2,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap%27');
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    /* Evita que el body genere scroll lateral por animaciones */
 }
 
 h1,
 h2,
 h3,
 h4 {
-
     font-family: 'Montserrat', sans-serif;
 }
 
 p,
 li {
-
     font-family: 'Work Sans', sans-serif;
 }
 
-.navBar {
-    font-family: 'Montserrat', sans-serif;
-
-}
-
-button {
+.btn-up2 {
     height: fit-content;
     background-color: #B1DF75;
     border-radius: 20px;
@@ -33,6 +32,21 @@ button {
     font-family: 'Work Sans', sans-serif;
     font-weight: bold;
     cursor: pointer;
+}
+
+header {
+    background-image: url('../images/header/deporte.png');
+    background-position: center center;
+    background-size: cover;
+}
+
+#header-section.scrolled {
+    background: #3D6C3F;
+    /* ajusta color/opacidad a tu paleta */
+}
+
+.navBar {
+    font-family: 'Montserrat', sans-serif;
 }
 
 .avatar {
@@ -57,7 +71,6 @@ button.iniciar-sesion {
     cursor: pointer;
 }
 
-
 button.iniciar-sesion:hover {
     background-color: #DFF2B2;
     /* Un tono más claro del verde base */
@@ -75,46 +88,12 @@ button.registrarse {
     cursor: pointer;
 }
 
-/* Evita que el body genere scroll lateral por animaciones */
-html, body { overflow-x: hidden; }
-
-button.botones-carusel {
-    width: auto;
-    background-color: transparent;
-    display: flex;
-    color: #F7F7F7;
+button.registrarse:hover {
+    background-color: #193118;
+    /* Un tono más claro del verde base */
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
-.cards{
-
-    border-radius: 8%;
-}
-button.botones-carusel-abajo {
-
-    background-color: #F7F7F7;
-    width: 20px;           /* tamaño del botón */
-    height: 20px;          /* igual que el ancho para que sea circular */
-    border-radius: 50%;    /* hace el botón completamente redondo */
-    display: inline-block; /* asegura que se comporte como un botón */
-    cursor: pointer;       /* cursor tipo mano */
-    transition: all 0.3s ease; /* animación suave */
-}
-
-button.botones-carusel-abajo:focus {
-
-    background-color: #B1DF75;  
-
-}
-
-header {
-    background-image: url('../images/header/deporte.png');
-    background-position: center center;
-    background-size: cover;
-}
-
-#header-section.scrolled {
-  background: #3D6C3F;   /* ajusta color/opacidad a tu paleta */
-}
-
 
 .activity-card {
     border-radius: 2rem;
@@ -162,7 +141,6 @@ header {
 #header-section.scrolled {
     background-color: rgba(61, 108, 63, 0.9);
     backdrop-filter: blur(3px);
-
 }
 
 #section-UP2Play {
@@ -211,4 +189,119 @@ header {
 #Joan_Juncosa {
     background-color: #F7F7F7;
     border-radius: 30px;
+}
+
+.slide-transition {
+    transition: transform 0.5s ease-in-out;
+}
+
+/* --- CAROUSEL --- */
+
+/* Contenedor general dentro del slide */
+.wrapper {
+    height: 100%;
+    /* Ocupar altura completa */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card base */
+.card {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Imagen superior */
+.card-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 18px;
+}
+
+.card-body {
+    padding: 18px 18px 10px 18px;
+    flex: 1;
+    /* Empuja el footer hacia abajo */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Subtítulo */
+.subtitle {
+    margin: 0 0 10px 0;
+    color: #6b7280;
+    /* gris */
+    font-size: 0.95rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Título */
+.title {
+    margin: 0 0 8px 0;
+    font-weight: 800;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: #1f2937;
+    /* Prevención de desbordamiento */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Ubicación */
+.location {
+    margin: 0;
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* Footer */
+.card-footer {
+    padding: 14px 18px 18px 18px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-top: auto;
+    /* Se pega al fondo */
+    border-top: 1px solid #f3f4f6;
+}
+
+/* Botones base */
+.btn {
+    border: none;
+    border-radius: 999px;
+    /* pill */
+    padding: 10px 16px;    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: fit-content;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* Botón principal */
+.btn-primary {
+    background: #3D6C3F;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #204718;
+    box-shadow: 0 4px 6px -1px rgba(47, 111, 31, 0.3);
 }
