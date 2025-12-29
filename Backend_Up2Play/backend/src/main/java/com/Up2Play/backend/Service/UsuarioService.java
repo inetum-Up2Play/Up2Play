@@ -29,6 +29,7 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginExcepti
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
 import com.Up2Play.backend.Model.Actividad;
+import com.Up2Play.backend.Model.Notificacion;
 import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
@@ -101,6 +102,8 @@ public class UsuarioService {
 
         // eliminar usuario de las actividades en las que esta inscrito
         List<Actividad> actividades = actividadRepository.findAll();
+
+        Long idNotificacion;
         
         for (Actividad act : actividades) {
             if (!act.getUsuarioCreador().equals(usuario)) {
@@ -111,6 +114,12 @@ public class UsuarioService {
 
             } else {
                 actividadService.deleteActividad(act.getId(), usuario.getId());
+                for (Notificacion notificacion : act.getNotificaciones()) {
+
+                   idNotificacion = notificacion.getId();
+                   notificacionService.EliminarNotificacion(idNotificacion, usuario.getId());
+                }
+
             }
 
         }
