@@ -10,15 +10,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 
 import { AuthService } from '../../services/auth/auth-service';
 import { UserDataService } from '../../services/auth/user-data-service';
 import { AvatarPipe } from '../../../shared/pipes/avatar-pipe';
 import { PerfilService } from '../../services/perfil/perfil-service';
-import { SnowService } from '../../services/navidad/snow-service';
-
 
 interface MenuItemPages {
   label: string;
@@ -41,18 +38,6 @@ export class Header implements OnInit {
   public perfilService = inject(PerfilService);
   private renderer = inject(Renderer2); // Para manipular el DOM
   private document = inject(DOCUMENT); // Referencia al Documento
-
-  
-
-  private snow = inject(SnowService);
-
-  // Este es el botón que ya tienes
-  toggleSnow() {
-    this.snow.toggle();
-  }
-
-
-
 
   // Signal que almacena el email una sola vez y no cambia más
   private userEmailSignal = signal<string>('');
