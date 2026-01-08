@@ -176,7 +176,6 @@ public Map<String, Object> createP2PPayment(Long amount, String currency,
             .setAmount(amount)
             .setCurrency(currency.toLowerCase())
             .addAllPaymentMethodType(DEFAULT_PAYMENT_METHOD_TYPES)
-            // Ya no usamos .setTransferData porque el pago se crea DIRECTAMENTE en la cuenta destino
             .setApplicationFeeAmount(actualFee) // Tu comisión (puedes poner 0)
             .putMetadata("transaction_type", "p2p_payment")
             .setReceiptEmail(customerEmail)
