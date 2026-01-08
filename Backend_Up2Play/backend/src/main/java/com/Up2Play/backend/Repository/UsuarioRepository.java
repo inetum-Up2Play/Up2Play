@@ -26,6 +26,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     // Busca un usuario por su código de verificación.
     Optional<Usuario> findByVerificationCode(String verificationCode);
 
+    Optional<Usuario> findByStripeAccountId(String stripeAccountId);
+
     @Modifying
     @Query("DELETE FROM VerificationToken t WHERE t.usuario.id = :usuarioId")
     int deleteToken(@Param("usuarioId") Long usuarioId);
