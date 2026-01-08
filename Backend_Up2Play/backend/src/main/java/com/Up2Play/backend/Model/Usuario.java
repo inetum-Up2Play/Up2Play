@@ -56,18 +56,26 @@ public class Usuario implements UserDetails {
     @Column(name = "VERIFICATION_EXPIRES_AT")
     private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
 
-    @OneToMany(mappedBy = "usuarioCreador",
-           cascade = CascadeType.ALL,
-           orphanRemoval = true)
+    @OneToMany(mappedBy = "usuarioCreador", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Actividad> actividadesCreadas = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "USUARIO_ACTIVIDAD", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id"))
     private Set<Actividad> actividadesUnidas = new HashSet<>();
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL,
-           orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
+
+    private String stripeAccountId;
+    private Boolean pagosHabilitados;
+
+    public String getStripeAccountId() {
+        return stripeAccountId;
+    }
+
+    public void setStripeAccountId(String stripeAccountId) {
+        this.stripeAccountId = stripeAccountId;
+    }
 
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
@@ -140,6 +148,46 @@ public class Usuario implements UserDetails {
         this.actividadesCreadas = actividadesCreadas;
         this.actividadesUnidas = actividadesUnidas;
         this.usuarioNotificaciones = usuarioNotificaciones;
+        this.perfil = perfil;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones, String stripeAccountId, Perfil perfil) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.stripeAccountId = stripeAccountId;
+        this.perfil = perfil;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones, String stripeAccountId, Boolean pagosHabilitados,
+            Perfil perfil) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.stripeAccountId = stripeAccountId;
+        this.pagosHabilitados = pagosHabilitados;
         this.perfil = perfil;
     }
 
@@ -269,5 +317,13 @@ public class Usuario implements UserDetails {
 
     public void setUsuarioNotificaciones(Set<UsuarioNotificacion> usuarioNotificaciones) {
         this.usuarioNotificaciones = usuarioNotificaciones;
+    }
+
+    public Boolean getPagosHabilitados() {
+        return pagosHabilitados;
+    }
+
+    public void setPagosHabilitados(Boolean pagosHabilitados) {
+        this.pagosHabilitados = pagosHabilitados;
     }
 }
