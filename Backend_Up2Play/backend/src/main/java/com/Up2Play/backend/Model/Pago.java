@@ -1,8 +1,6 @@
 package com.Up2Play.backend.Model;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -35,29 +32,24 @@ public class Pago {
     @JoinColumn(name = "id_actividad", nullable = false)
     private Actividad actividad;
 
-    @OneToMany(mappedBy = "pago")
-    private Set<Notificacion> notificaciones = new HashSet<>();
-
     public Pago() {
     }
 
-    public Pago(Long id, LocalDateTime fecha, double total, Usuario usuario, Actividad actividad,
-            Set<Notificacion> notificaciones) {
+    public Pago(Long id, LocalDateTime fecha, double total, Usuario usuario, Actividad actividad) {
         this.id = id;
         this.fecha = fecha;
         this.total = total;
         this.usuario = usuario;
         this.actividad = actividad;
-        this.notificaciones = notificaciones;
+        
     }
 
-    public Pago(LocalDateTime fecha, double total, Usuario usuario, Actividad actividad,
-            Set<Notificacion> notificaciones) {
+    public Pago(LocalDateTime fecha, double total, Usuario usuario, Actividad actividad) {
         this.fecha = fecha;
         this.total = total;
         this.usuario = usuario;
         this.actividad = actividad;
-        this.notificaciones = notificaciones;
+       
     }
 
     public Long getId() {
@@ -99,14 +91,5 @@ public class Pago {
     public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
-
-    public Set<Notificacion> getNotificaciones() {
-        return notificaciones;
-    }
-
-    public void setNotificaciones(Set<Notificacion> notificaciones) {
-        this.notificaciones = notificaciones;
-    }
     
-
 }
