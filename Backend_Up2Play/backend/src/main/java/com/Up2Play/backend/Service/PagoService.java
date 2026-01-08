@@ -35,7 +35,7 @@ public class PagoService {
         // webhook de Stripe
         if (evento == PAYMENT_INTENT_SUCCEEDED) {
             pagoService.crearPago(actividad, usuario);
-        }
+        } o en la manera que sea que se compruebe que el pago se ha realizado con éxito.
     */
     public Pago crearPago(Actividad act, Usuario usuario){
 

@@ -33,7 +33,7 @@ export class ErrorService {
     ACTIVIDAD_NO_ENCONTRADA: 'Actividad no encontrada', //404
     USUARIO_YA_APUNTADO: 'El usuario ya está apuntado a la actividad', //409
     USUARIO_NO_APUNTADO: 'El usuario no está apuntado a la actividad', //404
-    ACTIVIDAD_COMPLETADA: 'No te puedes unir a una actividad completada', //409
+    ACTIVIDAD_COMPLETADA: 'No te puedes unir a una actividad en curso o completada.', //409
     MAX_PARTICIPANTES:
       'Se ha alcanzado el número máximo de participantes para esta actividad', //409
     CREADOR_NO_DESAPUNTAR:
@@ -45,6 +45,7 @@ export class ErrorService {
     PERFIL_NO_ENCONTRADO: 'No se ha encontrado el perfil solicitado.', //404
     EDITAR_PERFIL_DENEGADO: 'No tienes permiso para editar este perfil.', //403
     NOTIFICACION_NO_ENCONTRADA: 'Notificación no encontrada.', //404
+    ERROR_DESAPUNTARSE: 'No puedes desapuntarte de una actividad en curso o completada.', //409
     UNKNOWN: 'Ha ocurrido un error desconocido.', // ?
   };
 

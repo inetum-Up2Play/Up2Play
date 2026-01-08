@@ -13,6 +13,7 @@ import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.DTO.Respuestas.UsuarioDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorDesapuntarse;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
@@ -436,7 +437,7 @@ public class ActividadService {
                 throw new MaximosParticipantes("Se ha alcanzado el numero maximo de participantes en esta actividad");
             }
 
-            if (act.getEstado().equals(EstadoActividad.COMPLETADA)) {
+            if (act.getEstado() != EstadoActividad.PENDIENTE) {
                 throw new ActividadCompletadaException("No se puede unir a una actividad completada");
             } else {
                 act.getUsuarios().add(usuario);
@@ -534,8 +535,10 @@ public class ActividadService {
         if (act.getUsuarios().contains(usuario)) {
 
             if (!act.getUsuarioCreador().equals(usuario)) {
-
-                //Enviar notificacion
+                if (act.getEstado() != EstadoActividad.PENDIENTE) {
+                    throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");   
+                } else {
+                    //Enviar notificacion
                 notificacionService.crearNotificacionPerfil(
                 "Te has desapuntdo de "+act.getNombre()+"." , 
                 "Has cancelado tu inscripción en la actividad "+act.getNombre()+". Esperamos verte en otras actividades próximamente.", 
@@ -546,6 +549,8 @@ public class ActividadService {
                 act.getUsuarios().remove(usuario);
                 usuario.getActividadesUnidas().remove(act);
                 act.setNumPersInscritas(act.getNumPersInscritas() - 1);
+                }
+                
 
             } else {
                 throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
