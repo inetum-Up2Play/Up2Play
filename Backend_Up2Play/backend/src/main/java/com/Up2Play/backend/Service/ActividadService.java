@@ -102,17 +102,18 @@ public class ActividadService {
         act.getUsuarios().add(usuario);
         usuarioApuntado.getActividadesUnidas().add(act);
         Actividad actGuardada = actividadRepository.save(act);
-        
-        //Enviar notificacion
+
+        // Enviar notificacion
         Set<Usuario> usuariosUnidos = act.getUsuarios();
         notificacionService.crearNotificacion(
-            "La actividad "+act.getNombre()+" se ha creado correctamente." , 
-            "La actividad "+act.getNombre()+" se ha registrado con éxito en el sistema. Ahora puedes revisar los detalles, realizar modificaciones si lo deseas y esperar a que otros participantes se unan al evento.", 
-            LocalDateTime.now(),
-            EstadoNotificacion.fromValue("CREADA"),
-            act,
-            usuariosUnidos,
-            usuario);
+                "La actividad " + act.getNombre() + " se ha creado correctamente.",
+                "La actividad " + act.getNombre()
+                        + " se ha registrado con éxito en el sistema. Ahora puedes revisar los detalles, realizar modificaciones si lo deseas y esperar a que otros participantes se unan al evento.",
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("CREADA"),
+                act,
+                usuariosUnidos,
+                usuario);
 
         return actGuardada;
     }
@@ -344,17 +345,17 @@ public class ActividadService {
 
             Actividad actEditada = actividadRepository.save(act);
 
-            //Enviar notificacion
+            // Enviar notificacion
             Set<Usuario> usuariosUnidos = act.getUsuarios();
             notificacionService.crearNotificacion(
-                "La actividad "+act.getNombre()+"  ha sido modificada." , 
-                "Se ha cambiado algún detalle de la actividad '"+act.getNombre()+"'. Revisa la información de la actividad para confirmar que sigues interesado en asistir al evento.", 
-                LocalDateTime.now(),
-                EstadoNotificacion.fromValue("EDITADA"),
-                act,
-                usuariosUnidos,
-                usuario);
-
+                    "La actividad " + act.getNombre() + "  ha sido modificada.",
+                    "Se ha cambiado algún detalle de la actividad '" + act.getNombre()
+                            + "'. Revisa la información de la actividad para confirmar que sigues interesado en asistir al evento.",
+                    LocalDateTime.now(),
+                    EstadoNotificacion.fromValue("EDITADA"),
+                    act,
+                    usuariosUnidos,
+                    usuario);
 
             List<String> emails = act.getUsuarios().stream()
                     .map(Usuario::getEmail)
@@ -377,20 +378,20 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
 
-             //Enviar notificacion
+            // Enviar notificacion
             Set<Usuario> usuariosUnidos = act.getUsuarios();
             notificacionService.crearNotificacion(
-            "La actividad "+act.getNombre()+" ha sido cancelada." , 
-            "La actividad "+act.getNombre()+" ha sido cancelada.  Lamentamos los inconvenientes y esperamos verte en próximas actividades.", 
-            LocalDateTime.now(),
-            EstadoNotificacion.fromValue("CANCELADA"),
-            act,
-            usuariosUnidos,
-            usuario);
- 
+                    "La actividad " + act.getNombre() + " ha sido cancelada.",
+                    "La actividad " + act.getNombre()
+                            + " ha sido cancelada.  Lamentamos los inconvenientes y esperamos verte en próximas actividades.",
+                    LocalDateTime.now(),
+                    EstadoNotificacion.fromValue("CANCELADA"),
+                    act,
+                    usuariosUnidos,
+                    usuario);
+
             List<String> emails = act.getUsuarios().stream()
                     .map(Usuario::getEmail)
                     .toList();
@@ -401,7 +402,6 @@ public class ActividadService {
                 n.setActividad(null);
             }
             act.getNotificaciones().clear();
-
 
             for (Usuario inscrito : act.getUsuarios()) {
                 inscrito.getActividadesUnidas().remove(act);
@@ -452,15 +452,16 @@ public class ActividadService {
 
         usuarioRepository.save(usuario);
 
-        //Enviar notificacion
-            
-            notificacionService.crearNotificacionPerfil(
-            "¡Te has inscrito a  "+act.getNombre()+"!" , 
-            "¡Te has inscrito a  "+act.getNombre()+"! Revisa los detalles del evento y prepárate para disfrutar. Te notificaremos si hay cambios importantes.", 
-            LocalDateTime.now(),
-            EstadoNotificacion.fromValue("INSCRITO"),
-            act,
-            usuario);
+        // Enviar notificacion
+
+        notificacionService.crearNotificacionPerfil(
+                "¡Te has inscrito a  " + act.getNombre() + "!",
+                "¡Te has inscrito a  " + act.getNombre()
+                        + "! Revisa los detalles del evento y prepárate para disfrutar. Te notificaremos si hay cambios importantes.",
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("INSCRITO"),
+                act,
+                usuario);
 
         return new ActividadDtoResp(
                 act.getId(),
@@ -535,14 +536,15 @@ public class ActividadService {
 
             if (!act.getUsuarioCreador().equals(usuario)) {
 
-                //Enviar notificacion
+                // Enviar notificacion
                 notificacionService.crearNotificacionPerfil(
-                "Te has desapuntdo de "+act.getNombre()+"." , 
-                "Has cancelado tu inscripción en la actividad "+act.getNombre()+". Esperamos verte en otras actividades próximamente.", 
-                LocalDateTime.now(),
-                EstadoNotificacion.fromValue("DESAPUNTADO"),
-                act,
-                usuario);
+                        "Te has desapuntdo de " + act.getNombre() + ".",
+                        "Has cancelado tu inscripción en la actividad " + act.getNombre()
+                                + ". Esperamos verte en otras actividades próximamente.",
+                        LocalDateTime.now(),
+                        EstadoNotificacion.fromValue("DESAPUNTADO"),
+                        act,
+                        usuario);
                 act.getUsuarios().remove(usuario);
                 usuario.getActividadesUnidas().remove(act);
                 act.setNumPersInscritas(act.getNumPersInscritas() - 1);
@@ -671,6 +673,30 @@ public class ActividadService {
             actividad.setEstado(estadoCalculado);
             actividadRepository.save(actividad);
         }
+    }
+
+    @Transactional
+    public List<ActividadDtoResp> getActividadesPasadasPorUsuario(Long usuarioId) {
+        var now = java.time.LocalDateTime.now();
+        return actividadRepository
+                .findByUsuarios_IdAndFechaBeforeOrderByFechaDesc(usuarioId, now)
+                .stream()
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
     }
 
 }

@@ -180,5 +180,15 @@ export class ActService {
     );
   }
 
+  //Lista las actividades en las que está el usuario y están pasadas
+  listarActividadesPasadas(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getPasadasPorUsuario').pipe(
+      catchError((error) => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
+      })
+    );
+  }
+
 
 }
