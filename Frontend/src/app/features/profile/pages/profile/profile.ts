@@ -24,6 +24,7 @@ import { MessageModule } from 'primeng/message';
 import { Footer } from '../../../../core/layout/footer/footer';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Pagos } from '../../../../core/services/pagos/pagos';
 
 @Component({
   selector: 'app-profile',
@@ -48,6 +49,7 @@ export class Profile implements OnInit {
   private errorService = inject(ErrorService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private pagos = inject(Pagos);
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
@@ -202,5 +204,17 @@ export class Profile implements OnInit {
         }
       });
   }
+  
+  iniciarOnboarding() {
+    this.pagos.getStripeOnboardingUrl().subscribe({
+      next: (url) => {
+        window.location.href = url; // Rediriges al usuario
+      },
+      error: () => {
+        alert('Ha fallado la generación del enlace. Inténtalo más tarde.');
+      }
+    });
+  }
+
 
 }
