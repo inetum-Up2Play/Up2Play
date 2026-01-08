@@ -4,6 +4,7 @@ public enum EstadoNotificacion {
 
     INSCRITO("Inscrito"),
     PAGADO("Pagado"),
+    PAGO_RECIBIDO("Pago Recibido"),
     ACTUALIZADO("Actualizado"), //editar perfil
     DESAPUNTADO("Desapuntado"),
     CANCELADA("Cancelada"),

@@ -17,17 +17,26 @@ import jakarta.transaction.Transactional;
 public class PagoService {
 
     private PagoRepository pagoRepository;
+    private NotificacionService notificacionService;
 
-    public PagoService(PagoRepository pagoRepository) {
-        this.pagoRepository = pagoRepository;
-        
-    }
+    
 
     //Crear pago por cada usuario al apuntarse a una actividad de pago
 
+    public PagoService(PagoRepository pagoRepository, NotificacionService notificacionService) {
+        this.pagoRepository = pagoRepository;
+        this.notificacionService = notificacionService;
+    }
+
     /* ---------IMPORTANTE!!---------
         Método hecho, falta implementarlo una vez el usuario paga y stripe
-        confirma el pago. */
+        confirma el pago. 
+        Se usa en: 
+        // webhook de Stripe
+        if (evento == PAYMENT_INTENT_SUCCEEDED) {
+            pagoService.crearPago(actividad, usuario);
+        }
+    */
     public Pago crearPago(Actividad act, Usuario usuario){
 
         Pago pago = new Pago();
@@ -37,7 +46,9 @@ public class PagoService {
         pago.setUsuario(usuario);
         pago.setActividad(act);
 
-        return pagoRepository.save(pago);
+        Pago pagoGuardado = pagoRepository.save(pago);
+        notificacionService.notificacionPagoConfirmado(pagoGuardado);
+        return pagoGuardado;
     }
 
     //Listar todos los pagos de cada usuario
