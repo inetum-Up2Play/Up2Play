@@ -72,6 +72,10 @@ public class Usuario implements UserDetails {
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
 
+    @OneToMany(mappedBy = "usuario",
+           cascade = CascadeType.ALL)
+    Set<Pago> pagos = new HashSet<>();
+
     public Perfil getPerfil() {
         return perfil;
     }
@@ -141,6 +145,26 @@ public class Usuario implements UserDetails {
         this.actividadesUnidas = actividadesUnidas;
         this.usuarioNotificaciones = usuarioNotificaciones;
         this.perfil = perfil;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones,
+            Perfil perfil, Set<Pago> pagos) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.perfil = perfil;
+        this.pagos = pagos;
     }
 
     public Usuario() {
@@ -269,5 +293,13 @@ public class Usuario implements UserDetails {
 
     public void setUsuarioNotificaciones(Set<UsuarioNotificacion> usuarioNotificaciones) {
         this.usuarioNotificaciones = usuarioNotificaciones;
+    }
+
+    public Set<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(Set<Pago> pagos) {
+        this.pagos = pagos;
     }
 }
