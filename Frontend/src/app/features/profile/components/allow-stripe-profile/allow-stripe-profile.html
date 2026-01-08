@@ -7,10 +7,11 @@
             al botón i sigue los pasos.</p>
     </div>
 
-    <button
+    <button (click)="habilitarPagos()" [disabled]="loading()"
         class="group relative inline-flex items-center bg-[#3D6C3F] h-fit px-6 py-3 rounded-2xl text-white font-semibold cursor-pointer
-         transition-transform duration-300 ease-in-out hover:scale-105
-         after:content-[''] after:inline-block after:w-0 group-hover:after:w-4 after:transition-[width] after:duration-300 after:ease-in-out">
+            transition-transform duration-300 ease-in-out hover:scale-105
+            after:content-[''] after:inline-block after:w-0 group-hover:after:w-4 after:transition-[width] after:duration-300 after:ease-in-out">
+        @if (loading()) { <i class="pi pi-spin pi-spinner mr-2"></i> }
         Ir a Stripe
         <svg class="w-4 h-4 ms-1.5 -me-0.5 transition-transform duration-300 ease-in-out group-hover:translate-x-2"
             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -20,11 +21,9 @@
         </svg>
     </button>
     } @else {
-        <p-message 
-            severity="success" 
-            text="Tu cuenta está vinculada y lista para recibir pagos." 
-            styleClass="w-full justify-content-start">
-        </p-message>
+    <p-message severity="success" text="Tu cuenta está vinculada y lista para recibir pagos."
+        styleClass="w-full justify-content-start">
+    </p-message>
     }
-    
+
 </div>
