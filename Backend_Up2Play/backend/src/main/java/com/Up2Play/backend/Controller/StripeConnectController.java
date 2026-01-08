@@ -2,7 +2,6 @@ package com.Up2Play.backend.Controller;
 
 import com.Up2Play.backend.DTO.CreateAccountRequest;
 import com.Up2Play.backend.DTO.CreatePaymentRequest;
-import com.Up2Play.backend.DTO.DirectChargeRequest;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -107,8 +106,9 @@ public class StripeConnectController {
      * Crea la intención de pago pero NO lo confirma todavía.
      */
     @PostMapping("/payments/payment-intent")
-    public ResponseEntity<?> createP2PPayment(@RequestBody CreatePaymentRequest request) {
+    public ResponseEntity<?> createP2PPayment(@RequestBody CreatePaymentRequest request, @AuthenticationPrincipal UserDetails principal) {
         try {
+
             // Importante: El amount debe venir en céntimos (ej: 500 para 5.00€)
             Map<String, Object> paymentIntent = stripeConnectService.createP2PPayment(
                     request.getAmount(),
