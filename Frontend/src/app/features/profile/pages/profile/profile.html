@@ -8,6 +8,9 @@
                 <app-avatar-profile [usuario]="usuario()" [perfil]="perfil()" (cambiosAvatar)="onCambiosAvatar($event)">
                 </app-avatar-profile>
             </div>
+            <div>
+                <app-allow-stripe-profile></app-allow-stripe-profile>
+            </div>
             <div id="profile">
                 <app-form-profile [usuario]="usuario()" [perfil]="perfil()" (changePassword)="onChangePassword($event)"
                     [(passwordDialogVisible)]="pwdVisible" (cambiosPerfil)="onCambiosPerfil($event)">
