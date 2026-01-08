@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Error de Pago - UP2Play</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec80",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102219",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1c2e24",
+                        "text-main-light": "#111814",
+                        "text-main-dark": "#e0e6e3",
+                        "text-secondary-light": "#618975",
+                        "text-secondary-dark": "#a0b3aa",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark min-h-screen flex flex-col transition-colors duration-200">
+    <!-- Top Navbar -->
+    <header
+        class="w-full bg-surface-light dark:bg-surface-dark border-b border-[#dbe6e0] dark:border-[#2a4035] sticky top-0 z-50">
+        <div class="px-4 md:px-10 lg:px-40 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="size-8 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-3xl">sports_soccer</span>
+                </div>
+                <h2 class="text-xl font-bold leading-tight tracking-[-0.015em]">UP2Play</h2>
+            </div>
+            <div class="hidden md:flex flex-1 justify-end gap-8 items-center">
+                <nav class="flex items-center gap-9">
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Actividades</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Comunidad</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Mi Perfil</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <button
+                        class="flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary text-[#102219] text-sm font-bold leading-normal hover:bg-opacity-90 transition-opacity">
+                        <span class="truncate">Crear Evento</span>
+                    </button>
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border-2 border-primary/20"
+                        data-alt="User profile avatar image"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_HpqxS3Gk8lw3OhOiIf8ZySreAnmoNC4kSVHpvtnngQXgtKGPfqapbtz9da5BqBAo0qjWRuVlLb_e97giieQUghHfzwnCNGGiBMKI-mNKR5246W7lBmVu6IW2du1TZX8QjJGNs0ZJ-QgNaD4fpVAOn7sqkRrcku7DLeK2Gmwj9x04axc9iAgYV6RbRq9NfVdfF0nwTVZtxmDoO1CayaLOOYxUpdxYHK8VMpDXLhxInaRDqGf5J57wkIPF1jr6AREyHHMcP1-n7zY");'>
+                    </div>
+                </div>
+            </div>
+            <button class="md:hidden p-2 text-text-main-light dark:text-text-main-dark">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col items-center justify-center px-4 py-12 md:py-20">
+        <div class="w-full max-w-[640px] flex flex-col gap-6">
+            <!-- Error Card -->
+            <div
+                class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-sm border border-[#dbe6e0] dark:border-[#2a4035] p-8 md:p-12 flex flex-col items-center text-center">
+                <!-- Icon Status -->
+                <div class="size-20 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-5xl text-red-500">credit_card_off</span>
+                </div>
+                <!-- Headline -->
+                <h1 class="text-2xl md:text-3xl font-bold mb-3">¡Vaya! Hubo un problema con el pago</h1>
+                <!-- Description -->
+                <p
+                    class="text-text-secondary-light dark:text-text-secondary-dark text-base max-w-[480px] mb-8 leading-relaxed">
+                    No se ha realizado ningún cargo en tu tarjeta. Esto suele deberse a fondos insuficientes, límites
+                    diarios o un error temporal de conexión con el banco.
+                </p>
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 w-full max-w-[480px] justify-center">
+                    <button
+                        class="flex-1 flex items-center justify-center rounded-xl h-12 px-6 bg-primary text-[#102219] text-base font-bold hover:bg-opacity-90 transition-all shadow-lg shadow-primary/20">
+                        <span class="mr-2 material-symbols-outlined text-xl">refresh</span>
+                        <span>Intentar de nuevo</span>
+                    </button>
+                    <button
+                        class="flex-1 flex items-center justify-center rounded-xl h-12 px-6 bg-transparent border border-[#dbe6e0] dark:border-[#2a4035] text-text-main-light dark:text-text-main-dark hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors text-base font-bold">
+                        <span>Contactar Soporte</span>
+                    </button>
+                </div>
+            </div>
+            <!-- Troubleshooting Details -->
+            <div
+                class="bg-surface-light dark:bg-surface-dark rounded-xl border border-[#dbe6e0] dark:border-[#2a4035] p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="material-symbols-outlined text-primary">info</span>
+                    <h3 class="font-bold text-lg">Posibles causas y soluciones</h3>
+                </div>
+                <div class="space-y-4">
+                    <div
+                        class="flex gap-4 p-3 rounded-lg hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors">
+                        <div class="mt-1">
+                            <span
+                                class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-xl">account_balance_wallet</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-sm mb-1">Fondos insuficientes</p>
+                            <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Verifica el saldo
+                                disponible en tu cuenta o intenta con otra tarjeta.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-4 p-3 rounded-lg hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors">
+                        <div class="mt-1">
+                            <span
+                                class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-xl">lock</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-sm mb-1">Bloqueo de seguridad</p>
+                            <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Algunos bancos
+                                bloquean transacciones online inusuales. Revisa tus mensajes del banco.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-4 p-3 rounded-lg hover:bg-background-light dark:hover:bg-background-dark/50 transition-colors">
+                        <div class="mt-1">
+                            <span
+                                class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark text-xl">pin</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-sm mb-1">Datos incorrectos</p>
+                            <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Asegúrate de que
+                                el CVV y la fecha de caducidad sean correctos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="mt-6 pt-4 border-t border-[#dbe6e0] dark:border-[#2a4035] flex justify-between items-center">
+                    <span class="text-xs text-text-secondary-light dark:text-text-secondary-dark font-mono">Error Code:
+                        stripe_card_declined_generic</span>
+                    <a class="text-xs font-medium text-primary hover:underline" href="#">Ver centro de ayuda</a>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a class="inline-flex items-center text-text-secondary-light dark:text-text-secondary-dark hover:text-primary transition-colors font-medium"
+                    href="#">
+                    <span class="material-symbols-outlined text-lg mr-1">arrow_back</span>
+                    Volver al inicio
+                </a>
+            </div>
+        </div>
+    </main>
+    <!-- Simple Footer -->
+    <footer class="w-full py-8 text-center border-t border-[#dbe6e0] dark:border-[#2a4035] mt-auto">
+        <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">
+            © 2024 UP2Play. Todos los derechos reservados.
+        </p>
+        <div class="flex justify-center gap-6 mt-2">
+            <a class="text-xs text-text-secondary-light dark:text-text-secondary-dark hover:text-primary"
+                href="#">Privacidad</a>
+            <a class="text-xs text-text-secondary-light dark:text-text-secondary-dark hover:text-primary"
+                href="#">Términos</a>
+        </div>
+    </footer>
+</body>
+
+</html>

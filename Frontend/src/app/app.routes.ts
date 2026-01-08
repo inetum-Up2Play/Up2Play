@@ -38,7 +38,11 @@ export const routes: Routes = [
       {
         path: 'notificaciones',
         component: Notificaciones
-      }
+      },
+      {
+        path: 'pagos',
+        loadChildren: () => import('./features/pagos/pay.routes').then(m => m.PAY_ROUTES),
+      },
     ],
   }
 
