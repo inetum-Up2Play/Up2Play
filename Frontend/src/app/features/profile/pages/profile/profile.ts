@@ -230,10 +230,20 @@ export class Profile implements OnInit {
 
   verificarEstadoStripe() {
     this.stripeService.checkStatus().subscribe({
-      next: (res) => {
-        this.pagosHabilitados.set(res.pagosHabilitados);
+    next: (res) => {
+      // 1. Actualizamos la señal independiente (opcional si la usas en otro sitio)
+      this.pagosHabilitados.set(res.pagosHabilitados);
+
+      // 2. LA CLAVE: Actualizamos el objeto usuario para que el @if y el [input] del HTML reaccionen
+      const usuarioActual = this.usuario();
+      if (usuarioActual) {
+        this.usuario.set({
+          ...usuarioActual,
+          pagosHabilitados: res.pagosHabilitados
+        });
       }
-    });
+    }
+  });
   }
 
 }
