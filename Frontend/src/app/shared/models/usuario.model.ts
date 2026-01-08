@@ -6,4 +6,5 @@ export interface Usuario {
     nombreUsuario: string;
     stripeAccountId: string;
     pagosHabilitados: boolean;
+
 }

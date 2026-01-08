@@ -55,6 +55,10 @@ public class Notificacion {
     @JoinColumn(name = "ID_USUARIO_GENERADOR", nullable = true)
     private Usuario usuarioCreador;
 
+    @ManyToOne
+    @JoinColumn(name = "id_pago", nullable = true)
+    private Pago pago;
+
     public Notificacion(Long id, @Size(max = 64) String titulo, @Size(max = 500) String descripcion,
             LocalDateTime fecha,
             EstadoNotificacion estadoNotificacion, Actividad actividad, Set<UsuarioNotificacion> usuarioNotificaciones,
