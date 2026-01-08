@@ -12,11 +12,12 @@ import com.Up2Play.backend.Model.Usuario;
 public interface PagoRepository extends JpaRepository<Pago, Long>{
      
     //Buscar lista pagos por su usuario 
-    List<Actividad> findByUsuario(Usuario usuarioCreador);
+    List<Pago> findByUsuario(Usuario usuario);
 
     //Buscar lista pagos por actividad 
-    List<Actividad> findByActividad(Actividad actividad);
+    List<Pago> findByActividad(Actividad actividad);
 
+    
 
 
     }
