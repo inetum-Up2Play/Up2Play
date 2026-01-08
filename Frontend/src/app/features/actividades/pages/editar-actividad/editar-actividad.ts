@@ -97,7 +97,7 @@ export class EditarActividad {
     nivel: ['', [Validators.required]], // mapea a tu enum
     estado: ['', [Validators.required]],
     numPersTotales: [0, [Validators.required, Validators.min(1)]],
-    precio: [0, [Validators.required, Validators.min(0)]],
+    precio: [{value: null, disabled: true}],
   });
 
   actividadId!: number;

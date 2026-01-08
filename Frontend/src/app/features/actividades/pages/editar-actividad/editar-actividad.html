@@ -1,6 +1,6 @@
 <app-header></app-header>
 <main class="pt-5 pb-5 md:pt-8 md:pb-8">
-    <div class="formulario w-[80%] min-w-xs p-4 w-380 md:max-w-5xl md:w-[70%] lg:w-[75%] card flex justify-center">
+    <div class="formulario w-[80%] min-w-xs p-4 md:max-w-5xl md:w-[70%] lg:w-[75%] card flex justify-center">
         <h1>EDITA TU ACTIVIDAD</h1>
         <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center gap-4 w-full">
             <div class="flex flex-col gap-1 w-full">
@@ -8,17 +8,19 @@
                     <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
                     Título
                 </label>
-                <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64" [invalid]="isInvalid('nombre')" />
+                <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64"
+                    [invalid]="isInvalid('nombre')" />
                 <!-- Manejo de errores para el TÍTULO -->
                 @if (isInvalid('nombre')) {
-                    <!-- Verificación de error específico: profanity -->
-                    @if (actividadForm.get('nombre')?.hasError('profanity')) {
-                        <p-message severity="error" size="small" variant="simple">El título contiene lenguaje inapropiado o soez.</p-message>
-                    }
-                    <!-- Verificación de error específico: required (solo si no hay profanity para evitar duplicados) -->
-                    @else if (actividadForm.get('nombre')?.hasError('required')) {
-                        <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
-                    }
+                <!-- Verificación de error específico: profanity -->
+                @if (actividadForm.get('nombre')?.hasError('profanity')) {
+                <p-message severity="error" size="small" variant="simple">El título contiene lenguaje inapropiado o
+                    soez.</p-message>
+                }
+                <!-- Verificación de error específico: required (solo si no hay profanity para evitar duplicados) -->
+                @else if (actividadForm.get('nombre')?.hasError('required')) {
+                <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
+                }
                 }
             </div>
             <div class="flex flex-col gap-1 w-full">
@@ -30,12 +32,13 @@
                     [invalid]="isInvalid('descripcion')"></textarea>
                 <!-- Manejo de errores para la DESCRIPCIÓN -->
                 @if (isInvalid('descripcion')) {
-                    @if (actividadForm.get('descripcion')?.hasError('profanity')) {
-                        <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o soez.</p-message>
-                    }
-                    @else if (actividadForm.get('descripcion')?.hasError('required')) {
-                        <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
-                    }
+                @if (actividadForm.get('descripcion')?.hasError('profanity')) {
+                <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o
+                    soez.</p-message>
+                }
+                @else if (actividadForm.get('descripcion')?.hasError('required')) {
+                <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
+                }
                 }
             </div>
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
@@ -102,17 +105,18 @@
                     placeholder="Ej. Polideportivo Municipal, Calle Mayor 123" [invalid]="isInvalid('ubicacion')" />
                 <!-- Manejo de errores para la UBICACIÓN -->
                 @if (isInvalid('ubicacion')) {
-                    @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
-                        <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o soez.</p-message>
-                    }
-                    @else if (actividadForm.get('ubicacion')?.hasError('required')) {
-                        <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
-                    }
+                @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
+                <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o
+                    soez.</p-message>
+                }
+                @else if (actividadForm.get('ubicacion')?.hasError('required')) {
+                <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
+                }
                 }
             </div>
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
                 <div class="flex flex-col gap-1 w-full">
-                    <label for="num_pers_totales" class="flex items-center gap-2">
+                    <label for="nivel" class="flex items-center gap-2">
                         <i class="pi pi-flag"></i> <!-- Icono PrimeIcons -->
                         Nivel
                     </label>
@@ -123,12 +127,12 @@
                     }
                 </div>
                 <div class="flex flex-col gap-1 w-full">
-                    <label for="num_pers_totales" class="flex items-center gap-2">
+                    <label for="precio" class="flex items-center gap-2">
                         <i class="pi pi-euro"></i> <!-- Icono PrimeIcons -->
-                        Precio
+                        Precio (No puede ser modificado)
                     </label>
                     <p-inputnumber formControlName="precio" placeholder="0,00 €" mode="currency"
-                        inputId="currency-germany" currency="EUR" locale="de-DE" />
+                        inputId="currency-germany" currency="EUR" locale="de-DE" [disabled]="true" />
                 </div>
             </div>
             <button pButton severity="secondary" type="submit"><span pButtonLabel>Editar Actividad</span></button>

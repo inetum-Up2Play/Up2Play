@@ -36,6 +36,10 @@ label i.pi {
     color: vars.$verde-oliva;
 }
 
+:host ::ng-deep .p-inputnumber .p-inputnumber-input:disabled {
+    pointer-events: none !important; // no recibe hover/click
+}
+
 /* Cambia el fondo y el color del texto */
 input[pInputText] {
     background-color: vars.$blanco; // color de fondo
