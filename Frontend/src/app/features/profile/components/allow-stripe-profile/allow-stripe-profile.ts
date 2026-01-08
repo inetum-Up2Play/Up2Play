@@ -1,23 +1,31 @@
-import { Component, inject } from '@angular/core'; import { Pagos } from '../../../../core/services/pagos/pagos';
+import { Component, inject, input, signal } from '@angular/core'; import { Pagos } from '../../../../core/services/pagos/pagos';
+import { StripeService } from '../../../../core/services/pagos/stripe-service';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-allow-stripe-profile',
-  imports: [],
+  imports: [MessageModule],
   templateUrl: './allow-stripe-profile.html',
   styleUrl: './allow-stripe-profile.scss',
 })
 export class AllowStripeProfile {
 
-  private pagos = inject(Pagos);
+  private stripeService = inject(StripeService);
 
-  iniciarOnboarding() {
-    this.pagos.getStripeOnboardingUrl().subscribe({
-      next: (url) => {
-        window.location.href = url; // Rediriges al usuario
+  // Recibimos el estado desde el padre (Perfil) usando signal inputs
+  pagosHabilitados = input.required<boolean>();
+  
+  loading = signal(false);
+
+  habilitarPagos() {
+    this.loading.set(true);
+    this.stripeService.getOnboardingLink().subscribe({
+      next: (res) => {
+        if (res.onboardingUrl) {
+          window.location.href = res.onboardingUrl;
+        }
       },
-      error: () => {
-        alert('Ha fallado la generación del enlace. Inténtalo más tarde.');
-      }
+      error: () => this.loading.set(false)
     });
   }
 }

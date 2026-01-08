@@ -1,12 +1,13 @@
 <div
     class="mb-3 py-4 px-6 md:py-6 md:px-8 lg:px-10 bg-white rounded-lg shadow w-full h-fit justify-between items-center flex md:flex-row flex-col">
+    @if (!pagosHabilitados()) {
     <div class="md:max-w-130 xl:max-w-175 mb-4 md:mb-0">
         <h2 class="font-bold xl:text-2xl lg:text-xl text-lg pb-2">¿Quieres crear actividades de pago?</h2>
         <p>Necesitarás una cuenta de Stripe para poder organizar actividades de pago y recibir los ingresos, haz click
             al botón i sigue los pasos.</p>
     </div>
 
-    <button (click)="iniciarOnboarding()"
+    <button
         class="group relative inline-flex items-center bg-[#3D6C3F] h-fit px-6 py-3 rounded-2xl text-white font-semibold cursor-pointer
          transition-transform duration-300 ease-in-out hover:scale-105
          after:content-[''] after:inline-block after:w-0 group-hover:after:w-4 after:transition-[width] after:duration-300 after:ease-in-out">
@@ -18,5 +19,12 @@
                 d="M19 12H5m14 0-5 5m5-5-5-5" />
         </svg>
     </button>
-
+    } @else {
+        <p-message 
+            severity="success" 
+            text="Tu cuenta está vinculada y lista para recibir pagos." 
+            styleClass="w-full justify-content-start">
+        </p-message>
+    }
+    
 </div>

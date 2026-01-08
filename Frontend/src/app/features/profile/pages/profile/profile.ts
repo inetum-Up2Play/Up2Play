@@ -1,30 +1,28 @@
-import {
-  Component,
-  inject,
-  input,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, inject, input, OnInit, output, signal} from '@angular/core'
+import { HttpErrorResponse } from '@angular/common/http';
+;
 
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+
 
 import { Header } from '../../../../core/layout/header/header';
+import { Footer } from '../../../../core/layout/footer/footer';
 import { CambiarPasswordDto, FormProfile } from '../../components/form-profile/form-profile';
 import { AvatarProfile } from '../../components/avatar-profile/avatar-profile';
+import { AllowStripeProfile } from '../../components/allow-stripe-profile/allow-stripe-profile';
+
 import { Usuario } from '../../../../shared/models/usuario.model';
+import { Perfil } from '../../../../shared/models/Perfil';
+
 import { PerfilService } from '../../../../core/services/perfil/perfil-service';
 import { UserService } from '../../../../core/services/user/user-service';
 import { AuthService } from '../../../../core/services/auth/auth-service';
-import { Perfil } from '../../../../shared/models/Perfil';
 import { ErrorService } from '../../../../core/services/error/error-service';
-import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
-import { Footer } from '../../../../core/layout/footer/footer';
-import { ConfirmDialog } from 'primeng/confirmdialog';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AllowStripeProfile } from '../../components/allow-stripe-profile/allow-stripe-profile';
+import { StripeService } from '../../../../core/services/pagos/stripe-service';
 
 @Component({
   selector: 'app-profile',
@@ -50,15 +48,24 @@ export class Profile implements OnInit {
   private errorService = inject(ErrorService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private stripeService = inject(StripeService);
 
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
   avatarPendiente = signal<number | null>(null); //Es el avatar recibido del avatar-component. Si no se pulsa en "guardar cambios" no se aplicará
 
   loadingPerfil = signal(false);
+  loading = signal(false);
+  pagosHabilitados = signal(false);
 
   pwdVisible = false;
 
+  ngOnInit(): void {
+    this.cargarDatos();
+    this.verificarEstadoStripe();
+  }
+
+  // Rellena los datos del usuario correspondiente
   private cargarDatos(): void {
     this.userService.getUsuario().subscribe({
       next: (datosUsuario) => {
@@ -84,10 +91,7 @@ export class Profile implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.cargarDatos();
-  }
-
+  // Escucha si el usuario edita algo de su perfil
   onCambiosPerfil(datosFormulario: Perfil) {
     const perfilActual = this.perfil();
 
@@ -123,6 +127,7 @@ export class Profile implements OnInit {
       });
   }
 
+  // Escucha solo cambios de avatar
   onCambiosAvatar(numAvatar: number) {
     const perfilActual = this.perfil();
 
@@ -155,6 +160,7 @@ export class Profile implements OnInit {
     //this.perfilService.eliminarPerfil();
   }
 
+  // Pop-up de confirmación para eliminar cuenta
   confirm() {
     this.confirmationService.confirm({
       header: 'Confirmación',
@@ -203,6 +209,31 @@ export class Profile implements OnInit {
           child?.onRequestFinished?.(false);
         }
       });
+  }
+
+  // Hbilitar pagos con Stripe
+  habilitarPagos() {
+    this.loading.set(true);
+    this.stripeService.getOnboardingLink().subscribe({
+      next: (res) => {
+        if (res.onboardingUrl) {
+          // Redirección externa a Stripe
+          window.location.href = res.onboardingUrl;
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener el link', err);
+        this.loading.set(false);
+      }
+    });
+  }
+
+  verificarEstadoStripe() {
+    this.stripeService.checkStatus().subscribe({
+      next: (res) => {
+        this.pagosHabilitados.set(res.pagosHabilitados);
+      }
+    });
   }
 
 }
