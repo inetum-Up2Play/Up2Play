@@ -35,6 +35,7 @@
     "@fullcalendar/interaction": "^6.1.19",
     "@primeng/themes": "^20.2.0",
     "@primeuix/themes": "^1.2.3",
+    "@stripe/stripe-js": "^8.6.1",
     "@tailwindcss/postcss": "^4.1.15",
     "ical.js": "^1.5.0",
     "leaflet": "^1.9.4",
