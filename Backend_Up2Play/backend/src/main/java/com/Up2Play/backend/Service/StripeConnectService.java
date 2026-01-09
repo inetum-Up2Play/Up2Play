@@ -7,7 +7,6 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
 import com.stripe.model.AccountLink;
 import com.stripe.model.PaymentIntent;
-import com.stripe.net.RequestOptions;
 import com.stripe.param.AccountCreateParams;
 import com.stripe.param.AccountLinkCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
@@ -163,38 +162,66 @@ public class StripeConnectService {
      * @return Map con información del pago
      * @throws StripeException Si ocurre un error en Stripe
      */
-    public Map<String, Object> createP2PPayment(Long amount, String currency, String connectedAccountId,
-            String customerEmail, Long applicationFee) throws StripeException {
-        validatePaymentParameters(amount, currency, connectedAccountId);
-        Long actualFee = (applicationFee != null && applicationFee > 0)
-                ? applicationFee
-                : calculatePlatformFee(amount);
+    public Map<String, Object> createP2PPayment(Long amount, String currency, 
+                                            String connectedAccountId,
+                                            String customerEmail,
+                                            Long applicationFee,
+                                            Long userId,          // ← NUEVO PARÁMETRO
+                                            Long actividadId)     // ← NUEVO PARÁMETRO
+        throws StripeException {
+    
+    validatePaymentParameters(amount, currency, connectedAccountId);
+    
+    // Calcular comisión (ej: 5%)
+    Long actualFee = (applicationFee != null && applicationFee > 0)
+            ? applicationFee
+            : calculatePlatformFee(amount);
+    
+    // Monto que irá al vendedor (total - comisión)
+    Long transferAmount = amount - actualFee;
 
-        // 1. Construimos los parámetros (SIN setTransferData)
-        PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
-                .setAmount(amount)
-                .setCurrency(currency.toLowerCase())
-                .addAllPaymentMethodType(DEFAULT_PAYMENT_METHOD_TYPES)
-                .setApplicationFeeAmount(actualFee) // Tu comisión (puedes poner 0)
-                .putMetadata("transaction_type", "p2p_payment")
-                .setReceiptEmail(customerEmail)
-                .build();
+    // ✅ CORREGIDO: Usa setTransferData en lugar de RequestOptions
+    PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+            .setAmount(amount)
+            .setCurrency(currency.toLowerCase())
+            .addAllPaymentMethodType(DEFAULT_PAYMENT_METHOD_TYPES)
+            
+            // ✅ TRANSFERENCIA AUTOMÁTICA al vendedor
+            .setTransferData(
+                PaymentIntentCreateParams.TransferData.builder()
+                    .setDestination(connectedAccountId)
+                    .setAmount(transferAmount)  // Monto que recibe el vendedor
+                    .build()
+            )
+            
+            // Comisión que se queda la plataforma
+            .setApplicationFeeAmount(actualFee)
+            
+            // ✅ METADATA CRÍTICA para el webhook
+            .putMetadata("user_id", userId.toString())
+            .putMetadata("actividad_id", actividadId.toString())
+            .putMetadata("connected_account_id", connectedAccountId)
+            .putMetadata("platform_fee", actualFee.toString())
+            .putMetadata("transfer_amount", transferAmount.toString())
+            .putMetadata("app", "up2play")
+            
+            .setReceiptEmail(customerEmail)
+            .build();
 
-        // 2. LA CLAVE: Usamos RequestOptions para decirle a Stripe que actúe sobre la
-        // cuenta conectada
-        RequestOptions options = RequestOptions.builder()
-                .setStripeAccount(connectedAccountId)
-                .build();
-
-        // 3. Creamos el PaymentIntent con las opciones de la cuenta conectada
-        PaymentIntent paymentIntent = PaymentIntent.create(params, options);
-        Map<String, Object> result = new HashMap<>();
-        result.put("paymentIntentId", paymentIntent.getId());
-        result.put("clientSecret", paymentIntent.getClientSecret()); // Esto es lo que usará Angular
-        result.put("status", paymentIntent.getStatus());
-        result.put("connectedAccountId", connectedAccountId); // Importante para el frontend
-        return result;
-    }
+    // ✅ CORREGIDO: Se crea en TU cuenta de plataforma (sin RequestOptions)
+    PaymentIntent paymentIntent = PaymentIntent.create(params);
+    
+    Map<String, Object> result = new HashMap<>();
+    result.put("paymentIntentId", paymentIntent.getId());
+    result.put("clientSecret", paymentIntent.getClientSecret());
+    result.put("status", paymentIntent.getStatus());
+    result.put("connectedAccountId", connectedAccountId);
+    result.put("amount", amount);
+    result.put("platformFee", actualFee);
+    result.put("transferAmount", transferAmount);
+    
+    return result;
+}
 
     /**
      * Calcula la comisión de la plataforma.
@@ -260,6 +287,6 @@ public class StripeConnectService {
      */
     public Map<String, Object> createP2PPayment(Long amount, String currency,
             String connectedAccountId) throws StripeException {
-        return createP2PPayment(amount, currency, connectedAccountId, null, null);
+        return createP2PPayment(amount, currency, connectedAccountId, null, null, amount, amount);
     }
 }
