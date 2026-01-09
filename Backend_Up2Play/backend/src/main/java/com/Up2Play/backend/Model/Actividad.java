@@ -61,6 +61,9 @@ public class Actividad {
     @OneToMany(mappedBy = "actividad")
     private Set<Notificacion> notificaciones = new HashSet<>();
 
+    @OneToMany(mappedBy = "actividad")
+    private Set<Pago> pagos = new HashSet<>();
+
     public Actividad() {
     }
 
@@ -118,6 +121,28 @@ public class Actividad {
         this.usuarios = usuarios;
         this.notificaciones = notificaciones;
     }
+
+     public Actividad(Long id, @Size(max = 64) String nombre, @Size(max = 500) String descripcion, LocalDateTime fecha,
+            String ubicacion, String deporte, NivelDificultad nivel, int numPersInscritas, int numPersTotales,
+            EstadoActividad estado, double precio, Usuario usuarioCreador, Set<Usuario> usuarios,
+            Set<Notificacion> notificaciones, Set<Pago> pagos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.ubicacion = ubicacion;
+        this.deporte = deporte;
+        this.nivel = nivel;
+        this.numPersInscritas = numPersInscritas;
+        this.numPersTotales = numPersTotales;
+        this.estado = estado;
+        this.precio = precio;
+        this.usuarioCreador = usuarioCreador;
+        this.usuarios = usuarios;
+        this.notificaciones = notificaciones;
+        this.pagos = pagos;
+    }
+
 
     public Long getId() {
         return id;
@@ -231,5 +256,14 @@ public class Actividad {
     public void setNotificaciones(Set<Notificacion> notificaciones) {
         this.notificaciones = notificaciones;
     }
+
+    public Set<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(Set<Pago> pagos) {
+        this.pagos = pagos;
+    }
+    
 
 }

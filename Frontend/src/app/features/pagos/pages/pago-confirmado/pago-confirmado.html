@@ -1,122 +1,54 @@
-<!DOCTYPE html>
-
-<html class="light" lang="es">
-
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Pago Exitoso - UP2Play</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Tailwind Configuration -->
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#13ec80",
-                        "background-light": "#f6f8f7",
-                        "background-dark": "#102219",
-                        "text-main": "#111814",
-                        "text-muted": "#618975",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"]
-                    },
-                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
-                },
-            },
-        }
-    </script>
-</head>
-
-<body
-    class="bg-background-light dark:bg-background-dark text-text-main dark:text-white font-display antialiased min-h-screen flex flex-col">
-    <!-- Top Navigation -->
-    <header
-        class="sticky top-0 z-50 w-full bg-white dark:bg-background-dark border-b border-[#f0f4f2] dark:border-[#1e3a2b] px-4 sm:px-10 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-            <div class="size-8 text-primary flex items-center justify-center">
-                <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z"
-                        fill="currentColor"></path>
-                </svg>
-            </div>
-            <h2 class="text-text-main dark:text-white text-xl font-bold leading-tight tracking-tight">UP2Play</h2>
-        </div>
-        <div class="flex items-center gap-4">
-            <nav class="hidden md:flex gap-6 text-sm font-medium text-text-muted dark:text-gray-400">
-                <a class="hover:text-primary transition-colors" href="#">Eventos</a>
-                <a class="hover:text-primary transition-colors" href="#">Mis Reservas</a>
-                <a class="hover:text-primary transition-colors" href="#">Comunidad</a>
-            </nav>
-            <button
-                class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full size-10 bg-[#f0f4f2] dark:bg-[#1e3a2b] hover:bg-primary/20 transition-colors text-text-main dark:text-white">
-                <span class="material-symbols-outlined">person</span>
-            </button>
-        </div>
-    </header>
+<body class="bg-background-light text-text-main font-display antialiased min-h-screen flex flex-col">
+    <app-header></app-header>
     <!-- Main Content -->
     <main class="flex-1 flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
-        <div
-            class="w-full max-w-3xl bg-white dark:bg-[#152a21] rounded-2xl shadow-sm border border-[#e5e7eb] dark:border-[#1e3a2b] overflow-hidden">
+        <div class="w-full max-w-3xl bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden">
             <div class="flex flex-col md:flex-row">
                 <!-- Left/Top: Hero Image & Success Message -->
                 <div
                     class="flex-1 p-8 md:p-10 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-[#f0f4f2] dark:border-[#1e3a2b]">
                     <!-- Animated Checkmark Circle -->
                     <div class="mb-6 relative">
-                        <div class="absolute inset-0 bg-primary/20 rounded-full animate-ping opacity-75"></div>
+                        <div class="absolute inset-0 bg-[#B1DF75]/20 rounded-full animate-ping opacity-75"></div>
                         <div
-                            class="relative size-24 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                            <span class="material-symbols-outlined"
-                                style="font-size: 48px; font-weight: 700;">check_circle</span>
+                            class="relative size-24 bg-[#B1DF75]/10 rounded-full flex items-center justify-center text-primary">
+                            <i class="text-[#B1DF75] text-[52px] font-bold ph ph-check-circle"></i>
                         </div>
                     </div>
-                    <h1 class="text-text-main dark:text-white text-3xl font-bold leading-tight mb-3">¡Pago realizado con
+                    <h1 class="text-text-main text-3xl font-bold leading-tight mb-3">¡Pago realizado con
                         éxito!</h1>
-                    <p class="text-text-muted dark:text-gray-400 text-base font-normal leading-relaxed max-w-sm">
-                        ¡Todo listo! Te has unido al equipo. Hemos enviado un correo de confirmación con los detalles.
+                    <p class="text-text-muted text-base font-normal leading-relaxed max-w-sm text-[#3D6C3F]">
+                        ¡Todo listo! Te has apuntado. Hemos enviado un correo de confirmación con los detalles.
                     </p>
                     <div class="mt-8 flex flex-col w-full gap-3">
-                        <button
-                            class="w-full bg-primary hover:bg-primary/90 text-text-main font-bold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2">
+                        <button (click)="goToInfoActividad()"
+                            class="w-full bg-[#B1DF75] hover:bg-[#B1DF75]/75 text-text-main font-bold py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer">
                             <span>Ver detalles de la actividad</span>
-                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            <span class="material-symbols-outlined text-sm font-bold"><i
+                                    class="ph-bold ph ph-arrow-right"></i>
+
+                            </span>
                         </button>
-                        <button
-                            class="w-full bg-transparent border border-[#d1d5db] dark:border-[#374151] text-text-main dark:text-white hover:bg-gray-50 dark:hover:bg-[#1e3a2b] font-bold py-3 px-4 rounded-xl transition-colors">
+                        <button (click)="goToInicio()" class=" w-full bg-transparent border border-[#d1d5db] text-text-main hover:bg-gray-50
+                            font-bold py-3 px-4 rounded-2xl transition-colors cursor-pointer">
                             Volver al inicio
                         </button>
                     </div>
-                    <a class="mt-6 text-sm text-text-muted dark:text-gray-500 hover:text-primary underline decoration-1 underline-offset-2"
-                        href="#">
+                    <a class="mt-6 text-sm text-text-muted hover:text-[#3D6C3F] underline decoration-1 underline-offset-2"
+                        href="https://stripe.com/es/contact" target="_blank">
                         ¿Necesitas ayuda? Contacta con soporte
                     </a>
                 </div>
                 <!-- Right/Bottom: Receipt Details -->
-                <div class="w-full md:w-80 bg-[#f9fafb] dark:bg-[#102219] p-6 md:p-8 flex flex-col justify-center">
-                    <h3 class="text-text-muted dark:text-gray-400 text-xs font-bold uppercase tracking-wider mb-6">
+                <div class="w-full md:w-80 bg-[#f9fafb] p-6 md:p-8 flex flex-col justify-center">
+                    <h3 class="text-text-muted text-xs font-bold uppercase tracking-wider mb-6">
                         Resumen del pedido</h3>
                     <!-- Event Image Mini -->
                     <div class="mb-6 rounded-lg overflow-hidden relative aspect-video shadow-sm">
                         <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10"></div>
                         <div class="absolute bottom-2 left-3 z-20">
                             <span
-                                class="text-white text-xs font-medium bg-primary/90 px-2 py-0.5 rounded">Confirmado</span>
+                                class="text-black text-xs font-medium bg-[#B1DF75]/90 px-2 py-0.5 rounded">Confirmado</span>
                         </div>
                         <div class="w-full h-full bg-center bg-cover"
                             data-alt="Action shot of people playing soccer on a green field"
@@ -126,32 +58,33 @@
                     <!-- Details List -->
                     <div class="space-y-4">
                         <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted dark:text-gray-400 text-sm">Actividad</span>
-                            <span class="text-text-main dark:text-white text-sm font-medium text-right">Fútbol 7 - Liga
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Actividad</span>
+                            <span class="text-text-main text-sm font-medium text-right">Fútbol 7 - Liga
                                 de los Jueves</span>
                         </div>
                         <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted dark:text-gray-400 text-sm">Fecha</span>
-                            <span class="text-text-main dark:text-white text-sm font-medium text-right">Jueves, 20
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Fecha</span>
+                            <span class="text-text-main text-sm font-medium text-right">Jueves, 20
                                 Oct</span>
                         </div>
                         <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted dark:text-gray-400 text-sm">Hora</span>
-                            <span class="text-text-main dark:text-white text-sm font-medium text-right">20:00 -
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Hora</span>
+                            <span class="text-text-maintext-sm font-medium text-right">20:00 -
                                 21:00</span>
                         </div>
                         <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted dark:text-gray-400 text-sm">Ubicación</span>
-                            <span class="text-text-main dark:text-white text-sm font-medium text-right">Polideportivo
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Ubicación</span>
+                            <span class="text-text-main text-sm font-medium text-right">Polideportivo
                                 Central</span>
                         </div>
-                        <div class="h-px bg-[#e5e7eb] dark:bg-[#1e3a2b] my-2"></div>
+                        <div class="h-px bg-[#e5e7eb] my-2"></div>
                         <div class="flex justify-between items-center gap-4">
-                            <span class="text-text-main dark:text-white text-base font-bold">Total Pagado</span>
-                            <span class="text-primary text-xl font-bold">5,50 €</span>
+                            <span class="text-text-main text-base font-bold">Total Pagado</span>
+                            <span class="text-[#3D6C3F] text-xl font-bold">5,50 €</span>
                         </div>
                         <div class="flex justify-end items-center gap-1 mt-1">
-                            <span class="material-symbols-outlined text-[10px] text-gray-400">lock</span>
+                            <span class="material-symbols-outlined text-[10px] text-gray-400"><i
+                                    class="ph ph-lock-simple"></i></span>
                             <span class="text-[10px] text-gray-400 uppercase">Pago Seguro con Stripe</span>
                         </div>
                     </div>
@@ -163,50 +96,115 @@
             <h4 class="text-text-main dark:text-white font-bold text-lg mb-6">También te podría interesar</h4>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <!-- Card 1 -->
-                <div
-                    class="group cursor-pointer bg-white dark:bg-[#152a21] rounded-xl overflow-hidden border border-transparent hover:border-primary/50 transition-all shadow-sm">
-                    <div class="h-32 bg-gray-200 w-full bg-cover bg-center"
-                        data-alt="Padel racket and ball on a blue court"
-                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6HfNleuuFZuPeYHVjVVuNFTpdCJcXc87bbJVHVIOeuEAWZFek4T2VQNJ7jPh7q4YiqcB9bY8zzEFr1HdBIHehj_DVejN19LDtNmQ23x7tQl3CqS5kcLUicu1JX4Y-I77pZ7D2cRChH5Sjp7tX72Yes5BxWMTk7zNAs78aoeOkMCirL-XwoPsFZ2YXjq_LnFDBcisxhCG5hrUOTkoxEnoxO5TAVhcjq_HpBjezWu2UmA6aILisD3Kv5i8f0xiAgFd-gOrh52Eb0uQ');">
+                <article
+                    class="group bg-white rounded-2xl overflow-hidden border border-[#f0f4f2] hover:border-[#3D6C3F]/50 shadow-sm hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col h-fit">
+                    <div class="relative aspect-video w-full overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            data-alt="People playing padel on a sunny court"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsuaYqwuI3QyM1GOmvZig7Eg3b4Se8orRivq4vFXEbVXTnxRjswpmTk842pw-bM3UkmJ4h7V08yyauPPO_t-aD-VMiCJWJrnonIZmSt2IBRig9E0tMbubtD48JDfpA7NBltJ1DY8lPAJt8i-mO_4IltXk_NJkylKh47zAuwgQoHw8uSrXXKrJjeYOwJb4jcJOqJzkvKbNXcC6MbehsFcTZdNCVxM2xnoiRy1KiZPGn9Q93kxkAr9F5VUxioU0ZRJVZgoog0w9f7cME");'>
+                        </div>
+                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60"></div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <div
+                                class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-xs font-medium flex items-center gap-1 border border-white/10">
+                                <span class="material-symbols-outlined text-[16px]"><i class="ph ph-racquet"></i></span>
+                                Pádel
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-4 text-left">
-                        <div class="text-xs text-primary font-bold mb-1">Mañana, 18:00</div>
-                        <h5 class="text-text-main dark:text-white font-bold text-sm mb-1">Torneo de Pádel</h5>
-                        <p class="text-text-muted dark:text-gray-400 text-xs">Club Deportivo Norte</p>
+                    <div class="p-5 flex flex-col grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3
+                                class="text-lg font-bold text-background-dark leading-tight group-hover:text-[#3D6C3F] transition-colors">
+                                Partido de Pádel</h3>
+                        </div>
+                        <div class="flex flex-col gap-2.5 mb-6">
+                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
+                                <span class="material-symbols-outlined text-[18px]"><i
+                                        class="ph ph-calendar-dots"></i></span>
+                                <span>12 Oct, 2023 • 18:00</span>
+                            </div>
+                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
+                                <span class="material-symbols-outlined text-[18px]"><i class="ph ph-map-pin"></i></span>
+                                <span>Club Deportivo Central</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </article>
                 <!-- Card 2 -->
-                <div
-                    class="group cursor-pointer bg-white dark:bg-[#152a21] rounded-xl overflow-hidden border border-transparent hover:border-primary/50 transition-all shadow-sm">
-                    <div class="h-32 bg-gray-200 w-full bg-cover bg-center"
-                        data-alt="Basketball hoop outdoors with sun flare"
-                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASrNr3SL-G4iya_RArLqemfTbhlc8xYOyCOWOFKaLYOpmS8ao4GU9kF6kCKLNY-aD6TaWGvtvegzpSpQ4C9VrVEfjTL_q_JYbqQ2wbI5WiSSluP6voxFq9UqS2QwEwOqIsseop-hYUaNtD1b2uBWcpa8uA7Cf4peL3b_o0RY9LtawFMZvDE7dfhY8i7gwQT6Ryq25HSNaUyvP3bPFheMWPQ0b5wi4wiw45ynzg1JKK-NGz1AMp5Ji-E_t_CJqirvpYJVp2JFnYChw');">
+                <article
+                    class="group bg-white rounded-2xl overflow-hidden border border-[#f0f4f2] hover:border-[#3D6C3F]/50 shadow-sm hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col h-fit">
+                    <div class="relative aspect-video w-full overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            data-alt="People playing padel on a sunny court"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsuaYqwuI3QyM1GOmvZig7Eg3b4Se8orRivq4vFXEbVXTnxRjswpmTk842pw-bM3UkmJ4h7V08yyauPPO_t-aD-VMiCJWJrnonIZmSt2IBRig9E0tMbubtD48JDfpA7NBltJ1DY8lPAJt8i-mO_4IltXk_NJkylKh47zAuwgQoHw8uSrXXKrJjeYOwJb4jcJOqJzkvKbNXcC6MbehsFcTZdNCVxM2xnoiRy1KiZPGn9Q93kxkAr9F5VUxioU0ZRJVZgoog0w9f7cME");'>
+                        </div>
+                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60"></div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <div
+                                class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-xs font-medium flex items-center gap-1 border border-white/10">
+                                <span class="material-symbols-outlined text-[16px]"><i class="ph ph-racquet"></i></span>
+                                Pádel
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-4 text-left">
-                        <div class="text-xs text-primary font-bold mb-1">Sáb, 10:00</div>
-                        <h5 class="text-text-main dark:text-white font-bold text-sm mb-1">Basket 3x3</h5>
-                        <p class="text-text-muted dark:text-gray-400 text-xs">Pistas Municipales</p>
+                    <div class="p-5 flex flex-col grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3
+                                class="text-lg font-bold text-background-dark leading-tight group-hover:text-[#3D6C3F] transition-colors">
+                                Partido de Pádel</h3>
+                        </div>
+                        <div class="flex flex-col gap-2.5 mb-6">
+                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
+                                <span class="material-symbols-outlined text-[18px]"><i
+                                        class="ph ph-calendar-dots"></i></span>
+                                <span>12 Oct, 2023 • 18:00</span>
+                            </div>
+                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
+                                <span class="material-symbols-outlined text-[18px]"><i class="ph ph-map-pin"></i></span>
+                                <span>Club Deportivo Central</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </article>
                 <!-- Card 3 -->
-                <div
-                    class="group cursor-pointer bg-white dark:bg-[#152a21] rounded-xl overflow-hidden border border-transparent hover:border-primary/50 transition-all shadow-sm">
-                    <div class="h-32 bg-gray-200 w-full bg-cover bg-center" data-alt="Group of people running in a park"
-                        style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCyXOebcEyt780pTqKkkKQTGIYY9IXBWL3tCO2KenSgE8SymljSdMFGA_m84WME9V5mUpC3QRgzAEnnv0PfWofCgwtugVFc81Gb4GbSYPpKWfVPQMli_bFlEQExd93BKcdiKh6bgCbEvZ5oxNyhwkxQv1revJ2k8S--DJX25umkQmPJ9oc0hVjUSRrXyHQ8SoQs3dvORHutx1HOWGSasPOB2qe6KZ98Ik3Y_L22mZuAgX94MmCdT3DXFFlhkkpTMRvYvBICliJU-d4');">
+                <article
+                    class="group bg-white rounded-2xl overflow-hidden border border-[#f0f4f2] hover:border-[#3D6C3F]/50 shadow-sm hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col h-fit">
+                    <div class="relative aspect-video w-full overflow-hidden">
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                            data-alt="People playing padel on a sunny court"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsuaYqwuI3QyM1GOmvZig7Eg3b4Se8orRivq4vFXEbVXTnxRjswpmTk842pw-bM3UkmJ4h7V08yyauPPO_t-aD-VMiCJWJrnonIZmSt2IBRig9E0tMbubtD48JDfpA7NBltJ1DY8lPAJt8i-mO_4IltXk_NJkylKh47zAuwgQoHw8uSrXXKrJjeYOwJb4jcJOqJzkvKbNXcC6MbehsFcTZdNCVxM2xnoiRy1KiZPGn9Q93kxkAr9F5VUxioU0ZRJVZgoog0w9f7cME");'>
+                        </div>
+                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60"></div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <div
+                                class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-xs font-medium flex items-center gap-1 border border-white/10">
+                                <span class="material-symbols-outlined text-[16px]"><i class="ph ph-racquet"></i></span>
+                                Pádel
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-4 text-left">
-                        <div class="text-xs text-primary font-bold mb-1">Dom, 09:00</div>
-                        <h5 class="text-text-main dark:text-white font-bold text-sm mb-1">Running Club</h5>
-                        <p class="text-text-muted dark:text-gray-400 text-xs">Parque del Retiro</p>
+                    <div class="p-5 flex flex-col grow">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3
+                                class="text-lg font-bold text-background-dark leading-tight group-hover:text-[#3D6C3F] transition-colors">
+                                Partido de Pádel</h3>
+                        </div>
+                        <div class="flex flex-col gap-2.5 mb-6">
+                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
+                                <span class="material-symbols-outlined text-[18px]"><i
+                                        class="ph ph-calendar-dots"></i></span>
+                                <span>12 Oct, 2023 • 18:00</span>
+                            </div>
+                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
+                                <span class="material-symbols-outlined text-[18px]"><i class="ph ph-map-pin"></i></span>
+                                <span>Club Deportivo Central</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </article>
             </div>
         </div>
     </main>
-    <footer
-        class="mt-auto border-t border-[#f0f4f2] dark:border-[#1e3a2b] bg-white dark:bg-background-dark py-6 text-center">
-        <p class="text-text-muted dark:text-gray-500 text-sm">© 2024 UP2Play. Todos los derechos reservados.</p>
-    </footer>
+    <app-footer></app-footer>
 </body>
-
-</html>
