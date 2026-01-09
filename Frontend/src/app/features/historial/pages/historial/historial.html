@@ -3,10 +3,12 @@
   <div
     class="flex flex-col w-full max-w-[95%] 2xl:max-w-screen-2xl mx-auto px-4 md:px-8 py-8 min-h-[50vh]"
   >
-    <div class="flex flex-col items-start mb-4">
+    <div class="flex flex-col items-start">
       <div class="flex items-center gap-2 mb-2">
-        <i class="ph ph-clock-counter-clockwise text-[#3D6C3F]"></i>
-        <h1 class="font-bold text-[#3D6C3F]">TU RECORRIDO</h1>
+        <i
+          class="ph ph-clock-counter-clockwise text-xl font-bold text-[#3D6C3F]"
+        ></i>
+        <h1 class="font-bold work text-[#3D6C3F]">TU RECORRIDO</h1>
       </div>
 
       <div>
@@ -17,21 +19,25 @@
     <div
       class="flex flex-col md:flex-row justify-between items-center w-full mb-6 gap-4"
     >
-      <div class="max-w-lg">
-        <p>
+      <div class="mt-4 md:mt-0">
+        <p class="font-semibold w-full work text-xl text-[#152614]">
           Revive tus mejores momentos, analiza tu rendimiento y mantén la
           motivación alta.
         </p>
       </div>
 
       <div class="bg-white rounded-lg p-4 flex items-center gap-3 shadow-sm">
-        <div class="bg-gray-100 p-2 rounded-full">
-          <i class="ph ph-trophy text-xl iconos-historial font-bold"></i>
+        <div class="bg-[#B1DF75]/25 p-2 rounded-full">
+          <i
+            class="ph ph-trophy text-2xl iconos-historial font-bold text-[#B1DF75]"
+          ></i>
         </div>
 
         <div class="flex flex-col">
-          <h1 class="font-bold recorrido">TOTAL COMPLETADO</h1>
-          <span class="text-xs">{{ activities.length }} Actividades</span>
+          <h1 class="font-bold recorrido text-[#3D6C3F]">TOTAL COMPLETADO</h1>
+          <span class="text-2xl font-bold"
+            >{{ activities.length }} Actividades</span
+          >
         </div>
       </div>
     </div>
@@ -42,30 +48,32 @@
       <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
         <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto grow">
           <p-iconfield iconPosition="left" class="w-full md:flex-1">
-            <p-inputicon styleClass="ph ph-magnifying-glass"></p-inputicon>
+            <p-inputicon
+              styleClass="ph ph-magnifying-glass !text-[#3D6C3F]/80"
+            ></p-inputicon>
+
             <input
               pInputText
               type="text"
               [(ngModel)]="filterNombre"
               (ngModelChange)="applyFilters()"
               placeholder="Buscar por nombre de actividad (ej. Padel, Yoga)..."
-              class="w-full text-sm"
+              class="w-full text-sm !text-[#3D6C3F]/80 !placeholder-[#3D6C3F]/80 focus:!shadow-none hover:!border-[#3D6C3F] focus:!border-[#3D6C3F]"
             />
           </p-iconfield>
           <p-multiSelect
             class="w-full md:flex-1"
             [options]="deportesOptions"
             [(ngModel)]="filterDeporte"
-            placeholder="Deportes"
             (onChange)="applyFilters()"
-            defaultLabel="Seleccionar deportes"
+            (onClear)="applyFilters()"
+            placeholder="Deportes"
             optionLabel="label"
             optionValue="value"
             selectedItemsLabel="{0} deportes seleccionados"
             [maxSelectedLabels]="1"
-            styleClass="w-full text-sm"
             [showClear]="true"
-            (onClear)="applyFilters()"
+            styleClass="w-full text-sm !text-[#3D6C3F]/80 focus:!shadow-none hover:!border-[#3D6C3F] focus:!border-[#3D6C3F] focus-within:!border-[#3D6C3F] focus-within:!shadow-none [&_.p-placeholder]:!text-[#3D6C3F]/80"
           >
           </p-multiSelect>
           <p-datepicker
@@ -76,7 +84,8 @@
             placeholder="Filtrar por fecha"
             [showIcon]="true"
             [showButtonBar]="true"
-            styleClass="w-full text-sm md:flex-1"
+            styleClass="w-full md:flex-1"
+            inputStyleClass="w-full text-sm !placeholder-[#3D6C3F]/80 focus:!shadow-none hover:!border-[#3D6C3F] focus:!border-[#3D6C3F]"
           >
           </p-datepicker>
         </div>
@@ -215,16 +224,19 @@
       </article>
       }
     </div>
-    }
-    @if (visibleActivities.length > numeroActividades) {
+    } @if (visibleActivities.length > numeroActividades) {
     <div class="mt-16 flex justify-center">
       <button
         (click)="loadMore()"
-        class="group relative px-8 py-3 rounded-full bg-white text-background-dark font-bold text-sm border-2 border-[#f0f4f2] hover:border-[#152614]/25 transition-all shadow-sm hover:shadow-soft overflow-hidden"
+        class="group cursor-pointer relative px-8 py-3 rounded-full bg-white text-background-dark font-bold text-sm border-2 border-[#f0f4f2] hover:border-[#152614]/10 transition-all shadow-sm hover:shadow-soft overflow-hidden"
       >
-        <span class="relative z-10 flex items-center gap-2">
+        <span
+          class="relative z-10 flex font-semibold text-xl work text-[#152614] items-center gap-2"
+        >
           Cargar más actividades
-          <i class="ph ph-arrow-clockwise"></i>
+          <i
+            class="ph ph-arrow-clockwise font-semibold text-xl text-[#152614] transition-transform duration-500 group-hover:rotate-180"
+          ></i>
         </span>
         <div
           class="absolute inset-0 bg-primary/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
@@ -233,7 +245,6 @@
     </div>
     }
   </div>
-  
 
   <app-footer></app-footer>
 </div>
