@@ -1,52 +1,14 @@
-<!DOCTYPE html>
-
-<html class="light" lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Stripe Account Created - UP2Play</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#13ec80",
-                        "background-light": "#f6f8f7",
-                        "background-dark": "#102219",
-                    },
-                    fontFamily: {
-                        "display": ["Lexend", "sans-serif"],
-                        "body": ["Noto Sans", "sans-serif"],
-                    },
-                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
-                },
-            },
-        }
-    </script>
-</head>
 <app-header></app-header>
-<body class="bg-background-light  text-[#111814] dark:text-white font-display">
+
+<body class="bg-background-light text-[#111814] font-display">
     <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
         <!-- Main Content -->
         <main class="flex-1 flex justify-center py-10 px-4 md:px-6 lg:px-8">
             <div class="max-w-[800px] w-full flex flex-col items-center">
                 <!-- Success Card -->
-                <div
-                    class="w-full bg-white rounded-xl shadow-sm border border-[#e5e7eb] dark:border-[#2a3f35] overflow-hidden">
+                <div class="w-full bg-white rounded-xl shadow-sm border border-[#e5e7eb] overflow-hidden">
                     <!-- Decorative Top Banner/Image -->
-                    <div class="h-32 w-full bg-gradient-to-r from-[#B1DF75]/10 to-[#B1DF75]/5 relative">
+                    <div class="h-32 w-full bg-linear-to-b from-[#B1DF75]/25 to-[#B1DF75]/0 relative">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <div
                                 class="w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
@@ -55,8 +17,8 @@
                         <!-- Success Icon Badge floating -->
                         <div class="absolute -bottom-10 left-1/2 transform -translate-x-1/2">
                             <div
-                                class="size-20 bg-[#3D6C3F]/80 rounded-full flex items-center justify-center shadow-lg border-4 border-white dark:border-[#1a2c24]">
-                                <span class="material-symbols-outlined text-white text-[40px] font-bold">check</span>
+                                class="size-20 bg-[#B1DF75]/85 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
+                                <i class="text-white text-[40px] font-bold ph ph-check-fat"></i>
                             </div>
                         </div>
                     </div>
@@ -64,73 +26,73 @@
                         <!-- Headline -->
                         <div class="mb-2">
                             <span
-                                class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-semibold bg-primary/10 text-primary uppercase tracking-wide">
+                                class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-semibold bg-[#3D6C3F]/10 text-[#3D6C3F] uppercase tracking-wide">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[#3D6C3F]/80 animate-pulse"></span>
                                 Verificado
                             </span>
                         </div>
                         <h1
-                            class="text-[#111814] dark:text-white tracking-tight text-[32px] md:text-[40px] font-bold leading-tight pb-4">
-                            ¡Creada con Éxito!
+                            class="text-[#111814]tracking-tight text-[32px] md:text-[40px] font-bold leading-tight pb-4">
+                            ¡Cuenta Creada con Éxito!
                         </h1>
                         <!-- Body Text -->
                         <p
                             class="text-[#637588] dark:text-[#a0b0a8] text-base md:text-lg font-normal leading-relaxed max-w-lg mx-auto pb-8">
-                            Tu cuenta de Stripe ha sido creada y vinculada correctamente a tu cuenta en UP2Play. Ya estás listo para
-                            gestionar actividades deportivas y recibir pagos de forma segura.
+                            Tu cuenta de Stripe ha sido creada y vinculada correctamente a tu cuenta en UP2Play. Ya
+                            estás listo para
+                            gestionar actividades y recibir pagos de forma segura.
                         </p>
                         <!-- Feature Checklist -->
-                        <div
-                            class="w-full bg-[#f8faf9] dark:bg-[#15231c] rounded-lg p-6 mb-8 text-left border border-[#eef2f0] dark:border-[#23352b]">
+                        <div class="w-full bg-[#f8faf9] rounded-lg p-6 mb-8 text-left border border-[#eef2f0]">
                             <h3
-                                class="text-sm font-semibold text-[#111814] dark:text-white uppercase tracking-wider mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                                class="text-sm font-semibold text-[#111814] uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">
                                 Ahora puedes:
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="flex gap-x-3 items-center">
                                     <div
-                                        class="flex-shrink-0 size-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-                                        <span class="material-symbols-outlined text-base">payments</span>
+                                        class="shrink-0 size-6 rounded-full bg-[#3D6C3F]/20 flex items-center justify-center text-[#3D6C3F]">
+                                        <i class="text-base ph-bold ph-credit-card"></i>
                                     </div>
-                                    <p class="text-[#111814] dark:text-[#e0e0e0] text-sm font-medium">Recibir pagos de
+                                    <p class="text-[#111814] text-sm font-medium">Recibir pagos de
                                         participantes</p>
                                 </div>
                                 <div class="flex gap-x-3 items-center">
                                     <div
-                                        class="flex-shrink-0 size-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-                                        <span class="material-symbols-outlined text-base">manage_accounts</span>
+                                        class="shrink-0 size-6 rounded-full bg-[#3D6C3F]/20 flex items-center justify-center text-[#3D6C3F]">
+                                        <i class="text-base ph-bold ph-user-gear"></i>
                                     </div>
-                                    <p class="text-[#111814] dark:text-[#e0e0e0] text-sm font-medium">Gestionar
+                                    <p class="text-[#111814] text-sm font-medium">Gestionar
                                         reembolsos fácilmente</p>
                                 </div>
                                 <div class="flex gap-x-3 items-center">
                                     <div
-                                        class="flex-shrink-0 size-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-                                        <span class="material-symbols-outlined text-base">account_balance</span>
+                                        class="shrink-0 size-6 rounded-full bg-[#3D6C3F]/20 flex items-center justify-center text-[#3D6C3F]">
+                                        <i class="text-base ph-bold ph-bank"></i>
                                     </div>
                                     <p class="text-[#111814] dark:text-[#e0e0e0] text-sm font-medium">Transferencias
                                         automáticas</p>
                                 </div>
                                 <div class="flex gap-x-3 items-center">
                                     <div
-                                        class="flex-shrink-0 size-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
-                                        <span class="material-symbols-outlined text-base">verified_user</span>
+                                        class="shrink-0 size-6 rounded-full bg-[#3D6C3F]/20 flex items-center justify-center text-[#3D6C3F]">
+                                        <i class="text-base ph-bold ph-shield-star"></i>
                                     </div>
-                                    <p class="text-[#111814] dark:text-[#e0e0e0] text-sm font-medium">Seguridad de nivel
+                                    <p class="text-[#111814] text-sm font-medium">Seguridad de nivel
                                         bancario</p>
                                 </div>
                             </div>
                         </div>
                         <!-- Action Buttons -->
                         <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
-                            <button
-                                class="bg-primary hover:bg-[#0fd673] text-[#102219] min-w-[200px] h-12 px-6 rounded-lg font-bold text-base transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
-                                <span class="material-symbols-outlined">person</span>
+                            <button (click)="goToProfile()"
+                                class="bg-[#B1DF75] hover:bg-[#B1DF75]/80 text-[#111814] min-w-[200px] h-12 px-6 rounded-lg font-bold text-base transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#3D6C3F]/20 cursor-pointer">
+                                <i class="ph-bold ph-user"></i>
                                 Volver a mi Perfil
                             </button>
-                            <button
-                                class="bg-transparent border-2 border-[#e5e7eb] dark:border-[#2a3f35] hover:border-primary hover:text-primary dark:hover:text-primary text-[#637588] dark:text-[#a0b0a8] min-w-[200px] h-12 px-6 rounded-lg font-bold text-base transition-all flex items-center justify-center gap-2">
-                                <span class="material-symbols-outlined">add_circle</span>
+                            <button (click)="goToCrearActividad()"
+                                class="bg-transparent border-2 border-[#e5e7eb] hover:border-[#3D6C3F]/75 hover:text-[#3D6C3F]  text-[#637588] min-w-[200px] h-12 px-6 rounded-lg font-bold text-base transition-all flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="ph-bold ph-plus-circle"></i>
                                 Crear Actividad
                             </button>
                         </div>
@@ -138,9 +100,10 @@
                             class="mt-8 pt-6 border-t border-[#f0f4f2] dark:border-[#23352b] w-full flex items-center justify-center gap-2">
                             <span class="text-xs text-gray-400 font-normal">Pagos asegurados por</span>
                             <div class="opacity-60 grayscale hover:grayscale-0 transition-all cursor-pointer"
-                                title="Stripe">
-                                <!-- Simple Stripe Logo Representation using SVG path -->
-                                 <img src="../../../../../assets/images/stripe/Stripe-Logo.png" alt="Stripe" class="h-10 w-20">
+                                title="Stripe"> <a href="https://stripe.com/es" target="_blank">
+                                    <!-- Simple Stripe Logo Representation using SVG path -->
+                                    <img src="../../../../../assets/images/stripe/Stripe-Logo.png" alt="Stripe"
+                                        class="h-10 w-20"></a>
                             </div>
                         </div>
                     </div>
@@ -151,6 +114,3 @@
 </body>
 
 <app-footer></app-footer>
-
-
-</html>
