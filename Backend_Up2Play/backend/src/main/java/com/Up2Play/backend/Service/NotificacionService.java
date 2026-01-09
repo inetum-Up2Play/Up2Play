@@ -13,6 +13,7 @@ import com.Up2Play.backend.Exception.ErroresNotificacion.NotificacionNoEncontrad
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Notificacion;
+import com.Up2Play.backend.Model.Pago;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.UsuarioNotificacion;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
@@ -186,6 +187,35 @@ public class NotificacionService {
         usuarioNotificacionRepository.save(usuarioNotificacion);
 
         return notificacionGuardada;
+    }
+
+    //notficaciones pago
+    public void notificacionPagoConfirmado(Pago pago){
+        Actividad act = pago.getActividad();
+        Usuario pagador = pago.getUsuario();
+        Usuario CreadorPagado = act.getUsuarioCreador();
+        LocalDateTime fecha = LocalDateTime.now();
+        
+        crearNotificacion(
+            "¡Pago confirmado!", 
+            "Has pagado correctamente la actividad " + act.getNombre(), 
+            fecha, 
+            EstadoNotificacion.fromValue("PAGADO"),
+            act, 
+            Set.of(pagador), 
+            CreadorPagado
+        );
+
+        crearNotificacion(
+            "¡Nuevo pago recibido", 
+            "El usuario " + pagador.getNombreUsuario() + " ha pagado tu actividad " + act.getNombre(), 
+            fecha, 
+            EstadoNotificacion.fromValue("PAGO_RECIBIDO"),
+            act, 
+            Set.of(CreadorPagado), 
+            pagador
+        );
+        
     }
 
     @Transactional

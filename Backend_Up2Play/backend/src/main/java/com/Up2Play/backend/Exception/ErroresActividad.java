@@ -50,14 +50,20 @@ public class ErroresActividad {
         }
     }
 
-        public static class LimiteCaracteres extends RuntimeException {
+    public static class LimiteCaracteres extends RuntimeException {
         public LimiteCaracteres(String message) {
             super(message);
         }
     }
 
-            public static class ActividadCompletadaException extends RuntimeException {
+    public static class ActividadCompletadaException extends RuntimeException {
         public ActividadCompletadaException(String message) {
+            super(message);
+        }
+    }
+
+    public static class ErrorDesapuntarse extends RuntimeException {
+        public ErrorDesapuntarse(String message) {
             super(message);
         }
     }

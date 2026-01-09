@@ -168,7 +168,6 @@ public class ActividadController {
     @GetMapping("/getApuntadasEnCurso")
     public List<ActividadDtoResp> getActividadesApuntadasEnCurso(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
-        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();
@@ -178,12 +177,21 @@ public class ActividadController {
     @GetMapping("/getNoApuntadasPorDeporte")
     public List<ActividadDtoResp> getActividadesNoApuntadasPorDeporte(@AuthenticationPrincipal UserDetails principal, @RequestParam String deporte) {
         String email = principal.getUsername();
-        System.out.println(email);
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();
         return actividadService.getActividadesNoApuntadasPorDeporte(usuariosId,deporte);
     }
+
+    @GetMapping("/getPasadasPorUsuario")
+    public List<ActividadDtoResp> getActividadesPasadasPorUsuario(@AuthenticationPrincipal UserDetails principal) {
+        String email = principal.getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Long usuarioId = usuario.getId();
+        return actividadService.getActividadesPasadasPorUsuario(usuarioId);
+    }
+    
 
 
 }

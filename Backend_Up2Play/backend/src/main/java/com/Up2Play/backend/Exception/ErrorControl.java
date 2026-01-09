@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.Up2Play.backend.DTO.ErrorResponseDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorDesapuntarse;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
@@ -281,7 +282,7 @@ public class ErrorControl {
                                 request.getRequestURI(),
                                 Instant.now());
                 return ResponseEntity
-                                .status(HttpStatus.FORBIDDEN)
+                                .status(HttpStatus.CONFLICT)
                                 .body(body);
         }
 
@@ -420,6 +421,23 @@ public class ErrorControl {
                                 Instant.now());
                 return ResponseEntity
                                 .status(HttpStatus.NOT_FOUND)
+                                .body(body);
+        }
+        
+
+        //Error al desapuntarse despues de completada
+        @ExceptionHandler(ErrorDesapuntarse.class)
+        public ResponseEntity<ErrorResponseDto> handleErrorDesapuntarse(
+                        ErrorDesapuntarse ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ERROR_DESAPUNTARSE",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
                                 .body(body);
         }
 
