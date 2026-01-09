@@ -19,7 +19,7 @@
     <div class="w-full flex flex-column gap-3">
         <div class="flex justify-content-between font-bold text-lg border-top-1 border-200 pt-3">
             <span>Total a pagar:</span>
-            <span class="text-primary">{{ (activityData.amount / 100) | currency:'EUR' }}</span>
+            <span class="text-primary">{{ actividad()?.precio | currency:'EUR' }}</span>
         </div>
 
         <p-button 
@@ -28,7 +28,7 @@
             styleClass="w-full p-button-raised" 
             [loading]="loading()"
             [disabled]="!stripeInstance"
-            (onClick)="controlPayment()">
+            (onClick)="confirmarPago()">
         </p-button>
         
         <p class="text-xs text-center text-secondary m-0">

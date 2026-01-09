@@ -1,210 +1,145 @@
 <body class="bg-background-light text-text-main font-display antialiased min-h-screen flex flex-col">
     <app-header></app-header>
-    <!-- Main Content -->
+    
     <main class="flex-1 flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-3xl bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden">
-            <div class="flex flex-col md:flex-row">
-                <!-- Left/Top: Hero Image & Success Message -->
-                <div
-                    class="flex-1 p-8 md:p-10 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-[#f0f4f2] dark:border-[#1e3a2b]">
-                    <!-- Animated Checkmark Circle -->
-                    <div class="mb-6 relative">
-                        <div class="absolute inset-0 bg-[#B1DF75]/20 rounded-full animate-ping opacity-75"></div>
-                        <div
-                            class="relative size-24 bg-[#B1DF75]/10 rounded-full flex items-center justify-center text-primary">
-                            <i class="text-[#B1DF75] text-[52px] font-bold ph ph-check-circle"></i>
+            
+            @if (!errorInscripcion()) {
+                <div class="p-8 text-center bg-red-50">
+                    <i class="pi pi-times-circle text-red-600 text-5xl mb-4"></i>
+                    <h2 class="text-2xl font-bold text-red-700">Hubo un problema</h2>
+                    <p class="text-red-600">El pago se realizó, pero no pudimos finalizar tu inscripción. Por favor, contacta con soporte.</p>
+                    <button (click)="goToInicio()" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 hover:cursor-pointer">Volver al inicio</button>
+                </div>
+            } 
+            
+            @else {
+                <div class="flex flex-col md:flex-row">
+                    
+                    <div class="flex-1 p-8 md:p-10 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-[#f0f4f2]">
+                        
+                        <div class="mb-6 relative">
+                            <div class="absolute inset-0 bg-[#B1DF75]/20 rounded-full animate-ping opacity-75"></div>
+                            <div class="relative size-24 bg-[#B1DF75]/10 rounded-full flex items-center justify-center text-primary">
+                                <i class="text-[#B1DF75] text-[52px] font-bold ph ph-check-circle"></i>
+                            </div>
                         </div>
-                    </div>
-                    <h1 class="text-text-main text-3xl font-bold leading-tight mb-3">¡Pago realizado con
-                        éxito!</h1>
-                    <p class="text-text-muted text-base font-normal leading-relaxed max-w-sm text-[#3D6C3F]">
-                        ¡Todo listo! Te has apuntado. Hemos enviado un correo de confirmación con los detalles.
-                    </p>
-                    <div class="mt-8 flex flex-col w-full gap-3">
-                        <button (click)="goToInfoActividad()"
-                            class="w-full bg-[#B1DF75] hover:bg-[#B1DF75]/75 text-text-main font-bold py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer">
-                            <span>Ver detalles de la actividad</span>
-                            <span class="material-symbols-outlined text-sm font-bold"><i
-                                    class="ph-bold ph ph-arrow-right"></i>
 
-                            </span>
-                        </button>
-                        <button (click)="goToInicio()" class=" w-full bg-transparent border border-[#d1d5db] text-text-main hover:bg-gray-50
-                            font-bold py-3 px-4 rounded-2xl transition-colors cursor-pointer">
-                            Volver al inicio
-                        </button>
+                        <h1 class="text-text-main text-3xl font-bold leading-tight mb-3">
+                            ¡Pago realizado con éxito!
+                        </h1>
+                        
+                        <p class="text-text-muted text-base font-normal leading-relaxed max-w-sm text-[#3D6C3F]">
+                            @if (procesandoInscripcion()) {
+                                <span class="flex items-center justify-center gap-2">
+                                    <i class="pi pi-spin pi-spinner"></i> Confirmando inscripción...
+                                </span>
+                            } @else {
+                                ¡Todo listo! Te has apuntado correctamente. Hemos enviado un correo de confirmación.
+                            }
+                        </p>
+
+                        <div class="mt-8 flex flex-col w-full gap-3">
+                            <button (click)="goToInfoActividad()"
+                                [disabled]="procesandoInscripcion()"
+                                class="w-full bg-[#B1DF75] hover:bg-[#B1DF75]/75 text-text-main font-bold py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50">
+                                <span>Ver detalles de la actividad</span>
+                                <span class="material-symbols-outlined text-sm font-bold">
+                                    <i class="ph-bold ph ph-arrow-right"></i>
+                                </span>
+                            </button>
+                            
+                            <button (click)="goToInicio()" 
+                                class="w-full bg-transparent border border-[#d1d5db] text-text-main hover:bg-gray-50 font-bold py-3 px-4 rounded-2xl transition-colors cursor-pointer">
+                                Volver al inicio
+                            </button>
+                        </div>
+
+                        <a class="mt-6 text-sm text-text-muted hover:text-[#3D6C3F] underline decoration-1 underline-offset-2"
+                            href="https://stripe.com/es/contact" target="_blank">
+                            ¿Necesitas ayuda? Contacta con soporte
+                        </a>
                     </div>
-                    <a class="mt-6 text-sm text-text-muted hover:text-[#3D6C3F] underline decoration-1 underline-offset-2"
-                        href="https://stripe.com/es/contact" target="_blank">
-                        ¿Necesitas ayuda? Contacta con soporte
-                    </a>
+
+                    <div class="w-full md:w-80 bg-[#f9fafb] p-6 md:p-8 flex flex-col justify-center">
+                        <h3 class="text-text-muted text-xs font-bold uppercase tracking-wider mb-6">
+                            Resumen del pedido
+                        </h3>
+
+                        @if (actividadResumen(); as act) {
+                            <div class="mb-6 rounded-lg overflow-hidden relative aspect-video shadow-sm">
+                                <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10"></div>
+                                <div class="absolute bottom-2 left-3 z-20">
+                                    <span class="text-black text-xs font-medium bg-[#B1DF75]/90 px-2 py-0.5 rounded">
+                                        Confirmado
+                                    </span>
+                                </div>
+                                <div class="w-full h-full bg-center bg-cover"
+                                     [style.background-image]="'url(' + (act.imagen || 'assets/images/placeholder-sport.jpg') + ')'">
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-start gap-4">
+                                    <span class="text-text-muted text-[#3D6C3F] text-sm">Actividad</span>
+                                    <span class="text-text-main text-sm font-medium text-right line-clamp-2">
+                                        {{ act.nombre }}
+                                    </span>
+                                </div>
+                                
+                                <div class="flex justify-between items-start gap-4">
+                                    <span class="text-text-muted text-[#3D6C3F] text-sm">Fecha</span>
+                                    <span class="text-text-main text-sm font-medium text-right capitalize">
+                                        {{ act.fecha | date:'fullDate' }}
+                                    </span>
+                                </div>
+
+                                @if (act.hora) {
+                                    <div class="flex justify-between items-start gap-4">
+                                        <span class="text-text-muted text-[#3D6C3F] text-sm">Hora</span>
+                                        <span class="text-text-main text-sm font-medium text-right">
+                                            {{ act.hora }}
+                                        </span>
+                                    </div>
+                                }
+
+                                @if (act.ubicacion) {
+                                    <div class="flex justify-between items-start gap-4">
+                                        <span class="text-text-muted text-[#3D6C3F] text-sm">Ubicación</span>
+                                        <span class="text-text-main text-sm font-medium text-right truncate max-w-[150px]">
+                                            {{ act.ubicacion }}
+                                        </span>
+                                    </div>
+                                }
+
+                                <div class="h-px bg-[#e5e7eb] my-2"></div>
+
+                                <div class="flex justify-between items-center gap-4">
+                                    <span class="text-text-main text-base font-bold">Total Pagado</span>
+                                    <span class="text-[#3D6C3F] text-xl font-bold">
+                                        {{ act.precio | currency:'EUR' }}
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-end items-center gap-1 mt-1">
+                                    <span class="material-symbols-outlined text-[10px] text-gray-400">
+                                        <i class="ph ph-lock-simple"></i>
+                                    </span>
+                                    <span class="text-[10px] text-gray-400 uppercase">Pago Seguro con Stripe</span>
+                                </div>
+                            </div>
+                        } @else {
+                            <div class="animate-pulse space-y-4">
+                                <div class="h-32 bg-gray-200 rounded"></div>
+                                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                                <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                            </div>
+                        }
+                    </div>
                 </div>
-                <!-- Right/Bottom: Receipt Details -->
-                <div class="w-full md:w-80 bg-[#f9fafb] p-6 md:p-8 flex flex-col justify-center">
-                    <h3 class="text-text-muted text-xs font-bold uppercase tracking-wider mb-6">
-                        Resumen del pedido</h3>
-                    <!-- Event Image Mini -->
-                    <div class="mb-6 rounded-lg overflow-hidden relative aspect-video shadow-sm">
-                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10"></div>
-                        <div class="absolute bottom-2 left-3 z-20">
-                            <span
-                                class="text-black text-xs font-medium bg-[#B1DF75]/90 px-2 py-0.5 rounded">Confirmado</span>
-                        </div>
-                        <div class="w-full h-full bg-center bg-cover"
-                            data-alt="Action shot of people playing soccer on a green field"
-                            style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-2UugRzrsqbkx1flTHb4nh9xNlzLtNdfyIvMAYrVF4fncQsq9GFve8cZOy9bnrRkOKsAOHsPE2dmAIEOjY9avu6lUB5FX83kDHBqPAhCp7BEDLcsuq_syFdNJh2oraPXo-24mNabQDL_76y6WMUKBJ8zK3FQBFvgDZPCGgNOwqG5kYLWBVHyXaX814pCuf2N-59keKDJUUgRZvc99pRKjU3xfinruwRxMiwZS_rBIsGQYBx2sHoPWffMMTlKsz6WPWoKinSnflKM');">
-                        </div>
-                    </div>
-                    <!-- Details List -->
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted text-[#3D6C3F] text-sm">Actividad</span>
-                            <span class="text-text-main text-sm font-medium text-right">Fútbol 7 - Liga
-                                de los Jueves</span>
-                        </div>
-                        <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted text-[#3D6C3F] text-sm">Fecha</span>
-                            <span class="text-text-main text-sm font-medium text-right">Jueves, 20
-                                Oct</span>
-                        </div>
-                        <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted text-[#3D6C3F] text-sm">Hora</span>
-                            <span class="text-text-maintext-sm font-medium text-right">20:00 -
-                                21:00</span>
-                        </div>
-                        <div class="flex justify-between items-start gap-4">
-                            <span class="text-text-muted text-[#3D6C3F] text-sm">Ubicación</span>
-                            <span class="text-text-main text-sm font-medium text-right">Polideportivo
-                                Central</span>
-                        </div>
-                        <div class="h-px bg-[#e5e7eb] my-2"></div>
-                        <div class="flex justify-between items-center gap-4">
-                            <span class="text-text-main text-base font-bold">Total Pagado</span>
-                            <span class="text-[#3D6C3F] text-xl font-bold">5,50 €</span>
-                        </div>
-                        <div class="flex justify-end items-center gap-1 mt-1">
-                            <span class="material-symbols-outlined text-[10px] text-gray-400"><i
-                                    class="ph ph-lock-simple"></i></span>
-                            <span class="text-[10px] text-gray-400 uppercase">Pago Seguro con Stripe</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
-        <!-- Bottom Recommendation (Optional for engagement) -->
-        <div class="mt-12 w-full max-w-4xl text-center">
-            <h4 class="text-text-main dark:text-white font-bold text-lg mb-6">También te podría interesar</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <!-- Card 1 -->
-                <article
-                    class="group bg-white rounded-2xl overflow-hidden border border-[#f0f4f2] hover:border-[#3D6C3F]/50 shadow-sm hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col h-fit">
-                    <div class="relative aspect-video w-full overflow-hidden">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                            data-alt="People playing padel on a sunny court"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsuaYqwuI3QyM1GOmvZig7Eg3b4Se8orRivq4vFXEbVXTnxRjswpmTk842pw-bM3UkmJ4h7V08yyauPPO_t-aD-VMiCJWJrnonIZmSt2IBRig9E0tMbubtD48JDfpA7NBltJ1DY8lPAJt8i-mO_4IltXk_NJkylKh47zAuwgQoHw8uSrXXKrJjeYOwJb4jcJOqJzkvKbNXcC6MbehsFcTZdNCVxM2xnoiRy1KiZPGn9Q93kxkAr9F5VUxioU0ZRJVZgoog0w9f7cME");'>
-                        </div>
-                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60"></div>
-                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                            <div
-                                class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-xs font-medium flex items-center gap-1 border border-white/10">
-                                <span class="material-symbols-outlined text-[16px]"><i class="ph ph-racquet"></i></span>
-                                Pádel
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 flex flex-col grow">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3
-                                class="text-lg font-bold text-background-dark leading-tight group-hover:text-[#3D6C3F] transition-colors">
-                                Partido de Pádel</h3>
-                        </div>
-                        <div class="flex flex-col gap-2.5 mb-6">
-                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
-                                <span class="material-symbols-outlined text-[18px]"><i
-                                        class="ph ph-calendar-dots"></i></span>
-                                <span>12 Oct, 2023 • 18:00</span>
-                            </div>
-                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
-                                <span class="material-symbols-outlined text-[18px]"><i class="ph ph-map-pin"></i></span>
-                                <span>Club Deportivo Central</span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                <!-- Card 2 -->
-                <article
-                    class="group bg-white rounded-2xl overflow-hidden border border-[#f0f4f2] hover:border-[#3D6C3F]/50 shadow-sm hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col h-fit">
-                    <div class="relative aspect-video w-full overflow-hidden">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                            data-alt="People playing padel on a sunny court"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsuaYqwuI3QyM1GOmvZig7Eg3b4Se8orRivq4vFXEbVXTnxRjswpmTk842pw-bM3UkmJ4h7V08yyauPPO_t-aD-VMiCJWJrnonIZmSt2IBRig9E0tMbubtD48JDfpA7NBltJ1DY8lPAJt8i-mO_4IltXk_NJkylKh47zAuwgQoHw8uSrXXKrJjeYOwJb4jcJOqJzkvKbNXcC6MbehsFcTZdNCVxM2xnoiRy1KiZPGn9Q93kxkAr9F5VUxioU0ZRJVZgoog0w9f7cME");'>
-                        </div>
-                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60"></div>
-                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                            <div
-                                class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-xs font-medium flex items-center gap-1 border border-white/10">
-                                <span class="material-symbols-outlined text-[16px]"><i class="ph ph-racquet"></i></span>
-                                Pádel
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 flex flex-col grow">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3
-                                class="text-lg font-bold text-background-dark leading-tight group-hover:text-[#3D6C3F] transition-colors">
-                                Partido de Pádel</h3>
-                        </div>
-                        <div class="flex flex-col gap-2.5 mb-6">
-                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
-                                <span class="material-symbols-outlined text-[18px]"><i
-                                        class="ph ph-calendar-dots"></i></span>
-                                <span>12 Oct, 2023 • 18:00</span>
-                            </div>
-                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
-                                <span class="material-symbols-outlined text-[18px]"><i class="ph ph-map-pin"></i></span>
-                                <span>Club Deportivo Central</span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-                <!-- Card 3 -->
-                <article
-                    class="group bg-white rounded-2xl overflow-hidden border border-[#f0f4f2] hover:border-[#3D6C3F]/50 shadow-sm hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col h-fit">
-                    <div class="relative aspect-video w-full overflow-hidden">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                            data-alt="People playing padel on a sunny court"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsuaYqwuI3QyM1GOmvZig7Eg3b4Se8orRivq4vFXEbVXTnxRjswpmTk842pw-bM3UkmJ4h7V08yyauPPO_t-aD-VMiCJWJrnonIZmSt2IBRig9E0tMbubtD48JDfpA7NBltJ1DY8lPAJt8i-mO_4IltXk_NJkylKh47zAuwgQoHw8uSrXXKrJjeYOwJb4jcJOqJzkvKbNXcC6MbehsFcTZdNCVxM2xnoiRy1KiZPGn9Q93kxkAr9F5VUxioU0ZRJVZgoog0w9f7cME");'>
-                        </div>
-                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-60"></div>
-                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                            <div
-                                class="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-white text-xs font-medium flex items-center gap-1 border border-white/10">
-                                <span class="material-symbols-outlined text-[16px]"><i class="ph ph-racquet"></i></span>
-                                Pádel
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-5 flex flex-col grow">
-                        <div class="flex justify-between items-start mb-3">
-                            <h3
-                                class="text-lg font-bold text-background-dark leading-tight group-hover:text-[#3D6C3F] transition-colors">
-                                Partido de Pádel</h3>
-                        </div>
-                        <div class="flex flex-col gap-2.5 mb-6">
-                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
-                                <span class="material-symbols-outlined text-[18px]"><i
-                                        class="ph ph-calendar-dots"></i></span>
-                                <span>12 Oct, 2023 • 18:00</span>
-                            </div>
-                            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
-                                <span class="material-symbols-outlined text-[18px]"><i class="ph ph-map-pin"></i></span>
-                                <span>Club Deportivo Central</span>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </main>
+
+        </main>
     <app-footer></app-footer>
 </body>

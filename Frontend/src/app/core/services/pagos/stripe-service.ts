@@ -35,7 +35,7 @@ export class StripeService {
     currency: string,
     connectedAccountId: string,
     customerEmail: string,
-    applicationFee: number
+    applicationFee?: number
   }): Observable<any> {
     // Llamada al endpoint POST que definimos en el controlador de Java
     return this.http.post(`${this.API_URL}/payments/payment-intent`, paymentData);

@@ -3,6 +3,9 @@ import { StripeService } from '../../../../../core/services/pagos/stripe-service
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CurrencyPipe } from '@angular/common';
+import { PagosService } from '../../../../../core/services/pagos/pagos-service';
+import { Router } from '@angular/router';
+import { UserDataService } from '../../../../../core/services/auth/user-data-service';
 
 @Component({
   selector: 'app-payment',
@@ -14,74 +17,84 @@ import { CurrencyPipe } from '@angular/common';
 export class Payment {
   private stripeService = inject(StripeService);
   private messageService = inject(MessageService);
+  private pagosService = inject(PagosService);
+  private userDataService = inject(UserDataService);
+  private router = inject(Router);
 
   // Referencia al div donde se monta el formulario de Stripe
-  private cardElementRef = viewChild<ElementRef>('paymentElement');
+  private paymentElementRef = viewChild<ElementRef>('paymentElement');
 
   // Signals para controlar el estado
   loading = signal(false);
+  actividad = signal<any>(null);
   stripeInstance: any;
   elements: any;
-  paymentElement: any;
-
-  // Estos datos deberían venir de la actividad seleccionada (ej. vía Input o un Shared Service)
-  activityData = {
-  amount: 1000, 
-  currency: 'eur',
-  connectedAccountId: 'acct_XXXXX',
-  customerEmail: 'cliente@ejemplo.com',
-  applicationFee: 0 // Añade esto, incluso si es 0
-};
 
   async ngOnInit() {
-    this.initPaymentFlow();
+    const activity = this.pagosService.selectedActivity();
+
+    // Seguridad: Si no hay actividad en el servicio, volvemos atrás
+    if (!activity) {
+      this.router.navigate(['/actividades']);
+      return;
+    }
+    this.actividad.set(activity);
+
+    this.iniciarFlujo(activity);
   }
 
-  async initPaymentFlow() {
+  private async iniciarFlujo(activity: any) {
     this.loading.set(true);
 
-    // 1. Obtener el clientSecret desde tu Backend
-    this.stripeService.createPaymentIntent(this.activityData).subscribe({
+    // Calculamos el total en céntimos redondeando para evitar decimales
+    const amountCents = Math.round(activity.precio * 100);
+
+    const payload = {
+      amount: amountCents, // Céntimos
+      currency: 'eur',
+      connectedAccountId: activity.organizadorStripeId,
+      customerEmail: this.userDataService.getEmail(),
+    };
+
+    this.stripeService.createPaymentIntent(payload).subscribe({
       next: async (res) => {
-        // 2. Inicializar Stripe con la cuenta del VENDEDOR (Direct Charge)
-        this.stripeInstance = await this.stripeService.getStripe(this.activityData.connectedAccountId);
-        
+        // Inicializamos Stripe con la cuenta del vendedor (Direct Charge)
+        this.stripeInstance = await this.stripeService.getStripe(activity.organizadorStripeId);
+
         if (this.stripeInstance && res.clientSecret) {
-          // 3. Crear instancia de Elements con el clientSecret
           this.elements = this.stripeInstance.elements({ clientSecret: res.clientSecret });
-          
-          // 4. Crear y montar el Payment Element (incluye validaciones, estilos, etc.)
-          this.paymentElement = this.elements.create('payment');
-          this.paymentElement.mount(this.cardElementRef()?.nativeElement);
+          const paymentElement = this.elements.create('payment');
+          // Montamos el elemento en el DOM
+          const elem = this.paymentElementRef()?.nativeElement;
+          if (elem) {
+            paymentElement.mount(elem);
+          }
         }
         this.loading.set(false);
       },
       error: (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo inicializar el pago' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Fallo al cargar pasarela' });
         this.loading.set(false);
       }
     });
   }
 
-  async controlPayment() {
-    if (this.loading()) return;
+  async confirmarPago() {
     this.loading.set(true);
+    const activity = this.actividad();
 
-    // 5. Confirmar el pago
+    this.pagosService.guardarTransaccionPendiente(activity);
+
     const { error } = await this.stripeInstance.confirmPayment({
       elements: this.elements,
       confirmParams: {
-        return_url: `${window.location.origin}/payment-success`,
+        return_url: `${window.location.origin}/pago-confirmado`,
       },
     });
 
     if (error) {
-      // Si hay error (ej. tarjeta rechazada), Stripe lo gestiona y te avisa
-      this.messageService.add({ severity: 'error', summary: 'Error de pago', detail: error.message });
+      this.messageService.add({ severity: 'error', summary: 'Pago fallido', detail: error.message });
       this.loading.set(false);
-    } else {
-      // Si no hay error, Stripe redirige automáticamente a return_url
-      ///pagos/pago-confirmado
     }
   }
 }

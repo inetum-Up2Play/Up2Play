@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core'; import { Pagos } from '../../../../core/services/pagos/pagos-service';
+import { Component, inject, input, signal } from '@angular/core'; 
 import { StripeService } from '../../../../core/services/pagos/stripe-service';
 import { MessageModule } from 'primeng/message';
 
