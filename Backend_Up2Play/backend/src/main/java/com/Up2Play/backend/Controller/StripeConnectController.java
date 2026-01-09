@@ -109,13 +109,18 @@ public class StripeConnectController {
     public ResponseEntity<?> createP2PPayment(@RequestBody CreatePaymentRequest request, @AuthenticationPrincipal UserDetails principal) {
         try {
 
+            Usuario usuario = usuarioRepository.findByEmail(principal.getUsername())
+                    .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
             // Importante: El amount debe venir en céntimos (ej: 500 para 5.00€)
             Map<String, Object> paymentIntent = stripeConnectService.createP2PPayment(
                     request.getAmount(),
                     request.getCurrency(),
                     request.getConnectedAccountId(), // El stripe_id del vendedor
                     request.getCustomerEmail(),
-                    request.getApplicationFee()); // Tu comisión (puede ser 0)
+                    request.getApplicationFee(),
+                    usuario.getId(),
+                    request.getActividadId()); // Tu comisión (puede ser 0)
  
             return ResponseEntity.ok(paymentIntent); 
         } catch (StripeException e) {
