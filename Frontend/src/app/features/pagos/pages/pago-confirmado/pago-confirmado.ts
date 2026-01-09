@@ -5,10 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { PagosService } from '../../../../core/services/pagos/pagos-service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
 
 @Component({
   selector: 'app-pago-confirmado',
-  imports: [Header, Footer, CurrencyPipe, DatePipe],
+  imports: [Header, Footer, CurrencyPipe, DatePipe, DeporteImgPipe, DatePipe],
   templateUrl: './pago-confirmado.html',
   styleUrl: './pago-confirmado.scss',
 })
@@ -49,7 +50,8 @@ export class PagoConfirmado implements OnInit {
     } else {
       this.procesandoInscripcion.set(false);
       this.errorInscripcion.set(true);
-      console.error('No se encontró transacción pendiente o el pago falló');
+      console.error('Pago no exitoso o falta información de sesión');
+      this.router.navigate(['/pagos/pago-denegado']);
     }
   }
 
@@ -62,6 +64,8 @@ export class PagoConfirmado implements OnInit {
       error: (err) => {
         this.procesandoInscripcion.set(false);
         this.errorInscripcion.set(true);
+        console.error('Error al registrar en BD tras pago', err);
+        this.router.navigate(['/pagos/pago-denegado']);
       }
     });
   }

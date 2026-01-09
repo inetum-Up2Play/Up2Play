@@ -54,6 +54,7 @@ export class Payment {
       currency: 'eur',
       connectedAccountId: activity.organizadorStripeId,
       customerEmail: this.userDataService.getEmail(),
+      actividadId: activity.actividadId
     };
 
     this.stripeService.createPaymentIntent(payload).subscribe({

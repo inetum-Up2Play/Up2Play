@@ -9,6 +9,9 @@ export interface PaymentInfo {
   nombre: string;
   precio: number;
   organizadorStripeId: string;
+  deporte?: string;
+  fecha?: string;
+  ubicacion?: string;
 }
 
 @Injectable({

@@ -351,7 +351,10 @@ export class InfoActividad implements OnInit, AfterViewInit {
                     actividadId: act.id,
                     nombre: act.nombre,
                     precio: precioNumerico,
-                    organizadorStripeId: creador.stripeAccountId 
+                    organizadorStripeId: creador.stripeAccountId ,
+                    deporte: act.deporte,
+                    fecha: act.fecha,
+                    ubicacion: act.ubicacion
                 });
 
                 this.router.navigate(['/pagos/pago']);

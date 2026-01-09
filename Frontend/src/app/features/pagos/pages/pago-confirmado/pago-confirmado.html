@@ -1,145 +1,136 @@
 <body class="bg-background-light text-text-main font-display antialiased min-h-screen flex flex-col">
     <app-header></app-header>
-    
+
     <main class="flex-1 flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
         <div class="w-full max-w-3xl bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden">
-            
-            @if (errorInscripcion()) {
-                <div class="p-8 text-center bg-red-50">
-                    <i class="pi pi-times-circle text-red-600 text-5xl mb-4"></i>
-                    <h2 class="text-2xl font-bold text-red-700">Hubo un problema</h2>
-                    <p class="text-red-600">El pago se realizó, pero no pudimos finalizar tu inscripción. Por favor, contacta con soporte.</p>
-                    <button (click)="goToInicio()" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 hover:cursor-pointer">Volver al inicio</button>
-                </div>
-            } 
-            
-            @else {
-                <div class="flex flex-col md:flex-row">
-                    
-                    <div class="flex-1 p-8 md:p-10 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-[#f0f4f2]">
-                        
-                        <div class="mb-6 relative">
-                            <div class="absolute inset-0 bg-[#B1DF75]/20 rounded-full animate-ping opacity-75"></div>
-                            <div class="relative size-24 bg-[#B1DF75]/10 rounded-full flex items-center justify-center text-primary">
-                                <i class="text-[#B1DF75] text-[52px] font-bold ph ph-check-circle"></i>
-                            </div>
+
+
+            <div class="flex flex-col md:flex-row">
+
+                <div
+                    class="flex-1 p-8 md:p-10 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-[#f0f4f2]">
+
+                    <div class="mb-6 relative">
+                        <div class="absolute inset-0 bg-[#B1DF75]/20 rounded-full animate-ping opacity-75"></div>
+                        <div
+                            class="relative size-24 bg-[#B1DF75]/10 rounded-full flex items-center justify-center text-primary">
+                            <i class="text-[#B1DF75] text-[52px] font-bold ph ph-check-circle"></i>
                         </div>
-
-                        <h1 class="text-text-main text-3xl font-bold leading-tight mb-3">
-                            ¡Pago realizado con éxito!
-                        </h1>
-                        
-                        <p class="text-text-muted text-base font-normal leading-relaxed max-w-sm text-[#3D6C3F]">
-                            @if (procesandoInscripcion()) {
-                                <span class="flex items-center justify-center gap-2">
-                                    <i class="pi pi-spin pi-spinner"></i> Confirmando inscripción...
-                                </span>
-                            } @else {
-                                ¡Todo listo! Te has apuntado correctamente. Hemos enviado un correo de confirmación.
-                            }
-                        </p>
-
-                        <div class="mt-8 flex flex-col w-full gap-3">
-                            <button (click)="goToInfoActividad()"
-                                [disabled]="procesandoInscripcion()"
-                                class="w-full bg-[#B1DF75] hover:bg-[#B1DF75]/75 text-text-main font-bold py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50">
-                                <span>Ver detalles de la actividad</span>
-                                <span class="material-symbols-outlined text-sm font-bold">
-                                    <i class="ph-bold ph ph-arrow-right"></i>
-                                </span>
-                            </button>
-                            
-                            <button (click)="goToInicio()" 
-                                class="w-full bg-transparent border border-[#d1d5db] text-text-main hover:bg-gray-50 font-bold py-3 px-4 rounded-2xl transition-colors cursor-pointer">
-                                Volver al inicio
-                            </button>
-                        </div>
-
-                        <a class="mt-6 text-sm text-text-muted hover:text-[#3D6C3F] underline decoration-1 underline-offset-2"
-                            href="https://stripe.com/es/contact" target="_blank">
-                            ¿Necesitas ayuda? Contacta con soporte
-                        </a>
                     </div>
 
-                    <div class="w-full md:w-80 bg-[#f9fafb] p-6 md:p-8 flex flex-col justify-center">
-                        <h3 class="text-text-muted text-xs font-bold uppercase tracking-wider mb-6">
-                            Resumen del pedido
-                        </h3>
+                    <h1 class="text-text-main text-3xl font-bold leading-tight mb-3">
+                        ¡Pago realizado con éxito!
+                    </h1>
 
-                        @if (actividadResumen(); as act) {
-                            <div class="mb-6 rounded-lg overflow-hidden relative aspect-video shadow-sm">
-                                <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10"></div>
-                                <div class="absolute bottom-2 left-3 z-20">
-                                    <span class="text-black text-xs font-medium bg-[#B1DF75]/90 px-2 py-0.5 rounded">
-                                        Confirmado
-                                    </span>
-                                </div>
-                                <div class="w-full h-full bg-center bg-cover"
-                                     [style.background-image]="'url(' + (act.imagen || 'assets/images/placeholder-sport.jpg') + ')'">
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-start gap-4">
-                                    <span class="text-text-muted text-[#3D6C3F] text-sm">Actividad</span>
-                                    <span class="text-text-main text-sm font-medium text-right line-clamp-2">
-                                        {{ act.nombre }}
-                                    </span>
-                                </div>
-                                
-                                <div class="flex justify-between items-start gap-4">
-                                    <span class="text-text-muted text-[#3D6C3F] text-sm">Fecha</span>
-                                    <span class="text-text-main text-sm font-medium text-right capitalize">
-                                        {{ act.fecha | date:'fullDate' }}
-                                    </span>
-                                </div>
-
-                                @if (act.hora) {
-                                    <div class="flex justify-between items-start gap-4">
-                                        <span class="text-text-muted text-[#3D6C3F] text-sm">Hora</span>
-                                        <span class="text-text-main text-sm font-medium text-right">
-                                            {{ act.hora }}
-                                        </span>
-                                    </div>
-                                }
-
-                                @if (act.ubicacion) {
-                                    <div class="flex justify-between items-start gap-4">
-                                        <span class="text-text-muted text-[#3D6C3F] text-sm">Ubicación</span>
-                                        <span class="text-text-main text-sm font-medium text-right truncate max-w-[150px]">
-                                            {{ act.ubicacion }}
-                                        </span>
-                                    </div>
-                                }
-
-                                <div class="h-px bg-[#e5e7eb] my-2"></div>
-
-                                <div class="flex justify-between items-center gap-4">
-                                    <span class="text-text-main text-base font-bold">Total Pagado</span>
-                                    <span class="text-[#3D6C3F] text-xl font-bold">
-                                        {{ act.precio | currency:'EUR' }}
-                                    </span>
-                                </div>
-
-                                <div class="flex justify-end items-center gap-1 mt-1">
-                                    <span class="material-symbols-outlined text-[10px] text-gray-400">
-                                        <i class="ph ph-lock-simple"></i>
-                                    </span>
-                                    <span class="text-[10px] text-gray-400 uppercase">Pago Seguro con Stripe</span>
-                                </div>
-                            </div>
+                    <p class="text-text-muted text-base font-normal leading-relaxed max-w-sm text-[#3D6C3F]">
+                        @if (procesandoInscripcion()) {
+                        <span class="flex items-center justify-center gap-2">
+                            <i class="pi pi-spin pi-spinner"></i> Confirmando inscripción...
+                        </span>
                         } @else {
-                            <div class="animate-pulse space-y-4">
-                                <div class="h-32 bg-gray-200 rounded"></div>
-                                <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-                                <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-                            </div>
+                        ¡Todo listo! Te has apuntado correctamente. Hemos enviado un correo de confirmación.
                         }
+                    </p>
+
+                    <div class="mt-8 flex flex-col w-full gap-3">
+                        <button (click)="goToInfoActividad()" [disabled]="procesandoInscripcion()"
+                            class="w-full bg-[#B1DF75] hover:bg-[#B1DF75]/75 text-text-main font-bold py-3 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50">
+                            <span>Ver detalles de la actividad</span>
+                            <span class="material-symbols-outlined text-sm font-bold">
+                                <i class="ph-bold ph ph-arrow-right"></i>
+                            </span>
+                        </button>
+
+                        <button (click)="goToInicio()"
+                            class="w-full bg-transparent border border-[#d1d5db] text-text-main hover:bg-gray-50 font-bold py-3 px-4 rounded-2xl transition-colors cursor-pointer">
+                            Volver al inicio
+                        </button>
                     </div>
+
+                    <a class="mt-6 text-sm text-text-muted hover:text-[#3D6C3F] underline decoration-1 underline-offset-2"
+                        href="https://stripe.com/es/contact" target="_blank" rel="noopener">
+                        ¿Necesitas ayuda? Contacta con soporte
+                    </a>
                 </div>
-            }
+
+                <div class="w-full md:w-80 bg-[#f9fafb] p-6 md:p-8 flex flex-col justify-center">
+                    <h3 class="text-text-muted text-xs font-bold uppercase tracking-wider mb-6">
+                        Resumen del pedido
+                    </h3>
+
+                    @if (actividadResumen(); as act) {
+                    <div class="mb-6 rounded-lg overflow-hidden relative aspect-video shadow-sm">
+                        <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10"></div>
+                        <div class="absolute bottom-2 left-3 z-20">
+                            <span class="text-black text-xs font-medium bg-[#B1DF75]/90 px-2 py-0.5 rounded">
+                                Confirmado
+                            </span>
+                        </div>
+                        <img [src]="act.deporte | deporteImg" alt="Imagen de actividad"
+                            class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start gap-4">
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Actividad</span>
+                            <span class="text-text-main text-sm font-medium text-right line-clamp-2">
+                                {{ act.nombre }}
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between items-start gap-4">
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Fecha</span>
+                            <span class="text-text-main text-sm font-medium text-right capitalize">
+                                {{ act.fecha | date:'fullDate' }}
+                            </span>
+                        </div>
+
+                        @if (act.fecha) {
+                        <div class="flex justify-between items-start gap-4">
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Hora</span>
+                            <span class="text-text-main text-sm font-medium text-right">
+                                {{ act.fecha | date:'HH:mm' }}
+                            </span>
+                        </div>
+                        }
+
+                        @if (act.ubicacion) {
+                        <div class="flex justify-between items-start gap-4">
+                            <span class="text-text-muted text-[#3D6C3F] text-sm">Ubicación</span>
+                            <span class="text-text-main text-sm font-medium text-right truncate max-w-[150px]"
+                                [title]="act.ubicacion"> {{ act.ubicacion }}
+                            </span>
+                        </div>
+                        }
+
+                        <div class="h-px bg-[#e5e7eb] my-2"></div>
+
+                        <div class="flex justify-between items-center gap-4">
+                            <span class="text-text-main text-base font-bold">Total Pagado</span>
+                            <span class="text-[#3D6C3F] text-xl font-bold">
+                                {{ act.precio | currency:'EUR' }}
+                            </span>
+                        </div>
+
+                        <div class="flex justify-end items-center gap-1 mt-1">
+                            <span class="material-symbols-outlined text-[10px] text-gray-400">
+                                <i class="ph ph-lock-simple"></i>
+                            </span>
+                            <span class="text-[10px] text-gray-400 uppercase">Pago Seguro con Stripe</span>
+                        </div>
+                    </div>
+                    } @else {
+                    <div class="animate-pulse space-y-4">
+                        <div class="h-32 bg-gray-200 rounded"></div>
+                        <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                    }
+                </div>
+            </div>
+
         </div>
 
-        </main>
+    </main>
     <app-footer></app-footer>
 </body>
