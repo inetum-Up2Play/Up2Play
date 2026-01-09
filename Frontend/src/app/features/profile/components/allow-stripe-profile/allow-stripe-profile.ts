@@ -1,4 +1,5 @@
-import { Component, inject, input, signal } from '@angular/core'; import { Pagos } from '../../../../core/services/pagos/pagos';
+import { Component, inject, input, signal } from '@angular/core';
+import { Pagos } from '../../../../core/services/pagos/pagos';
 import { StripeService } from '../../../../core/services/pagos/stripe-service';
 import { MessageModule } from 'primeng/message';
 
@@ -9,12 +10,11 @@ import { MessageModule } from 'primeng/message';
   styleUrl: './allow-stripe-profile.scss',
 })
 export class AllowStripeProfile {
-
   private stripeService = inject(StripeService);
 
   // Recibimos el estado desde el padre (Perfil) usando signal inputs
   pagosHabilitados = input.required<boolean>();
-  
+
   loading = signal(false);
 
   habilitarPagos() {
@@ -25,7 +25,7 @@ export class AllowStripeProfile {
           window.location.href = res.onboardingUrl;
         }
       },
-      error: () => this.loading.set(false)
+      error: () => this.loading.set(false),
     });
   }
 }
