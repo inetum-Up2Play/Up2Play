@@ -40,7 +40,7 @@
                 <strong> Punto de encuentro:</strong> {{ act.ubicacion }}
             </p>
             <p><i class="pi pi-euro" style="color:#3D6C3F"></i>
-                <strong> Precio:</strong> {{ act.precio == '0' ? 'Gratuita' : act.precio + '€' }}
+                <strong> Precio:</strong> {{ act.precio == 0 ? 'Gratuita' : act.precio + '€' }}
             </p>
         </div>
         <div>
@@ -52,21 +52,62 @@
                 <i class="pi pi-pen-to-square"></i>
                 Editar
             </button>
-            <button (click)="confirm($event)"
-                class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
-                <i class="pi pi-trash"></i>
-                Eliminar
-            </button>
+                @if(act.precio == 0.00) {
+                    <button (click)="eliminar($event)"
+                        class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
+                        <i class="pi pi-trash"></i>
+                        Eliminar
+                    </button>
+                    
+                } @else {
+                    
+                    <button (click)="ReembolsoATodos($event)"
+                        class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
+                        <i class="pi pi-trash"></i>
+                        Eliminar y reembolsar
+                    </button>
+                }
             } @else if (!apuntado()) {
-            <button (click)="unirse()"
-                class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
-                ¡Apúntate!
-            </button>
+
+                @if (act.precio == 0.00) {
+                    
+                    <button (click)="unirse()"
+                        class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
+                        ¡Apúntate!
+                    </button>
+
+                } @else {
+                    <button (click)="pagar()"
+                        class="cursor-pointer 
+                            bg-[#FFEE59] hover:bg-[#e6d600] 
+                            text-[#152614] 
+                            font-semibold border-none py-2 px-4 rounded-[20px] 
+                            flex items-center gap-2 shadow-md hover:shadow-lg transition-all">
+                        <i class="pi pi-credit-card"></i> 
+                        <span>Apúntate por {{ act.precio }}€</span>
+                    </button>
+
+                }
             } @else {
-            <button (click)="desapuntarse()"
-                class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
-                Desapúntate...
-            </button>
+                @if (act.precio == 0.00) {
+                    <button (click)="desapuntarse()"
+                        class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
+                        Desapúntate...
+                    </button>
+                    
+                } @else {
+                    <button (click)="reembolso()"
+                        class="cursor-pointer 
+                            bg-[#d97706] hover:bg-[#b45309] 
+                            text-[#F7F7F7] 
+                            font-semibold border-none py-2 px-4 rounded-[20px] 
+                            transition-all duration-200 
+                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
+                        Desapuntarse y reembolsar...
+                    </button>
+
+
+                }
             }
         </div>
     </div>

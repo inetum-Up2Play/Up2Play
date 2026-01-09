@@ -1,4 +1,5 @@
 @use 'styles/variables' as vars;
+@use 'sass:color';
 
 .title {
     font-weight: bold;
@@ -50,6 +51,24 @@
 
 :host ::ng-deep .btn-apuntarse:hover {
     background-color: #204718;
+    border: none; 
+}
+
+/* BTN PAGAR */
+:host ::ng-deep .btn-pagar {
+    background-color: vars.$amarillo;
+    color: vars.$verde-oscuro;
+    border: none;
+    border-radius: 20px;    
+
+}
+:host ::ng-deep .btn-pagar .p-button-label {
+    font-weight: 550 !important; 
+}
+
+:host ::ng-deep .btn-pagar:hover {
+    background-color: color.adjust(vars.$amarillo, $lightness: -20%);
+    color: vars.$verde-oscuro; 
     border: none;
 }
 
@@ -63,6 +82,26 @@
 :host ::ng-deep .btn-desapuntarse:hover {
     background-color: #5c5c5c;
     border: none;
+}
+
+/* BTN REEMBOLSO (Usuario se desapunta de actividad de pago) */
+:host ::ng-deep .btn-reembolso {
+    background-color: #d97706; /* Un naranja ámbar sólido */
+    color: vars.$blanco;
+    border: none;
+    border-radius: 20px;
+    transition: background-color 0.2s;
+}
+
+/* Mantenemos la negrita para indicar importancia financiera */
+:host ::ng-deep .btn-reembolso .p-button-label {
+    font-weight: 600 !important;
+}
+
+:host ::ng-deep .btn-reembolso:hover {
+    background-color: #b45309; /* Tono teja/bronce más oscuro */
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 :host ::ng-deep .p-card-body{

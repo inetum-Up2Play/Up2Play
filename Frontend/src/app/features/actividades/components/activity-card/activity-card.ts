@@ -1,4 +1,12 @@
-import { Component, EventEmitter, inject, Input, input, Output, output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  input,
+  Output,
+  output,
+} from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -10,24 +18,28 @@ import { Router } from '@angular/router';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
+import { Actividad } from '../../../../shared/models/Actividad';
 
 @Component({
   selector: 'app-activity-card',
-  imports: [CardModule, ButtonModule, ConfirmDialog, ToastModule, MessageModule],
+  imports: [
+    CardModule,
+    ButtonModule,
+    ConfirmDialog,
+    ToastModule,
+    MessageModule,
+  ],
   providers: [ConfirmationService],
   templateUrl: './activity-card.html',
-  styleUrl: './activity-card.scss'
+  styleUrl: './activity-card.scss',
 })
-
 export class ActivityCard {
-
   private actService = inject(ActService);
   private messageService = inject(MessageService);
   private errorService = inject(ErrorService);
   private actUpdateService = inject(ActUpdateService);
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
-
 
   titulo = input.required<string>();
   fecha = input.required<string>();
@@ -46,11 +58,11 @@ export class ActivityCard {
   @Input() botonAction?: (id: number) => void;
   @Input() actividadId!: number;
 
-  handleButtonClick(tipo: 'boton' | 'eliminar') {
+  handleButtonClick(tipo: 'boton' | 'eliminar' | 'reembolso-a-todos') {
     if (tipo === 'boton') {
       // Call the passed callback, if provided. Use optional chaining to be safe.
       this.botonAction?.(this.actividadId);
-    } else {
+    } else if (tipo === 'eliminar') {
       this.confirmationService.confirm({
         target: event?.target as EventTarget,
         message: '¿Seguro que quieres eliminar esta actividad?',
@@ -72,7 +84,11 @@ export class ActivityCard {
             next: () => {
               console.log(this.actividadId);
 
-              this.messageService.add({ severity: 'success', summary: 'Oh... :(', detail: 'Actividad eliminada correctamente' });
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Oh... :(',
+                detail: 'Actividad eliminada correctamente',
+              });
               setTimeout(() => {
                 this.actUpdateService.notifyUpdate();
               }, 2500); // espera 2.5 segundos para que se vea el toast
@@ -80,24 +96,51 @@ export class ActivityCard {
             error: (codigo) => {
               const mensaje = this.errorService.getMensajeError(codigo);
               this.errorService.showError(mensaje);
-            }
-          })
+            },
+          });
         },
         reject: () => {
-          this.messageService.add({ severity: 'warn', summary: 'Rechazado', detail: 'Has cancelado la eliminación' });
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Rechazado',
+            detail: 'Has cancelado la eliminación',
+          });
+        },
+      });
+    } else {
+      this.confirmationService.confirm({
+        target: event?.target as EventTarget,
+        message: '¿Seguro que quieres eliminar esta actividad? Esta actividad tiene un coste y al eliminarla se procederá al reembolso automático.',
+        header: '¡Cuidado!',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancelar',
+        rejectButtonProps: {
+          label: 'Cancelar',
+          severity: 'secondary',
+          outlined: true,
+        },
+        acceptButtonProps: {
+          label: 'Eliminar y reembolsar',
+          severity: 'danger',
+        },
+
+        accept: () => {
+          console.log('Reembolso de actividad', this.actividadId);
+        },
+        reject: () => {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Rechazado',
+            detail: 'Has cancelado la eliminación',
+          });
         },
       });
     }
-    console.log('Botón clickeado con id:', this.actividadId);
-
   }
 
   infoActividad() {
-
-    console.log('Información de la actividad con id:', this.actividadId);
-
-    return this.router.navigate([`/actividades/info-actividad/${this.actividadId}`]);
-
+    return this.router.navigate([
+      `/actividades/info-actividad/${this.actividadId}`,
+    ]);
   }
-
 }

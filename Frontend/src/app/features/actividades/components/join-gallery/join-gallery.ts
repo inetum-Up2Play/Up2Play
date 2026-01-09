@@ -99,5 +99,9 @@ export class JoinGallery implements OnInit {
     });
   }
 
+  pagar(id: number) {
+    console.log('pagar');
+  }
+
 
 }
