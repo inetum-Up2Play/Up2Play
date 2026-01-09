@@ -1,1 +1,250 @@
-<p>historial works!</p>
+<div class="w-full">
+  <app-header></app-header>
+  <div
+    class="flex flex-col w-full max-w-[95%] 2xl:max-w-screen-2xl mx-auto px-4 md:px-8 py-8 min-h-[50vh]"
+  >
+    <div class="flex flex-col items-start">
+      <div class="flex items-center gap-2 mb-2">
+        <i
+          class="ph ph-clock-counter-clockwise text-xl font-bold text-[#3D6C3F]"
+        ></i>
+        <h1 class="font-bold work text-[#3D6C3F]">TU RECORRIDO</h1>
+      </div>
+
+      <div>
+        <h1 class="text-5xl font-bold">Historial de Actividades</h1>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col md:flex-row justify-between items-center w-full mb-6 gap-4"
+    >
+      <div class="mt-4 md:mt-0">
+        <p class="font-semibold w-full work text-xl text-[#152614]">
+          Revive tus mejores momentos, analiza tu rendimiento y mantén la
+          motivación alta.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg p-4 flex items-center gap-3 shadow-sm">
+        <div class="bg-[#B1DF75]/25 p-2 rounded-full">
+          <i
+            class="ph ph-trophy text-2xl iconos-historial font-bold text-[#B1DF75]"
+          ></i>
+        </div>
+
+        <div class="flex flex-col">
+          <h1 class="font-bold recorrido text-[#3D6C3F]">TOTAL COMPLETADO</h1>
+          <span class="text-2xl font-bold"
+            >{{ activities.length }} Actividades</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-white p-4 rounded-2xl border border-[#f0f4f2] shadow-sm mb-8"
+    >
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto grow">
+          <p-iconfield iconPosition="left" class="w-full md:flex-1">
+            <p-inputicon
+              styleClass="ph ph-magnifying-glass !text-[#3D6C3F]/80"
+            ></p-inputicon>
+
+            <input
+              pInputText
+              type="text"
+              [(ngModel)]="filterNombre"
+              (ngModelChange)="applyFilters()"
+              placeholder="Buscar por nombre de actividad (ej. Padel, Yoga)..."
+              class="w-full text-sm !text-[#3D6C3F]/80 !placeholder-[#3D6C3F]/80 focus:!shadow-none hover:!border-[#3D6C3F] focus:!border-[#3D6C3F]"
+            />
+          </p-iconfield>
+          <p-multiSelect
+            class="w-full md:flex-1"
+            [options]="deportesOptions"
+            [(ngModel)]="filterDeporte"
+            (onChange)="applyFilters()"
+            (onClear)="applyFilters()"
+            placeholder="Deportes"
+            optionLabel="label"
+            optionValue="value"
+            selectedItemsLabel="{0} deportes seleccionados"
+            [maxSelectedLabels]="1"
+            [showClear]="true"
+            styleClass="w-full text-sm !text-[#3D6C3F]/80 focus:!shadow-none hover:!border-[#3D6C3F] focus:!border-[#3D6C3F] focus-within:!border-[#3D6C3F] focus-within:!shadow-none [&_.p-placeholder]:!text-[#3D6C3F]/80"
+          >
+          </p-multiSelect>
+          <p-datepicker
+            [(ngModel)]="filterFecha"
+            (onSelect)="applyFilters()"
+            (onClear)="applyFilters()"
+            dateFormat="dd/mm/yy"
+            placeholder="Filtrar por fecha"
+            [showIcon]="true"
+            [showButtonBar]="true"
+            styleClass="w-full md:flex-1"
+            inputStyleClass="w-full text-sm !placeholder-[#3D6C3F]/80 focus:!shadow-none hover:!border-[#3D6C3F] focus:!border-[#3D6C3F]"
+          >
+          </p-datepicker>
+        </div>
+
+        <button
+          (click)="clearFilters()"
+          class="text-sm font-medium text-[#3D6C3F] hover:text-[#152614] transition-colors flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#f0f4f2] whitespace-nowrap cursor-pointer"
+        >
+          <i class="ph ph-trash"></i>
+          Limpiar filtros
+        </button>
+      </div>
+      @if (filterDeporte.length > 0 || filterFecha || filterNombre) {
+      <div class="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+        <span class="text-xs text-gray-400 font-medium self-center mr-2"
+          >Filtros activos:</span
+        >
+
+        @if (filterDeporte.length > 0) { @for (deporte of filterDeporte; track
+        deporte) {
+        <div
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D6C3F]/10 text-[#3D6C3F] text-xs font-bold border border-[#3D6C3F]/20 animate-fade-in"
+        >
+          <span>{{ deporte }}</span>
+          <button
+            (click)="removeDeporte(deporte)"
+            class="hover:text-[#152614] cursor-pointer flex items-center"
+          >
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+        } } @if (filterFecha) {
+        <div
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D6C3F]/10 text-[#3D6C3F] text-xs font-bold border border-[#3D6C3F]/20 animate-fade-in"
+        >
+          <i class="ph ph-calendar-blank"></i>
+          <span>{{ filterFecha | date : "dd/MM/yyyy" }}</span>
+          <button
+            (click)="filterFecha = null; applyFilters()"
+            class="hover:text-[#152614] cursor-pointer flex items-center"
+          >
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+        } @if (filterNombre) {
+        <div
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D6C3F]/10 text-[#3D6C3F] text-xs font-bold border border-[#3D6C3F]/20 animate-fade-in"
+        >
+          <i class="ph ph-magnifying-glass"></i>
+          <span>"{{ filterNombre }}"</span>
+          <button
+            (click)="filterNombre = ''; applyFilters()"
+            class="hover:text-[#152614] cursor-pointer flex items-center"
+          >
+            <i class="ph ph-x"></i>
+          </button>
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    @if (visibleActivities.length === 0) {
+    <div class="flex flex-col items-center justify-center">
+      <app-empty-activities
+        class="w-full"
+        icon="ph ph-smiley-sad"
+        title="Tu lista está vacía..."
+        message="¡No se han encontrado actividades con este filtro!"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+      </app-empty-activities>
+    </div>
+    } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      @for (activity of visibleActivities | slice:0:numeroActividades; track
+      activity.id) {
+      <article
+        class="bg-white rounded-2xl overflow-hidden border border-[#f0f4f2] hover:border-[#152614]/25 shadow-sm hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
+      >
+        <div class="relative aspect-video w-full overflow-hidden">
+          <img
+            class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+            [src]="activity.deporte | deporteImg"
+            alt="actividad-img"
+          />
+
+          <div
+            class="absolute inset-0 from-black/20 to-transparent opacity-60"
+          ></div>
+        </div>
+
+        <div class="p-5 flex flex-col">
+          <div class="mb-4">
+            <h3
+              [routerLink]="['/actividades/info-actividad', activity.id]"
+              class="text-lg font-bold text-background-dark leading-tight group-hover:text-primary transition-colors line-clamp-2 cursor-pointer"
+            >
+              {{ activity.nombre }}
+            </h3>
+          </div>
+
+          <div class="flex flex-col gap-3 mb-4">
+            <div class="flex items-center gap-2.5 text-sm text-secondary-text">
+              <i class="ph ph-calendar-blank text-[#3D6C3F] font-medium"></i>
+              <div class="flex gap-2">
+                <span class="text-[#3D6C3F] font-medium">
+                  {{ activity.fecha | date : "dd MMM yyyy" }}
+                </span>
+                <span class="text-[#3D6C3F] font-medium">•</span>
+                <span class="text-[#3D6C3F] font-medium">
+                  {{ activity.fecha | date : "HH:mm" }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5 text-sm text-secondary-text">
+              <i class="ph ph-map-pin-line font-medium text-[#3D6C3F]"></i>
+              <span class="leading-tight font-medium text-[#3D6C3F]">{{
+                activity.ubicacion
+              }}</span>
+            </div>
+          </div>
+
+          <div class="mt-auto pt-4 border-t border-[#EEF1F0] flex justify-end">
+            <button
+              [routerLink]="['/actividades/info-actividad', activity.id]"
+              class="text-sm italic flex items-center gap-1 cursor-pointer"
+            >
+              Ver detalles
+              <i class="ph ph-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </article>
+      }
+    </div>
+    } @if (visibleActivities.length > numeroActividades) {
+    <div class="mt-16 flex justify-center">
+      <button
+        (click)="loadMore()"
+        class="group cursor-pointer relative px-8 py-3 rounded-full bg-white text-background-dark font-bold text-sm border-2 border-[#f0f4f2] hover:border-[#152614]/10 transition-all shadow-sm hover:shadow-soft overflow-hidden"
+      >
+        <span
+          class="relative z-10 flex font-semibold text-xl work text-[#152614] items-center gap-2"
+        >
+          Cargar más actividades
+          <i
+            class="ph ph-arrow-clockwise font-semibold text-xl text-[#152614] transition-transform duration-500 group-hover:rotate-180"
+          ></i>
+        </span>
+        <div
+          class="absolute inset-0 bg-primary/10 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"
+        ></div>
+      </button>
+    </div>
+    }
+  </div>
+
+  <app-footer></app-footer>
+</div>

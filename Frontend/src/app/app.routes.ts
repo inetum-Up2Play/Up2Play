@@ -4,6 +4,7 @@ import { AuthService } from './core/services/auth/auth-service';
 import { Home } from './features/home/home';
 import { Profile } from './features/profile/pages/profile/profile';
 import { Notificaciones } from './features/notificaciones/notificaciones';
+import { Historial } from './features/historial/pages/historial/historial';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,10 @@ export const routes: Routes = [
         path: 'pagos',
         loadChildren: () => import('./features/pagos/pay.routes').then(m => m.PAY_ROUTES),
       },
+      {
+        path: 'historial',
+        component: Historial
+      }
     ],
   }
 
