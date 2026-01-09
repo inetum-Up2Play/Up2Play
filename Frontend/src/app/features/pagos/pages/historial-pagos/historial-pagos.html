@@ -1,0 +1,225 @@
+<body class="bg-background-light dark:bg-background-dark text-[#111814] flex flex-col min-h-screen overflow-x-hidden">
+    <app-header></app-header>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col p-6 lg:py-10 lg:px-32 gap-8">
+        <!-- Page Heading -->
+        <div class="flex flex-wrap justify-between gap-4 items-end">
+            <div class="flex flex-col gap-3 max-w-2xl">
+                <p class="text-[#152614] text-4xl font-bold leading-tight tracking-[-0.033em]">
+                    Historial de Pagos</p>
+                <p class="text-[#3D6C3F] text-base font-normal leading-normal">Revisa tus transacciones pasadas,
+                    gestiona tus suscripciones y descarga tus facturas.</p>
+            </div>
+        </div>
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
+                <div class="flex items-center justify-between">
+                    <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">Total este mes</p>
+                    <i class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-fill ph-money"></i>
+                </div>
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">45,00 €
+                </p>
+                <p class="text-xs text-[#3D6C3F] flex items-center gap-1">
+                    <span class="text-[#B1DF75] font-bold flex items-center"><span
+                            class="material-symbols-outlined text-[16px]"><i class="ph-bold ph-trend-up"></i></span>
+                        +12%</span> vs mes
+                    anterior
+                </p>
+            </div>
+            <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
+                <div class="flex items-center justify-between">
+                    <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">Última actividad</p>
+                    <i
+                        class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-bold ph-clock-counter-clockwise"></i>
+                </div>
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">12,00 €
+                </p>
+                <p class="text-xs text-[#3D6C3F]">Pádel Mix - Nivel Medio</p>
+            </div>
+            <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
+                <div class="flex items-center justify-between">
+                    <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">EVENTOS</p>
+                    <i class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-bold ph-monitor-arrow-up"></i>
+                </div>
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">1 Activo
+                </p>
+                <p class="text-xs text-[#3D6C3F]">Finaliza: 15 Oct 2026</p>
+            </div>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center bg-[#f6f8f7] p-2 rounded-2xl">
+            <!-- Buscar por actividad -->
+            <div class="w-full md:w-auto md:flex-1 md:max-w-md">
+                <label class="flex flex-col w-full h-12">
+                    <div
+                        class="flex w-full flex-1 items-center rounded-xl h-full bg-white border border-transparent focus-within:border-[#B1DF75]/50 hover:border-[#B1DF75] transition-colors shadow-sm">
+                        <div class="text-[#3D6C3F]/85 flex items-center justify-center pl-4">
+                            <i class="ph-bold ph-magnifying-glass"></i>
+                        </div>
+                        <input #searchInput
+                            class="w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 placeholder:text-[#3D6C3F]/85 px-4 text-base font-normal h-full"
+                            placeholder="Buscar por actividad (ej. Fútbol)..." [value]="search()"
+                            (input)="onSearchInput(searchInput.value)" />
+                    </div>
+                </label>
+            </div>
+
+            <!-- Controles de filtro adicionales -->
+            <div class="flex flex-wrap md:flex-nowrap gap-2 w-full md:w-auto items-center">
+                <!-- Fecha desde -->
+                <label
+                    class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl hover:border-[#B1DF75] transition-colors shadow-sm">
+                    <span class="sr-only">Fecha desde</span>
+                    <input #dateFromRef type="date"
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm h-6"
+                        placeholder="Desde" [value]="dateFrom()" (input)="onDateFromInput(dateFromRef.value)"
+                        (focus)="onDateFocus(dateFromRef)" (click)="onDateClick(dateFromRef)" />
+                </label>
+
+                <!-- Fecha hasta -->
+                <label
+                    class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl hover:border-[#B1DF75] transition-colors shadow-sm">
+                    <span class="sr-only">Fecha hasta</span>
+                    <input #dateToRef type="date"
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm h-6"
+                        placeholder="Hasta" [value]="dateTo()" (input)="onDateToInput(dateToRef.value)"
+                        (focus)="onDateFocus(dateToRef)" (click)="onDateClick(dateToRef)" />
+                </label>
+
+                <!-- Importe mínimo -->
+                <label
+                    class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl text-[#152614] hover:border-[#B1DF75] transition-colors shadow-sm">
+                    <input #amountMinRef type="number" step="1.00" min="0"
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm w-12"
+                        placeholder="Min" [value]="amountMin()" (input)="onAmountMinInput(amountMinRef.value)" />
+                    <i class="text-[18px] ph ph-currency-eur"></i>
+                </label>
+
+                <!-- Importe máximo -->
+                <label
+                    class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl text-[#152614] hover:border-[#B1DF75] transition-colors shadow-sm">
+                    <input #amountMaxRef type="number" step="1.00" min="0"
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm w-12"
+                        placeholder="Max" [value]="amountMax()" (input)="onAmountMaxInput(amountMaxRef.value)" />
+                    <i class="text-[18px] ph ph-currency-eur"></i>
+                </label>
+
+                <!-- Botones -->
+                <div class="flex gap-2">
+                    <button
+                        class="whitespace-nowrap flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-[#152614] hover:border-[#B1DF75] transition-colors shadow-sm cursor-pointer"
+                        (click)="dateFrom.set(''); dateTo.set(''); amountMin.set(''); amountMax.set('');">
+                        <i class="text-[18px] ph-bold ph-eraser"></i>
+                        Limpiar
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="bg-white rounded-2xl border border-[#dbe6e0] overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[800px] border-collapse">
+                    <thead>
+                        <tr class="bg-[#f6f8f7] border-b border-[#dbe6e0]">
+                            <th class="text-left py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                                Fecha</th>
+                            <th class="text-left py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                                Actividad</th>
+                            <th class="text-left py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                                Estado</th>
+                            <th class="text-right py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                                Importe</th>
+                            <th class="text-center py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                                Acción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-[#f0f4f2]">
+                        @for (pago of filteredPagos(); track trackPago($index, pago)) {
+                        <tr class="group hover:bg-[#fcfdfd] transition-colors">
+                            <td class="py-4 px-6 text-sm text-[#152614] font-medium">
+                                <div class="flex flex-col">
+                                    <span>{{ pago.fecha }}</span>
+                                    <span class="text-xs text-[#3D6C3F]">{{ pago.hora }}</span>
+                                </div>
+                            </td>
+
+                            <td class="py-4 px-6">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-[#B1DF75]/15 text-[#B1DF75] flex items-center justify-center">
+                                        <!-- Icono derivado por deporte -->
+                                        <i [ngClass]="[pago.deporte | iconDeporte, 'text-2xl']"
+                                            [attr.aria-label]="pago.deporte + ' icono'"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold text-[#152614]">{{ pago.actividadTitulo }}</span>
+                                        <span class="text-xs text-[#3D6C3F]">{{ pago.actividadLugar }}</span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="py-4 px-6">
+                                <span
+                                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
+                                    [ngClass]="{
+                  'bg-[#e3fcf0] text-[#0a6639]': pago.estado === 'Completado',
+                  'bg-[#fff7e6] text-[#7a5b00]': pago.estado === 'Fallido'
+                }">
+                                    <span class="size-2 rounded-full" [ngClass]="{
+                        'bg-[#13ec80]': pago.estado === 'Completado',
+                        'bg-[#ffc107]': pago.estado === 'Fallido'
+                      }"></span>
+                                    {{ pago.estado }}
+                                </span>
+                            </td>
+
+                            <td class="py-4 px-6 text-right">
+                                <span class="text-base font-bold text-[#152614]">- {{ pago.importe | number:'1.2-2' }}
+                                    €</span>
+                            </td>
+
+                            <td class="py-4 px-6 text-center">
+                                <button
+                                    class="p-2 rounded-lg hover:bg-[#f0f4f2] text-[#3D6C3F] hover:text-[#152614] transition-colors cursor-pointer"
+                                    title="Descargar Factura">
+                                    <i class="text-[20px] ph-bold ph-download-simple"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        } @empty {
+                        <tr>
+                            <td colspan="5" class="py-6 px-6 text-center text-sm text-[#3D6C3F]">
+                                No hay resultados para "<strong>{{ search() }}</strong>"
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination / Info -->
+            <div class="bg-[#f6f8f7] px-6 py-4 border-t border-[#dbe6e0] flex items-center justify-between">
+                <p class="text-sm text-[#3D6C3F]">
+                    Mostrando
+                    <span class="font-bold text-[#152614]">{{ showingRange.from }}-{{ showingRange.to }}</span>
+                    de
+                    <span class="font-bold text-[#152614]">{{ showingRange.total }}</span>
+                    pagos
+                </p>
+                <div class="flex gap-2">
+                    <button
+                        class="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed opacity-50">Anterior</button>
+                    <button
+                        class="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm font-medium text-[#152614] hover:border-[#B1DF75] transition-colors cursor-pointer">Siguiente</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <app-footer></app-footer>
+</body>
