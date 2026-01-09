@@ -2,10 +2,11 @@ import { Component, ElementRef, inject, signal, viewChild } from '@angular/core'
 import { StripeService } from '../../../../../core/services/pagos/stripe-service';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-payment',
-  imports: [ButtonModule],
+  imports: [ButtonModule, CurrencyPipe],
   templateUrl: './payment.html',
   styleUrl: './payment.scss',
   providers: [MessageService]
@@ -25,11 +26,12 @@ export class Payment {
 
   // Estos datos deberían venir de la actividad seleccionada (ej. vía Input o un Shared Service)
   activityData = {
-    amount: 1000, // 10.00€
-    currency: 'eur',
-    connectedAccountId: 'acct_XXXXX', // ID del vendedor
-    customerEmail: 'cliente@ejemplo.com'
-  };
+  amount: 1000, 
+  currency: 'eur',
+  connectedAccountId: 'acct_XXXXX',
+  customerEmail: 'cliente@ejemplo.com',
+  applicationFee: 0 // Añade esto, incluso si es 0
+};
 
   async ngOnInit() {
     this.initPaymentFlow();
