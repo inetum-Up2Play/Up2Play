@@ -45,6 +45,7 @@ import { AvatarGroup } from 'primeng/avatargroup';
 import { catchError, forkJoin, map, of } from 'rxjs';
 import { TooltipModule } from 'primeng/tooltip';
 import { PagosService } from '../../../../core/services/pagos/pagos-service';
+import { UserService } from '../../../../core/services/user/user-service';
 
 interface ParticipanteView {
   nombre: string;
@@ -76,6 +77,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
   private errorService = inject(ErrorService);
   private perfilService = inject(PerfilService);
   private pagosService = inject(PagosService);
+  private userService = inject(UserService);
   private injector = inject(Injector);
   private router = inject(Router);
 
@@ -329,21 +331,52 @@ export class InfoActividad implements OnInit, AfterViewInit {
       return;
     }
 
-    const precioNumerico = parseFloat(act.precio);
+    const precioStr = act.precio ? act.precio.toString().replace(',', '.') : '0';
+    const precioNumerico = parseFloat(precioStr);
     // LÓGICA POR SI LA ACTIVIDAD ES DE PAGO
     if (!isNaN(precioNumerico) && precioNumerico > 0) {
-      // 1. Guardamos la información necesaria en el servicio de estado
-      this.pagosService.setActivity({
-        actividadId: act.id,
-        nombre: act.nombre,
-        precio: precioNumerico,
-        organizadorStripeId: (act as any).organizadorStripeId // Este ID debe traerlo el DTO de backend
-      });
 
-      // 2. Redirigimos al componente de pago
-      this.router.navigate(['/pagos/pago']);
-      return; // Detenemos la ejecución aquí, no se une a la BD todavía
-    }
+      if (!act.usuarioCreadorId) {
+        this.errorService.showError('No se puede identificar al creador de la actividad');
+        return;
+      }
+
+      this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
+        next: (creador) => {
+            // Ya tenemos al usuario creador, verificamos su Stripe ID
+            if (creador && creador.stripeAccountId) {
+                
+                // Todo correcto: Guardamos y navegamos
+                this.pagosService.setActivity({
+                    actividadId: act.id,
+                    nombre: act.nombre,
+                    precio: precioNumerico,
+                    organizadorStripeId: creador.stripeAccountId 
+                });
+
+                this.router.navigate(['/pagos/pago']);
+
+            } else {
+                // El creador existe, pero no tiene pagos configurados
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error de Pago',
+                    detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
+                });
+            }
+        },
+        error: (err) => {
+            console.error(err);
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo contactar con el servidor para verificar al organizador.'
+            });
+        }
+    });
+
+    return; // Detenemos aquí para que no siga al flujo gratuito
+  }
 
     // LÓGICA PARA ACTIVIDADES GRATUITAS
     this.actService.unirteActividad(act.id).subscribe({

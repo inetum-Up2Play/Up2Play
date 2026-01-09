@@ -88,7 +88,7 @@ export class Payment {
     const { error } = await this.stripeInstance.confirmPayment({
       elements: this.elements,
       confirmParams: {
-        return_url: `${window.location.origin}/pago-confirmado`,
+        return_url: `${window.location.origin}/pagos/pago-confirmado`,
       },
     });
 

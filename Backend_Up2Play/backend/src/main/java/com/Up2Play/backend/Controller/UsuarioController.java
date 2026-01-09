@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -92,6 +93,26 @@ public class UsuarioController {
             usuario.getRol()
         );
         return ResponseEntity.ok(usuarioDto);
+    }
+
+    // Obtiene un usuario específico por ID (Público o protegido según necesites)
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioDto> getUsuarioById(@PathVariable Long id) {
+        
+        Usuario usuario = usuarioService.getUsuarioById(id);
+
+        // Usamos el constructor antiguo y seteamos el campo nuevo manualmente para mantener compatibilidad y claridad
+        UsuarioDto dto = new UsuarioDto(
+            usuario.getId(),
+            usuario.getEmail(),
+            usuario.getNombreUsuario(),
+            usuario.getRol()
+        );
+
+        // Añadimos el dato crítico para Stripe
+        dto.setStripeAccountId(usuario.getStripeAccountId());
+
+        return ResponseEntity.ok(dto);
     }
 
 }

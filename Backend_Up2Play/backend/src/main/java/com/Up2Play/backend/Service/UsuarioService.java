@@ -541,4 +541,10 @@ public class UsuarioService {
 
     }
 
+    // Obtiene un usuario por su ID
+    public Usuario getUsuarioById(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con id " + id + " no encontrado"));
+    }
+
 }

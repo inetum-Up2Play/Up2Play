@@ -61,6 +61,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         // Permite acceso libre a Swagger (documentación de la API)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        // Permite acceso a ver info de usuarios, necesario para saber a quien pagar en Stripe
+                        .requestMatchers(HttpMethod.GET, "/usuarios/{id}").authenticated() 
                         // Todas las demás rutas requieren que el usuario esté autenticado
                         .anyRequest().authenticated())
                 // Usa el proveedor de autenticación personalizado para validar usuarios
