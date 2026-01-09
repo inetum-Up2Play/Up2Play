@@ -48,7 +48,7 @@ export class Header implements OnInit {
   items: MenuItemPages[] = [
     { label: 'Inicio', icon: 'pi pi-home', route: '/' },
     { label: 'Actividades', icon: 'pi pi-bookmark', route: '/actividades' },
-    { label: 'Pagos', icon: 'pi pi-chart-line', route: '/pagos' },
+    { label: 'Pagos', icon: 'pi pi-chart-line', route: '/pagos/historial-pagos' },
     { label: 'Notificaciones', icon: 'pi pi-users', route: '/notificaciones' },
     { label: 'Historial', icon: 'pi pi-calendar', route: '/historial' },
     { label: 'Mi Cuenta', icon: 'pi pi-cog', route: '/perfil' },

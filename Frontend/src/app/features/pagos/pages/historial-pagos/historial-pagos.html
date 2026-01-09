@@ -1,7 +1,7 @@
 <body class="bg-background-light dark:bg-background-dark text-[#111814] flex flex-col min-h-screen overflow-x-hidden">
     <app-header></app-header>
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col p-6 lg:py-10 lg:px-24 gap-8">
+    <main class="flex-1 flex flex-col p-6 lg:py-10 lg:px-32 gap-8">
         <!-- Page Heading -->
         <div class="flex flex-wrap justify-between gap-4 items-end">
             <div class="flex flex-col gap-3 max-w-2xl">
@@ -27,24 +27,22 @@
                     anterior
                 </p>
             </div>
-            <div
-                class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] dark:border-[#1e3a2d] bg-white dark:bg-[#1e3a2d] shadow-sm">
+            <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
                 <div class="flex items-center justify-between">
                     <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">Última actividad</p>
                     <i
                         class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-bold ph-clock-counter-clockwise"></i>
                 </div>
-                <p class="text-[#152614] dark:text-white tracking-tight text-3xl font-bold leading-tight">12,00 €
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">12,00 €
                 </p>
-                <p class="text-xs text-[#3D6C3F] dark:text-gray-300">Pádel Mix - Nivel Medio</p>
+                <p class="text-xs text-[#3D6C3F]">Pádel Mix - Nivel Medio</p>
             </div>
-            <div
-                class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] dark:border-[#1e3a2d] bg-white dark:bg-[#1e3a2d] shadow-sm">
+            <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
                 <div class="flex items-center justify-between">
                     <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">EVENTOS</p>
                     <i class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-bold ph-monitor-arrow-up"></i>
                 </div>
-                <p class="text-[#152614] dark:text-white tracking-tight text-3xl font-bold leading-tight">1 Activo
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">1 Activo
                 </p>
                 <p class="text-xs text-[#3D6C3F]">Finaliza: 15 Oct 2026</p>
             </div>
@@ -56,12 +54,12 @@
             <div class="w-full md:w-auto md:flex-1 md:max-w-md">
                 <label class="flex flex-col w-full h-12">
                     <div
-                        class="flex w-full flex-1 items-center rounded-xl h-full bg-white border border-transparent focus-within:border-[#B1DF75]/50 transition-all shadow-sm">
+                        class="flex w-full flex-1 items-center rounded-xl h-full bg-white border border-transparent focus-within:border-[#B1DF75]/50 hover:border-[#B1DF75] transition-colors shadow-sm">
                         <div class="text-[#3D6C3F]/85 flex items-center justify-center pl-4">
                             <i class="ph-bold ph-magnifying-glass"></i>
                         </div>
                         <input #searchInput
-                            class="w-full bg-transparent border-none focus:ring-0 text-[#3D6C3F]/85 placeholder:text-[#3D6C3F]/85 px-4 text-base font-normal h-full"
+                            class="w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 placeholder:text-[#3D6C3F]/85 px-4 text-base font-normal h-full"
                             placeholder="Buscar por actividad (ej. Fútbol)..." [value]="search()"
                             (input)="onSearchInput(searchInput.value)" />
                     </div>
@@ -71,19 +69,21 @@
             <!-- Controles de filtro adicionales -->
             <div class="flex flex-wrap md:flex-nowrap gap-2 w-full md:w-auto items-center">
                 <!-- Fecha desde -->
-                <label class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <label
+                    class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl hover:border-[#B1DF75] transition-colors shadow-sm">
                     <span class="sr-only">Fecha desde</span>
                     <input #dateFromRef type="date"
-                        class="bg-transparent border-none focus:ring-0 text-[#3D6C3F]/85 text-sm h-6"
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm h-6"
                         placeholder="Desde" [value]="dateFrom()" (input)="onDateFromInput(dateFromRef.value)"
                         (focus)="onDateFocus(dateFromRef)" (click)="onDateClick(dateFromRef)" />
                 </label>
 
                 <!-- Fecha hasta -->
-                <label class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <label
+                    class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl hover:border-[#B1DF75] transition-colors shadow-sm">
                     <span class="sr-only">Fecha hasta</span>
                     <input #dateToRef type="date"
-                        class="bg-transparent border-none focus:ring-0 text-[#3D6C3F]/85 text-sm h-6"
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm h-6"
                         placeholder="Hasta" [value]="dateTo()" (input)="onDateToInput(dateToRef.value)"
                         (focus)="onDateFocus(dateToRef)" (click)="onDateClick(dateToRef)" />
                 </label>
@@ -92,8 +92,8 @@
                 <label
                     class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl text-[#152614] hover:border-[#B1DF75] transition-colors shadow-sm">
                     <input #amountMinRef type="number" step="1.00" min="0"
-                        class="bg-transparent border-none focus:ring-0 text-[#3D6C3F]/85 text-sm w-12" placeholder="Min"
-                        [value]="amountMin()" (input)="onAmountMinInput(amountMinRef.value)" />
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm w-12"
+                        placeholder="Min" [value]="amountMin()" (input)="onAmountMinInput(amountMinRef.value)" />
                     <i class="text-[18px] ph ph-currency-eur"></i>
                 </label>
 
@@ -101,15 +101,15 @@
                 <label
                     class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl text-[#152614] hover:border-[#B1DF75] transition-colors shadow-sm">
                     <input #amountMaxRef type="number" step="1.00" min="0"
-                        class="bg-transparent border-none focus:ring-0 text-[#3D6C3F]/85 text-sm w-12" placeholder="Max"
-                        [value]="amountMax()" (input)="onAmountMaxInput(amountMaxRef.value)" />
+                        class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-[#3D6C3F]/85 text-sm w-12"
+                        placeholder="Max" [value]="amountMax()" (input)="onAmountMaxInput(amountMaxRef.value)" />
                     <i class="text-[18px] ph ph-currency-eur"></i>
                 </label>
 
                 <!-- Botones -->
                 <div class="flex gap-2">
                     <button
-                        class="whitespace-nowrap flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-[#152614] hover:border-[#B1DF75] transition-colors shadow-sm cursor-pointer"
+                        class="whitespace-nowrap flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-[#152614] hover:border-[#B1DF75] transition-colors shadow-sm cursor-pointer"
                         (click)="dateFrom.set(''); dateTo.set(''); amountMin.set(''); amountMax.set('');">
                         <i class="text-[18px] ph-bold ph-eraser"></i>
                         Limpiar
