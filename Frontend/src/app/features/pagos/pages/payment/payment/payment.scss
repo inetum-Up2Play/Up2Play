@@ -1,0 +1,9 @@
+@use 'styles/variables' as vars;
+
+.h1 {
+    font-family: vars.$montserrat;
+}
+
+.p, h2, span, h3, button {
+    font-family: vars.$work-sans;
+}
