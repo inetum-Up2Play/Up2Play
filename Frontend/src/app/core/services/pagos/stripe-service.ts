@@ -29,7 +29,6 @@ export class StripeService {
   }
 
   // En stripe-service.ts
-
   createPaymentIntent(paymentData: {
     amount: number,
     currency: string,

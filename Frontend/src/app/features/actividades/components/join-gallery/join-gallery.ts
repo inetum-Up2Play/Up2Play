@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -11,8 +11,7 @@ import { ErrorService } from '../../../../core/services/error/error-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 import { EmptyActivities } from '../empty-activities/empty-activities';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
-
-
+import { Actividad } from '../../../../shared/models/Actividad';
 
 @Component({
   selector: 'app-join-gallery',
@@ -20,13 +19,15 @@ import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
   templateUrl: './join-gallery.html',
   styleUrl: './join-gallery.scss'
 })
+
 export class JoinGallery implements OnInit {
+  actividad = signal<Actividad | null>(null);
 
   private actService = inject(ActService);
   private messageService = inject(MessageService);
   private errorService = inject(ErrorService);
   private actUpdateService = inject(ActUpdateService);
-  
+
   activities: any[] = [];
   visibleActivities: any[] = [];
   pageSize = 8; // 4 por fila * 2 filas
@@ -76,7 +77,7 @@ export class JoinGallery implements OnInit {
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
   }
 
-  
+
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
@@ -90,7 +91,7 @@ export class JoinGallery implements OnInit {
         //bus de recarga de actividaedes
         this.actUpdateService.notifyUpdate();
 
-        },
+      },
       error: (codigo) => {
         console.log('Código de error recibido:', codigo); // Debug
         const mensaje = this.errorService.getMensajeError(codigo);

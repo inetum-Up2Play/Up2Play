@@ -1,39 +1,39 @@
-<div class="card flex flex-column align-items-center gap-4 p-6 surface-card border-round-xl shadow-2 max-w-30rem mx-auto mt-8">
-    <div class="text-center">
-        <i class="pi pi-shield text-primary text-5xl mb-3"></i>
-        <h2 class="m-0 text-2xl font-bold">Pago Seguro</h2>
-        <p class="text-secondary mt-2">Introduce los datos de tu tarjeta para confirmar la reserva.</p>
-    </div>
+<div class="content">
+    <app-header></app-header>
+    <div
+        class="card flex flex-column align-items-center gap-4 p-6 surface-card border-round-xl shadow-2 max-w-30rem mx-auto mt-8">
+        <div class="text-center">
+            <i class="pi pi-shield text-primary text-5xl mb-3"></i>
+            <h2 class="m-0 text-2xl font-bold">Pago Seguro</h2>
+            <p class="text-secondary mt-2">Introduce los datos de tu tarjeta para confirmar la reserva.</p>
+        </div>
 
-    <div class="w-full min-h-15rem border-1 border-300 border-round p-3 surface-50">
-        <div #paymentElement>
-            @if (loading() && !elements) {
+        <div class="w-full min-h-15rem border border-round p-3 surface-50">
+            <div #paymentElement>
+                @if (loading() && !elements) {
                 <div class="flex flex-column align-items-center justify-content-center h-full gap-3">
                     <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
                     <span>Cargando pasarela de pago...</span>
                 </div>
-            }
-        </div>
-    </div>
-
-    <div class="w-full flex flex-column gap-3">
-        <div class="flex justify-content-between font-bold text-lg border-top-1 border-200 pt-3">
-            <span>Total a pagar:</span>
-            <span class="text-primary">{{ actividad()?.precio | currency:'EUR' }}</span>
+                }
+            </div>
         </div>
 
-        <p-button 
-            label="Confirmar y Pagar" 
-            icon="pi pi-check" 
-            styleClass="w-full p-button-raised" 
-            [loading]="loading()"
-            [disabled]="!stripeInstance"
-            (onClick)="confirmarPago()">
-        </p-button>
-        
-        <p class="text-xs text-center text-secondary m-0">
-            <i class="pi pi-lock text-xs mr-1"></i>
-            Tus datos bancarios son procesados de forma segura por Stripe.
-        </p>
+        <div class="w-full flex flex-column gap-3">
+            <div class="flex justify-content-between font-bold text-lg border-top-1 border pt-3">
+                <span>Total a pagar:</span>
+                <span class="text-primary">{{ actividad()?.precio | currency:'EUR' }}</span>
+            </div>
+
+            <p-button label="Confirmar y Pagar" icon="pi pi-check" styleClass="w-full p-button-raised"
+                [loading]="loading()" [disabled]="!stripeInstance" (onClick)="confirmarPago()">
+            </p-button>
+
+            <p class="text-xs text-center text-secondary m-0">
+                <i class="pi pi-lock text-xs mr-1"></i>
+                Tus datos bancarios son procesados de forma segura por Stripe.
+            </p>
+        </div>
     </div>
+    <app-footer></app-footer>
 </div>

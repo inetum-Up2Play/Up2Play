@@ -1,19 +1,24 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { StripeService } from '../../../../../core/services/pagos/stripe-service';
+import { CurrencyPipe } from '@angular/common';
+import { Router } from '@angular/router';
+
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { CurrencyPipe } from '@angular/common';
+
+import { StripeService } from '../../../../../core/services/pagos/stripe-service';
 import { PagosService } from '../../../../../core/services/pagos/pagos-service';
-import { Router } from '@angular/router';
 import { UserDataService } from '../../../../../core/services/auth/user-data-service';
+import { Header } from '../../../../../core/layout/header/header';
+import { Footer } from '../../../../../core/layout/footer/footer';
 
 @Component({
   selector: 'app-payment',
-  imports: [ButtonModule, CurrencyPipe],
+  imports: [ButtonModule, CurrencyPipe, Header, Footer],
   templateUrl: './payment.html',
   styleUrl: './payment.scss',
   providers: [MessageService]
 })
+
 export class Payment {
   private stripeService = inject(StripeService);
   private messageService = inject(MessageService);
