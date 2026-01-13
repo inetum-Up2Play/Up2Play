@@ -67,21 +67,14 @@ public class Usuario implements UserDetails {
     private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
 
     private String stripeAccountId;
-    private Boolean pagosHabilitados;
 
-    public String getStripeAccountId() {
-        return stripeAccountId;
-    }
-
-    public void setStripeAccountId(String stripeAccountId) {
-        this.stripeAccountId = stripeAccountId;
-    }
+    @Column(name = "PAGOS_HABILITADOS", nullable = false)
+    private Boolean pagosHabilitados = false;
 
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
 
-    @OneToMany(mappedBy = "usuario",
-           cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     Set<Pago> pagos = new HashSet<>();
 
     public Perfil getPerfil() {
@@ -155,7 +148,7 @@ public class Usuario implements UserDetails {
         this.perfil = perfil;
     }
 
-   public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
             boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
             Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
             Set<UsuarioNotificacion> usuarioNotificaciones,
@@ -214,7 +207,6 @@ public class Usuario implements UserDetails {
         this.pagosHabilitados = pagosHabilitados;
         this.perfil = perfil;
     }
-
 
     public Usuario() {
     }
@@ -344,6 +336,13 @@ public class Usuario implements UserDetails {
         this.usuarioNotificaciones = usuarioNotificaciones;
     }
 
+    public String getStripeAccountId() {
+        return stripeAccountId;
+    }
+
+    public void setStripeAccountId(String stripeAccountId) {
+        this.stripeAccountId = stripeAccountId;
+    }
 
     public Boolean getPagosHabilitados() {
         return pagosHabilitados;
@@ -352,7 +351,7 @@ public class Usuario implements UserDetails {
     public void setPagosHabilitados(Boolean pagosHabilitados) {
         this.pagosHabilitados = pagosHabilitados;
     }
-    
+
     public Set<Pago> getPagos() {
         return pagos;
     }
