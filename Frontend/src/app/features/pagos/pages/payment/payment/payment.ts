@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, signal, viewChild, OnInit } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, JsonPipe, TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
@@ -15,7 +15,7 @@ import { DeporteImgPipe } from '../../../../actividades/pipes/deporte-img-pipe';
 
 @Component({
   selector: 'app-payment',
-  imports: [ButtonModule, CurrencyPipe, Header, Footer, DatePipe, ProgressSpinner, DeporteImgPipe],
+  imports: [ButtonModule, CurrencyPipe, Header, Footer, DatePipe, ProgressSpinner, DeporteImgPipe, TitleCasePipe, JsonPipe],
   templateUrl: './payment.html',
   styleUrl: './payment.scss',
   providers: [MessageService]
@@ -67,8 +67,17 @@ export class Payment implements OnInit {
       this.router.navigate(['/actividades']);
       return;
     }
-    this.actividad.set(activity);
-    this.iniciarFlujo(activity);
+
+    // NORMALIZACIÓN
+    const activityData = { ...activity,
+      // Convertimos el string de la base de datos a un objeto Date real
+      fecha: activity.fecha ? new Date(activity.fecha) : null,
+      // Aseguramos que el precio sea un número puro
+      precio: Number(activity.precio)
+    };
+
+    this.actividad.set(activityData);
+    this.iniciarFlujo(activityData);
   }
 
   private async iniciarFlujo(activity: any) {
