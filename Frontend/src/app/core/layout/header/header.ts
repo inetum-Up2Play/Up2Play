@@ -71,7 +71,7 @@ export class Header implements OnInit {
         label: email && email.length > 0 ? email : 'Mi Cuenta',
         icon: 'pi pi-envelope',
         command: () => {
-          this.router.navigate(['/my-account']);
+          this.router.navigate(['/perfil']);
         }
       },
       {
