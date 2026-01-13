@@ -343,43 +343,43 @@ export class InfoActividad implements OnInit, AfterViewInit {
 
       this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
         next: (creador) => {
-            // Ya tenemos al usuario creador, verificamos su Stripe ID
-            if (creador && creador.stripeAccountId) {
-                
-                // Todo correcto: Guardamos y navegamos
-                this.pagosService.setActivity({
-                    actividadId: act.id,
-                    nombre: act.nombre,
-                    precio: precioNumerico,
-                    organizadorStripeId: creador.stripeAccountId ,
-                    deporte: act.deporte,
-                    fecha: act.fecha,
-                    ubicacion: act.ubicacion
-                });
+          // Ya tenemos al usuario creador, verificamos su Stripe ID
+          if (creador && creador.stripeAccountId) {
 
-                this.router.navigate(['/pagos/pago']);
+            // Todo correcto: Guardamos y navegamos
+            this.pagosService.setActivity({
+              actividadId: act.id,
+              nombre: act.nombre,
+              precio: precioNumerico,
+              organizadorStripeId: creador.stripeAccountId,
+              deporte: act.deporte,
+              fecha: act.fecha,
+              ubicacion: act.ubicacion
+            });
 
-            } else {
-                // El creador existe, pero no tiene pagos configurados
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error de Pago',
-                    detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
-                });
-            }
+            this.router.navigate(['/pagos/pago']);
+
+          } else {
+            // El creador existe, pero no tiene pagos configurados
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error de Pago',
+              detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
+            });
+          }
         },
         error: (err) => {
-            console.error(err);
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'No se pudo contactar con el servidor para verificar al organizador.'
-            });
+          console.error(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo contactar con el servidor para verificar al organizador.'
+          });
         }
-    });
+      });
 
-    return; // Detenemos aquí para que no siga al flujo gratuito
-  }
+      return; // Detenemos aquí para que no siga al flujo gratuito
+    }
 
     // LÓGICA PARA ACTIVIDADES GRATUITAS
     this.actService.unirteActividad(act.id).subscribe({

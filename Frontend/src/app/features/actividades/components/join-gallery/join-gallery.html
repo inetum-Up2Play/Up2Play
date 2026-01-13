@@ -18,7 +18,7 @@
             [actividadId]="act.id"
             [botonLabel]="'¡Apúntate!'"
             [botonStyle]="'btn-apuntarse'"
-            [botonAction]="apuntarse"
+            [botonAction]="apuntarse.bind(this)"
             [attr.aria-label]="act.nombre">
 
           </app-activity-card>
