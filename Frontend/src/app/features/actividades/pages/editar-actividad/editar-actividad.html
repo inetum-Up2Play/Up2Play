@@ -32,13 +32,13 @@
                     [invalid]="isInvalid('descripcion')"></textarea>
                 <!-- Manejo de errores para la DESCRIPCIÓN -->
                 @if (isInvalid('descripcion')) {
-                @if (actividadForm.get('descripcion')?.hasError('profanity')) {
-                <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o
-                    soez.</p-message>
-                }
-                @else if (actividadForm.get('descripcion')?.hasError('required')) {
-                <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
-                }
+                    @if (actividadForm.get('descripcion')?.hasError('profanity')) {
+                    <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o
+                        soez.</p-message>
+                    }
+                    @else if (actividadForm.get('descripcion')?.hasError('required')) {
+                    <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
+                    }
                 }
             </div>
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
@@ -105,13 +105,13 @@
                     placeholder="Ej. Polideportivo Municipal, Calle Mayor 123" [invalid]="isInvalid('ubicacion')" />
                 <!-- Manejo de errores para la UBICACIÓN -->
                 @if (isInvalid('ubicacion')) {
-                @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
-                <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o
-                    soez.</p-message>
-                }
-                @else if (actividadForm.get('ubicacion')?.hasError('required')) {
-                <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
-                }
+                    @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
+                    <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o
+                        soez.</p-message>
+                    }
+                    @else if (actividadForm.get('ubicacion')?.hasError('required')) {
+                    <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
+                    }
                 }
             </div>
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
