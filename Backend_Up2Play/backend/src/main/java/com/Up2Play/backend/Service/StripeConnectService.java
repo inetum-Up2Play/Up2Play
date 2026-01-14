@@ -7,6 +7,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
 import com.stripe.model.AccountLink;
 import com.stripe.model.PaymentIntent;
+import com.stripe.net.RequestOptions;
 import com.stripe.param.AccountCreateParams;
 import com.stripe.param.AccountLinkCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
@@ -151,8 +152,9 @@ public class StripeConnectService {
     }
 
     /**
-     * Crea un pago P2P usando PaymentIntent.
-     *
+     * Crea un pago Direct Charge.
+     * El pago se crea directamente en la cuenta del vendedor. *
+     * 
      * @param amount             Monto en centavos
      * @param currency           Código de moneda (ej: "eur", "usd")
      * @param connectedAccountId ID de la cuenta Connect del destinatario
@@ -162,66 +164,44 @@ public class StripeConnectService {
      * @return Map con información del pago
      * @throws StripeException Si ocurre un error en Stripe
      */
-    public Map<String, Object> createP2PPayment(Long amount, String currency, 
-                                            String connectedAccountId,
-                                            String customerEmail,
-                                            Long applicationFee,
-                                            Long userId,          // ← NUEVO PARÁMETRO
-                                            Long actividadId)     // ← NUEVO PARÁMETRO
-        throws StripeException {
-    
-    validatePaymentParameters(amount, currency, connectedAccountId);
-    
-    // Calcular comisión (ej: 5%)
-    Long actualFee = (applicationFee != null && applicationFee > 0)
-            ? applicationFee
-            : calculatePlatformFee(amount);
-    
-    // Monto que irá al vendedor (total - comisión)
-    Long transferAmount = amount - actualFee;
+    public Map<String, Object> createP2PPayment(Long amount, String currency,
+            String connectedAccountId,
+            String customerEmail,
+            Long userId, // ← NUEVO PARÁMETRO
+            Long actividadId) // ← NUEVO PARÁMETRO
+            throws StripeException {
 
-    // ✅ CORREGIDO: Usa setTransferData en lugar de RequestOptions
-    PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
-            .setAmount(amount)
-            .setCurrency(currency.toLowerCase())
-            .addAllPaymentMethodType(DEFAULT_PAYMENT_METHOD_TYPES)
-            
-            // ✅ TRANSFERENCIA AUTOMÁTICA al vendedor
-            .setTransferData(
-                PaymentIntentCreateParams.TransferData.builder()
-                    .setDestination(connectedAccountId)
-                    .setAmount(transferAmount)  // Monto que recibe el vendedor
-                    .build()
-            )
-            
-            // Comisión que se queda la plataforma
-            .setApplicationFeeAmount(actualFee)
-            
-            // ✅ METADATA CRÍTICA para el webhook
-            .putMetadata("user_id", userId.toString())
-            .putMetadata("actividad_id", actividadId.toString())
-            .putMetadata("connected_account_id", connectedAccountId)
-            .putMetadata("platform_fee", actualFee.toString())
-            .putMetadata("transfer_amount", transferAmount.toString())
-            .putMetadata("app", "up2play")
-            
-            .setReceiptEmail(customerEmail)
-            .build();
+        // 1. Validación para evitar Error 500 (NPE)
+        if (amount == null || amount <= 0) throw new IllegalArgumentException("Monto inválido");
+        if (connectedAccountId == null) throw new IllegalArgumentException("Falta ID de cuenta del vendedor");
 
-    // ✅ CORREGIDO: Se crea en TU cuenta de plataforma (sin RequestOptions)
-    PaymentIntent paymentIntent = PaymentIntent.create(params);
-    
-    Map<String, Object> result = new HashMap<>();
-    result.put("paymentIntentId", paymentIntent.getId());
-    result.put("clientSecret", paymentIntent.getClientSecret());
-    result.put("status", paymentIntent.getStatus());
-    result.put("connectedAccountId", connectedAccountId);
-    result.put("amount", amount);
-    result.put("platformFee", actualFee);
-    result.put("transferAmount", transferAmount);
-    
-    return result;
-}
+        // 2. Parámetros del pago
+        PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
+                .setAmount(amount)
+                .setCurrency(currency != null ? currency.toLowerCase() : "eur")
+                .setReceiptEmail(customerEmail)
+                // Metadata para que tu Webhook sepa qué ha pasado al confirmar
+                .putMetadata("user_id", userId.toString())
+                .putMetadata("actividad_id", actividadId.toString())
+                .setAutomaticPaymentMethods(
+                    PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build()
+                )
+                .build();
+
+        // 3. DIRECT CHARGE le dice a Stripe: "No crees este pago en Up2Play, créalo EN LA CUENTA del vendedor"
+        RequestOptions requestOptions = RequestOptions.builder()
+                .setStripeAccount(connectedAccountId) 
+                .build();
+
+        PaymentIntent paymentIntent = PaymentIntent.create(params, requestOptions);
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("clientSecret", paymentIntent.getClientSecret());
+        result.put("paymentIntentId", paymentIntent.getId());
+        result.put("connectedAccountId", connectedAccountId); // Devolver para el frontend
+        
+        return result;
+    }
 
     /**
      * Calcula la comisión de la plataforma.
@@ -287,6 +267,6 @@ public class StripeConnectService {
      */
     public Map<String, Object> createP2PPayment(Long amount, String currency,
             String connectedAccountId) throws StripeException {
-        return createP2PPayment(amount, currency, connectedAccountId, null, null, amount, amount);
+        return createP2PPayment(amount, currency, connectedAccountId, null, amount, amount);
     }
 }

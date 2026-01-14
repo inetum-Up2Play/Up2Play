@@ -58,10 +58,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Permite peticiones OPTIONS (necesarias para CORS)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // // Permite acceso libre a rutas de login y registro
+                        // Permite acceso libre a rutas de login y registro
                         .requestMatchers("/auth/**").permitAll()
                         // Permite acceso libre a Swagger (documentación de la API)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        // Permite acceso a ver info de usuarios, necesario para saber a quien pagar en Stripe
+                        .requestMatchers(HttpMethod.GET, "/usuarios/{id}").authenticated() 
+                        // Permite acceso a webhooks, necesario para Stripe
                         .requestMatchers("/api/webhooks/**").permitAll()
                         // Todas las demás rutas requieren que el usuario esté autenticado
                         .anyRequest().authenticated())

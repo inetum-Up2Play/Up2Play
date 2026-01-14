@@ -1,21 +1,10 @@
-import {
-  Component,
-  signal,
-  inject,
-  AfterViewInit,
-  Injector,
-  effect,
-  OnInit,
-} from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { Component, signal, inject, AfterViewInit, Injector, effect, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { catchError, forkJoin, map, of } from 'rxjs';
 
+// --- PrimeNG ---
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { RatingModule } from 'primeng/rating';
@@ -24,17 +13,11 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { Avatar } from 'primeng/avatar';
+import { AvatarGroup } from 'primeng/avatargroup';
+import { TooltipModule } from 'primeng/tooltip';
 
-import { Actividad } from '../../../../shared/models/Actividad';
-import { Usuario } from '../../../../shared/models/usuario.model';
-import { Perfil } from '../../../../shared/models/Perfil';
-import { ActService } from '../../../../core/services/actividad/act-service';
-import { Header } from '../../../../core/layout/header/header';
-import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
-import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
-import { ErrorService } from '../../../../core/services/error/error-service';
-import { PerfilService } from '../../../../core/services/perfil/perfil-service';
-
+// --- OpenLayers ---
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -46,11 +29,20 @@ import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Zoom from 'ol/control/Zoom';
 import { Style, Icon } from 'ol/style';
+
+// --- Propios ---
+import { Actividad } from '../../../../shared/models/Actividad';
+import { Usuario } from '../../../../shared/models/usuario.model';
+import { Perfil } from '../../../../shared/models/Perfil';
+import { ActService } from '../../../../core/services/actividad/act-service';
+import { Header } from '../../../../core/layout/header/header';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { PerfilService } from '../../../../core/services/perfil/perfil-service';
 import { Footer } from '../../../../core/layout/footer/footer';
-import { Avatar } from 'primeng/avatar';
-import { AvatarGroup } from 'primeng/avatargroup';
-import { catchError, forkJoin, map, of } from 'rxjs';
-import { TooltipModule } from 'primeng/tooltip';
+import { PagosService } from '../../../../core/services/pagos/pagos-service';
+import { UserService } from '../../../../core/services/user/user-service';
 
 interface ParticipanteView {
   nombre: string;
@@ -82,29 +74,39 @@ interface ParticipanteView {
   styleUrls: ['./info-actividad.scss'],
 })
 export class InfoActividad implements OnInit, AfterViewInit {
+  
+  // --- Señales de Estado (Datos principales) ---
   actividad = signal<Actividad | null>(null);
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
   apuntado = signal<boolean>(false);
+  
+  // --- Señales de UI / Participantes ---
   isCreador = signal<boolean>(false);
   avatarIdCreador = signal<number>(0);
   avatarIdUsuario = signal<number>(0);
-  idsUsuarios: number[] = []; // aquí tendrás tus ids inscritos
-  avataresUsuarios = signal<ParticipanteView[]>([]); // { [idUsuario]: avatarId
+  avataresUsuarios = signal<ParticipanteView[]>([]); 
+  errorUbicacion = signal<string | null>(null);
 
+  // --- Variables ---
+  actividadId: number;
+  idsUsuarios: number[] = [];
+  act = { ubicacion: '' };
+  
+  // Form para mostrar las estrellas (readonly)
+  formRating = new FormGroup({
+    rating: new FormControl(0),
+  });
+
+  // --- Servicios Inyectados ---
   private messageService = inject(MessageService);
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
-  private router = inject(Router);
   private perfilService = inject(PerfilService);
+  private pagosService = inject(PagosService);
+  private userService = inject(UserService);
   private injector = inject(Injector);
-
-  actividadId: number;
-  errorUbicacion = signal<string | null>(null);
-
-  act = {
-    ubicacion: '',
-  };
+  private router = inject(Router);
 
   constructor(
     private route: ActivatedRoute,
@@ -114,70 +116,9 @@ export class InfoActividad implements OnInit, AfterViewInit {
     this.actividadId = Number(route.snapshot.paramMap.get('id'));
   }
 
-  ngAfterViewInit(): void {
-    this.http
-      .get<any>(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          this.act.ubicacion
-        )}`
-      )
-      .subscribe((results) => {
-        if (results.length > 0) {
-          const lat = parseFloat(results[0].lat);
-          const lon = parseFloat(results[0].lon);
-          this.initMap(lat, lon);
-        }
-      });
-  }
-
-  initMap(lat: number, lon: number): void {
-    const marker = new Feature({
-      geometry: new Point(fromLonLat([lon, lat])),
-    });
-
-    marker.setStyle(
-      new Style({
-        image: new Icon({
-          src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
-          anchor: [0.5, 1],
-          scale: 0.08,
-        }),
-      })
-    );
-
-    const vectorLayer = new VectorLayer({
-      source: new VectorSource({
-        features: [marker],
-      }),
-    });
-
-    // Control de zoom personalizado
-    const zoomControl = new Zoom({
-      className: 'custom-zoom',
-      zoomInLabel: '',
-      zoomOutLabel: '',
-      zoomInTipLabel: 'Acercar',
-      zoomOutTipLabel: 'Alejar',
-    });
-
-    // Inicialización del mapa
-    const map = new Map({
-      target: 'map',
-      layers: [
-        new TileLayer({
-          source: new OSM({
-            attributions: 'Mapa por Up2Play',
-          }),
-        }),
-        vectorLayer,
-      ],
-      view: new View({
-        center: fromLonLat([lon, lat]),
-        zoom: 17,
-      }),
-      controls: [zoomControl], // Usamos nuestro control personalizado
-    });
-  }
+  // =============================================================
+  // CICLO DE VIDA
+  // =============================================================
 
   ngOnInit(): void {
     if (!this.actividadId || Number.isNaN(this.actividadId)) {
@@ -189,6 +130,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
       return;
     }
 
+    // Efecto para cargar avatar del creador cuando llegue la actividad
     effect(
       () => {
         const act = this.actividad();
@@ -199,51 +141,34 @@ export class InfoActividad implements OnInit, AfterViewInit {
       { injector: this.injector }
     );
 
+    // Carga inicial de datos
+    this.cargarDatosActividad();
     this.cargarInscritos();
+    this.comprobarEstadoUsuario();
+  }
 
-    this.actService
-      .usuariosInscritosActividad(this.actividadId)
-      .pipe(
-        map((participantes) =>
-          (participantes ?? [])
-            .map((p) => p?.nombreUsuario) // <- ajusta aquí
-            .filter(
-              (nombre) => typeof nombre === 'string' && nombre.trim() !== ''
-            )
-        )
-      )
-      .subscribe((nombres) => {
-        console.log('Nombres de usuario:', nombres);
-      });
+  ngAfterViewInit(): void {
+    // La inicialización del mapa depende de que Nominatim devuelva coordenadas, 
+    // se llama dentro de la suscripción en ngOnInit -> cargarDatosActividad, 
+    // pero si la ubicación ya estuviera lista se podría hacer aquí.
+  }
 
+  // =============================================================
+  // CARGA DE DATOS Y LÓGICA
+  // =============================================================
+
+  cargarDatosActividad(): void {
     this.actService.getActividad(this.actividadId).subscribe({
       next: (act) => {
         this.actividad.set(act);
-        console.log('Actividad cargada:', act);
-
-        // Actualizamos el rating
+        this.act.ubicacion = act.ubicacion; // Actualizar objeto local si es necesario
+        
+        // Actualizamos el rating visual
         this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel));
 
-        // Ahora que tenemos la ubicación, llamamos a Nominatim
+        // Cargar mapa
         if (act.ubicacion) {
-          this.http
-            .get<any>(
-              `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-                act.ubicacion
-              )}`
-            )
-            .subscribe((results) => {
-              if (results.length > 0) {
-                const lat = parseFloat(results[0].lat);
-                const lon = parseFloat(results[0].lon);
-                this.initMap(lat, lon);
-                this.errorUbicacion.set(null); // No hay error
-              } else {
-                this.errorUbicacion.set(
-                  `No se pudo localizar la dirección: ${act.ubicacion}`
-                );
-              }
-            });
+          this.resolverCoordenadas(act.ubicacion);
         }
       },
       error: (e) => {
@@ -254,12 +179,15 @@ export class InfoActividad implements OnInit, AfterViewInit {
         });
       },
     });
-    // Consultar si el usuario está apuntado
+  }
+
+  comprobarEstadoUsuario(): void {
+    // ¿Está apuntado?
     this.actService
       .estoyApuntado(this.actividadId)
       .subscribe((flag) => this.apuntado.set(flag));
 
-    // Consultar si el usuario es el creador de la actividad y actualizar el signal
+    // ¿Es el creador?
     this.actService
       .comprobarCreador(this.actividadId)
       .subscribe((flag) => this.isCreador.set(flag));
@@ -274,27 +202,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
         console.error('Error cargando avatar del creador', err);
         this.avatarIdCreador.set(0);
       },
-    });
-  }
-
-  cargarAvataresMasivos(participantes: { id: number; nombre: string }[]) {
-    const peticiones = participantes.map((p) =>
-      this.perfilService.getPerfilByUserId(p.id).pipe(
-        map((perfil) => {
-          // Construimos el objeto final para la vista
-          return {
-            nombre: p.nombre,
-            avatarId:
-              (perfil as any)?.imagen ?? (perfil as any)?.imagenPerfil ?? 0,
-          };
-        }),
-        // Si falla, devolvemos el objeto con avatar 0 pero conservando el nombre
-        catchError(() => of({ nombre: p.nombre, avatarId: 0 }))
-      )
-    );
-
-    forkJoin(peticiones).subscribe((resultado) => {
-      this.avataresUsuarios.set(resultado);
     });
   }
 
@@ -323,57 +230,150 @@ export class InfoActividad implements OnInit, AfterViewInit {
       });
   }
 
-  //Usamos el p-rating como un form
-  formRating = new FormGroup({
-    rating: new FormControl(0),
-  });
+  cargarAvataresMasivos(participantes: { id: number; nombre: string }[]) {
+    const peticiones = participantes.map((p) =>
+      this.perfilService.getPerfilByUserId(p.id).pipe(
+        map((perfil) => {
+          return {
+            nombre: p.nombre,
+            avatarId: (perfil as any)?.imagen ?? (perfil as any)?.imagenPerfil ?? 0,
+          };
+        }),
+        catchError(() => of({ nombre: p.nombre, avatarId: 0 }))
+      )
+    );
 
-  //Método para indicar las banderas según nivel
-  getNivelValue(nivel: string): number {
-    const map: Record<string, number> = {
-      INICIADO: 1,
-      PRINCIPIANTE: 2,
-      INTERMEDIO: 3,
-      AVANZADO: 4,
-      EXPERTO: 5,
-    };
-    return map[nivel] || 0; // Devuelve 0 si no coincide
+    forkJoin(peticiones).subscribe((resultado) => {
+      this.avataresUsuarios.set(resultado);
+    });
   }
 
-  extraerHora(fecha: string): string {
-    if (!fecha) return '';
-    return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
+  // =============================================================
+  // LÓGICA DEL MAPA (OpenLayers)
+  // =============================================================
+
+  resolverCoordenadas(direccion: string): void {
+    this.http
+      .get<any>(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccion)}`
+      )
+      .subscribe((results) => {
+        if (results.length > 0) {
+          const lat = parseFloat(results[0].lat);
+          const lon = parseFloat(results[0].lon);
+          this.initMap(lat, lon);
+          this.errorUbicacion.set(null);
+        } else {
+          this.errorUbicacion.set(`No se pudo localizar la dirección: ${direccion}`);
+        }
+      });
   }
 
-  extraerFecha(fecha: string): string {
-    if (!fecha) return '';
-    return fecha.includes('T') ? fecha.split('T')[0] : '';
+  initMap(lat: number, lon: number): void {
+    // Si ya existe un mapa (en caso de re-render), deberías limpiar el div 'map' o destruir la instancia anterior
+    // document.getElementById('map')!.innerHTML = ''; 
+
+    const marker = new Feature({
+      geometry: new Point(fromLonLat([lon, lat])),
+    });
+
+    marker.setStyle(
+      new Style({
+        image: new Icon({
+          src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+          anchor: [0.5, 1],
+          scale: 0.08,
+        }),
+      })
+    );
+
+    const vectorLayer = new VectorLayer({
+      source: new VectorSource({ features: [marker] }),
+    });
+
+    const zoomControl = new Zoom({
+      className: 'custom-zoom',
+      zoomInLabel: '',
+      zoomOutLabel: '',
+      zoomInTipLabel: 'Acercar',
+      zoomOutTipLabel: 'Alejar',
+    });
+
+    new Map({
+      target: 'map',
+      layers: [
+        new TileLayer({
+          source: new OSM({ attributions: 'Mapa por Up2Play' }),
+        }),
+        vectorLayer,
+      ],
+      view: new View({
+        center: fromLonLat([lon, lat]),
+        zoom: 17,
+      }),
+      controls: [zoomControl],
+    });
   }
+
+  // =============================================================
+  // ACCIONES DEL USUARIO
+  // =============================================================
 
   unirse(): void {
     const act = this.actividad();
+
     if (!act?.id) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Atención',
-        detail: 'Actividad no cargada',
+      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Actividad no cargada' });
+      return;
+    }
+
+    const precioStr = act.precio ? act.precio.toString().replace(',', '.') : '0';
+    const precioNumerico = parseFloat(precioStr);
+
+    // 1. LÓGICA DE PAGO
+    if (!isNaN(precioNumerico) && precioNumerico > 0) {
+      if (!act.usuarioCreadorId) {
+        this.errorService.showError('No se puede identificar al creador de la actividad');
+        return;
+      }
+
+      this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
+        next: (creador) => {
+          if (creador && creador.stripeAccountId) {
+            this.pagosService.setActivity({
+              actividadId: act.id,
+              nombre: act.nombre,
+              precio: precioNumerico,
+              organizadorStripeId: creador.stripeAccountId,
+              deporte: act.deporte,
+              fecha: act.fecha,
+              ubicacion: act.ubicacion,
+            });
+            this.router.navigate(['/pagos/pago']);
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error de Pago',
+              detail: 'El organizador no tiene configurada su cuenta para recibir pagos.',
+            });
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al verificar organizador.' });
+        },
       });
       return;
     }
 
+    // 2. LÓGICA GRATUITA
     this.actService.unirteActividad(act.id).subscribe({
       next: () => {
         this.apuntado.set(true);
         this.cargarInscritos();
-
-        this.messageService.add({
-          severity: 'success',
-          summary: '¡Enhorabuena!',
-          detail: 'Te has unido a la actividad',
-        });
+        this.messageService.add({ severity: 'success', summary: '¡Enhorabuena!', detail: 'Te has unido a la actividad' });
       },
       error: (codigo) => {
-        console.log('Código de error recibido:', codigo); // Debug
         const mensaje = this.errorService.getMensajeError(codigo);
         this.errorService.showError(mensaje);
       },
@@ -390,11 +390,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
 
     this.actService.desapuntarseActividad(this.actividadId).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'info',
-          summary: 'Vaya...',
-          detail: 'Te has desapuntado de la actividad',
-        });
+        this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado' });
         this.apuntado.set(false);
         this.cargarInscritos();
       },
@@ -405,12 +401,10 @@ export class InfoActividad implements OnInit, AfterViewInit {
     });
   }
 
-  reembolso(): void {}
-
   eliminar(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: '¿Seguro que quieres eliminar esta actividad?',
+      message: '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
       header: 'Cuidado!',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Cancelar',
@@ -423,7 +417,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
         label: 'Eliminar',
         severity: 'danger',
       },
-
       accept: () => {
         const act = this.actividad();
         if (!act) return;
@@ -432,12 +425,12 @@ export class InfoActividad implements OnInit, AfterViewInit {
           next: () => {
             this.messageService.add({
               severity: 'success',
-              summary: 'Oh... :(',
+              summary: 'Actividad eliminada',
               detail: 'Actividad eliminada correctamente',
             });
             setTimeout(() => {
-              this.actService['router'].navigate(['/actividades']);
-            }, 2500); // espera 1.5 segundos para que se vea el toast
+              this.router.navigate(['/actividades']);
+            }, 2500);
           },
           error: (codigo) => {
             const mensaje = this.errorService.getMensajeError(codigo);
@@ -446,64 +439,37 @@ export class InfoActividad implements OnInit, AfterViewInit {
         });
       },
       reject: () => {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Rechazado',
-          detail: 'Has cancelado la eliminación',
-        });
-      },
-    });
-  }
-
-  ReembolsoATodos(event: Event): void {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: '¿Seguro que quieres eliminar esta actividad? Esta actividad tiene un coste y al eliminarla se procederá al reembolso automático.',
-      header: 'Cuidado!',
-      icon: 'pi pi-info-circle',
-      rejectLabel: 'Cancelar',
-      rejectButtonProps: {
-        label: 'Cancelar',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptButtonProps: {
-        label: 'Eliminar y reembolsar',
-        severity: 'danger',
-      },
-
-      accept: () => {
-        const act = this.actividad();
-        if (!act) return;
-
-        this.actService.deleteActividad(this.actividadId).subscribe({
-          next: () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Oh... :(',
-              detail: 'Actividad eliminada correctamente',
-            });
-            setTimeout(() => {
-              this.actService['router'].navigate(['/actividades']);
-            }, 2500); // espera 1.5 segundos para que se vea el toast
-          },
-          error: (codigo) => {
-            const mensaje = this.errorService.getMensajeError(codigo);
-            this.errorService.showError(mensaje);
-          },
-        });
-      },
-      reject: () => {
-        this.messageService.add({
-          severity: 'warn',
-          summary: 'Rechazado',
-          detail: 'Has cancelado la eliminación',
-        });
+        this.messageService.add({ severity: 'warn', summary: 'Rechazado', detail: 'Has cancelado la eliminación' });
       },
     });
   }
 
   goEditar(): void {
     this.router.navigate(['/actividades/editar-actividad/', this.actividadId]);
+  }
+
+  // =============================================================
+  // HELPERS / UTILS
+  // =============================================================
+
+  getNivelValue(nivel: string): number {
+    const map: Record<string, number> = {
+      INICIADO: 1,
+      PRINCIPIANTE: 2,
+      INTERMEDIO: 3,
+      AVANZADO: 4,
+      EXPERTO: 5,
+    };
+    return map[nivel] || 0;
+  }
+
+  extraerHora(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
+  }
+
+  extraerFecha(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 }
