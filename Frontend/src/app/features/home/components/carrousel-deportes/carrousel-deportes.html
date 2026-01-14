@@ -120,7 +120,7 @@
                         [imagen]="activity.deporte | deporteImg" 
                         [botonLabel]="'¡Apúntate!'"
                         [botonStyle]="'btn-apuntarse'" 
-                        [botonAction]="apuntarse" 
+                        [botonAction]="apuntarse.bind(this)" 
                         [actividadId]="activity.id">
                     </app-activity-card>
                 </ng-template>
