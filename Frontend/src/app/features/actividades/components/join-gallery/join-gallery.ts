@@ -18,11 +18,17 @@ import { UserService } from '../../../../core/services/user/user-service';
 
 @Component({
   selector: 'app-join-gallery',
-  imports: [ActivityCard, ButtonModule, ToastModule, MessageModule, EmptyActivities, DeporteImgPipe],
+  imports: [
+    ActivityCard,
+    ButtonModule,
+    ToastModule,
+    MessageModule,
+    EmptyActivities,
+    DeporteImgPipe,
+  ],
   templateUrl: './join-gallery.html',
-  styleUrl: './join-gallery.scss'
+  styleUrl: './join-gallery.scss',
 })
-
 export class JoinGallery implements OnInit {
   actividad = signal<Actividad | null>(null);
 
@@ -40,7 +46,6 @@ export class JoinGallery implements OnInit {
   currentPage = 1;
   noHayActividades = true;
 
-
   ngOnInit() {
     this.cargarActividades();
 
@@ -52,7 +57,7 @@ export class JoinGallery implements OnInit {
 
   cargarActividades() {
     this.actService.listarActividadesNoApuntadas().subscribe({
-      next: data => {
+      next: (data) => {
         this.activities = data;
         this.updateVisibleActivities();
 
@@ -60,10 +65,10 @@ export class JoinGallery implements OnInit {
           this.noHayActividades = false;
         }
       },
-      error: err => {
+      error: (err) => {
         console.error('Error cargando actividades', err);
         this.activities = [];
-      }
+      },
     });
   }
 
@@ -83,91 +88,73 @@ export class JoinGallery implements OnInit {
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
   }
 
-
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
-  apuntarse(id: number) {
-    // 1. Buscamos la actividad completa en nuestra lista local
-    const act = this.activities.find(a => a.id === id);
+  pagar(id: number) {
+    const act = this.activities.find((a) => a.id === id);
 
     if (!act) return;
 
-    const precioStr = act.precio ? act.precio.toString().replace(',', '.') : '0';
-    const precioNumerico = parseFloat(precioStr);
-    // COMPRUEBA SI ES DE PAGO
-    if (!isNaN(precioNumerico) && precioNumerico > 0) {
+    this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
+      next: (creador) => {
+        // Ya tenemos al usuario creador, verificamos su Stripe ID
+        if (creador && creador.stripeAccountId) {
+          // Todo correcto: Guardamos y navegamos
+          this.pagosService.setActivity({
+            actividadId: act.id,
+            nombre: act.nombre,
+            precio: act.precio,
+            organizadorStripeId: creador.stripeAccountId,
+            deporte: act.deporte,
+            fecha: act.fecha,
+            ubicacion: act.ubicacion,
+          });
 
-      if (!act.usuarioCreadorId) {
-        this.errorService.showError('No se puede identificar al creador de la actividad');
-        return;
-      }
-
-      this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
-        next: (creador) => {
-          // Ya tenemos al usuario creador, verificamos su Stripe ID
-          if (creador && creador.stripeAccountId) {
-
-            // Todo correcto: Guardamos y navegamos
-            this.pagosService.setActivity({
-              actividadId: act.id,
-              nombre: act.nombre,
-              precio: precioNumerico,
-              organizadorStripeId: creador.stripeAccountId,
-              deporte: act.deporte,
-              fecha: act.fecha,
-              ubicacion: act.ubicacion
-            });
-
-            this.router.navigate(['/pagos/pago']);
-
-          } else {
-            // El creador existe, pero no tiene pagos configurados
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error de Pago',
-              detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
-            });
-          }
-        },
-        error: (err) => {
-          console.error(err);
+          this.router.navigate(['/pagos/pago']);
+        } else {
+          // El creador existe, pero no tiene pagos configurados
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo contactar con el servidor para verificar al organizador.'
+            summary: 'Error de Pago',
+            detail:
+              'El organizador no tiene configurada su cuenta para recibir pagos.',
           });
         }
-      });
-
-      return; // Detenemos aquí para que no siga al flujo gratuito
-    } else {
-      // FLUJO GRATUITO 
-      this.actService.unirteActividad(id).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: '¡Enhorabuena!',
-            detail: 'Te has unido a la actividad'
-          });
-          // Bus de recarga de actividaedes
-          this.actUpdateService.notifyUpdate();
-        },
-        error: (codigo) => {
-          const mensaje = this.errorService.getMensajeError(codigo);
-          this.errorService.showError(mensaje);
-        }
-      });
-    }
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            'No se pudo contactar con el servidor para verificar al organizador.',
+        });
+      },
+    });
   }
 
-  pagar(id: number) {
-    console.log('pagar');
+  apuntarse(id: number) {
+    const act = this.activities.find((a) => a.id === id);
+
+    if (!act) return;
+
+    this.actService.unirteActividad(id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: '¡Enhorabuena!',
+          detail: 'Te has unido a la actividad',
+        });
+        // Bus de recarga de actividaedes
+        this.actUpdateService.notifyUpdate();
+      },
+      error: (codigo) => {
+        const mensaje = this.errorService.getMensajeError(codigo);
+        this.errorService.showError(mensaje);
+      },
+    });
   }
-
-
 }
-
-

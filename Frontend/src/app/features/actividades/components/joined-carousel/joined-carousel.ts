@@ -41,7 +41,7 @@ export class JoinedCarousel implements OnInit {
   }
 
   cargarActividades() {
-    this.actService.listarActividadesApuntadas().subscribe({
+    this.actService.listarActividadesApuntadasPendientes().subscribe({
       next: data => {
         this.activities = data;
         //Creo la propiedad esCreador en cada actividad

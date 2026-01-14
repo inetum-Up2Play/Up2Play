@@ -1,5 +1,18 @@
-import { Component, signal, inject, AfterViewInit, Injector, effect, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  Component,
+  signal,
+  inject,
+  AfterViewInit,
+  Injector,
+  effect,
+  OnInit,
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { catchError, forkJoin, map, of } from 'rxjs';
@@ -74,25 +87,24 @@ interface ParticipanteView {
   styleUrls: ['./info-actividad.scss'],
 })
 export class InfoActividad implements OnInit, AfterViewInit {
-  
   // --- Señales de Estado (Datos principales) ---
   actividad = signal<Actividad | null>(null);
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
   apuntado = signal<boolean>(false);
-  
+
   // --- Señales de UI / Participantes ---
   isCreador = signal<boolean>(false);
   avatarIdCreador = signal<number>(0);
   avatarIdUsuario = signal<number>(0);
-  avataresUsuarios = signal<ParticipanteView[]>([]); 
+  avataresUsuarios = signal<ParticipanteView[]>([]);
   errorUbicacion = signal<string | null>(null);
 
   // --- Variables ---
   actividadId: number;
   idsUsuarios: number[] = [];
   act = { ubicacion: '' };
-  
+
   // Form para mostrar las estrellas (readonly)
   formRating = new FormGroup({
     rating: new FormControl(0),
@@ -148,8 +160,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // La inicialización del mapa depende de que Nominatim devuelva coordenadas, 
-    // se llama dentro de la suscripción en ngOnInit -> cargarDatosActividad, 
+    // La inicialización del mapa depende de que Nominatim devuelva coordenadas,
+    // se llama dentro de la suscripción en ngOnInit -> cargarDatosActividad,
     // pero si la ubicación ya estuviera lista se podría hacer aquí.
   }
 
@@ -162,7 +174,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
       next: (act) => {
         this.actividad.set(act);
         this.act.ubicacion = act.ubicacion; // Actualizar objeto local si es necesario
-        
+
         // Actualizamos el rating visual
         this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel));
 
@@ -236,7 +248,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
         map((perfil) => {
           return {
             nombre: p.nombre,
-            avatarId: (perfil as any)?.imagen ?? (perfil as any)?.imagenPerfil ?? 0,
+            avatarId:
+              (perfil as any)?.imagen ?? (perfil as any)?.imagenPerfil ?? 0,
           };
         }),
         catchError(() => of({ nombre: p.nombre, avatarId: 0 }))
@@ -255,7 +268,9 @@ export class InfoActividad implements OnInit, AfterViewInit {
   resolverCoordenadas(direccion: string): void {
     this.http
       .get<any>(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccion)}`
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          direccion
+        )}`
       )
       .subscribe((results) => {
         if (results.length > 0) {
@@ -264,14 +279,16 @@ export class InfoActividad implements OnInit, AfterViewInit {
           this.initMap(lat, lon);
           this.errorUbicacion.set(null);
         } else {
-          this.errorUbicacion.set(`No se pudo localizar la dirección: ${direccion}`);
+          this.errorUbicacion.set(
+            `No se pudo localizar la dirección: ${direccion}`
+          );
         }
       });
   }
 
   initMap(lat: number, lon: number): void {
     // Si ya existe un mapa (en caso de re-render), deberías limpiar el div 'map' o destruir la instancia anterior
-    // document.getElementById('map')!.innerHTML = ''; 
+    // document.getElementById('map')!.innerHTML = '';
 
     const marker = new Feature({
       geometry: new Point(fromLonLat([lon, lat])),
@@ -315,53 +332,14 @@ export class InfoActividad implements OnInit, AfterViewInit {
     });
   }
 
-  // =============================================================
-  // ACCIONES DEL USUARIO
-  // =============================================================
-
-  unirse(): void {
+  apuntarse(): void {
     const act = this.actividad();
 
     if (!act?.id) {
-      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Actividad no cargada' });
-      return;
-    }
-
-    const precioStr = act.precio ? act.precio.toString().replace(',', '.') : '0';
-    const precioNumerico = parseFloat(precioStr);
-
-    // 1. LÓGICA DE PAGO
-    if (!isNaN(precioNumerico) && precioNumerico > 0) {
-      if (!act.usuarioCreadorId) {
-        this.errorService.showError('No se puede identificar al creador de la actividad');
-        return;
-      }
-
-      this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
-        next: (creador) => {
-          if (creador && creador.stripeAccountId) {
-            this.pagosService.setActivity({
-              actividadId: act.id,
-              nombre: act.nombre,
-              precio: precioNumerico,
-              organizadorStripeId: creador.stripeAccountId,
-              deporte: act.deporte,
-              fecha: act.fecha,
-              ubicacion: act.ubicacion,
-            });
-            this.router.navigate(['/pagos/pago']);
-          } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error de Pago',
-              detail: 'El organizador no tiene configurada su cuenta para recibir pagos.',
-            });
-          }
-        },
-        error: (err) => {
-          console.error(err);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al verificar organizador.' });
-        },
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Actividad no cargada',
       });
       return;
     }
@@ -371,7 +349,11 @@ export class InfoActividad implements OnInit, AfterViewInit {
       next: () => {
         this.apuntado.set(true);
         this.cargarInscritos();
-        this.messageService.add({ severity: 'success', summary: '¡Enhorabuena!', detail: 'Te has unido a la actividad' });
+        this.messageService.add({
+          severity: 'success',
+          summary: '¡Enhorabuena!',
+          detail: 'Te has unido a la actividad',
+        });
       },
       error: (codigo) => {
         const mensaje = this.errorService.getMensajeError(codigo);
@@ -381,7 +363,49 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   pagar(): void {
-    console.log('Redirigiendo a la pasarela de pago...');
+    const act = this.actividad();
+
+    if (!act?.id) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Actividad no cargada',
+      });
+      return;
+    }
+
+    this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
+      next: (creador) => {
+        if (creador && creador.stripeAccountId) {
+          this.pagosService.setActivity({
+            actividadId: act.id,
+            nombre: act.nombre,
+            precio: act.precio,
+            organizadorStripeId: creador.stripeAccountId,
+            deporte: act.deporte,
+            fecha: act.fecha,
+            ubicacion: act.ubicacion,
+          });
+          this.router.navigate(['/pagos/pago']);
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error de Pago',
+            detail:
+              'El organizador no tiene configurada su cuenta para recibir pagos.',
+          });
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al verificar organizador.',
+        });
+      },
+    });
+    return;
   }
 
   desapuntarse(): void {
@@ -390,7 +414,11 @@ export class InfoActividad implements OnInit, AfterViewInit {
 
     this.actService.desapuntarseActividad(this.actividadId).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado' });
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Vaya...',
+          detail: 'Te has desapuntado',
+        });
         this.apuntado.set(false);
         this.cargarInscritos();
       },
@@ -404,7 +432,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
   eliminar(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
+      message:
+        '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
       header: 'Cuidado!',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Cancelar',
@@ -439,7 +468,11 @@ export class InfoActividad implements OnInit, AfterViewInit {
         });
       },
       reject: () => {
-        this.messageService.add({ severity: 'warn', summary: 'Rechazado', detail: 'Has cancelado la eliminación' });
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Rechazado',
+          detail: 'Has cancelado la eliminación',
+        });
       },
     });
   }
@@ -472,4 +505,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
+
+  reembolsoATodos() {}
+
+  reembolso() {}
 }

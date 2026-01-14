@@ -131,7 +131,7 @@ public class ActividadService {
     // Listado todas las actividades
 
     @Transactional // (readOnly = true)
-    public List<ActividadDtoResp> getAllActividadesPendientes() {
+    public List<ActividadDtoResp> Ya () {
         return actividadRepository.findAll().stream()
                 .peek(this::actualizarEstadoSiNecesario)
                 .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))

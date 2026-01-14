@@ -108,6 +108,15 @@ export class ActService {
     );
   }
 
+    listarActividadesApuntadasPendientes(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
+      catchError((error) => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
+      })
+    );
+  }
+
   //Metodo eliminar actividad
   deleteActividad(id: number) {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(

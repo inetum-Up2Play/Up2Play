@@ -95,25 +95,10 @@ export class CarrouselDeportes {
     });
   }
 
-  pagar(id: number) {
-    console.log('pagar unico');
-  }
-  
-  apuntarse(id: number) {
-    // 1. Buscamos la actividad completa en nuestra lista local
+    pagar(id: number) {
     const act = this.activities.find(a => a.id === id);
 
     if (!act) return;
-
-    const precioStr = act.precio ? act.precio.toString().replace(',', '.') : '0';
-    const precioNumerico = parseFloat(precioStr);
-    // COMPRUEBA SI ES DE PAGO
-    if (!isNaN(precioNumerico) && precioNumerico > 0) {
-
-      if (!act.usuarioCreadorId) {
-        this.errorService.showError('No se puede identificar al creador de la actividad');
-        return;
-      }
 
       this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
         next: (creador) => {
@@ -124,7 +109,7 @@ export class CarrouselDeportes {
             this.pagosService.setActivity({
               actividadId: act.id,
               nombre: act.nombre,
-              precio: precioNumerico,
+              precio: act.precio,
               organizadorStripeId: creador.stripeAccountId,
               deporte: act.deporte,
               fecha: act.fecha,
@@ -151,10 +136,13 @@ export class CarrouselDeportes {
           });
         }
       });
+  }
 
-      return; // Detenemos aquí para que no siga al flujo gratuito
-    } else {
-      // FLUJO GRATUITO 
+  apuntarse(id: number) {
+    const act = this.activities.find(a => a.id === id);
+
+    if (!act) return;
+
       this.actService.unirteActividad(id).subscribe({
         next: () => {
           this.messageService.add({
@@ -170,7 +158,6 @@ export class CarrouselDeportes {
           this.errorService.showError(mensaje);
         }
       });
-    }
   }
 
   extraerHora(fecha: string): string {

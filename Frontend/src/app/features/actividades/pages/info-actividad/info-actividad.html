@@ -61,7 +61,7 @@
                     
                 } @else {
                     
-                    <button (click)="ReembolsoATodos($event)"
+                    <button (click)="reembolsoATodos()"
                         class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
                         <i class="pi pi-trash"></i>
                         Eliminar y reembolsar
@@ -71,7 +71,7 @@
 
                 @if (act.precio == 0.00) {
                     
-                    <button (click)="unirse()"
+                    <button (click)="apuntarse()"
                         class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
                         ¡Apúntate!
                     </button>
