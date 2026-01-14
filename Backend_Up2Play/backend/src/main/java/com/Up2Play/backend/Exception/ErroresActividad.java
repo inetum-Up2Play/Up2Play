@@ -68,4 +68,12 @@ public class ErroresActividad {
         }
     }
 
+    public static class PagosNoHabilitadosException extends RuntimeException {
+        public PagosNoHabilitadosException(String message) {
+            super(message);
+        }
+    }
+
 }
+
+

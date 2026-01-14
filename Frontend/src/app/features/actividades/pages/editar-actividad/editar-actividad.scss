@@ -37,7 +37,10 @@ label i.pi {
 }
 
 :host ::ng-deep .p-inputnumber .p-inputnumber-input:disabled {
-    pointer-events: none !important; // no recibe hover/click
+    background-color: #c4c9d181 !important;  
+    color: #8a919c !important;  
+    opacity: 1 !important; // Evita la transparencia por defecto del navegador
+    cursor: not-allowed !important; // Cursor de bloqueo
 }
 
 /* Cambia el fondo y el color del texto */

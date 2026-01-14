@@ -118,9 +118,9 @@
                         [hora]="extraerHora(activity.fecha)" 
                         [ubicacion]="activity.ubicacion"
                         [imagen]="activity.deporte | deporteImg" 
-                        [botonLabel]="activity.precio == 0 ? '¡Apúntate!' : 'Apúntate por ' + activity.precio + '€'"
-                        [botonStyle]="activity.precio == 0 ? 'btn-apuntarse' : 'btn-pagar'"
-                        [botonAction]="activity.precio == 0 ? apuntarse : pagar"
+                        [botonLabel]="'¡Apúntate!'"
+                        [botonStyle]="'btn-apuntarse'" 
+                        [botonAction]="apuntarse.bind(this)" 
                         [actividadId]="activity.id">
                     </app-activity-card>
                 </ng-template>

@@ -5,6 +5,7 @@ public class UsuarioDto {
     private String email;
     private String nombreUsuario;
     private String rol;
+    private String stripeAccountId;
 
     
     public UsuarioDto() {
@@ -18,6 +19,13 @@ public class UsuarioDto {
         this.rol = rol;
     }
 
+    public UsuarioDto(Long id, String email, String nombreUsuario, String rol, String stripeAccountId) {
+        this.id = id;
+        this.email = email;
+        this.nombreUsuario = nombreUsuario;
+        this.rol = rol;
+        this.stripeAccountId = stripeAccountId;
+    }
 
     public Long getId() {
         return id;
@@ -58,7 +66,11 @@ public class UsuarioDto {
         this.rol = rol;
     }
 
-    
+    public String getStripeAccountId() {
+        return stripeAccountId;
+    }
 
-    
+    public void setStripeAccountId(String stripeAccountId) {
+        this.stripeAccountId = stripeAccountId;
+    }
 }

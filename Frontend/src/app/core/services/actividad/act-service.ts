@@ -9,7 +9,6 @@ import {
 import { Actividad } from '../../../shared/models/Actividad';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
-import { AuthService } from '../auth/auth-service';
 
 @Injectable({
   providedIn: 'root',

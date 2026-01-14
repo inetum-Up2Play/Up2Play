@@ -11,7 +11,7 @@
             </div>
             <div>
                 @if (usuario()) {
-                <app-allow-stripe-profile [pagosHabilitados]="usuario()!.pagosHabilitados">
+                <app-allow-stripe-profile [pagosHabilitados]="usuario()?.pagosHabilitados ?? false">
                 </app-allow-stripe-profile>
                 }
             </div>

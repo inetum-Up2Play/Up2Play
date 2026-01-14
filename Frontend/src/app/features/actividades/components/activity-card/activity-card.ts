@@ -1,34 +1,20 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  input,
-  Output,
-  output,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, input, Output, output } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ErrorService } from '../../../../core/services/error/error-service';
-import { MessageService, ConfirmationService } from 'primeng/api';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
-import { Router } from '@angular/router';
+
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
-import { Actividad } from '../../../../shared/models/Actividad';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { MessageService, ConfirmationService } from 'primeng/api';
+
 
 @Component({
   selector: 'app-activity-card',
-  imports: [
-    CardModule,
-    ButtonModule,
-    ConfirmDialog,
-    ToastModule,
-    MessageModule,
-  ],
+  imports: [CardModule, ButtonModule, ConfirmDialog, MessageModule],
   providers: [ConfirmationService],
   templateUrl: './activity-card.html',
   styleUrl: './activity-card.scss',

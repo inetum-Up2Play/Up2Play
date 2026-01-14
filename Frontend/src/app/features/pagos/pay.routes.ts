@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { PagoConfirmado } from './pages/pago-confirmado/pago-confirmado';
 import { PagoDenegado } from './pages/pago-denegado/pago-denegado';
 import { StripeCallback } from './pages/stripe-callback/stripe-callback';
+import { Payment } from './pages/payment/payment/payment';
 import { HistorialPagos } from './pages/historial-pagos/historial-pagos';
 
 export const PAY_ROUTES: Routes = [
@@ -18,7 +19,11 @@ export const PAY_ROUTES: Routes = [
     component: StripeCallback,
   },
   {
+    path: 'pago',
+    component: Payment
+  },
+  {
     path: 'historial-pagos',
     component: HistorialPagos,
-  },
+  }
 ];

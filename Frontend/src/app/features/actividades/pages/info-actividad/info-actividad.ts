@@ -51,6 +51,8 @@ import { Avatar } from 'primeng/avatar';
 import { AvatarGroup } from 'primeng/avatargroup';
 import { catchError, forkJoin, map, of } from 'rxjs';
 import { TooltipModule } from 'primeng/tooltip';
+import { PagosService } from '../../../../core/services/pagos/pagos-service';
+import { UserService } from '../../../../core/services/user/user-service';
 
 interface ParticipanteView {
   nombre: string;

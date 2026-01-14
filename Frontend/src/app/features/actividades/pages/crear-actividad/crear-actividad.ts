@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
@@ -23,6 +23,7 @@ import { Header } from '../../../../core/layout/header/header';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
 import { Footer } from '../../../../core/layout/footer/footer';
+import { UserService } from '../../../../core/services/user/user-service';
 
 @Component({
   selector: 'app-crear-actividad',
@@ -49,9 +50,11 @@ export class CrearActividad {
   private messageService = inject(MessageService);
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
+  private userService = inject(UserService);
 
- actividadForm: FormGroup;
- formSubmitted = false;
+  actividadForm: FormGroup;
+  formSubmitted = false;
+  pagosHabilitados = signal(false);
 
   private pad2(n: number): string {
     return n < 10 ? `0${n}` : `${n}`;
@@ -86,6 +89,17 @@ export class CrearActividad {
 
   onSubmit(): void {
     this.formSubmitted = true;
+    const raw = this.actividadForm.value;
+    const precio = Number(raw.precio ?? 0);
+
+    if (precio > 0 && !this.pagosHabilitados()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Pagos no configurados',
+        detail: 'Debes habilitar los pagos en tu perfil para crear actividades con coste.',
+      });
+      return; // Detenemos la ejecución aquí
+    }
 
     if (this.actividadForm.invalid) {
       // Marca todos los controles como tocados → dispara validaciones en la vista
@@ -102,8 +116,6 @@ export class CrearActividad {
       });
       return;
     }
-
-    const raw = this.actividadForm.value;
 
     // Defensive: asegura que son Date
     const fechaDate: Date =
@@ -172,6 +184,13 @@ export class CrearActividad {
   nivelEscogido: string | undefined;
 
   ngOnInit() {
+    // Cargamos el estado del usuario
+    this.userService.getUsuario().subscribe({
+      next: (user) => {
+        this.pagosHabilitados.set(user?.pagosHabilitados ?? false);
+      }
+    });
+
     // Inicializar deportes
     this.deportes = [
       { name: 'Atletismo' },

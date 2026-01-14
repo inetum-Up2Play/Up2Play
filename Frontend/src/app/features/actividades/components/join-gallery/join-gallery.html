@@ -9,25 +9,38 @@
 </app-empty-activities>
 } @else {
 
-<div class="xl:p-5 xl:px-9 2xl:px-24">
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 auto-rows-fr"
-  >
-    @for (act of visibleActivities; track act.id) {
-    <app-activity-card
-      [titulo]="act.nombre"
-      [fecha]="extraerFecha(act.fecha)"
-      [hora]="extraerHora(act.fecha)"
-      [ubicacion]="act.ubicacion"
-      [imagen]="act.deporte | deporteImg"
-      [actividadId]="act.id"
-      [botonLabel]="act.precio == 0 ? '¡Apúntate!' : 'Apúntate por ' + act.precio + '€'"
-      [botonStyle]="act.precio == 0 ? 'btn-apuntarse' : 'btn-pagar'"
-      [botonAction]="act.precio == 0 ? apuntarse : pagar"
-      [attr.aria-label]="act.nombre"
-    >
-    </app-activity-card>
-    }
+  <div class="xl:p-5 xl:px-9 2xl:px-24">
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 auto-rows-fr">
+        @for (act of visibleActivities; track act.id) {
+          <app-activity-card
+            [titulo]="act.nombre"
+            [fecha]="extraerFecha(act.fecha)"
+            [hora]="extraerHora(act.fecha)"
+            [ubicacion]="act.ubicacion"
+            [imagen]="act.deporte | deporteImg"
+            [actividadId]="act.id"
+            [botonLabel]="'¡Apúntate!'"
+            [botonStyle]="'btn-apuntarse'"
+            [botonAction]="apuntarse.bind(this)"
+            [attr.aria-label]="act.nombre">
+
+          </app-activity-card>
+        }
+      </div>
+      
+      <div class="flex justify-center md:justify-end ver-mas-container md:px-0">
+        @if (visibleActivities.length < activities.length) {
+          <p-button
+            styleClass="boton-ver-mas" 
+            label="Mostrar más actividades" 
+            variant="outlined" 
+            icon="pi pi-refresh" 
+            severity="contrast" 
+            (onClick)="loadMore()"
+            [attr.aria-label]="'Mostrar más actividades'">
+          </p-button>
+        }
+      </div>
   </div>
 
   <div class="flex justify-center md:justify-end ver-mas-container md:px-0">
