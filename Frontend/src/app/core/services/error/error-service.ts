@@ -46,6 +46,8 @@ export class ErrorService {
     EDITAR_PERFIL_DENEGADO: 'No tienes permiso para editar este perfil.', //403
     NOTIFICACION_NO_ENCONTRADA: 'Notificación no encontrada.', //404
     ERROR_DESAPUNTARSE: 'No puedes desapuntarte de una actividad en curso o completada.', //409
+    ERROR_ELIMINAR: 'No puedes eliminar una actividad en curso o completada.', //409
+    ERROR_EDITAR: 'No puedes editar una actividad en curso o completada.', //409
     UNKNOWN: 'Ha ocurrido un error desconocido.', // ?
   };
 
