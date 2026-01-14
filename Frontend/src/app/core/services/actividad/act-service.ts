@@ -39,8 +39,8 @@ export class ActService {
     return this.http.put(`${this.baseUrl}/editarActividad/${id}`, payload).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
-        const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
+        const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
+        return throwError(() => codigo);
       })
     );
   }
@@ -114,8 +114,8 @@ export class ActService {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(
       map(() => true),
       catchError((error: HttpErrorResponse) => {
-        const errBody = error.error as ErrorResponseDto;
-        return of(errBody?.error ?? 'UNKNOWN');
+        const codigo = (error.error as ErrorResponseDto)?.error ?? 'UNKNOWN';
+        return throwError(() => codigo);
       })
     );
   }

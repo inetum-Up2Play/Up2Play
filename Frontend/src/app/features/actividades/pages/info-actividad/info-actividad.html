@@ -46,7 +46,7 @@
         <div>
             <p-toast />
             <p-confirmdialog />
-            @if (isCreador()) {
+            @if (isCreador() && actividad()?.estado === 'PENDIENTE') {
             <button (click)="goEditar()"
                 class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
                 <i class="pi pi-pen-to-square"></i>
@@ -57,16 +57,18 @@
                 <i class="pi pi-trash"></i>
                 Eliminar
             </button>
-            } @else if (!apuntado()) {
+            } @else if (!apuntado() && actividad()?.estado === 'PENDIENTE') {
             <button (click)="unirse()"
                 class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
                 ¡Apúntate!
             </button>
             } @else {
-            <button (click)="desapuntarse()"
-                class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
-                Desapúntate...
-            </button>
+                @if (actividad()?.estado === 'PENDIENTE'){
+                    <button (click)="desapuntarse()"
+                        class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
+                        Desapúntate... 
+                    </button>
+                }
             }
         </div>
     </div>

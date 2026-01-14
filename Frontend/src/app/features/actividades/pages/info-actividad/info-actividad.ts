@@ -409,6 +409,7 @@ import { TooltipModule } from 'primeng/tooltip';
     }
 
     goEditar(): void {
+      
       this.router.navigate(['/actividades/editar-actividad/', this.actividadId]);
     }
   }

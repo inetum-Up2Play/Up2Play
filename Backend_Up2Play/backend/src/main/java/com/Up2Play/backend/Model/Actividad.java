@@ -20,6 +20,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -44,6 +45,8 @@ public class Actividad {
 
     @Convert(converter = NivelDificultadConverter.class)
     private NivelDificultad nivel;
+    
+    @Min(1)
     private int numPersInscritas;
     private int numPersTotales;
 

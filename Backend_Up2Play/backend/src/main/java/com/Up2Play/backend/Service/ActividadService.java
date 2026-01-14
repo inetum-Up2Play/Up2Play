@@ -14,6 +14,8 @@ import com.Up2Play.backend.DTO.Respuestas.UsuarioDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.ErrorDesapuntarse;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEditar;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
@@ -304,6 +306,11 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+        
+        if (!EstadoActividad.PENDIENTE.equals(act.getEstado())) {
+            throw new ErrorEditar("Solo se pueden editar actividades pendientes");
+        }
+
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
             if (input.getNombre() != null && input.getNombre().length() > 64) {
                 throw new LimiteCaracteres("El nombre no puede tener más de 64 caracteres.");
@@ -337,10 +344,7 @@ public class ActividadService {
             } else
                 act.setNumPersTotales(num_personas_totales);
 
-            if (act.getEstado().equals(EstadoActividad.COMPLETADA)) {
-
-                throw new ActividadCompletadaException("No puedes editar una actividad que ya ha sido completada!");
-            }
+           
 
             act.setDeporte(input.getDeporte());
 
@@ -379,6 +383,10 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+        if (act.getEstado() != EstadoActividad.PENDIENTE) {
+          throw new ErrorEliminar("No se puede eliminar una actividad completada");
+        }
+        
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
 
             // Enviar notificacion
@@ -442,7 +450,7 @@ public class ActividadService {
             } else {
                 act.getUsuarios().add(usuario);
                 usuario.getActividadesUnidas().add(act);
-                act.getUsuarios().add(usuario);
+                
 
             }
 
