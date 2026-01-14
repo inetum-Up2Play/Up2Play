@@ -3,6 +3,8 @@ import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
 import { CommonModule } from '@angular/common';
 import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
+import { DatePickerModule } from 'primeng/datepicker';
+import { FormsModule } from '@angular/forms';
 
 interface Pago {
   fecha: string;            // '14 Oct 2023'
@@ -16,7 +18,7 @@ interface Pago {
 
 @Component({
   selector: 'app-historial-pagos',
-  imports: [Header, Footer, CommonModule, IconDeportePipe],
+  imports: [Header, Footer, CommonModule, IconDeportePipe, DatePickerModule, FormsModule],
   templateUrl: './historial-pagos.html',
   styleUrl: './historial-pagos.scss',
 })
@@ -74,8 +76,8 @@ export class HistorialPagos {
 
   // ====== Signals de filtro ======
   search = signal<string>('');
-  dateFrom = signal<string>('');   // formato input type="date": 'YYYY-MM-DD'
-  dateTo = signal<string>('');   // formato input type="date"
+  dateFrom = signal<Date | null>(null);     // formato input type="date": 'YYYY-MM-DD'
+  dateTo = signal<Date | null>(null);     // formato input type="date"
   amountMin = signal<string>('');  // números en string para inputs
   amountMax = signal<string>('');
 
@@ -134,63 +136,51 @@ export class HistorialPagos {
   }
 
   /** Establece el rango a "este mes" (desde el día 1 al último del mes actual) */
+
   setThisMonth() {
     const now = new Date();
-    const y = now.getFullYear();
-    const m = now.getMonth();
-    const first = new Date(y, m, 1);
-    const last = new Date(y, m + 1, 0);
-    const toStr = (d: Date) =>
-      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    this.dateFrom.set(toStr(first));
-    this.dateTo.set(toStr(last));
+    const from = new Date(now.getFullYear(), now.getMonth(), 1);
+    const to = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    this.dateFrom.set(from);
+    this.dateTo.set(to);
   }
 
-  // ====== Handlers de inputs ======
+  // Handlers (reciben Date | null)
+  onDateFromChange(value: Date | null) {
+    this.dateFrom.set(value);
+  }
+
+  onDateToChange(value: Date | null) {
+    this.dateTo.set(value);
+  }
+
+  // Los de búsqueda e importes siguen igual (strings)
   onSearchInput(value: string) { this.search.set(value); }
-  onDateFromInput(value: string) { this.dateFrom.set(value); }
-  onDateToInput(value: string) { this.dateTo.set(value); }
   onAmountMinInput(value: string) { this.amountMin.set(value); }
   onAmountMaxInput(value: string) { this.amountMax.set(value); }
 
-  onDateFocus(el: HTMLInputElement) {
-    // Abre el picker si el navegador lo soporta
-    (el as any).showPicker?.();
-  }
-
-  onDateClick(el: HTMLInputElement) {
-    (el as any).showPicker?.();
-  }
-
   // ====== Filtrado combinado ======
+
   filteredPagos = computed(() => {
     const term = this.normalize(this.search());
 
-    // Parsear filtros
-    const from = this.parseInputDate(this.dateFrom());
-    const to = this.parseInputDate(this.dateTo());
-    const min = this.parseAmount(this.amountMin());
-    const max = this.parseAmount(this.amountMax());
+    const from = this.dateFrom();
+    const toRaw = this.dateTo();
+    // aseguramos inclusión del día final
+    const to = toRaw ? new Date(toRaw.getFullYear(), toRaw.getMonth(), toRaw.getDate(), 23, 59, 59, 999) : null;
 
     return this.pagos().filter(p => {
-      // 1) Título actividad
-      const matchesTitle = term
-        ? this.normalize(p.actividadTitulo).includes(term)
-        : true;
+      const matchesTitle = term ? this.normalize(p.actividadTitulo).includes(term) : true;
 
-      // 2) Fecha
-      const d = this.parseFechaToDate(p.fecha);
+      const d = this.parseFechaToDate(p.fecha); // Date de la fila
       const matchesDate =
         (!from && !to) ? true :
-          (d
-            && (!from || d.getTime() >= from.getTime())
-            && (!to || d.getTime() <= to.getTime()));
+          (d && (!from || d >= from) && (!to || d <= to));
 
-      // 3) Importe
-      const amt = p.importe;
-      const matchesAmount =
-        (min === undefined || amt >= min) &&
-        (max === undefined || amt <= max);
+      const min = this.parseAmount(this.amountMin());
+      const max = this.parseAmount(this.amountMax());
+      const matchesAmount = (min === undefined || p.importe >= min) &&
+        (max === undefined || p.importe <= max);
 
       return matchesTitle && matchesDate && matchesAmount;
     });
