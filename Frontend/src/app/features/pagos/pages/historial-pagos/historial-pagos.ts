@@ -1,10 +1,15 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, OnInit, inject } from '@angular/core';
 import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
 import { CommonModule } from '@angular/common';
 import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
+import { catchError, finalize, forkJoin, map, of, switchMap, tap } from 'rxjs';
+import { PagosService, PagoDtoResp } from '../../../../core/services/pagos/pagos-service';
+import { Actividad } from '../../../../shared/models/Actividad';
+import { ActService } from '../../../../core/services/actividad/act-service';
+
 
 interface Pago {
   fecha: string;            // '14 Oct 2023'
@@ -24,107 +29,47 @@ interface Pago {
 })
 export class HistorialPagos {
 
-  // Demo: reemplaza por tu data real (servicio, etc.)
-  pagos = signal<Pago[]>([
-    {
-      fecha: '14 Oct 2026',
-      hora: '10:30',
-      actividadTitulo: 'Tenis de tranquis',
-      actividadLugar: 'Tennis nástic',
-      estado: 'Fallido',
-      importe: 10.00,
-      deporte: 'tenis'
-    },
-    {
-      fecha: '14 Oct 2023',
-      hora: '18:30',
-      actividadTitulo: 'Fútbol 7 - Torneo',
-      actividadLugar: 'Polideportivo Central',
-      estado: 'Completado',
-      importe: 15.00,
-      deporte: 'futbol'
-    },
-    {
-      fecha: '17 Dic 2025',
-      hora: '18:30',
-      actividadTitulo: 'Tiroteo remix',
-      actividadLugar: 'Campoclaro',
-      estado: 'Completado',
-      importe: 25.00,
-      deporte: 'tiro-con-arco'
-    },
-    {
-      fecha: '2 Ene 2025',
-      hora: '20:30',
-      actividadTitulo: 'Excursion por la montaña',
-      actividadLugar: 'La Mussara',
-      estado: 'Fallido',
-      importe: 5.00,
-      deporte: 'senderismo'
-    },
-    {
-      fecha: '8 Feb 2025',
-      hora: '8:30',
-      actividadTitulo: 'Gym con las mamis',
-      actividadLugar: 'Viding Tarragona',
-      estado: 'Completado',
-      importe: 50.00,
-      deporte: 'crossfit'
-    },
-    // ...
-  ]);
+  private pagosService = inject(PagosService);
 
-  // ====== Signals de filtro ======
+  private actService = inject(ActService); // <-- reemplaza por tu nombre de servicio real
+
+  // Estado de datos/UX
+  pagos = signal<Pago[]>([]);
+  loading = signal<boolean>(false);
+  error = signal<string | null>(null);
+
+  // ---------- Caché para no repetir llamadas por actividad ----------
+  private actividadCache = new Map<number, Actividad>();
+
+  // ====== Filtros ======
   search = signal<string>('');
-  dateFrom = signal<Date | null>(null);     // formato input type="date": 'YYYY-MM-DD'
-  dateTo = signal<Date | null>(null);     // formato input type="date"
-  amountMin = signal<string>('');  // números en string para inputs
+  dateFrom = signal<Date | null>(null);
+  dateTo = signal<Date | null>(null);
+  amountMin = signal<string>('');
   amountMax = signal<string>('');
 
   // ====== Helpers ======
   private normalize(text: string): string {
-    return (text ?? '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .trim();
+    return (text ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
   }
 
-  /** Mapa meses ES: soporta abreviaturas y nombres completos */
   private readonly monthMap: Record<string, number> = {
-    ene: 0, enero: 0,
-    feb: 1, febrero: 1,
-    mar: 2, marzo: 2,
-    abr: 3, abril: 3,
-    may: 4, mayo: 4,
-    jun: 5, junio: 5,
-    jul: 6, julio: 6,
-    ago: 7, agosto: 7,
-    sep: 8, set: 8, septiembre: 8,
-    oct: 9, octubre: 9,
-    nov: 10, noviembre: 10,
+    ene: 0, enero: 0, feb: 1, febrero: 1, mar: 2, marzo: 2, abr: 3, abril: 3,
+    may: 4, mayo: 4, jun: 5, junio: 5, jul: 6, julio: 6, ago: 7, agosto: 7,
+    sep: 8, set: 8, septiembre: 8, oct: 9, octubre: 9, nov: 10, noviembre: 10,
     dic: 11, diciembre: 11,
   };
 
-  /** Convierte '14 Oct 2026' -> Date | null (zona local) */
   private parseFechaToDate(fecha: string): Date | null {
     if (!fecha) return null;
     const parts = fecha.trim().split(/\s+/); // ['14','Oct','2026']
     if (parts.length < 3) return null;
     const day = Number(parts[0]);
-    const monthKey = this.normalize(parts[1]).slice(0, 3); // 'oct', 'dic', 'ene'...
+    const monthKey = this.normalize(parts[1]).slice(0, 3);
     const year = Number(parts[2]);
     const monthIndex = this.monthMap[monthKey];
     if (Number.isNaN(day) || Number.isNaN(year) || monthIndex === undefined) return null;
     const d = new Date(year, monthIndex, day);
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }
-
-  private parseInputDate(value: string): Date | undefined {
-    if (!value) return undefined; // input vacío -> no filtro
-    const d = new Date(value);
-    if (isNaN(d.getTime())) return undefined;
     d.setHours(0, 0, 0, 0);
     return d;
   }
@@ -135,7 +80,101 @@ export class HistorialPagos {
     return Number.isFinite(n) ? n : undefined;
   }
 
-  /** Establece el rango a "este mes" (desde el día 1 al último del mes actual) */
+  private formatFechaEs(d: Date): string {
+    const fmt = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+    return fmt.replace(/\b([a-záéíóúñü])/, (m) => m.toUpperCase());
+  }
+  private formatHora(d: Date): string {
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    return `${hh}:${mm}`;
+  }
+
+  /** Mapper: PagoDtoResp -> Pago (lo que usa tu tabla) */
+
+  // ---------- Mapper DTO + Actividad -> Pago ----------
+  private toPago(dto: PagoDtoResp, act?: Actividad): Pago {
+    const d = dto.fecha ? new Date(dto.fecha) : null;
+    const ok = d && !isNaN(d.getTime()) ? d : null;
+
+    // OJO: nombreActividad es el campo que llega del back
+    const actividadTitulo = dto.nombreActividad ?? '';
+
+    // Usamos datos de la actividad si existen; si no, dejamos vacío
+    const actividadLugar = act?.ubicacion ?? '';
+    const deporte = act?.deporte ?? '';
+
+    return {
+      fecha: ok ? this.formatFechaEs(ok) : '',
+      hora: ok ? this.formatHora(ok) : '',
+      actividadTitulo,
+      actividadLugar,
+      estado: 'Completado',      // ajusta si incorporas estado real
+      importe: Number(dto.total ?? 0),
+      deporte
+    };
+  }
+
+
+  // ====== Cargar del servicio ======
+  ngOnInit(): void {
+    this.loadPagosUsuarioActual();
+  }
+
+  loadPagosUsuarioActual() {
+    this.loading.set(true);
+    this.error.set(null);
+
+
+    this.pagosService.getPagosUsuarioActual().pipe(
+      tap(dtos => console.log('[GET /getPagos] body:', dtos)),
+      switchMap((dtos: PagoDtoResp[]) => {
+        const uniqueIds = Array.from(new Set(dtos.map(d => d.actividadId)));
+
+        // Preparar Observables de actividades con caché
+        const requests = uniqueIds.map(id => {
+          const cached = this.actividadCache.get(id);
+          if (cached) return of({ id, actividad: cached });
+
+          return this.actService.getActividad(id).pipe(
+            tap(act => { if (act) this.actividadCache.set(id, act); }),
+            map(act => ({ id, actividad: act as Actividad })),
+            catchError(err => {
+              console.error(`[Actividad ${id}] error`, err);
+              return of({ id, actividad: null as unknown as Actividad }); // guardamos null
+            })
+          );
+        });
+
+        // Si no hay actividades únicas, seguimos con map vacío
+        const actividades$ = requests.length ? forkJoin(requests) : of([]);
+
+        return actividades$.pipe(
+          map(pares => {
+            const actMap = new Map<number, Actividad>();
+            (pares as { id: number; actividad: Actividad }[]).forEach(({ id, actividad }) => {
+              if (actividad) actMap.set(id, actividad);
+            });
+            return { dtos, actMap };
+          })
+        );
+      }),
+      map(({ dtos, actMap }) => dtos.map(dto => this.toPago(dto, actMap.get(dto.actividadId)))),
+      tap(pagos => console.table(pagos.map(p => ({
+        titulo: p.actividadTitulo, lugar: p.actividadLugar, deporte: p.deporte, importe: p.importe
+      })))),
+      finalize(() => this.loading.set(false))
+    ).subscribe({
+      next: pagos => this.pagos.set(pagos),
+      error: err => {
+        console.error('[HistorialPagos] Error', err);
+        this.error.set('No se pudo cargar el historial de pagos.');
+        this.pagos.set([]);
+      }
+    });
+
+  }
+
 
   setThisMonth() {
     const now = new Date();

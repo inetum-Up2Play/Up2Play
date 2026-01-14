@@ -122,6 +122,14 @@
         <div class="bg-white rounded-2xl border border-[#dbe6e0] overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[800px] border-collapse">
+
+                    <!-- Mensajes de estado -->
+                    @if (loading()) {
+                    <div class="text-[#3D6C3F] text-sm">Cargando pagos...</div>
+                    } @else if (error()) {
+                    <div class="text-red-600 text-sm">{{ error() }}</div>
+                    }
+
                     <thead>
                         <tr class="bg-[#f6f8f7] border-b border-[#dbe6e0]">
                             <th class="text-left py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
