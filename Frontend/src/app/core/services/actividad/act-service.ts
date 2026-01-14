@@ -9,7 +9,6 @@ import {
 import { Actividad } from '../../../shared/models/Actividad';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
-import { AuthService } from '../auth/auth-service';
 
 @Injectable({
   providedIn: 'root',
@@ -102,6 +101,15 @@ export class ActService {
 
   listarActividadesApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getApuntadasCalendario').pipe(
+      catchError((error) => {
+        console.error('Error al obtener actividades', error);
+        return of([]); // Devuelve array vacío si falla
+      })
+    );
+  }
+
+    listarActividadesApuntadasPendientes(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
       catchError((error) => {
         console.error('Error al obtener actividades', error);
         return of([]); // Devuelve array vacío si falla

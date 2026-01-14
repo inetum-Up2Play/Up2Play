@@ -6,12 +6,10 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
 import com.stripe.model.AccountLink;
-import com.stripe.model.Charge;
 import com.stripe.model.PaymentIntent;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.AccountCreateParams;
 import com.stripe.param.AccountLinkCreateParams;
-import com.stripe.param.ChargeCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import jakarta.annotation.PostConstruct;
 
@@ -40,23 +38,22 @@ public class StripeConnectService {
     private UsuarioRepository usuarioRepository;
 
     // Lista de métodos de pago por defecto
-    private static final List<String> DEFAULT_PAYMENT_METHOD_TYPES =
-            Arrays.asList("card");
-
+    private static final List<String> DEFAULT_PAYMENT_METHOD_TYPES = Arrays.asList("card");
 
     @PostConstruct
     public void init() {
         Stripe.apiKey = secretKey;
     }
 
-      /**
+    /**
      * Sincroniza el estado de la cuenta de Stripe con nuestra base de datos.
-     * Se debe llamar cuando recibimos un webhook o cuando el usuario vuelve al perfil.
+     * Se debe llamar cuando recibimos un webhook o cuando el usuario vuelve al
+     * perfil.
      */
     public void verificarYActualizarEstadoPagos(String stripeAccountId) throws StripeException {
         // 1. Consultamos el estado real en los servidores de Stripe
         Account account = Account.retrieve(stripeAccountId);
- 
+
         // 2. Comprobamos si Stripe ya le permite realizar cargos
         // chargesEnabled es true si ha pasado el onboarding y validaciones
         if (account.getChargesEnabled()) {
@@ -77,7 +74,8 @@ public class StripeConnectService {
      * @return Map con información de la cuenta creada
      * @throws StripeException Si ocurre un error en Stripe
      */
-    public Map<String, Object> createConnectAccount(String email, String country, Usuario usuario) throws StripeException {
+    public Map<String, Object> createConnectAccount(String email, String country, Usuario usuario)
+            throws StripeException {
         // Validación básica
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("El email es obligatorio");
@@ -110,7 +108,7 @@ public class StripeConnectService {
 
         usuario.setStripeAccountId(account.getId());
         usuarioRepository.save(usuario);
-        
+
         // Retornar más información útil
         Map<String, Object> result = new HashMap<>();
         result.put("accountId", account.getId());
@@ -119,12 +117,13 @@ public class StripeConnectService {
         result.put("type", account.getType());
         result.put("chargesEnabled", account.getChargesEnabled());
         result.put("detailsSubmitted", account.getDetailsSubmitted());
-        
+
         return result;
     }
 
     /**
-     * Genera un enlace de onboarding para que el usuario complete su cuenta Connect.
+     * Genera un enlace de onboarding para que el usuario complete su cuenta
+     * Connect.
      *
      * @param accountId El ID de la cuenta Connect
      * @return Map con la URL y tipo de enlace
@@ -143,110 +142,63 @@ public class StripeConnectService {
                 .build();
 
         AccountLink accountLink = AccountLink.create(params);
-        
+
         Map<String, String> result = new HashMap<>();
         result.put("url", accountLink.getUrl());
         result.put("expiresAt", String.valueOf(accountLink.getExpiresAt()));
         result.put("type", "onboarding");
-        
+
         return result;
     }
 
     /**
-     * Crea un pago P2P usando PaymentIntent.
-     *
+     * Crea un pago Direct Charge.
+     * El pago se crea directamente en la cuenta del vendedor. *
+     * 
      * @param amount             Monto en centavos
      * @param currency           Código de moneda (ej: "eur", "usd")
      * @param connectedAccountId ID de la cuenta Connect del destinatario
      * @param customerEmail      Email del cliente que realiza el pago (opcional)
-     * @param applicationFee     Comisión de la plataforma (en centavos). Si es null, se calcula automáticamente.
+     * @param applicationFee     Comisión de la plataforma (en centavos). Si es
+     *                           null, se calcula automáticamente.
      * @return Map con información del pago
      * @throws StripeException Si ocurre un error en Stripe
      */
-public Map<String, Object> createP2PPayment(Long amount, String currency,
-                                            String connectedAccountId, String customerEmail,
-                                            Long applicationFee) throws StripeException {
-    validatePaymentParameters(amount, currency, connectedAccountId);
-    Long actualFee = (applicationFee != null && applicationFee > 0)
-            ? applicationFee
-            : calculatePlatformFee(amount);
- 
-    // 1. Construimos los parámetros (SIN setTransferData)
-    PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
-            .setAmount(amount)
-            .setCurrency(currency.toLowerCase())
-            .addAllPaymentMethodType(DEFAULT_PAYMENT_METHOD_TYPES)
-            .setApplicationFeeAmount(actualFee) // Tu comisión (puedes poner 0)
-            .putMetadata("transaction_type", "p2p_payment")
-            .setReceiptEmail(customerEmail)
-            .build();
- 
-    // 2. LA CLAVE: Usamos RequestOptions para decirle a Stripe que actúe sobre la cuenta conectada
-    RequestOptions options = RequestOptions.builder()
-            .setStripeAccount(connectedAccountId) 
-            .build();
- 
-    // 3. Creamos el PaymentIntent con las opciones de la cuenta conectada
-    PaymentIntent paymentIntent = PaymentIntent.create(params, options);
-    Map<String, Object> result = new HashMap<>();
-    result.put("paymentIntentId", paymentIntent.getId());
-    result.put("clientSecret", paymentIntent.getClientSecret()); // Esto es lo que usará Angular
-    result.put("status", paymentIntent.getStatus());
-    result.put("connectedAccountId", connectedAccountId); // Importante para el frontend
-    return result;
-}
+    public Map<String, Object> createP2PPayment(Long amount, String currency,
+            String connectedAccountId,
+            String customerEmail,
+            Long userId, // ← NUEVO PARÁMETRO
+            Long actividadId) // ← NUEVO PARÁMETRO
+            throws StripeException {
 
-    /**
-     * Crea un cargo directo a una cuenta Connect (método tradicional).
-     *
-     * @param amount             Monto en centavos
-     * @param currency           Código de moneda
-     * @param sourceToken        Token de la tarjeta (generado por Stripe.js)
-     * @param connectedAccountId ID de la cuenta Connect del destinatario
-     * @param applicationFee     Comisión de la plataforma (en centavos). Si es null, se calcula automáticamente.
-     * @param description        Descripción del cargo (opcional)
-     * @return Map con información del cargo
-     * @throws StripeException Si ocurre un error en Stripe
-     */
-    public Map<String, Object> createDirectCharge(Long amount, String currency, String sourceToken,
-                                                  String connectedAccountId, Long applicationFee,
-                                                  String description) throws StripeException {
-        // Validaciones
-        validatePaymentParameters(amount, currency, connectedAccountId);
-        
-        if (sourceToken == null || sourceToken.isEmpty()) {
-            throw new IllegalArgumentException("El sourceToken es obligatorio");
-        }
+        // 1. Validación para evitar Error 500 (NPE)
+        if (amount == null || amount <= 0) throw new IllegalArgumentException("Monto inválido");
+        if (connectedAccountId == null) throw new IllegalArgumentException("Falta ID de cuenta del vendedor");
 
-        Long actualFee = (applicationFee != null && applicationFee > 0) 
-                ? applicationFee 
-                : calculatePlatformFee(amount);
-
-        ChargeCreateParams.Builder paramsBuilder = ChargeCreateParams.builder()
+        // 2. Parámetros del pago
+        PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                 .setAmount(amount)
-                .setCurrency(currency.toLowerCase())
-                .setSource(sourceToken)
-                .setDestination(
-                        ChargeCreateParams.Destination.builder()
-                                .setAccount(connectedAccountId)
-                                .build()
+                .setCurrency(currency != null ? currency.toLowerCase() : "eur")
+                .setReceiptEmail(customerEmail)
+                // Metadata para que tu Webhook sepa qué ha pasado al confirmar
+                .putMetadata("user_id", userId.toString())
+                .putMetadata("actividad_id", actividadId.toString())
+                .setAutomaticPaymentMethods(
+                    PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build()
                 )
-                .setApplicationFee(actualFee)
-                .putMetadata("transaction_type", "direct_charge");
+                .build();
 
-        if (description != null && !description.isEmpty()) {
-            paramsBuilder.setDescription(description);
-        }
+        // 3. DIRECT CHARGE le dice a Stripe: "No crees este pago en Up2Play, créalo EN LA CUENTA del vendedor"
+        RequestOptions requestOptions = RequestOptions.builder()
+                .setStripeAccount(connectedAccountId) 
+                .build();
 
-        Charge charge = Charge.create(paramsBuilder.build());
+        PaymentIntent paymentIntent = PaymentIntent.create(params, requestOptions);
         
         Map<String, Object> result = new HashMap<>();
-        result.put("chargeId", charge.getId());
-        result.put("amount", charge.getAmount());
-        result.put("applicationFee", actualFee);
-        result.put("status", charge.getStatus());
-        result.put("paid", charge.getPaid());
-        result.put("created", charge.getCreated());
+        result.put("clientSecret", paymentIntent.getClientSecret());
+        result.put("paymentIntentId", paymentIntent.getId());
+        result.put("connectedAccountId", connectedAccountId); // Devolver para el frontend
         
         return result;
     }
@@ -274,9 +226,9 @@ public Map<String, Object> createP2PPayment(Long amount, String currency,
         if (accountId == null || accountId.isEmpty()) {
             throw new IllegalArgumentException("El accountId es obligatorio");
         }
-        
+
         Account account = Account.retrieve(accountId);
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("accountId", account.getId());
         result.put("email", account.getEmail());
@@ -287,7 +239,7 @@ public Map<String, Object> createP2PPayment(Long amount, String currency,
         result.put("detailsSubmitted", account.getDetailsSubmitted());
         result.put("defaultCurrency", account.getDefaultCurrency());
         result.put("created", account.getCreated());
-        
+
         return result;
     }
 
@@ -314,7 +266,7 @@ public Map<String, Object> createP2PPayment(Long amount, String currency,
      * Método simplificado para crear pago (sobrecarga útil)
      */
     public Map<String, Object> createP2PPayment(Long amount, String currency,
-                                                String connectedAccountId) throws StripeException {
-        return createP2PPayment(amount, currency, connectedAccountId, null, null);
+            String connectedAccountId) throws StripeException {
+        return createP2PPayment(amount, currency, connectedAccountId, null, amount, amount);
     }
 }

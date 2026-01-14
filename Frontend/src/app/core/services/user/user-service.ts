@@ -32,6 +32,12 @@ export class UserService {
     );
   }
 
+  getUsuarioPorId(id: number): Observable<Usuario> {
+    // Asegúrate de que tu Backend (UsuarioController) tenga un endpoint GET /usuarios/{id}
+    // y que devuelva el objeto Usuario CON el stripeAccountId
+    return this.http.get<Usuario>(`${this.baseUrl}/${id}`);
+}
+
   //Método actualizar datos del ususario (cambiar contraseña)
   cambiarContraseñaPerfil(payload: CambiarPasswordDto): Observable<any> {
     return this.http.put(`${this.baseUrl}/cambiar-password`, payload).pipe(

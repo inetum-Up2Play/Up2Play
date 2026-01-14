@@ -1,5 +1,6 @@
 package com.Up2Play.backend.Repository;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,8 @@ public interface PagoRepository extends JpaRepository<Pago, Long>{
 
     //Buscar lista pagos por actividad 
     List<Pago> findByActividad(Actividad actividad);
+
+    Optional<Pago> findByStripePaymentId(String stripePaymentId);
 
     
 

@@ -41,7 +41,7 @@ export class JoinedCarousel implements OnInit {
   }
 
   cargarActividades() {
-    this.actService.listarActividadesApuntadas().subscribe({
+    this.actService.listarActividadesApuntadasPendientes().subscribe({
       next: data => {
         this.activities = data;
         //Creo la propiedad esCreador en cada actividad
@@ -78,6 +78,10 @@ export class JoinedCarousel implements OnInit {
 
     return this.router.navigate([`/actividades/editar-actividad/${id}`]);
 
+  }
+
+  reembolso(id: number) {
+    console.log('reembolso unico');
   }
 
   extraerHora(fecha: string): string {

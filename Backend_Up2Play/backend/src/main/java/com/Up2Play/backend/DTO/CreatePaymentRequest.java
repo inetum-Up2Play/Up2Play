@@ -7,9 +7,18 @@ public class CreatePaymentRequest {
     private String connectedAccountId;
     private String customerEmail;
     private Long applicationFee; // opcional
+    private Long actividadId; // ID de la actividad asociada al pago
 
     public Long getAmount() {
         return amount;
+    }
+
+    public Long getActividadId() {
+        return actividadId;
+    }
+
+    public void setActividadId(Long actividadId) {
+        this.actividadId = actividadId;
     }
 
     public void setAmount(Long amount) {

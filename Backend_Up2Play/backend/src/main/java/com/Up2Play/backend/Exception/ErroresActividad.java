@@ -68,8 +68,14 @@ public class ErroresActividad {
         }
     }
 
+
     public static class ErrorEditar extends RuntimeException {
         public ErrorEditar(String message) {
+        }
+    }
+    public static class PagosNoHabilitadosException extends RuntimeException {
+        public PagosNoHabilitadosException(String message) {
+
             super(message);
         }
     }
@@ -80,8 +86,6 @@ public class ErroresActividad {
         }
     }
 
-
-
-
-
 }
+
+

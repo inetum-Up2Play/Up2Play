@@ -100,56 +100,62 @@ public class StripeConnectController {
 
     }
 
-     
     /**
      * Este es el método que usarás para el pago embebido en Angular.
      * Crea la intención de pago pero NO lo confirma todavía.
      */
     @PostMapping("/payments/payment-intent")
-    public ResponseEntity<?> createP2PPayment(@RequestBody CreatePaymentRequest request, @AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<?> createP2PPayment(@RequestBody CreatePaymentRequest request,
+            @AuthenticationPrincipal UserDetails principal) {
         try {
+            // Validación preventiva
+            if (request.getActividadId() == null || request.getAmount() == null) {
+                return ResponseEntity.badRequest().body("Faltan datos: idActividad o monto");
+            }
 
-            // Importante: El amount debe venir en céntimos (ej: 500 para 5.00€)
+            Usuario usuario = usuarioRepository.findByEmail(principal.getUsername())
+                    .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+            // Llamamos al service con los parámetros corregidos para Direct Charge
             Map<String, Object> paymentIntent = stripeConnectService.createP2PPayment(
                     request.getAmount(),
                     request.getCurrency(),
-                    request.getConnectedAccountId(), // El stripe_id del vendedor
+                    request.getConnectedAccountId(),
                     request.getCustomerEmail(),
-                    request.getApplicationFee()); // Tu comisión (puede ser 0)
- 
-            return ResponseEntity.ok(paymentIntent); 
+                    usuario.getId(),
+                    request.getActividadId());
+
+            return ResponseEntity.ok(paymentIntent);
         } catch (StripeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
- 
+
     @GetMapping("/check-status")
     public ResponseEntity<?> checkStripeStatus(@AuthenticationPrincipal UserDetails principal) {
         try {
             Usuario usuario = usuarioRepository.findByEmail(principal.getUsername())
                     .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
- 
+
             if (usuario.getStripeAccountId() == null) {
                 return ResponseEntity.ok(Map.of("pagosHabilitados", false));
             }
- 
+
             // Sincroniza con Stripe
             stripeConnectService.verificarYActualizarEstadoPagos(usuario.getStripeAccountId());
- 
+
             // Refrescamos el objeto usuario de la base de datos
             Usuario usuarioActualizado = usuarioRepository.findById(usuario.getId()).get();
- 
+
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "pagosHabilitados", usuarioActualizado.getPagosHabilitados()));
- 
+
         } catch (StripeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Error de Stripe: " + e.getMessage()));
         }
     }
-
 
     /**
      * Endpoint para consultar el estado de una cuenta

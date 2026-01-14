@@ -135,7 +135,7 @@ export class Profile implements OnInit {
       console.error('❌ ERROR: Intentando cambiar avatar sin perfil cargado.');
       return;
     }
-
+    
     this.avatarPendiente.set(numAvatar);
   }
 

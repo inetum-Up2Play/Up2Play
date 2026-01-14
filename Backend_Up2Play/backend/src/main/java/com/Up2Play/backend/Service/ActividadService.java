@@ -19,6 +19,7 @@ import com.Up2Play.backend.Exception.ErroresActividad.ErrorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
+import com.Up2Play.backend.Exception.ErroresActividad.PagosNoHabilitadosException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreador;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEliminar;
@@ -95,6 +96,14 @@ public class ActividadService {
         act.setDeporte(input.getDeporte());
 
         double precio = Double.parseDouble(input.getPrecio());
+        // Si no tiene Stripe habilitado, no puedes crear actividades de precio > 0
+        if (precio > 0) {
+            if (usuario.getPagosHabilitados() == null || !usuario.getPagosHabilitados()
+                    || usuario.getStripeAccountId() == null) {
+                // Debes crear esta excepción personalizada o usar una genérica
+                throw new PagosNoHabilitadosException("No puedes crear actividades de pago sin configurar Stripe en tu perfil.");
+            }
+        }
         act.setPrecio(precio);
 
         act.setEstado(EstadoActividad.fromValue("Pendiente"));
@@ -124,7 +133,7 @@ public class ActividadService {
     // Listado todas las actividades
 
     @Transactional // (readOnly = true)
-    public List<ActividadDtoResp> getAllActividadesPendientes() {
+    public List<ActividadDtoResp> Ya () {
         return actividadRepository.findAll().stream()
                 .peek(this::actualizarEstadoSiNecesario)
                 .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
@@ -546,22 +555,21 @@ public class ActividadService {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
                 if (act.getEstado() != EstadoActividad.PENDIENTE) {
-                    throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");   
+                    throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
                 } else {
-                    //Enviar notificacion
-                notificacionService.crearNotificacionPerfil(
-                        "Te has desapuntdo de " + act.getNombre() + ".",
-                        "Has cancelado tu inscripción en la actividad " + act.getNombre()
-                                + ". Esperamos verte en otras actividades próximamente.",
-                        LocalDateTime.now(),
-                        EstadoNotificacion.fromValue("DESAPUNTADO"),
-                        act,
-                        usuario);
-                act.getUsuarios().remove(usuario);
-                usuario.getActividadesUnidas().remove(act);
-                act.setNumPersInscritas(act.getNumPersInscritas() - 1);
+                    // Enviar notificacion
+                    notificacionService.crearNotificacionPerfil(
+                            "Te has desapuntdo de " + act.getNombre() + ".",
+                            "Has cancelado tu inscripción en la actividad " + act.getNombre()
+                                    + ". Esperamos verte en otras actividades próximamente.",
+                            LocalDateTime.now(),
+                            EstadoNotificacion.fromValue("DESAPUNTADO"),
+                            act,
+                            usuario);
+                    act.getUsuarios().remove(usuario);
+                    usuario.getActividadesUnidas().remove(act);
+                    act.setNumPersInscritas(act.getNumPersInscritas() - 1);
                 }
-                
 
             } else {
                 throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");

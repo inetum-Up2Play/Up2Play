@@ -2,7 +2,11 @@ package com.Up2Play.backend.Model;
 
 import java.time.LocalDateTime;
 
+import com.Up2Play.backend.Model.converter.EstadoActividadConverter;
+import com.Up2Play.backend.Model.enums.EstadoPago;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +36,15 @@ public class Pago {
     @JoinColumn(name = "id_actividad", nullable = false)
     private Actividad actividad;
 
+    @Convert(converter = EstadoActividadConverter.class)
+    private EstadoPago estado;
+
+    @Column(name = "error_mensaje", length = 500)
+    private String errorMensaje;
+
+    @Column(name = "stripe_payment_id")
+    private String stripePaymentId;
+
     public Pago() {
     }
 
@@ -41,7 +54,7 @@ public class Pago {
         this.total = total;
         this.usuario = usuario;
         this.actividad = actividad;
-        
+
     }
 
     public Pago(LocalDateTime fecha, double total, Usuario usuario, Actividad actividad) {
@@ -49,7 +62,43 @@ public class Pago {
         this.total = total;
         this.usuario = usuario;
         this.actividad = actividad;
-       
+
+    }
+
+    public Pago(Long id, LocalDateTime fecha, double total, Usuario usuario, Actividad actividad, EstadoPago estado,
+            String errorMensaje, String stripePaymentId) {
+        this.id = id;
+        this.fecha = fecha;
+        this.total = total;
+        this.usuario = usuario;
+        this.actividad = actividad;
+        this.estado = estado;
+        this.errorMensaje = errorMensaje;
+        this.stripePaymentId = stripePaymentId;
+    }
+
+    public EstadoPago getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoPago estado) {
+        this.estado = estado;
+    }
+
+    public String getErrorMensaje() {
+        return errorMensaje;
+    }
+
+    public void setErrorMensaje(String errorMensaje) {
+        this.errorMensaje = errorMensaje;
+    }
+
+    public String getStripePaymentId() {
+        return stripePaymentId;
+    }
+
+    public void setStripePaymentId(String stripePaymentId) {
+        this.stripePaymentId = stripePaymentId;
     }
 
     public Long getId() {
@@ -91,5 +140,5 @@ public class Pago {
     public void setActividad(Actividad actividad) {
         this.actividad = actividad;
     }
-    
+
 }
