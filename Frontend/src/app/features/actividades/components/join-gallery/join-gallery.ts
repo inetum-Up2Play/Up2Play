@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
@@ -42,17 +42,44 @@ export class JoinGallery implements OnInit {
 
   activities: any[] = [];
   visibleActivities: any[] = [];
-  pageSize = 8; // 4 por fila * 2 filas
+  pageSize = 8;
   currentPage = 1;
   noHayActividades = true;
 
-  ngOnInit() {
+ngOnInit() {
+    this.calcularPageSize();
+
     this.cargarActividades();
 
-    //Recargar al recibir notificación (unirse/desunirse)
     this.actUpdateService.update$.subscribe(() => {
       this.cargarActividades();
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.calcularPageSize();
+  }
+  
+  calcularPageSize() {
+    const width = window.innerWidth;
+    let nuevoSize = 8;
+
+    if (width >= 1536) {
+      nuevoSize = 8; 
+    } 
+    else if (width >= 1280) {
+      nuevoSize = 9; 
+    } 
+    else {
+      nuevoSize = 8;
+    }
+    if (this.pageSize !== nuevoSize) {
+      this.pageSize = nuevoSize;
+      if (this.activities.length > 0) {
+        this.updateVisibleActivities();
+      }
+    }
   }
 
   cargarActividades() {
