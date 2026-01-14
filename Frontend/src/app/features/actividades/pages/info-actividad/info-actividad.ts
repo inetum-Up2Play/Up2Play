@@ -1,12 +1,13 @@
 import {
-  Component,
-  signal,
-  inject,
   AfterViewInit,
-  Injector,
+  Component,
   effect,
+  inject,
+  Injector,
   OnInit,
+  signal,
 } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import {
   FormControl,
   FormGroup,
@@ -14,48 +15,47 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { catchError, forkJoin, map, of } from 'rxjs';
 
 // --- PrimeNG ---
-import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
-import { RatingModule } from 'primeng/rating';
-import { InputIconModule } from 'primeng/inputicon';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { MessageModule } from 'primeng/message';
-import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Avatar } from 'primeng/avatar';
 import { AvatarGroup } from 'primeng/avatargroup';
+import { CardModule } from 'primeng/card';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { InputIconModule } from 'primeng/inputicon';
+import { MessageModule } from 'primeng/message';
+import { RatingModule } from 'primeng/rating';
+import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 
 // --- OpenLayers ---
-import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
-import { fromLonLat } from 'ol/proj';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
-import VectorSource from 'ol/source/Vector';
+import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
-import Zoom from 'ol/control/Zoom';
-import { Style, Icon } from 'ol/style';
+import Map from 'ol/Map';
+import View from 'ol/View';
+import { Zoom } from 'ol/control';
+import { fromLonLat } from 'ol/proj';
+import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+import { Icon, Style } from 'ol/style';
 
-// --- Propios ---
-import { Actividad } from '../../../../shared/models/Actividad';
-import { Usuario } from '../../../../shared/models/usuario.model';
-import { Perfil } from '../../../../shared/models/Perfil';
-import { ActService } from '../../../../core/services/actividad/act-service';
+// --- Servicios y Modelos Propios ---
 import { Header } from '../../../../core/layout/header/header';
-import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
-import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
-import { ErrorService } from '../../../../core/services/error/error-service';
-import { PerfilService } from '../../../../core/services/perfil/perfil-service';
 import { Footer } from '../../../../core/layout/footer/footer';
+import { ActService } from '../../../../core/services/actividad/act-service';
+import { Actividad } from '../../../../shared/models/Actividad';
+import { ErrorService } from '../../../../core/services/error/error-service';
 import { PagosService } from '../../../../core/services/pagos/pagos-service';
+import { PerfilService } from '../../../../core/services/perfil/perfil-service';
 import { UserService } from '../../../../core/services/user/user-service';
+import { Perfil } from '../../../../shared/models/Perfil';
+import { Usuario } from '../../../../shared/models/usuario.model';
+import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 
 interface ParticipanteView {
   nombre: string;
@@ -87,45 +87,49 @@ interface ParticipanteView {
   styleUrls: ['./info-actividad.scss'],
 })
 export class InfoActividad implements OnInit, AfterViewInit {
-  // --- Señales de Estado (Datos principales) ---
-  actividad = signal<Actividad | null>(null);
-  usuario = signal<Usuario | null>(null);
-  perfil = signal<Perfil | null>(null);
-  apuntado = signal<boolean>(false);
+  // =============================================================
+  // INYECCIÓN DE DEPENDENCIAS
+  // =============================================================
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private http = inject(HttpClient);
+  private injector = inject(Injector);
 
-  // --- Señales de UI / Participantes ---
-  isCreador = signal<boolean>(false);
-  avatarIdCreador = signal<number>(0);
-  avatarIdUsuario = signal<number>(0);
-  avataresUsuarios = signal<ParticipanteView[]>([]);
-  errorUbicacion = signal<string | null>(null);
-
-  // --- Variables ---
-  actividadId: number;
-  idsUsuarios: number[] = [];
-  act = { ubicacion: '' };
-
-  // Form para mostrar las estrellas (readonly)
-  formRating = new FormGroup({
-    rating: new FormControl(0),
-  });
-
-  // --- Servicios Inyectados ---
   private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
   private perfilService = inject(PerfilService);
   private pagosService = inject(PagosService);
   private userService = inject(UserService);
-  private injector = inject(Injector);
-  private router = inject(Router);
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    private confirmationService: ConfirmationService
-  ) {
-    this.actividadId = Number(route.snapshot.paramMap.get('id'));
+  // =============================================================
+  // ESTADO (SIGNALS & PROPIEDADES)
+  // =============================================================
+  // Datos principales
+  actividad = signal<Actividad | null>(null);
+  usuario = signal<Usuario | null>(null);
+  perfil = signal<Perfil | null>(null);
+  apuntado = signal<boolean>(false);
+
+  // UI & Participantes
+  isCreador = signal<boolean>(false);
+  avatarIdCreador = signal<number>(0);
+  avataresUsuarios = signal<ParticipanteView[]>([]);
+  errorUbicacion = signal<string | null>(null);
+
+  // Propiedades locales
+  actividadId: number;
+  act = { ubicacion: '' };
+  idsUsuarios: number[] = [];
+
+  // Formularios
+  formRating = new FormGroup({
+    rating: new FormControl(0),
+  });
+
+  constructor() {
+    this.actividadId = Number(this.route.snapshot.paramMap.get('id'));
   }
 
   // =============================================================
@@ -142,7 +146,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
       return;
     }
 
-    // Efecto para cargar avatar del creador cuando llegue la actividad
+    // Efecto para cargar el avatar del creador cuando llegue la actividad
     effect(
       () => {
         const act = this.actividad();
@@ -153,32 +157,30 @@ export class InfoActividad implements OnInit, AfterViewInit {
       { injector: this.injector }
     );
 
-    // Carga inicial de datos
+    // Carga inicial
     this.cargarDatosActividad();
     this.cargarInscritos();
     this.comprobarEstadoUsuario();
   }
 
   ngAfterViewInit(): void {
-    // La inicialización del mapa depende de que Nominatim devuelva coordenadas,
-    // se llama dentro de la suscripción en ngOnInit -> cargarDatosActividad,
-    // pero si la ubicación ya estuviera lista se podría hacer aquí.
+    // El mapa se inicializa bajo demanda al recibir coordenadas
   }
 
   // =============================================================
-  // CARGA DE DATOS Y LÓGICA
+  // CARGA DE DATOS
   // =============================================================
 
   cargarDatosActividad(): void {
     this.actService.getActividad(this.actividadId).subscribe({
       next: (act) => {
         this.actividad.set(act);
-        this.act.ubicacion = act.ubicacion; // Actualizar objeto local si es necesario
+        this.act.ubicacion = act.ubicacion;
 
-        // Actualizamos el rating visual
+        // Actualizar UI
         this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel));
 
-        // Cargar mapa
+        // Iniciar mapa
         if (act.ubicacion) {
           this.resolverCoordenadas(act.ubicacion);
         }
@@ -194,12 +196,10 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   comprobarEstadoUsuario(): void {
-    // ¿Está apuntado?
     this.actService
       .estoyApuntado(this.actividadId)
       .subscribe((flag) => this.apuntado.set(flag));
 
-    // ¿Es el creador?
     this.actService
       .comprobarCreador(this.actividadId)
       .subscribe((flag) => this.isCreador.set(flag));
@@ -262,89 +262,16 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   // =============================================================
-  // LÓGICA DEL MAPA (OpenLayers)
+  // ACCIONES DE USUARIO (Botones)
   // =============================================================
-
-  resolverCoordenadas(direccion: string): void {
-    this.http
-      .get<any>(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          direccion
-        )}`
-      )
-      .subscribe((results) => {
-        if (results.length > 0) {
-          const lat = parseFloat(results[0].lat);
-          const lon = parseFloat(results[0].lon);
-          this.initMap(lat, lon);
-          this.errorUbicacion.set(null);
-        } else {
-          this.errorUbicacion.set(
-            `No se pudo localizar la dirección: ${direccion}`
-          );
-        }
-      });
-  }
-
-  initMap(lat: number, lon: number): void {
-    // Si ya existe un mapa (en caso de re-render), deberías limpiar el div 'map' o destruir la instancia anterior
-    // document.getElementById('map')!.innerHTML = '';
-
-    const marker = new Feature({
-      geometry: new Point(fromLonLat([lon, lat])),
-    });
-
-    marker.setStyle(
-      new Style({
-        image: new Icon({
-          src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
-          anchor: [0.5, 1],
-          scale: 0.08,
-        }),
-      })
-    );
-
-    const vectorLayer = new VectorLayer({
-      source: new VectorSource({ features: [marker] }),
-    });
-
-    const zoomControl = new Zoom({
-      className: 'custom-zoom',
-      zoomInLabel: '',
-      zoomOutLabel: '',
-      zoomInTipLabel: 'Acercar',
-      zoomOutTipLabel: 'Alejar',
-    });
-
-    new Map({
-      target: 'map',
-      layers: [
-        new TileLayer({
-          source: new OSM({ attributions: 'Mapa por Up2Play' }),
-        }),
-        vectorLayer,
-      ],
-      view: new View({
-        center: fromLonLat([lon, lat]),
-        zoom: 17,
-      }),
-      controls: [zoomControl],
-    });
-  }
 
   apuntarse(): void {
     const act = this.actividad();
-
     if (!act?.id) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Atención',
-        detail: 'Actividad no cargada',
-      });
+      this.mostrarAdvertencia('Actividad no cargada');
       return;
     }
 
-    // 2. LÓGICA GRATUITA
     this.actService.unirteActividad(act.id).subscribe({
       next: () => {
         this.apuntado.set(true);
@@ -355,22 +282,14 @@ export class InfoActividad implements OnInit, AfterViewInit {
           detail: 'Te has unido a la actividad',
         });
       },
-      error: (codigo) => {
-        const mensaje = this.errorService.getMensajeError(codigo);
-        this.errorService.showError(mensaje);
-      },
+      error: (codigo) => this.manejarError(codigo),
     });
   }
 
   pagar(): void {
     const act = this.actividad();
-
     if (!act?.id) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Atención',
-        detail: 'Actividad no cargada',
-      });
+      this.mostrarAdvertencia('Actividad no cargada');
       return;
     }
 
@@ -378,7 +297,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
       next: (creador) => {
         if (creador && creador.stripeAccountId) {
           this.pagosService.setActivity({
-            actividadId: act.id,
+            actividadId: act.id!,
             nombre: act.nombre,
             precio: act.precio,
             organizadorStripeId: creador.stripeAccountId,
@@ -405,7 +324,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
         });
       },
     });
-    return;
   }
 
   desapuntarse(): void {
@@ -422,10 +340,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
         this.apuntado.set(false);
         this.cargarInscritos();
       },
-      error: (codigo) => {
-        const mensaje = this.errorService.getMensajeError(codigo);
-        this.errorService.showError(mensaje);
-      },
+      error: (codigo) => this.manejarError(codigo),
     });
   }
 
@@ -434,7 +349,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
       target: event.target as EventTarget,
       message:
         '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
-      header: 'Cuidado!',
+      header: '¡Cuidado!',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Cancelar',
       rejectButtonProps: {
@@ -447,9 +362,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
         severity: 'danger',
       },
       accept: () => {
-        const act = this.actividad();
-        if (!act) return;
-
         this.actService.deleteActividad(this.actividadId).subscribe({
           next: () => {
             this.messageService.add({
@@ -461,10 +373,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
               this.router.navigate(['/actividades']);
             }, 2500);
           },
-          error: (codigo) => {
-            const mensaje = this.errorService.getMensajeError(codigo);
-            this.errorService.showError(mensaje);
-          },
+          error: (codigo) => this.manejarError(codigo),
         });
       },
       reject: () => {
@@ -478,7 +387,76 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   goEditar(): void {
-    this.router.navigate(['/actividades/editar-actividad/', this.actividadId]);
+    this.router.navigate([
+      '/actividades/editar-actividad/',
+      this.actividadId,
+    ]);
+  }
+
+  // =============================================================
+  // LÓGICA DEL MAPA (OpenLayers)
+  // =============================================================
+
+  resolverCoordenadas(direccion: string): void {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      direccion
+    )}`;
+    this.http.get<any>(url).subscribe((results) => {
+      if (results.length > 0) {
+        const lat = parseFloat(results[0].lat);
+        const lon = parseFloat(results[0].lon);
+        this.initMap(lat, lon);
+        this.errorUbicacion.set(null);
+      } else {
+        this.errorUbicacion.set(
+          `No se pudo localizar la dirección: ${direccion}`
+        );
+      }
+    });
+  }
+
+  initMap(lat: number, lon: number): void {
+    // Si necesitas limpiar el mapa anterior, hazlo aquí:
+    // document.getElementById('map')!.innerHTML = '';
+
+    const marker = new Feature({
+      geometry: new Point(fromLonLat([lon, lat])),
+    });
+
+    marker.setStyle(
+      new Style({
+        image: new Icon({
+          src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+          anchor: [0.5, 1],
+          scale: 0.08,
+        }),
+      })
+    );
+
+    const vectorLayer = new VectorLayer({
+      source: new VectorSource({ features: [marker] }),
+    });
+
+    const zoomControl = new Zoom({
+      className: 'custom-zoom',
+      zoomInTipLabel: 'Acercar',
+      zoomOutTipLabel: 'Alejar',
+    });
+
+    new Map({
+      target: 'map',
+      layers: [
+        new TileLayer({
+          source: new OSM({ attributions: 'Mapa por Up2Play' }),
+        }),
+        vectorLayer,
+      ],
+      view: new View({
+        center: fromLonLat([lon, lat]),
+        zoom: 17,
+      }),
+      controls: [zoomControl],
+    });
   }
 
   // =============================================================
@@ -506,7 +484,20 @@ export class InfoActividad implements OnInit, AfterViewInit {
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
-  reembolsoATodos() {}
+  private mostrarAdvertencia(msg: string) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Atención',
+      detail: msg,
+    });
+  }
 
+  private manejarError(codigo: number) {
+    const mensaje = this.errorService.getMensajeError(codigo);
+    this.errorService.showError(mensaje);
+  }
+
+  // Placeholders
+  reembolsoATodos() {}
   reembolso() {}
 }

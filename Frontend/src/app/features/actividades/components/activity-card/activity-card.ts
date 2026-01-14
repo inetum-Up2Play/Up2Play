@@ -1,4 +1,4 @@
-import { Component, inject, Input, input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, input, Output, output } from '@angular/core';
 import { Router } from '@angular/router';
 
 // --- Servicios Propios ---
@@ -16,15 +16,8 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-activity-card',
-  standalone: true,
-  imports: [
-    CardModule,
-    ButtonModule,
-    ConfirmDialog,
-    ToastModule,
-    MessageModule,
-  ],
-  providers: [ConfirmationService], // MessageService suele proveerse en el root, pero puede ir aquí si se requiere instancia local
+  imports: [CardModule, ButtonModule, ConfirmDialog, MessageModule],
+  providers: [ConfirmationService],
   templateUrl: './activity-card.html',
   styleUrl: './activity-card.scss',
 })
