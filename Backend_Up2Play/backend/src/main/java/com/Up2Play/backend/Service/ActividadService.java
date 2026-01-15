@@ -33,16 +33,14 @@ import com.Up2Play.backend.Model.enums.NivelDificultad;
 import com.Up2Play.backend.Repository.ActividadRepository;
 import com.Up2Play.backend.Repository.PagoRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
+import com.stripe.exception.StripeException;
 
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @Service
 public class ActividadService {
-    private static final Logger log = LoggerFactory.getLogger(ActividadService.class);
+
     private ActividadRepository actividadRepository;
     private UsuarioRepository usuarioRepository;
     private NotificacionService notificacionService;
@@ -545,48 +543,69 @@ public class ActividadService {
 
     }
 
- // Desapuntarse a Actividad
     @Transactional
     public ActividadDtoResp desapuntarActividad(Long idActividad, Long idUsuario) {
- 
+
         Actividad act = actividadRepository.findById(idActividad)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
- 
+
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
- 
-        if (act.getUsuarios().contains(usuario)) {
- 
-            if (!act.getUsuarioCreador().equals(usuario)) {
- 
-                if (act.getEstado() != EstadoActividad.PENDIENTE) {
-                    throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
-                } else {
-                    // Enviar notificacion
-                    notificacionService.crearNotificacionPerfil(
-                            "Te has desapuntdo de " + act.getNombre() + ".",
-                            "Has cancelado tu inscripción en la actividad " + act.getNombre()
-                                    + ". Esperamos verte en otras actividades próximamente.",
-                            LocalDateTime.now(),
-                            EstadoNotificacion.fromValue("DESAPUNTADO"),
-                            act,
-                            usuario);
-                    act.getUsuarios().remove(usuario);
-                    usuario.getActividadesUnidas().remove(act);
-                    act.setNumPersInscritas(act.getNumPersInscritas() - 1);
-                }
- 
-            } else {
-                throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
-            }
- 
-        } else {
- 
+
+        // 1. Validaciones previas
+        if (!act.getUsuarios().contains(usuario)) {
             throw new UsuarioNoApuntadoException("El usuario no está apuntado a esta actividad");
         }
- 
+        if (act.getUsuarioCreador().equals(usuario)) {
+            throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
+        }
+        if (act.getEstado() != EstadoActividad.PENDIENTE) {
+            throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
+        }
+
+        // 2. LÓGICA DE REEMBOLSO (Solo si tiene precio)
+        if (act.getPrecio() > 0) {
+            // IMPORTANTE: Debes obtener el ID del pago que se realizó en su día.
+            // Aquí asumo que tienes un método o repositorio para recuperarlo.
+            String paymentIntentId = obtenerPaymentIdDeInscripcion(idActividad, idUsuario);
+
+            if (paymentIntentId == null) {
+                throw new RuntimeException("No se encontró el registro de pago para esta inscripción.");
+            }
+
+            try {
+                // Ejecutamos el reembolso en la cuenta del organizador
+                stripeConnectService.crearReembolso(paymentIntentId, act.getUsuarioCreador().getStripeAccountId());
+            } catch (StripeException e) {
+                // Si el error es falta de fondos en la cuenta del creador
+                if ("balance_insufficient".equals(e.getCode())) {
+                    throw new RuntimeException(
+                            "No se pudo procesar el reembolso: fondos insuficientes en la cuenta del organizador.");
+                }
+                // Para cualquier otro error de Stripe, lanzamos una excepción genérica
+                throw new RuntimeException("Error al procesar el reembolso con Stripe: " + e.getMessage());
+            }
+        }
+
+        // 3. Lógica de borrado (Solo llegamos aquí si el reembolso fue exitoso o era
+        // gratis)
+        notificacionService.crearNotificacionPerfil(
+                "Te has desapuntado de " + act.getNombre() + ".",
+                "Has cancelado tu inscripción en la actividad " + act.getNombre()
+                        + ". Esperamos verte en otras actividades próximamente.",
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("DESAPUNTADO"),
+                act,
+                usuario);
+
+        act.getUsuarios().remove(usuario);
+        usuario.getActividadesUnidas().remove(act);
+        act.setNumPersInscritas(act.getNumPersInscritas() - 1);
+
+        // Guardamos cambios
         usuarioRepository.save(usuario);
- 
+        actividadRepository.save(act);
+
         return new ActividadDtoResp(
                 act.getId(),
                 act.getNombre(),
@@ -599,12 +618,20 @@ public class ActividadService {
                 act.getNumPersTotales(),
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
-                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
-                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
-                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
- 
+                act.getUsuarioCreador().getId(),
+                act.getUsuarioCreador().getNombreUsuario(),
+                act.getUsuarioCreador().getEmail());
     }
- 
+
+    /**
+     * Recupera el ID de pago de Stripe desde la tabla 'pago'.
+     * Se utiliza para identificar qué transacción reembolsar en Stripe Connect.
+     */
+    private String obtenerPaymentIdDeInscripcion(Long idActividad, Long idUsuario) {
+        // Buscamos en la tabla de pagos el registro que vincula a ambos
+        return pagoRepository.findStripeIdByUsuarioAndActividad(idUsuario, idActividad)
+                .orElse(null); // Si no hay pago (ej. actividad gratuita anterior), devuelve null
+    }
 
     // Lista usuarios apuntados a una actividad
     public List<UsuarioDto> getUsuariosApuntados(Long idActividad) {
