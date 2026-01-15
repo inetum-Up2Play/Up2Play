@@ -26,29 +26,44 @@ import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Notificacion;
+import com.Up2Play.backend.Model.Pago;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
+import com.Up2Play.backend.Model.enums.EstadoPago;
 import com.Up2Play.backend.Model.enums.NivelDificultad;
 import com.Up2Play.backend.Repository.ActividadRepository;
+import com.Up2Play.backend.Repository.PagoRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
+import com.stripe.exception.StripeException;
 
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class ActividadService {
+    private static final Logger log = LoggerFactory.getLogger(ActividadService.class);
     private ActividadRepository actividadRepository;
     private UsuarioRepository usuarioRepository;
     private NotificacionService notificacionService;
+    private StripeConnectService stripeConnectService;
+    private PagoRepository pagoRepository;
 
     // CRUD
 
-    public ActividadService(ActividadRepository actividadRepository, UsuarioRepository usuarioRepository,
-            NotificacionService notificacionService) {
+    public ActividadService(ActividadRepository actividadRepository,
+            UsuarioRepository usuarioRepository,
+            NotificacionService notificacionService,
+            StripeConnectService stripeConnectService,
+            PagoRepository pagoRepository) {
         this.actividadRepository = actividadRepository;
         this.usuarioRepository = usuarioRepository;
         this.notificacionService = notificacionService;
+        this.stripeConnectService = stripeConnectService;
+        this.pagoRepository = pagoRepository;
     }
 
     // Crear Actividad
@@ -99,7 +114,8 @@ public class ActividadService {
             if (usuario.getPagosHabilitados() == null || !usuario.getPagosHabilitados()
                     || usuario.getStripeAccountId() == null) {
                 // Debes crear esta excepción personalizada o usar una genérica
-                throw new PagosNoHabilitadosException("No puedes crear actividades de pago sin configurar Stripe en tu perfil.");
+                throw new PagosNoHabilitadosException(
+                        "No puedes crear actividades de pago sin configurar Stripe en tu perfil.");
             }
         }
         act.setPrecio(precio);
@@ -532,7 +548,7 @@ public class ActividadService {
 
     }
 
-    // Desapuntarse a Actividad
+    // Desapuntarse a Actividad CON REEMBOLSO
     @Transactional
     public ActividadDtoResp desapuntarActividad(Long idActividad, Long idUsuario) {
 
@@ -549,15 +565,25 @@ public class ActividadService {
                 if (act.getEstado() != EstadoActividad.PENDIENTE) {
                     throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
                 } else {
-                    // Enviar notificacion
+                    // === 1. BUSCAR EL PAGO ASOCIADO ===
+                    Pago pago = buscarPagoParaReembolso(act, usuario);
+
+                    // === 2. REALIZAR REEMBOLSO (si hay pago y es pagada) ===
+                    if (act.getPrecio() > 0 && pago != null) {
+                        realizarReembolsoStripe(pago, act, usuario);
+                    }
+
+                    // === 3. ENVIAR NOTIFICACIÓN ===
                     notificacionService.crearNotificacionPerfil(
-                            "Te has desapuntdo de " + act.getNombre() + ".",
+                            "Te has desapuntado de " + act.getNombre() + ".",
                             "Has cancelado tu inscripción en la actividad " + act.getNombre()
-                                    + ". Esperamos verte en otras actividades próximamente.",
+                                    + (act.getPrecio() > 0 ? ". El reembolso está en proceso." : ""),
                             LocalDateTime.now(),
                             EstadoNotificacion.fromValue("DESAPUNTADO"),
                             act,
                             usuario);
+
+                    // === 4. ACTUALIZAR RELACIONES ===
                     act.getUsuarios().remove(usuario);
                     usuario.getActividadesUnidas().remove(act);
                     act.setNumPersInscritas(act.getNumPersInscritas() - 1);
@@ -568,7 +594,6 @@ public class ActividadService {
             }
 
         } else {
-
             throw new UsuarioNoApuntadoException("El usuario no está apuntado a esta actividad");
         }
 
@@ -589,7 +614,72 @@ public class ActividadService {
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
+    }
 
+    /**
+     * Busca el pago asociado a un usuario para una actividad
+     */
+    private Pago buscarPagoParaReembolso(Actividad actividad, Usuario usuario) {
+        try {
+            // Opción 1: Si tienes método específico en repository
+            return pagoRepository.findByActividadAndUsuario(actividad, usuario)
+                    .orElseThrow(() -> new IllegalStateException("No se encontró pago para reembolsar"));
+
+        } catch (Exception e) {
+            // Si la actividad es gratuita o no hay pago, no pasa nada
+            if (actividad.getPrecio() > 0) {
+                log.error("Error buscando pago para reembolso. Actividad: {}, Usuario: {}",
+                        actividad.getId(), usuario.getId(), e);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Realiza el reembolso en Stripe
+     */
+    private void realizarReembolsoStripe(Pago pago, Actividad actividad, Usuario usuario) {
+        try {
+            // Verificar que el pago tiene paymentIntentId
+            if (pago.getStripePaymentId() == null || pago.getStripePaymentId().isEmpty()) {
+                log.error("Pago {} no tiene paymentIntentId para reembolso", pago.getId());
+                throw new IllegalStateException("El pago no tiene información de pago para reembolsar");
+            }
+
+            // Verificar estado del pago (que no esté ya reembolsado)
+            if (pago.getEstado() == EstadoPago.REEMBOLSADO || pago.getEstado() == EstadoPago.FALLIDO) {
+                log.warn("Pago {} ya está reembolsado o fallido. Estado: {}",
+                        pago.getId(), pago.getEstado());
+                return;
+            }
+
+            // Obtener cuenta Stripe del organizador
+            String connectedAccountId = actividad.getUsuarioCreador().getStripeAccountId();
+            if (connectedAccountId == null || connectedAccountId.isEmpty()) {
+                throw new IllegalStateException("El organizador no tiene cuenta Stripe configurada");
+            }
+
+            // Realizar reembolso
+            String refundId = stripeConnectService.crearReembolso(
+                    pago.getStripePaymentId(),
+                    connectedAccountId);
+
+            // Actualizar estado del pago
+            pago.setEstado(EstadoPago.REEMBOLSADO);
+            pagoRepository.save(pago);
+
+            log.info("Reembolso exitoso. Pago: {}, RefundId: {}, Usuario: {}, Actividad: {}",
+                    pago.getId(), refundId, usuario.getId(), actividad.getId());
+
+        } catch (StripeException e) {
+            log.error("Error en Stripe al reembolsar. Pago: {}, Usuario: {}, Actividad: {}",
+                    pago.getId(), usuario.getId(), actividad.getId(), e);
+            throw new RuntimeException("Error procesando el reembolso: " + e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("Error general al reembolsar. Pago: {}, Usuario: {}, Actividad: {}",
+                    pago.getId(), usuario.getId(), actividad.getId(), e);
+            throw new RuntimeException("Error en el proceso de reembolso", e);
+        }
     }
 
     // Lista usuarios apuntados a una actividad

@@ -20,7 +20,7 @@ public interface PagoRepository extends JpaRepository<Pago, Long>{
 
     Optional<Pago> findByStripePaymentId(String stripePaymentId);
 
-    
+Optional<Pago> findByActividadAndUsuario(Actividad actividad, Usuario usuario);
 
 
     }
