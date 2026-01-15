@@ -14,6 +14,8 @@ import com.Up2Play.backend.DTO.Respuestas.UsuarioDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.ErrorDesapuntarse;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEditar;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
@@ -313,6 +315,11 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+        
+        if (!EstadoActividad.PENDIENTE.equals(act.getEstado())) {
+            throw new ErrorEditar("Solo se pueden editar actividades pendientes");
+        }
+
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
             if (input.getNombre() != null && input.getNombre().length() > 64) {
                 throw new LimiteCaracteres("El nombre no puede tener más de 64 caracteres.");
@@ -346,10 +353,7 @@ public class ActividadService {
             } else
                 act.setNumPersTotales(num_personas_totales);
 
-            if (act.getEstado().equals(EstadoActividad.COMPLETADA)) {
-
-                throw new ActividadCompletadaException("No puedes editar una actividad que ya ha sido completada!");
-            }
+           
 
             act.setDeporte(input.getDeporte());
 
@@ -388,6 +392,10 @@ public class ActividadService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+        if (act.getEstado() != EstadoActividad.PENDIENTE) {
+          throw new ErrorEliminar("No se puede eliminar una actividad completada");
+        }
+        
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
 
             // Enviar notificacion
@@ -439,20 +447,19 @@ public class ActividadService {
 
         if (!act.getUsuarios().contains(usuario)) {
 
-            act.setNumPersInscritas(act.getNumPersInscritas() + 1);
 
-            if (act.getNumPersInscritas() > act.getNumPersTotales()) {
+            if (act.getNumPersInscritas() >= act.getNumPersTotales()) {
 
                 throw new MaximosParticipantes("Se ha alcanzado el numero maximo de participantes en esta actividad");
-            }
-
-            if (act.getEstado() != EstadoActividad.PENDIENTE) {
-                throw new ActividadCompletadaException("No se puede unir a una actividad completada");
             } else {
-                act.getUsuarios().add(usuario);
-                usuario.getActividadesUnidas().add(act);
-                act.getUsuarios().add(usuario);
 
+                if (act.getEstado() != EstadoActividad.PENDIENTE) {
+                    throw new ActividadCompletadaException("No se puede unir a una actividad completada");
+                } else {
+                    act.getUsuarios().add(usuario);
+                    usuario.getActividadesUnidas().add(act);
+                    act.setNumPersInscritas(act.getUsuarios().size());
+                }
             }
 
         } else {
@@ -560,7 +567,8 @@ public class ActividadService {
                             usuario);
                     act.getUsuarios().remove(usuario);
                     usuario.getActividadesUnidas().remove(act);
-                    act.setNumPersInscritas(act.getNumPersInscritas() - 1);
+                    act.setNumPersInscritas(act.getUsuarios().size());
+                    //act.setNumPersInscritas(act.getNumPersInscritas() - 1);
                 }
 
             } else {

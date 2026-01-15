@@ -14,13 +14,23 @@ export interface PaymentInfo {
   ubicacion?: string;
 }
 
+export interface PagoDtoResp {
+  id: number;
+  fecha: string;            // ISO: '2026-10-14T18:30:00Z' (o similar)
+  total: number;
+  usuario: number;
+  actividadId: number;
+  nombreActividad: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class PagosService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  
+  private baseUrl = 'http://localhost:8080/pagos';
+
   // Guardamos la actividad seleccionada en una Signal
   private _selectedActivity = signal<PaymentInfo | null>(null);
 
@@ -44,6 +54,13 @@ export class PagosService {
   clear() {
     this._selectedActivity.set(null);
     sessionStorage.removeItem('pending_payment');
+  }
+
+
+  getPagosUsuarioActual(): Observable<PagoDtoResp[]> {
+    return this.http.get<PagoDtoResp[]>(
+      `${this.baseUrl}/getPagos`,
+    );
   }
 
 }

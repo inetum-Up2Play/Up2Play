@@ -11,6 +11,8 @@ import com.Up2Play.backend.DTO.ErrorResponseDto;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresActividad.ErrorDesapuntarse;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEditar;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
@@ -440,5 +442,39 @@ public class ErrorControl {
                                 .status(HttpStatus.CONFLICT)
                                 .body(body);
         }
+
+        @ExceptionHandler(ErrorEliminar.class)
+        public ResponseEntity<ErrorResponseDto> handleErrorEliminar(
+                        ErrorEliminar ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ERROR_ELIMINAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        @ExceptionHandler(ErrorEditar.class)
+        public ResponseEntity<ErrorResponseDto> handleErrorEditar(
+                        ErrorEditar ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ERROR_EDITAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        
+        
+
 
 }

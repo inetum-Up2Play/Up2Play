@@ -3,6 +3,7 @@ package com.Up2Play.backend.Model;
 import java.time.LocalDateTime;
 
 import com.Up2Play.backend.Model.converter.EstadoActividadConverter;
+import com.Up2Play.backend.Model.converter.EstadoPagoConverter;
 import com.Up2Play.backend.Model.enums.EstadoPago;
 
 import jakarta.persistence.Column;
@@ -36,7 +37,7 @@ public class Pago {
     @JoinColumn(name = "id_actividad", nullable = false)
     private Actividad actividad;
 
-    @Convert(converter = EstadoActividadConverter.class)
+    @Convert(converter = EstadoPagoConverter.class)
     private EstadoPago estado;
 
     @Column(name = "error_mensaje", length = 500)
