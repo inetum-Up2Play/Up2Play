@@ -90,7 +90,8 @@ public class UsuarioController {
             usuario.getId(),
             usuario.getEmail(),
             usuario.getNombreUsuario(),
-            usuario.getRol()
+            usuario.getRol(),
+            usuario.getPagosHabilitados()
         );
         return ResponseEntity.ok(usuarioDto);
     }

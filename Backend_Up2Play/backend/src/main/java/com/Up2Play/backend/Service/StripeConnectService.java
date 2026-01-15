@@ -7,18 +7,19 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Account;
 import com.stripe.model.AccountLink;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.Refund;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.AccountCreateParams;
 import com.stripe.param.AccountLinkCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.RefundCreateParams;
+
 import jakarta.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -36,9 +37,6 @@ public class StripeConnectService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
-    // Lista de métodos de pago por defecto
-    private static final List<String> DEFAULT_PAYMENT_METHOD_TYPES = Arrays.asList("card");
 
     @PostConstruct
     public void init() {
@@ -167,13 +165,15 @@ public class StripeConnectService {
     public Map<String, Object> createP2PPayment(Long amount, String currency,
             String connectedAccountId,
             String customerEmail,
-            Long userId, // ← NUEVO PARÁMETRO
-            Long actividadId) // ← NUEVO PARÁMETRO
+            Long userId,
+            Long actividadId)
             throws StripeException {
 
         // 1. Validación para evitar Error 500 (NPE)
-        if (amount == null || amount <= 0) throw new IllegalArgumentException("Monto inválido");
-        if (connectedAccountId == null) throw new IllegalArgumentException("Falta ID de cuenta del vendedor");
+        if (amount == null || amount <= 0)
+            throw new IllegalArgumentException("Monto inválido");
+        if (connectedAccountId == null)
+            throw new IllegalArgumentException("Falta ID de cuenta del vendedor");
 
         // 2. Parámetros del pago
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
@@ -184,23 +184,54 @@ public class StripeConnectService {
                 .putMetadata("user_id", userId.toString())
                 .putMetadata("actividad_id", actividadId.toString())
                 .setAutomaticPaymentMethods(
-                    PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build()
-                )
+                        PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build())
                 .build();
 
-        // 3. DIRECT CHARGE le dice a Stripe: "No crees este pago en Up2Play, créalo EN LA CUENTA del vendedor"
+        // 3. DIRECT CHARGE le dice a Stripe: "No crees este pago en Up2Play, créalo EN
+        // LA CUENTA del vendedor"
         RequestOptions requestOptions = RequestOptions.builder()
-                .setStripeAccount(connectedAccountId) 
+                .setStripeAccount(connectedAccountId)
                 .build();
 
         PaymentIntent paymentIntent = PaymentIntent.create(params, requestOptions);
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("clientSecret", paymentIntent.getClientSecret());
         result.put("paymentIntentId", paymentIntent.getId());
         result.put("connectedAccountId", connectedAccountId); // Devolver para el frontend
-        
+
         return result;
+    }
+
+    /**
+     * Realiza un reembolso total de un pago específico.
+     * * @param paymentIntentId El ID del pago original (pi_...)
+     * 
+     * @param connectedAccountId El ID de la cuenta del organizador (acct_...)
+     * @return El ID del reembolso creado
+     * @throws StripeException Si el organizador no tiene saldo suficiente o el ID
+     *                         es inválido
+     */
+    public String crearReembolso(String paymentIntentId, String connectedAccountId) throws StripeException {
+        if (paymentIntentId == null || connectedAccountId == null) {
+            throw new IllegalArgumentException(
+                    "El ID de pago y el ID de cuenta conectada son obligatorios para el reembolso.");
+        }
+
+        // Configuración del reembolso
+        RefundCreateParams params = RefundCreateParams.builder()
+                .setPaymentIntent(paymentIntentId)
+                .build();
+
+        // IMPORTANTE: Al ser Direct Charge, el reembolso debe ejecutarse EN LA CUENTA
+        // del vendedor
+        RequestOptions requestOptions = RequestOptions.builder()
+                .setStripeAccount(connectedAccountId)
+                .build();
+
+        Refund refund = Refund.create(params, requestOptions);
+
+        return refund.getId();
     }
 
     /**
@@ -241,32 +272,5 @@ public class StripeConnectService {
         result.put("created", account.getCreated());
 
         return result;
-    }
-
-    /**
-     * Valida los parámetros comunes para pagos.
-     */
-    private void validatePaymentParameters(Long amount, String currency, String connectedAccountId) {
-        if (amount == null || amount <= 0) {
-            throw new IllegalArgumentException("El amount debe ser mayor que 0");
-        }
-        if (currency == null || currency.isEmpty()) {
-            throw new IllegalArgumentException("La currency es obligatoria");
-        }
-        if (connectedAccountId == null || connectedAccountId.isEmpty()) {
-            throw new IllegalArgumentException("El connectedAccountId es obligatorio");
-        }
-        // Validación adicional: el ID debe comenzar con "acct_"
-        if (!connectedAccountId.startsWith("acct_")) {
-            throw new IllegalArgumentException("Formato de accountId inválido");
-        }
-    }
-
-    /**
-     * Método simplificado para crear pago (sobrecarga útil)
-     */
-    public Map<String, Object> createP2PPayment(Long amount, String currency,
-            String connectedAccountId) throws StripeException {
-        return createP2PPayment(amount, currency, connectedAccountId, null, amount, amount);
     }
 }

@@ -7,9 +7,7 @@ import com.stripe.net.Webhook;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Pago;
 import com.Up2Play.backend.Model.Usuario;
-import com.Up2Play.backend.Model.enums.EstadoPago;
 import com.Up2Play.backend.Repository.ActividadRepository;
-import com.Up2Play.backend.Repository.PagoRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +35,7 @@ public class StripeWebhookService {
     private ActividadRepository actividadRepository;
 
     @Autowired
-    private PagoRepository pagoRepository;
+    private PagoService pagoService;
 
     /**
      * Procesa webhooks de Stripe - Versión SIMPLE
@@ -122,21 +119,12 @@ public class StripeWebhookService {
             logger.info("👤 Usuario encontrado: {}", usuario.getEmail());
             logger.info("🎯 Actividad encontrada: {}", actividad.getNombre());
 
-            // 5. CREAR Y GUARDAR EL PAGO en tu entidad Pago
-            Pago pago = new Pago();
-            pago.setFecha(LocalDateTime.now()); // Fecha actual
-
             // Convertir de centavos a euros (Stripe usa centavos)
             double totalEnEuros = paymentIntent.getAmount() / 100.0;
-            pago.setTotal(totalEnEuros);
-            pago.setEstado(EstadoPago.COMPLETADO);
-            pago.setStripePaymentId(paymentId);
 
-            pago.setUsuario(usuario);
-            pago.setActividad(actividad);
+            // 5. CREAR Y GUARDAR EL PAGO en tu entidad Pago
 
-            // Guardar en la base de datos
-            pagoRepository.save(pago);
+            Pago pago = pagoService.crearPagoSucceded(totalEnEuros, usuario, actividad, paymentId);
 
             logger.info("💾 PAGO GUARDADO en BD - ID: {}, Total: {}€, Usuario: {}, Actividad: {}",
                     pago.getId(), pago.getTotal(), usuario.getEmail(), actividad.getNombre());
@@ -191,17 +179,13 @@ public class StripeWebhookService {
                 Usuario usuario = usuarioRepository.findById(Long.parseLong(userId)).orElse(null);
                 Actividad actividad = actividadRepository.findById(Long.parseLong(actividadId)).orElse(null);
 
-                // GUARDAR PAGO FALLIDO EN BD (si tu entidad tiene campo estado)
-                Pago pagoFallido = new Pago();
-                pagoFallido.setFecha(LocalDateTime.now());
-                pagoFallido.setTotal(paymentIntent.getAmount() / 100.0);
-                pagoFallido.setUsuario(usuario);
-                pagoFallido.setActividad(actividad);
-                pagoFallido.setEstado(EstadoPago.FALLIDO);
-                pagoFallido.setErrorMensaje(errorMessage);
-                pagoFallido.setStripePaymentId(paymentId);
+                // Convertir de centavos a euros (Stripe usa centavos)
+                double totalEnEuros = paymentIntent.getAmount() / 100.0;
 
-                pagoRepository.save(pagoFallido);
+                // GUARDAR PAGO FALLIDO EN BD (si tu entidad tiene campo estado)
+
+                Pago pagoFallido = pagoService.crearPagoFailed(totalEnEuros, usuario, actividad, paymentId,
+                        errorMessage);
 
                 logger.warn("📝 Pago fallido guardado en BD - ID: {}", pagoFallido.getId());
 
