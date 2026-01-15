@@ -5,11 +5,16 @@ import { Home } from './features/home/home';
 import { Profile } from './features/profile/pages/profile/profile';
 import { Notificaciones } from './features/notificaciones/notificaciones';
 import { Historial } from './features/historial/pages/historial/historial';
+import { PoliticaDevoluciones } from './features/legal/politica-devoluciones/politica-devoluciones';
 
 export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
+  },
+  {
+    path: 'legal/devoluciones',
+    component: PoliticaDevoluciones,
   },
 
   // Zona protegida: TODO lo demás entra por el guard
@@ -22,6 +27,7 @@ export const routes: Routes = [
                 const authService = inject(AuthService);
                 return authService.canActivate(state.url);
             }
+
         ],
     children: [
       {
@@ -47,7 +53,7 @@ export const routes: Routes = [
       {
         path: 'historial',
         component: Historial
-      }
+      }      
     ],
   }
 

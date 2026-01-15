@@ -1,0 +1,68 @@
+@use 'styles/variables' as vars;
+
+// Estilos Globales del Componente
+:host {
+    display: block;
+    font-family: vars.$work-sans; // Fuente por defecto para todo el texto
+    
+    // Color de fondo base (simulando Tailwind bg-gray-50 pero con tus variables)
+    background-color: vars.$blanco; 
+    color: vars.$verde-oscuro;
+
+    // Ajustes para modo oscuro (opcional, usando media query nativa)
+    @media (prefers-color-scheme: dark) {
+        background-color: vars.$verde-oscuro;
+        color: vars.$blanco;
+    }
+
+    // --- Overrides de PrimeNG usando tus variables ---
+    ::ng-deep .p-accordion-content {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 1.25rem 1.25rem 1.25rem !important;
+    }
+
+    ::ng-deep .p-accordion-header-action {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        text-decoration: none !important;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        
+        &:focus {
+            box-shadow: none !important;
+        }
+    }
+
+    ::ng-deep .p-accordion-toggle-icon {
+        order: 1;
+        margin-left: auto;
+        color: vars.$verde-oliva; // Usando variable
+    }
+}
+
+// --- Tipografía ---
+h1, h2, h3, h4 {
+    font-family: vars.$montserrat;
+    font-weight: 700;
+}
+
+// --- Clases de Utilidad de Colores (Para usar en HTML) ---
+
+// Textos
+.text-brand { color: vars.$verde-oliva; }
+.text-brand-dark { color: vars.$verde-oscuro; }
+.text-brand-light { color: vars.$verde-claro; }
+.text-accent { color: vars.$amarillo; }
+
+// Fondos
+.bg-brand { background-color: vars.$verde-oliva; }
+.bg-accent { background-color: vars.$amarillo; }
+.bg-light-green { background-color: rgba(vars.$verde-claro, 0.2); } // Opacidad usando la variable
+.bg-soft-brand { background-color: rgba(vars.$verde-oliva, 0.1); }
+.bg-soft-accent { background-color: rgba(vars.$amarillo, 0.2); }
+
+// Bordes
+.border-brand-light { border-color: rgba(vars.$verde-oliva, 0.2); }
