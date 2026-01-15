@@ -2,6 +2,7 @@ package com.Up2Play.backend.Controller;
 
 import com.Up2Play.backend.DTO.CreateAccountRequest;
 import com.Up2Play.backend.DTO.CreatePaymentRequest;
+import com.Up2Play.backend.DTO.RefundRequest;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -126,6 +127,18 @@ public class StripeConnectController {
                     request.getActividadId());
 
             return ResponseEntity.ok(paymentIntent);
+        } catch (StripeException e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/payments/refund")
+    public ResponseEntity<?> refundPayment(@RequestBody RefundRequest request) {
+        try {
+            String refund = stripeConnectService.crearReembolso(request.getPaymentIntentId(),
+                    request.getConnectedAccountId());
+
+            return ResponseEntity.ok(Map.of("refund", refund));
         } catch (StripeException e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }

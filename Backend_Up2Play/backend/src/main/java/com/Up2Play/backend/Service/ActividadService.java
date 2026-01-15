@@ -31,24 +31,36 @@ import com.Up2Play.backend.Model.enums.EstadoActividad;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Model.enums.NivelDificultad;
 import com.Up2Play.backend.Repository.ActividadRepository;
+import com.Up2Play.backend.Repository.PagoRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class ActividadService {
+    private static final Logger log = LoggerFactory.getLogger(ActividadService.class);
     private ActividadRepository actividadRepository;
     private UsuarioRepository usuarioRepository;
     private NotificacionService notificacionService;
+    private StripeConnectService stripeConnectService;
+    private PagoRepository pagoRepository;
 
     // CRUD
 
-    public ActividadService(ActividadRepository actividadRepository, UsuarioRepository usuarioRepository,
-            NotificacionService notificacionService) {
+    public ActividadService(ActividadRepository actividadRepository,
+            UsuarioRepository usuarioRepository,
+            NotificacionService notificacionService,
+            StripeConnectService stripeConnectService,
+            PagoRepository pagoRepository) {
         this.actividadRepository = actividadRepository;
         this.usuarioRepository = usuarioRepository;
         this.notificacionService = notificacionService;
+        this.stripeConnectService = stripeConnectService;
+        this.pagoRepository = pagoRepository;
     }
 
     // Crear Actividad
@@ -99,7 +111,8 @@ public class ActividadService {
             if (usuario.getPagosHabilitados() == null || !usuario.getPagosHabilitados()
                     || usuario.getStripeAccountId() == null) {
                 // Debes crear esta excepción personalizada o usar una genérica
-                throw new PagosNoHabilitadosException("No puedes crear actividades de pago sin configurar Stripe en tu perfil.");
+                throw new PagosNoHabilitadosException(
+                        "No puedes crear actividades de pago sin configurar Stripe en tu perfil.");
             }
         }
         act.setPrecio(precio);
@@ -532,20 +545,20 @@ public class ActividadService {
 
     }
 
-    // Desapuntarse a Actividad
+ // Desapuntarse a Actividad
     @Transactional
     public ActividadDtoResp desapuntarActividad(Long idActividad, Long idUsuario) {
-
+ 
         Actividad act = actividadRepository.findById(idActividad)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
-
+ 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
-
+ 
         if (act.getUsuarios().contains(usuario)) {
-
+ 
             if (!act.getUsuarioCreador().equals(usuario)) {
-
+ 
                 if (act.getEstado() != EstadoActividad.PENDIENTE) {
                     throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
                 } else {
@@ -562,18 +575,18 @@ public class ActividadService {
                     usuario.getActividadesUnidas().remove(act);
                     act.setNumPersInscritas(act.getNumPersInscritas() - 1);
                 }
-
+ 
             } else {
                 throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
             }
-
+ 
         } else {
-
+ 
             throw new UsuarioNoApuntadoException("El usuario no está apuntado a esta actividad");
         }
-
+ 
         usuarioRepository.save(usuario);
-
+ 
         return new ActividadDtoResp(
                 act.getId(),
                 act.getNombre(),
@@ -589,8 +602,9 @@ public class ActividadService {
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
-
+ 
     }
+ 
 
     // Lista usuarios apuntados a una actividad
     public List<UsuarioDto> getUsuariosApuntados(Long idActividad) {
