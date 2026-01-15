@@ -6,6 +6,7 @@ public class UsuarioDto {
     private String nombreUsuario;
     private String rol;
     private String stripeAccountId;
+    private boolean pagosHabilitados;
 
     
     public UsuarioDto() {
@@ -17,6 +18,14 @@ public class UsuarioDto {
         this.email = email;
         this.nombreUsuario = nombreUsuario;
         this.rol = rol;
+    }
+
+    public UsuarioDto(Long id, String email, String nombreUsuario, String rol, boolean pagosHabilitados) {
+        this.id = id;
+        this.email = email;
+        this.nombreUsuario = nombreUsuario;
+        this.rol = rol;
+        this.pagosHabilitados = pagosHabilitados;
     }
 
     public UsuarioDto(Long id, String email, String nombreUsuario, String rol, String stripeAccountId) {
@@ -72,5 +81,13 @@ public class UsuarioDto {
 
     public void setStripeAccountId(String stripeAccountId) {
         this.stripeAccountId = stripeAccountId;
+    }
+
+    public boolean isPagosHabilitados() {
+        return pagosHabilitados;
+    }
+
+    public void setPagosHabilitados(boolean pagosHabilitados) {
+        this.pagosHabilitados = pagosHabilitados;
     }
 }
