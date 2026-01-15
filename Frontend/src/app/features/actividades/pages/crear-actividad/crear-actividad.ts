@@ -188,6 +188,7 @@ export class CrearActividad {
     this.userService.getUsuario().subscribe({
       next: (user) => {
         this.pagosHabilitados.set(user?.pagosHabilitados ?? false);
+        console.log(user);
       }
     });
 
