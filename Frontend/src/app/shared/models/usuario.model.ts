@@ -5,6 +5,6 @@ export interface Usuario {
     rol: string;
     nombreUsuario: string;
     stripeAccountId?: string;
-    pagosHabilitados?: boolean;
+    pagosHabilitados: boolean;
 
 }

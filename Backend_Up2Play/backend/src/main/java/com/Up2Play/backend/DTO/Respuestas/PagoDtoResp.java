@@ -8,5 +8,6 @@ public record PagoDtoResp(
     double total,
     Long usuario,
     Long actividadId,
+    String estado,
     String nombreActividad
  ) {}
