@@ -44,6 +44,7 @@ public class Actividad {
 
     @Convert(converter = NivelDificultadConverter.class)
     private NivelDificultad nivel;
+    
     private int numPersInscritas;
     private int numPersTotales;
 
