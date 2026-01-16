@@ -80,14 +80,6 @@ export class JoinedCarousel implements OnInit {
 
   }
 
-  reembolso(id: number) {
-    console.log('reembolso unico');
-  }
-
-  desapuntarseSinReembolso(id:number) {
-    
-  }
-
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';

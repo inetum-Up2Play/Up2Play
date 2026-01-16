@@ -41,10 +41,7 @@
               : (activity.precio != '0.00' ? 'btn-reembolso' : 'btn-desapuntarse')"
               
             [botonAction]="activity.esCreador 
-                ? editar 
-                : (activity.precio != '0.00' 
-                    ? (noReembolso(activity.fecha) ? desapuntarseSinReembolso : reembolso) 
-                    : desapuntarse)"
+                ? editar : desapuntarse"
 
             [eliminarLabel]="activity.esCreador 
               ? (activity.precio != '0.00' ? 'Eliminar y reembolsar' : 'Eliminar') 

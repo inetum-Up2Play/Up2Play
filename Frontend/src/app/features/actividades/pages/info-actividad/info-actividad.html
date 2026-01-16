@@ -97,7 +97,7 @@
                     
                 } @else {
                     @if(noReembolso(act.fecha)) {
-                        <button (click)="desapuntarseSinReembolso()"
+                        <button (click)="desapuntarse()"
                             class="cursor-pointer 
                                 bg-[#d97706] hover:bg-[#b45309] 
                                 text-[#F7F7F7] 
@@ -108,7 +108,7 @@
                         </button>
                         
                     } @else {
-                        <button (click)="reembolso()"
+                        <button (click)="desapuntarse()"
                             class="cursor-pointer 
                                 bg-[#d97706] hover:bg-[#b45309] 
                                 text-[#F7F7F7] 

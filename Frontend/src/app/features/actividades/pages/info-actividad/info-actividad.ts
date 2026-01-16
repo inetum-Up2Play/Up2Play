@@ -394,11 +394,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   reembolsoATodos() {}
-  reembolso() {}
-
-  desapuntarseSinReembolso() {
-    
-  }
 
   // =============================================================
   // LÓGICA DEL MAPA (OpenLayers)
