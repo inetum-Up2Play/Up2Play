@@ -575,25 +575,30 @@ public class ActividadService {
  
         // 2. LÓGICA DE REEMBOLSO (Solo si tiene precio)
         if (act.getPrecio() > 0) {
-            // IMPORTANTE: Debes obtener el ID del pago que se realizó en su día.
-            // Aquí asumo que tienes un método o repositorio para recuperarlo.
-            String paymentIntentId = obtenerPaymentIdDeInscripcion(idActividad, idUsuario);
- 
-            if (paymentIntentId == null) {
-                throw new RuntimeException("No se encontró el registro de pago para esta inscripción.");
-            }
- 
-            try {
-                // Ejecutamos el reembolso en la cuenta del organizador
-                stripeConnectService.crearReembolso(paymentIntentId, act.getUsuarioCreador().getStripeAccountId());
-            } catch (StripeException e) {
-                // Si el error es falta de fondos en la cuenta del creador
-                if ("balance_insufficient".equals(e.getCode())) {
-                    throw new RuntimeException(
-                            "No se pudo procesar el reembolso: fondos insuficientes en la cuenta del organizador.");
+            LocalDateTime fechaLimite = act.getFecha().minusHours(24);
+            
+            // Solo entramos a Stripe si NO se ha pasado la fecha límite
+            if (LocalDateTime.now().isBefore(fechaLimite)) {
+                // IMPORTANTE: Debes obtener el ID del pago que se realizó en su día.
+                // Aquí asumo que tienes un método o repositorio para recuperarlo.
+                String paymentIntentId = obtenerPaymentIdDeInscripcion(idActividad, idUsuario);
+    
+                if (paymentIntentId == null) {
+                    throw new RuntimeException("No se encontró el registro de pago para esta inscripción.");
                 }
-                // Para cualquier otro error de Stripe, lanzamos una excepción genérica
-                throw new RuntimeException("Error al procesar el reembolso con Stripe: " + e.getMessage());
+    
+                try {
+                    // Ejecutamos el reembolso en la cuenta del organizador
+                    stripeConnectService.crearReembolso(paymentIntentId, act.getUsuarioCreador().getStripeAccountId());
+                } catch (StripeException e) {
+                    // Si el error es falta de fondos en la cuenta del creador
+                    if ("balance_insufficient".equals(e.getCode())) {
+                        throw new RuntimeException(
+                                "No se pudo procesar el reembolso: fondos insuficientes en la cuenta del organizador.");
+                    }
+                    // Para cualquier otro error de Stripe, lanzamos una excepción genérica
+                    throw new RuntimeException("Error al procesar el reembolso con Stripe: " + e.getMessage());
+                }
             }
         }
  
