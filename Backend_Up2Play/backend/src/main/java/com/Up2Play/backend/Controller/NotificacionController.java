@@ -21,7 +21,7 @@ import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/notificaciones")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4201")
 public class NotificacionController {
 
     private final NotificacionService notificacionService;

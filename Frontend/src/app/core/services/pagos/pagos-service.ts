@@ -21,6 +21,23 @@ export interface PagoDtoResp {
   usuario: number;
   actividadId: number;
   nombreActividad: string;
+  estado: 'Completado' | 'Fallido' | 'Reembolsado' | string;
+}
+
+export interface ActividadCreadaDto {
+  id: number;
+  nombre: string;
+  descripcion?: string;
+  fecha?: string;            // "2026-01-14T08:22:37.624752" (LocalDateTime → string)
+  ubicacion?: string;
+  deporte?: string;
+  nivel?: string;
+  numPersInscritas: number;
+  numPersTotales: number;
+  estado?: string;
+  precio: number;
+  usuarioCreador?: number;
+  emailCreador?: string;
 }
 
 @Injectable({
@@ -29,7 +46,7 @@ export interface PagoDtoResp {
 export class PagosService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/pagos';
+  private baseUrl = 'http://localhost:8082/pagos';
 
   // Guardamos la actividad seleccionada en una Signal
   private _selectedActivity = signal<PaymentInfo | null>(null);

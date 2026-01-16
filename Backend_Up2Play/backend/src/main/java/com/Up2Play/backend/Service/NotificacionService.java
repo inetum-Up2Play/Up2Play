@@ -258,7 +258,7 @@ public class NotificacionService {
                                 <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">🔐 Se ha cambiado tu contraseña</h2>
                                 <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
                                 <p style="font-size: 15px; color: #555555;">Este es un correo de aviso, ya que se ha cambiado tu contraseña en <strong>UP2Play</strong>.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el soporte de la aplicacion!.</p>
-                                <a href="http://localhost:4200/"
+                                <a href="http://localhost:4201/"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Ir a UP2Play
                                 </a>
@@ -303,7 +303,7 @@ public class NotificacionService {
                                     Si no fuiste tú, contacta con el soporte de la aplicación.
                                 </p>
                                 <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
-                                <a href="http://localhost:4200/"
+                                <a href="http://localhost:4201/"
                                    style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px; width: 100%%; text-align: center; font-weight: bold;">
                                     Ir a UP2Play
                                 </a>
@@ -351,7 +351,7 @@ public class NotificacionService {
                                 <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,</p>
                                 <p style="font-size: 15px; color: #555555;">Este es un correo de aviso, ya que se ha eliminado la actividad: <strong>%s</strong> a la que estas apuntado en <strong>UP2Play</strong>.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el soporte de la aplicacion!.</p>
                                 <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
-                                <a href="http://localhost:4200/"
+                                <a href="http://localhost:4201/"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Ir a UP2Play
                                 </a>

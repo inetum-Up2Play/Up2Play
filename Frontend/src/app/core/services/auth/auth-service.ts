@@ -17,7 +17,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
   private userDataService = inject(UserDataService);
-  private baseUrl = 'http://localhost:8080/auth';
+  private baseUrl = 'http://localhost:8082/auth';
   private logoutTimer: any;
 
   // REGISTRO

@@ -18,7 +18,7 @@ export class UserService {
 
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/usuarios';
+  private baseUrl = 'http://localhost:8082/usuarios';
   private logoutTimer: any;
 
   //Método obtener datos de usuario
