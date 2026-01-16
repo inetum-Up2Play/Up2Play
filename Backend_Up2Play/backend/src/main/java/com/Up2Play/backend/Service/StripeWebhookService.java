@@ -6,6 +6,7 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.net.Webhook;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Pago;
+import com.stripe.model.Refund;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.ActividadRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -59,6 +60,9 @@ public class StripeWebhookService {
 
                 case "payment_intent.payment_failed":
                     return handleFailedPayment(event);
+
+                case "charge.refunded":
+                    return handleRefund(event);
 
                 default:
                     // Para otros eventos, solo los loggeamos
@@ -236,5 +240,62 @@ public class StripeWebhookService {
         } catch (Exception e) {
             logger.error("Error loggeando detalles del pago fallido: {}", e.getMessage());
         }
+    }
+
+    /**
+     * 💸 MANEJA REEMBOLSO - MÁS SIMPLE, COMO TÚ LO HACES
+     */
+    private Map<String, Object> handleRefund(Event event) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            // 1. Extraer el objeto Refund del evento
+            Refund refund = (Refund) event.getDataObjectDeserializer()
+                    .getObject().orElseThrow(() -> new RuntimeException("No hay Refund"));
+
+            String refundId = refund.getId();
+            String chargeId = refund.getCharge(); // ID del cargo original
+            String paymentIntentId = refund.getPaymentIntent(); // ID del PaymentIntent
+
+            logger.info("💰 REEMBOLSO COMPLETADO detectado: {}", refundId);
+            logger.info("   • Cargo original: {}", chargeId);
+            logger.info("   • PaymentIntent: {}", paymentIntentId);
+
+            // 2. Extraer información del reembolso
+            double amountRefunded = refund.getAmount() / 100.0; // Convertir a euros
+            String currency = refund.getCurrency().toUpperCase();
+            String status = refund.getStatus(); // succeeded, pending, failed, cancelled
+            String reason = refund.getReason(); // duplicate, fraudulent, requested_by_customer, etc.
+
+            logger.info("   • Monto reembolsado: {} {}", amountRefunded, currency);
+            logger.info("   • Estado: {}", status);
+            logger.info("   • Razón: {}", reason);
+
+            // 3. Buscar el pago original en tu BD (como ya lo tienes)
+            Pago pagoOriginal = pagoService.buscarPagoPorStripeId(chargeId); 
+
+            Pago pagoReembolsado = pagoService.crearPagoReembolsado(amountRefunded, pagoOriginal.getUsuario(), pagoOriginal.getActividad(), paymentIntentId,
+                    refundId);
+
+            logger.info("✅ PAGO REEMBOLSADO guardado en BD - ID: {}, Monto: {} {}, Estado: REEMBOLSADO",
+                    pagoReembolsado.getId(), amountRefunded, currency);
+
+            // 7. Preparar respuesta
+            result.put("status", "success");
+            result.put("message", "Reembolso registrado exitosamente");
+            result.put("pago_reembolsado_id", pagoReembolsado.getId());
+            result.put("stripe_refund_id", refundId);
+            result.put("amount_refunded", amountRefunded);
+            result.put("currency", currency);
+            result.put("reason", reason);
+            result.put("refund_status", status);
+
+        } catch (Exception e) {
+            logger.error("💥 ERROR procesando reembolso: {}", e.getMessage(), e);
+            result.put("status", "error");
+            result.put("error", e.getMessage());
+        }
+
+        return result;
     }
 }

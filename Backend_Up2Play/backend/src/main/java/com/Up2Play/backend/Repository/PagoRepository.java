@@ -23,7 +23,6 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
 
     Optional<Pago> findByStripePaymentId(String stripePaymentId);
 
-
     // ✅ ÚNICA consulta que necesitas (versión mejorada)
     @Query(value = "SELECT stripe_payment_id " +
                    "FROM ( " +

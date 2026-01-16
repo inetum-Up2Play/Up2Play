@@ -90,6 +90,25 @@ public class PagoService {
         return pagoFallido;
     }
 
+    @Transactional
+    public Pago crearPagoReembolsado(double total, Usuario usuario, Actividad actividad, 
+                                    String stripePaymentId, String stripeRefundId) {
+        Pago pago = new Pago();
+        pago.setTotal(total);
+        pago.setUsuario(usuario);
+        pago.setActividad(actividad);
+        pago.setEstado(EstadoPago.REEMBOLSADO);
+        pago.setStripePaymentId(stripePaymentId);
+        pago.setStripeRefundId(stripeRefundId);
+        pago.setFecha(LocalDateTime.now());
+        
+        return pagoRepository.save(pago);
+    }
+
+    public Pago buscarPagoPorStripeId(String stripePaymentId) {
+        return pagoRepository.findByStripePaymentId(stripePaymentId).orElse(null);
+    }
+
     // Listar todos los pagos de cada usuario
     @Transactional
     public List<PagoDtoResp> getPagosUsuario(Usuario usuario) {

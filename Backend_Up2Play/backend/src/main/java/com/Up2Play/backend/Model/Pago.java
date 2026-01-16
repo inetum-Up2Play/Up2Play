@@ -45,6 +45,8 @@ public class Pago {
     @Column(name = "stripe_payment_id")
     private String stripePaymentId;
 
+    private String stripeRefundId;
+
     public Pago() {
     }
 
@@ -75,6 +77,19 @@ public class Pago {
         this.estado = estado;
         this.errorMensaje = errorMensaje;
         this.stripePaymentId = stripePaymentId;
+    }
+
+    public Pago(Long id, LocalDateTime fecha, double total, Usuario usuario, Actividad actividad, EstadoPago estado,
+            String errorMensaje, String stripePaymentId, String stripeRefundId) {
+        this.id = id;
+        this.fecha = fecha;
+        this.total = total;
+        this.usuario = usuario;
+        this.actividad = actividad;
+        this.estado = estado;
+        this.errorMensaje = errorMensaje;
+        this.stripePaymentId = stripePaymentId;
+        this.stripeRefundId = stripeRefundId;
     }
 
     public EstadoPago getEstado() {
@@ -139,6 +154,14 @@ public class Pago {
 
     public void setActividad(Actividad actividad) {
         this.actividad = actividad;
+    }
+
+    public String getStripeRefundId() {
+        return stripeRefundId;
+    }
+
+    public void setStripeRefundId(String stripeRefundId) {
+        this.stripeRefundId = stripeRefundId;
     }
 
 }
