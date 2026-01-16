@@ -84,6 +84,10 @@ export class JoinedCarousel implements OnInit {
     console.log('reembolso unico');
   }
 
+  desapuntarseSinReembolso(id:number) {
+    
+  }
+
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
@@ -92,6 +96,18 @@ export class JoinedCarousel implements OnInit {
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
+  }
+
+  noReembolso(fechaStr: string): boolean {
+    const fechaActividad = new Date(fechaStr).getTime();
+    const ahora = Date.now();
+    
+    // Calculamos 24h en milisegundos: 24h * 60min * 60seg * 1000ms
+    const unDiaEnMs = 24 * 60 * 60 * 1000; 
+    
+    const diferencia = fechaActividad - ahora;
+
+    return diferencia <= unDiaEnMs;
   }
 
   responsiveOptions = [

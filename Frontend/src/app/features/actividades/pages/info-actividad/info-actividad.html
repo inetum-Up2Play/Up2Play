@@ -96,17 +96,28 @@
                     </button>
                     
                 } @else {
-                    <button (click)="reembolso()"
-                        class="cursor-pointer 
-                            bg-[#d97706] hover:bg-[#b45309] 
-                            text-[#F7F7F7] 
-                            font-semibold border-none py-2 px-4 rounded-[20px] 
-                            transition-all duration-200 
-                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
-                        Desapuntarse y reembolsar...
-                    </button>
-
-
+                    @if(noReembolso(act.fecha)) {
+                        <button (click)="desapuntarseSinReembolso()"
+                            class="cursor-pointer 
+                                bg-[#d97706] hover:bg-[#b45309] 
+                                text-[#F7F7F7] 
+                                font-semibold border-none py-2 px-4 rounded-[20px] 
+                                transition-all duration-200 
+                                hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
+                            Desapuntarse sin reembolso
+                        </button>
+                        
+                    } @else {
+                        <button (click)="reembolso()"
+                            class="cursor-pointer 
+                                bg-[#d97706] hover:bg-[#b45309] 
+                                text-[#F7F7F7] 
+                                font-semibold border-none py-2 px-4 rounded-[20px] 
+                                transition-all duration-200 
+                                hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
+                            Desapuntarse y reembolsar...
+                        </button>
+                    }
                 }
             }
         </div>

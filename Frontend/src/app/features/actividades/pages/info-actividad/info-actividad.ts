@@ -393,6 +393,13 @@ export class InfoActividad implements OnInit, AfterViewInit {
     ]);
   }
 
+  reembolsoATodos() {}
+  reembolso() {}
+
+  desapuntarseSinReembolso() {
+    
+  }
+
   // =============================================================
   // LÓGICA DEL MAPA (OpenLayers)
   // =============================================================
@@ -497,7 +504,15 @@ export class InfoActividad implements OnInit, AfterViewInit {
     this.errorService.showError(mensaje);
   }
 
-  // Placeholders
-  reembolsoATodos() {}
-  reembolso() {}
+  noReembolso(fechaStr: string): boolean {
+    const fechaActividad = new Date(fechaStr).getTime();
+    const ahora = Date.now();
+    
+    // Calculamos 24h en milisegundos: 24h * 60min * 60seg * 1000ms
+    const unDiaEnMs = 24 * 60 * 60 * 1000; 
+    
+    const diferencia = fechaActividad - ahora;
+
+    return diferencia <= unDiaEnMs;
+  }
 }
