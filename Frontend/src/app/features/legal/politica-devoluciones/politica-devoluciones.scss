@@ -1,19 +1,8 @@
 @use 'styles/variables' as vars;
 
-// Estilos Globales del Componente
 :host {
     display: block;
-    font-family: vars.$work-sans; // Fuente por defecto para todo el texto
-    
-    // Color de fondo base (simulando Tailwind bg-gray-50 pero con tus variables)
-    background-color: vars.$blanco; 
-    color: vars.$verde-oscuro;
-
-    // Ajustes para modo oscuro (opcional, usando media query nativa)
-    @media (prefers-color-scheme: dark) {
-        background-color: vars.$verde-oscuro;
-        color: vars.$blanco;
-    }
+    font-family: vars.$work-sans;
 
     // --- Overrides de PrimeNG usando tus variables ---
     ::ng-deep .p-accordion-content {

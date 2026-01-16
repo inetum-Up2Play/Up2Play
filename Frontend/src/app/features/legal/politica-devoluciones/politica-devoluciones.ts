@@ -1,11 +1,13 @@
-import { ViewportScroller } from '@angular/common';
+import { ViewportScroller, Location } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { AccordionModule } from 'primeng/accordion'; 
 import { Button } from 'primeng/button';
+import { AuthHeaderComponent } from '../../auth/components/auth-header.component/auth-header.component';
+import { AuthFooterComponent } from '../../auth/components/auth-footer.component/auth-footer.component';
 
 @Component({
   selector: 'app-politica-devoluciones',
-  imports: [AccordionModule, Button],
+  imports: [AccordionModule, Button, AuthFooterComponent, AuthHeaderComponent],
   templateUrl: './politica-devoluciones.html',
   styleUrl: './politica-devoluciones.scss',
 })
@@ -14,6 +16,12 @@ private readonly viewportScroller = inject(ViewportScroller);
 
   lastUpdate = signal('Enero, 2026');
   activeAccordionValue = 'conditions';
+
+  private location = inject(Location);
+
+  goBack(): void {
+    this.location.back();
+  }
 
   summaryCards = [
     {
