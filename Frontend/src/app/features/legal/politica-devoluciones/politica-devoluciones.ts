@@ -2,12 +2,11 @@ import { ViewportScroller, Location } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { AccordionModule } from 'primeng/accordion'; 
 import { Button } from 'primeng/button';
-import { AuthHeaderComponent } from '../../auth/components/auth-header.component/auth-header.component';
-import { AuthFooterComponent } from '../../auth/components/auth-footer.component/auth-footer.component';
-
+import { Header } from '../../../core/layout/header/header';
+import { Footer } from '../../../core/layout/footer/footer';
 @Component({
   selector: 'app-politica-devoluciones',
-  imports: [AccordionModule, Button, AuthFooterComponent, AuthHeaderComponent],
+  imports: [AccordionModule, Button, Header, Footer],
   templateUrl: './politica-devoluciones.html',
   styleUrl: './politica-devoluciones.scss',
 })
