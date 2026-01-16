@@ -31,16 +31,17 @@
             [attr.aria-label]="activity.nombre"
 
             [botonLabel]="activity.esCreador 
-              ? 'Editar' 
-              : (activity.precio != '0.00' ? 'Desapuntarse y reembolsar...' : 'Desapuntarse...')"
+                ? 'Editar' 
+                : (activity.precio != '0.00' 
+                    ? (noReembolso(activity.fecha) ? 'Desapuntarse sin reembolso' : 'Desapuntarse y reembolsar...') 
+                    : 'Desapuntarse...')"
               
             [botonStyle]="activity.esCreador 
               ? 'btn-editar' 
               : (activity.precio != '0.00' ? 'btn-reembolso' : 'btn-desapuntarse')"
               
             [botonAction]="activity.esCreador 
-              ? editar 
-              : (activity.precio != '0.00' ? reembolso : desapuntarse)"
+                ? editar : desapuntarse"
 
             [eliminarLabel]="activity.esCreador 
               ? (activity.precio != '0.00' ? 'Eliminar y reembolsar' : 'Eliminar') 
