@@ -61,6 +61,7 @@ public class PagoService {
                     p.getTotal(),
                     p.getUsuario().getId(),
                     p.getActividad().getId(),
+                    p.getEstado() != null ? p.getEstado().name() : null,
                     p.getActividad().getNombre()))
                 .toList();   
     }
