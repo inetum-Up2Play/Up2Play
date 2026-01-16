@@ -21,11 +21,11 @@
                 </p>
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 w-full max-w-[480px] justify-center">
-                    <button
+                    <button (click)="goToInfoActividad()"
                         class=" group flex items-center justify-center rounded-xl h-12 px-6 bg-[#B1DF75] hover:bg-[#B1DF75]/75 text-base font-bold hover:bg-opacity-90 transition-all shadow-lg shadow-[#B1DF75]/20 hover:cursor-pointer">
                         <span class="mr-2  transition-transform duration-300 group-hover:rotate-90 text-xl"><i
-                                class="ph-bold ph-arrow-clockwise"></i></span>
-                        <span>Intentar de nuevo</span>
+                                class="ph-bold ph-arrow-clockwise"></i></span> 
+                                Intentar de nuevo
                     </button>
                     <button (click)="openSupport()"
                         class="flex-1 flex items-center justify-center rounded-xl h-12 px-6 bg-transparent border border-[#dbe6e0] hover:bg-[#dbe6e0] transition-colors text-base font-bold shadow-[#B1DF75]/20 hover:cursor-pointer">
@@ -84,7 +84,8 @@
             </div>
             <div class="group text-center mt-4">
                 <a class="inline-flex items-center  transition-colors font-medium" href="#">
-                    <span class="text-lg mr-1 transition-transform duration-300 group-hover:-translate-x-2 flex items-center" ><i
+                    <span
+                        class="text-lg mr-1 transition-transform duration-300 group-hover:-translate-x-2 flex items-center"><i
                             class="ph ph-arrow-left"></i></span>
                     Volver al inicio
                 </a>

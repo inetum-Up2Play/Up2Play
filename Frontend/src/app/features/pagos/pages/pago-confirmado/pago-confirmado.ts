@@ -71,7 +71,8 @@ export class PagoConfirmado implements OnInit {
   }
 
   goToInfoActividad() {
-    return this.router.navigate([`/actividades/info-actividad/${this.actividadId}`]);
+    const id = this.actividadResumen()?.actividadId;
+      this.router.navigate(['/actividades/info-actividad', id]);
   }
 
   goToInicio() {
