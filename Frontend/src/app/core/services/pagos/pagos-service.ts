@@ -46,7 +46,7 @@ export interface ActividadCreadaDto {
 export class PagosService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8081/pagos';
+  private baseUrl = 'http://localhost:8082/pagos';
 
   // Guardamos la actividad seleccionada en una Signal
   private _selectedActivity = signal<PaymentInfo | null>(null);

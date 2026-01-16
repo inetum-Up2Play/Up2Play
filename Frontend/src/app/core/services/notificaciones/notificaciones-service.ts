@@ -13,7 +13,7 @@ import {
 export class NotificacionesService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8081/notificaciones';
+  private baseUrl = 'http://localhost:8082/notificaciones';
 
   //Lista de notificaciones
   getNotificacionesUsuario(): Observable<Notificacion[]> {

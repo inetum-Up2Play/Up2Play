@@ -84,7 +84,7 @@ public class SecurityConfig {
         CorsConfiguration cfg = new CorsConfiguration();
         // Orígenes permitidos (ajusta según tu frontend en desarrollo/producción)
         cfg.setAllowedOrigins(
-                List.of("http://localhost:4201", "http://localhost:8081", "https://dashboard.stripe.com"));
+                List.of("http://localhost:4201", "http://localhost:8082", "https://dashboard.stripe.com"));
         // Métodos HTTP permitidos (incluye OPTIONS para preflight)
         cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         // Headers permitidos (incluye Authorization para JWT)
