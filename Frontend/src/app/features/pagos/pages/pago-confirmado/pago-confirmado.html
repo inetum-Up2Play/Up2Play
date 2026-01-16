@@ -73,7 +73,7 @@
                     <div class="space-y-4">
                         <div class="flex justify-between items-start gap-4">
                             <span class="text-text-muted text-[#3D6C3F] text-sm">Actividad</span>
-                            <span class="text-text-main text-sm font-medium text-right line-clamp-2">
+                            <span class="text-text-main text-sm font-medium text-right">
                                 {{ act.nombre }}
                             </span>
                         </div>
@@ -97,7 +97,7 @@
                         @if (act.ubicacion) {
                         <div class="flex justify-between items-start gap-4">
                             <span class="text-text-muted text-[#3D6C3F] text-sm">Ubicación</span>
-                            <span class="text-text-main text-sm font-medium text-right truncate max-w-[150px]"
+                            <span class="text-text-main text-sm font-medium text-right max-w-[150px]"
                                 [title]="act.ubicacion"> {{ act.ubicacion }}
                             </span>
                         </div>

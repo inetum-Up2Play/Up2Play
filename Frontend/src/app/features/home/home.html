@@ -24,9 +24,9 @@
                     <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
                         class="my-2 md:my-0 w-24 h-24 md:w-30 md:h-30 xl:w-38 xl:h-38 2xl:w-50 2xl:h-50 rounded-full shadow-sm object-cover aspect-square">
                     <!-- Texto bienvenida -->
-                    <div class="flex flex-col gap-2 w-full">
+                    <div class="flex flex-col gap-2 w-full max-w-[65%]">
                         <h1
-                            class="text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl font-extrabold text-gray-900 leading-tight">
+                            class="text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl font-extrabold text-gray-900 leading-tight truncate">
                             ¡Hola, <br>
                             <span class="text-gray-900">{{ currentUsuario()!.nombreUsuario }}!</span>
                         </h1>
