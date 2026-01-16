@@ -17,7 +17,7 @@ import com.Up2Play.backend.Service.PagoService;
 
 @RestController
 @RequestMapping("/pagos")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4201")
 public class PagoController {
 
     private final PagoService pagoService;

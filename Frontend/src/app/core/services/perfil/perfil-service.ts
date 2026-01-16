@@ -16,7 +16,7 @@ import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 export class PerfilService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/perfil';
+  private baseUrl = 'http://localhost:8081/perfil';
   private logoutTimer: any;
 
   public avatarGlobal = signal<number>(0);

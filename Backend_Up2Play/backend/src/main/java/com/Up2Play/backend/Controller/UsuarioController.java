@@ -26,10 +26,10 @@ import com.Up2Play.backend.Service.UsuarioService;
 
 import jakarta.mail.MessagingException;
 
-//Controlador REST para operaciones CRUD de usuarios. Incluye endpoints que conectan con Angular en localhost:4200) pueda hacer peticiones a este backend.
+//Controlador REST para operaciones CRUD de usuarios. Incluye endpoints que conectan con Angular en localhost:4201) pueda hacer peticiones a este backend.
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4201")
 public class UsuarioController {
 
     // Servicio que contiene la lógica para trabajar con usuarios

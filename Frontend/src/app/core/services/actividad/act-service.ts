@@ -16,7 +16,7 @@ import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 export class ActService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/actividades';
+  private baseUrl = 'http://localhost:8081/actividades';
   private logoutTimer: any;
 
   //Metodo crear actividad

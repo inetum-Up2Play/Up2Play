@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class StripeService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:8080/api/stripe';
+  private readonly API_URL = 'http://localhost:8081/api/stripe';
   private stripePromise = loadStripe(environment.stripePublicKey);
 
   /**Inicializa Stripe para Direct Charges.
