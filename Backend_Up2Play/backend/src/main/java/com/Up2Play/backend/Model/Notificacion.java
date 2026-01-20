@@ -29,8 +29,8 @@ public class Notificacion {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @Size(max = 64) // ajusta a 255 si la columna es 255
-    @Column(name = "TITULO", length = 64)
+    @Size(max = 255) // ajusta a 255 si la columna es 255
+    @Column(name = "TITULO", length = 255)
     private String titulo;
 
     @Size(max = 500)

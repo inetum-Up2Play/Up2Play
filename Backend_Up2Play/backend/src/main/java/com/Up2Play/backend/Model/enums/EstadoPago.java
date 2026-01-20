@@ -3,6 +3,7 @@ package com.Up2Play.backend.Model.enums;
 public enum EstadoPago {
 
     COMPLETADO("Completado"),
+    REEMBOLSADO("Reembolsado"),
     FALLIDO("Fallido");
 
     private final String valorBD;
