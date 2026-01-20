@@ -11,61 +11,7 @@ Here has to be imported the other style files (from the src/styles/)
 
 @use 'sass:color';
 
-/* Contenedor del overlay del menú (styleClass="mobile-menu") */
-.mobile-menu.p-menu {
-  /* — Apariencia del panel — */
-  background-color: color.change(vars.$verde-oscuro, $alpha: 0.90); // blanco con 15% de transparencia
-  color: vars.$verde-oscuro;
-  border: 1px solid color.change(vars.$verde-oscuro, $alpha: 0.25);
-  border-radius: 12px;
-  font-family: vars.$montserrat;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: .02em;
-  /* tracking */
-  text-align: right;
 
-  /* (Opcional) Para que el popup pueda ser más estrecho y se adapte al contenido */
-  min-width: 0 !important;
-  width: fit-content;
-  /* o max-content si lo prefieres */
-  max-width: 90vw;
-  /* evita desbordes en móvil */
-}
-
-/* Lista interior: un poco de aire y separación */
-.mobile-menu .p-menu-list {
-  padding: .5rem;
-  gap: .25rem;
-}
-
-/* Cada item (contenedor y link) alineado a la izquierda y con bordes suaves */
-.mobile-menu .p-menu-item-content {
-  border-radius: 8px;
-  text-align: right;
-}
-
-.mobile-menu .p-menu-item-link {
-  color: vars.$blanco;
-  justify-content: flex-end;
-  text-align: right;
-  /* por si hay contenido multilínea */
-}
-
-
-/* ESTILOS PARA EL HEADER GENERAL */
-.p-drawer {
-  --p-drawer-background: #3D6C3F;
-}
-
-.layout-menu {
-  background-color: vars.$verde-oscuro !important;
-}
-
-.layout-menu li:hover,
-a:hover {
-  color: vars.$verde-oliva !important;
-}
 
 /* IMAGEN GRIS DE FONDO DE LA APP */
 .header-background-active {
@@ -83,7 +29,6 @@ a:hover {
   padding-top: var(--header-h);
   /* Usamos el valor calculado en el header.component.ts */
 }
-
 
 
 .cd-eliminar {
