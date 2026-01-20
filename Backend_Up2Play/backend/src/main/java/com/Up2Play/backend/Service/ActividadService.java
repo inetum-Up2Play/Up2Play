@@ -561,16 +561,33 @@ public class ActividadService {
  
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
- 
-        // 1. Validaciones previas
-        if (!act.getUsuarios().contains(usuario)) {
-            throw new UsuarioNoApuntadoException("El usuario no está apuntado a esta actividad");
-        }
-        if (act.getUsuarioCreador().equals(usuario)) {
-            throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
-        }
-        if (act.getEstado() != EstadoActividad.PENDIENTE) {
-            throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
+
+        if (act.getUsuarios().contains(usuario)) {
+
+            if (!act.getUsuarioCreador().equals(usuario)) {
+
+                if (act.getEstado() != EstadoActividad.PENDIENTE) {
+                    throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
+                } else {
+                    // Enviar notificacion
+                    notificacionService.crearNotificacionPerfil(
+                            "Te has desapuntdo de " + act.getNombre() + ".",
+                            "Has cancelado tu inscripción en la actividad " + act.getNombre()
+                                    + ". Esperamos verte en otras actividades próximamente.",
+                            LocalDateTime.now(),
+                            EstadoNotificacion.fromValue("DESAPUNTADO"),
+                            act,
+                            usuario);
+                    act.getUsuarios().remove(usuario);
+                    usuario.getActividadesUnidas().remove(act);
+                    act.setNumPersInscritas(act.getUsuarios().size());
+                    //act.setNumPersInscritas(act.getNumPersInscritas() - 1);
+                }
+
+            } else {
+                throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
+            }
+
         }
  
         // 2. LÓGICA DE REEMBOLSO (Solo si tiene precio)

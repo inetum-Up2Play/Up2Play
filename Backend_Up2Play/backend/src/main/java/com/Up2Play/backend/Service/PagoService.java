@@ -84,14 +84,14 @@ public class PagoService {
     public List<PagoDtoResp> getPagosUsuario(Usuario usuario) {
         return pagoRepository.findByUsuario(usuario).stream()
                 .map(p -> new PagoDtoResp(
-                        p.getId(),
-                        p.getFecha(),
-                        p.getTotal(),
-                        p.getUsuario().getId(),
-                        p.getActividad().getId(),
-                        p.getEstado() != null ? p.getEstado().name() : null,
-                        p.getActividad().getNombre()))
-                .toList();
+                    p.getId(),
+                    p.getFecha(),
+                    p.getTotal(),
+                    p.getUsuario().getId(),
+                    p.getActividad().getId(),
+                    p.getEstado() != null ? p.getEstado().name() : null,
+                    p.getActividad().getNombre()))
+                .toList();   
     }
  
 }
