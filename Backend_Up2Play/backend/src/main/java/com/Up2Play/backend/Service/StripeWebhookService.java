@@ -6,7 +6,6 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.net.Webhook;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Pago;
-import com.stripe.model.Refund;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.ActividadRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
@@ -62,7 +61,7 @@ public class StripeWebhookService {
                     return handleFailedPayment(event);
 
                 case "charge.refunded":
-                    return handleRefund(event);
+                    return handleChargeRefunded(event);
 
                 default:
                     // Para otros eventos, solo los loggeamos
@@ -242,60 +241,115 @@ public class StripeWebhookService {
         }
     }
 
-    /**
-     * 💸 MANEJA REEMBOLSO - MÁS SIMPLE, COMO TÚ LO HACES
-     */
-    private Map<String, Object> handleRefund(Event event) {
+    private Map<String, Object> handleChargeRefunded(Event event) {
         Map<String, Object> result = new HashMap<>();
 
         try {
-            // 1. Extraer el objeto Refund del evento
-            Refund refund = (Refund) event.getDataObjectDeserializer()
-                    .getObject().orElseThrow(() -> new RuntimeException("No hay Refund"));
+            // 1. IMPORTANTE: En eventos "charge.refunded", el objeto es CHARGE, no Refund
+            com.stripe.model.Charge charge = (com.stripe.model.Charge) event.getDataObjectDeserializer()
+                    .getObject().orElseThrow(() -> new RuntimeException("No hay Charge en el evento"));
 
-            String refundId = refund.getId();
-            String chargeId = refund.getCharge(); // ID del cargo original
-            String paymentIntentId = refund.getPaymentIntent(); // ID del PaymentIntent
+            // 2. Obtener información del cargo
+            String chargeId = charge.getId();
+            String paymentIntentId = charge.getPaymentIntent();
 
-            logger.info("💰 REEMBOLSO COMPLETADO detectado: {}", refundId);
-            logger.info("   • Cargo original: {}", chargeId);
-            logger.info("   • PaymentIntent: {}", paymentIntentId);
+            logger.info("💰 REEMBOLSO COMPLETADO para charge: {}", chargeId);
+            logger.info("   • PaymentIntent asociado: {}", paymentIntentId);
 
-            // 2. Extraer información del reembolso
-            double amountRefunded = refund.getAmount() / 100.0; // Convertir a euros
-            String currency = refund.getCurrency().toUpperCase();
-            String status = refund.getStatus(); // succeeded, pending, failed, cancelled
-            String reason = refund.getReason(); // duplicate, fraudulent, requested_by_customer, etc.
+            // 3. Obtener los reembolsos de esta charge
+            // PRIMERO verificar si hay reembolsos
+            if (charge.getRefunds() == null || charge.getRefunds().getData() == null
+                    || charge.getRefunds().getData().isEmpty()) {
+                logger.warn("⚠️ Charge {} no tiene reembolsos en la lista", chargeId);
 
-            logger.info("   • Monto reembolsado: {} {}", amountRefunded, currency);
-            logger.info("   • Estado: {}", status);
+                // Aún así, podemos usar amount_refunded
+                double amountRefunded = charge.getAmountRefunded() / 100.0;
+
+                // Crear pago reembolsado sin refundId específico
+                Pago pagoOriginal = pagoService.buscarPagoPorStripeId(paymentIntentId);
+
+                if (pagoOriginal != null) {
+                    Pago pagoReembolsado = pagoService.crearPagoReembolsado(
+                            amountRefunded,
+                            pagoOriginal.getUsuario(),
+                            pagoOriginal.getActividad(),
+                            "no_refund_id_" + System.currentTimeMillis(),
+                            "Refund completed");
+
+                    logger.info("✅ Pago reembolsado creado sin refundId específico");
+                    result.put("status", "success");
+                    result.put("pago_id", pagoReembolsado.getId());
+                    return result;
+                }
+            }
+
+            // 4. Si hay reembolsos en la lista, tomar el más reciente
+            String refundId = null;
+            double amountRefunded = 0;
+            String reason = "unknown";
+
+            if (charge.getRefunds() != null && charge.getRefunds().getData() != null
+                    && !charge.getRefunds().getData().isEmpty()) {
+                // Tomar el primer reembolso (normalmente solo hay uno)
+                com.stripe.model.Refund refund = charge.getRefunds().getData().get(0);
+                refundId = refund.getId();
+                amountRefunded = refund.getAmount() / 100.0;
+                reason = refund.getReason() != null ? refund.getReason() : "unknown";
+
+                logger.info("   • Refund ID: {}", refundId);
+            } else {
+                // Usar el amount_refunded de la charge
+                amountRefunded = charge.getAmountRefunded() / 100.0;
+                refundId = "charge_refunded_" + chargeId;
+                logger.info("   • Usando amount_refunded de la charge: {}€", amountRefunded);
+            }
+
+            logger.info("   • Monto reembolsado: {}€", amountRefunded);
             logger.info("   • Razón: {}", reason);
 
-            // 3. Buscar el pago original en tu BD (como ya lo tienes)
-            Pago pagoOriginal = pagoService.buscarPagoPorStripeId(chargeId); 
+            // 5. Buscar el pago original en BD
+            Pago pagoOriginal = pagoService.buscarPagoPorStripeId(paymentIntentId);
 
-            Pago pagoReembolsado = pagoService.crearPagoReembolsado(amountRefunded, pagoOriginal.getUsuario(), pagoOriginal.getActividad(), paymentIntentId,
-                    refundId);
+            if (pagoOriginal == null) {
+                logger.error("❌ No se encontró pago en BD para PaymentIntent: {}", paymentIntentId);
+                result.put("status", "error");
+                result.put("message", "Pago original no encontrado");
+                return result;
+            }
 
-            logger.info("✅ PAGO REEMBOLSADO guardado en BD - ID: {}, Monto: {} {}, Estado: REEMBOLSADO",
-                    pagoReembolsado.getId(), amountRefunded, currency);
+            logger.info("✅ Pago original encontrado - ID BD: {}, Usuario: {}",
+                    pagoOriginal.getId(), pagoOriginal.getUsuario().getEmail());
 
-            // 7. Preparar respuesta
+            // 6. Crear el registro del reembolso
+            Pago pagoReembolsado = pagoService.crearPagoReembolsado(
+                    amountRefunded,
+                    pagoOriginal.getUsuario(),
+                    pagoOriginal.getActividad(),
+                    refundId,
+                    reason);
+
+            logger.info("✅ PAGO REEMBOLSADO guardado. ID BD: {}, Monto: {}€",
+                    pagoReembolsado.getId(), amountRefunded);
+
+            // 7. OPCIONAL: Actualizar el pago original
+            pagoService.marcarPagoComoReembolsado(pagoOriginal.getId(), refundId);
+
+            // 8. Preparar respuesta
             result.put("status", "success");
             result.put("message", "Reembolso registrado exitosamente");
             result.put("pago_reembolsado_id", pagoReembolsado.getId());
-            result.put("stripe_refund_id", refundId);
+            result.put("pago_original_id", pagoOriginal.getId());
+            result.put("refund_id", refundId);
             result.put("amount_refunded", amountRefunded);
-            result.put("currency", currency);
             result.put("reason", reason);
-            result.put("refund_status", status);
 
         } catch (Exception e) {
-            logger.error("💥 ERROR procesando reembolso: {}", e.getMessage(), e);
+            logger.error("💥 ERROR en handleChargeRefunded: {}", e.getMessage(), e);
             result.put("status", "error");
             result.put("error", e.getMessage());
         }
 
         return result;
     }
+
 }

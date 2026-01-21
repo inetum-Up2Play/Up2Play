@@ -91,8 +91,8 @@ public class PagoService {
     }
 
     @Transactional
-    public Pago crearPagoReembolsado(double total, Usuario usuario, Actividad actividad, 
-                                    String stripePaymentId, String stripeRefundId) {
+    public Pago crearPagoReembolsado(double total, Usuario usuario, Actividad actividad,
+            String stripePaymentId, String stripeRefundId) {
         Pago pago = new Pago();
         pago.setTotal(total);
         pago.setUsuario(usuario);
@@ -101,7 +101,7 @@ public class PagoService {
         pago.setStripePaymentId(stripePaymentId);
         pago.setStripeRefundId(stripeRefundId);
         pago.setFecha(LocalDateTime.now());
-        
+
         return pagoRepository.save(pago);
     }
 
@@ -123,4 +123,19 @@ public class PagoService {
                 .toList();
     }
 
+    // En PagoService.java
+    public Pago buscarPagoPorChargeId(String chargeId) {
+        return pagoRepository.findByStripePaymentId(chargeId).orElse(null);
+    }
+
+    public void marcarPagoComoReembolsado(Long pagoId, String refundId) {
+        Pago pago = pagoRepository.findById(pagoId)
+                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+
+        // Actualizar el estado del pago original
+        pago.setEstado(EstadoPago.REEMBOLSADO);
+        pago.setStripeRefundId(refundId); // Guardar el ID del reembolso
+        pagoRepository.save(pago);
+
+    }
 }
