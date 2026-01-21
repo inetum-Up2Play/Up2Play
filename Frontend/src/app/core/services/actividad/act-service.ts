@@ -1,13 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
-import { Actividad } from '../../../shared/models/Actividad';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
+
+import { Actividad } from '../../../shared/models/Actividad';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 
 @Injectable({
@@ -17,9 +13,8 @@ export class ActService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
   private baseUrl = 'http://localhost:8082/actividades';
-  private logoutTimer: any;
 
-  //Metodo crear actividad
+  // Crear actividad
   crearActividad(payload: any): Observable<any> {
     return this.http
       .post<any>(`${this.baseUrl + '/crearActividad'}`, payload)
@@ -32,7 +27,7 @@ export class ActService {
       );
   }
 
-  //Metodo editar actividad
+  // Editar actividad
   editarActividad(id: number, payload: any): Observable<any> {
     this.comprobarCreador(id);
     return this.http.put(`${this.baseUrl}/editarActividad/${id}`, payload).pipe(
@@ -57,7 +52,7 @@ export class ActService {
     );
   }
 
-  //Metodo obtener actividad por id
+  // Obtener actividad por id
   getActividad(id: number): Observable<Actividad> {
     return this.http.get<Actividad>(this.baseUrl + `/${id}`, {}).pipe(
       // map((res) => res),
@@ -68,7 +63,7 @@ export class ActService {
     );
   }
 
-  //Metodo listar todas las actividades
+  // Listar todas las actividades
   listarActividades() {
     return this.http.get(this.baseUrl + '/getAll', {}).pipe(
       map(() => true),
@@ -79,7 +74,7 @@ export class ActService {
     );
   }
 
-  //Metodo listar actividades creadas por el usuario
+  // Listar actividades creadas por el usuario
   listarActividadesCreadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getCreadas', {}).pipe(
       catchError((error) => {
@@ -89,7 +84,7 @@ export class ActService {
     );
   }
 
-  //Metodo listar actividades a las que el usuario no está apuntado
+  // Listar actividades a las que el usuario no está apuntado
   listarActividadesNoApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getNoApuntadas').pipe(
       catchError((error) => {
@@ -99,6 +94,7 @@ export class ActService {
     );
   }
 
+  // Listar todas las actividades a las que el usuario está apuntado
   listarActividadesApuntadas(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getApuntadasCalendario').pipe(
       catchError((error) => {
@@ -108,7 +104,8 @@ export class ActService {
     );
   }
 
-    listarActividadesApuntadasPendientes(): Observable<any[]> {
+  // Listar todas las actividades de la aplicación que todavía no han sucedido
+  listarActividadesApuntadasPendientes(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getApuntadas').pipe(
       catchError((error) => {
         console.error('Error al obtener actividades', error);
@@ -117,7 +114,7 @@ export class ActService {
     );
   }
 
-  //Metodo eliminar actividad
+  // Eliminar actividad
   deleteActividad(id: number) {
     return this.http.delete(this.baseUrl + `/delete/${id}`, {}).pipe(
       map(() => true),
@@ -128,7 +125,7 @@ export class ActService {
     );
   }
 
-  //Metodo apuntarte a actividad
+  // Apuntarte a actividad
   unirteActividad(idActividad: number): Observable<any> {
     return this.http
       .put<any>(`${this.baseUrl}/${idActividad}/participantes`, {})
@@ -141,7 +138,7 @@ export class ActService {
       );
   }
 
-  //Metodo desapuntarte a actividad
+  // Desapuntarte a actividad
   desapuntarseActividad(idActividad: number): Observable<void> {
     return this.http
       .delete<void>(`${this.baseUrl}/${idActividad}/participantes`)
@@ -153,12 +150,14 @@ export class ActService {
       );
   }
 
+  // Enviado idActividad, comprueba si el usuario es el creador
   comprobarCreador(idActividad: number): Observable<boolean> {
     return this.http
       .get<boolean>(`${this.baseUrl}/isCreador/${idActividad}`)
       .pipe(catchError(() => of(false)));
   }
 
+  // Enviando idActividad, comprueba si el usuario está ya apuntado
   estoyApuntado(idActividad: number): Observable<boolean> {
     return this.http
       .get<boolean>(`${this.baseUrl}/isUsuarioApuntado/${idActividad}`)
@@ -180,7 +179,8 @@ export class ActService {
   // Método listar actividades por deporte
   listarActividadesPorDeporte(deporte: string): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/getNoApuntadasPorDeporte', {
-      params: { deporte: deporte }}).pipe(
+      params: { deporte: deporte }
+    }).pipe(
       catchError((error) => {
         console.error('Error al obtener actividades', error);
         return of([]); // Devuelve array vacío si falla

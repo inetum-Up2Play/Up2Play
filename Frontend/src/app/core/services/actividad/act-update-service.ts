@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ActUpdateService {
   
   private updateSubject = new Subject<void>();

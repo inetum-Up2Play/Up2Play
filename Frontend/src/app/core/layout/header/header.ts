@@ -1,5 +1,5 @@
 import { Router, RouterModule } from '@angular/router';
-import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { MenubarModule } from 'primeng/menubar';
@@ -29,6 +29,7 @@ interface MenuItemPages {
   imports: [RouterModule, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule, AvatarPipe],
   templateUrl: './header.html',
   styleUrls: ['./header.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class Header implements OnInit {

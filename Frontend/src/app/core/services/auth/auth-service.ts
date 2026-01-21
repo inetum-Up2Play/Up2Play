@@ -3,10 +3,12 @@ import { Router, UrlTree } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+
 import { LoginResponse } from './auth-types';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 import { UserDataService } from './user-data-service';
 
+// Variables de configuración
 const STORAGE_KEY = 'auth';
 const SKEW_MS = 10_000;
 
@@ -134,6 +136,7 @@ export class AuthService {
     return !!this.token && !this.isTokenExpired();
   }
 
+  // CERRAR SESIÓN
   logout(navigateToLogin = true) {
     if (this.logoutTimer) clearTimeout(this.logoutTimer);
     sessionStorage.removeItem(STORAGE_KEY);

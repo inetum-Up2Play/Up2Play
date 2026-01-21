@@ -1,12 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastModule } from 'primeng/toast';
@@ -49,7 +42,8 @@ import { Footer } from '../../../../core/layout/footer/footer';
   templateUrl: './editar-actividad.html',
   styleUrl: './editar-actividad.scss',
 })
-export class EditarActividad {
+
+export class EditarActividad implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private actService = inject(ActService);

@@ -102,6 +102,7 @@ export class JoinedCarousel implements OnInit {
     return diferencia <= unDiaEnMs;
   }
 
+  // Variables para configurar el responsive del carousel
   responsiveOptions = [
     {
       breakpoint: '1840px',

@@ -10,7 +10,6 @@ import { ActUpdateService } from '../../../../core/services/actividad/act-update
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 import { MessageService, ConfirmationService } from 'primeng/api';
 

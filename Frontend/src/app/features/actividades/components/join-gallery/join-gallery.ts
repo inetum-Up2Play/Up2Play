@@ -18,14 +18,7 @@ import { UserService } from '../../../../core/services/user/user-service';
 
 @Component({
   selector: 'app-join-gallery',
-  imports: [
-    ActivityCard,
-    ButtonModule,
-    ToastModule,
-    MessageModule,
-    EmptyActivities,
-    DeporteImgPipe,
-  ],
+  imports: [ActivityCard, ButtonModule, ToastModule, MessageModule, EmptyActivities, DeporteImgPipe],
   templateUrl: './join-gallery.html',
   styleUrl: './join-gallery.scss',
 })
@@ -46,7 +39,7 @@ export class JoinGallery implements OnInit {
   currentPage = 1;
   noHayActividades = true;
 
-ngOnInit() {
+  ngOnInit() {
     this.calcularPageSize();
 
     this.cargarActividades();
@@ -60,17 +53,17 @@ ngOnInit() {
   onResize(event: any) {
     this.calcularPageSize();
   }
-  
+
   calcularPageSize() {
     const width = window.innerWidth;
     let nuevoSize = 8;
 
     if (width >= 1536) {
-      nuevoSize = 8; 
-    } 
+      nuevoSize = 8;
+    }
     else if (width >= 1280) {
-      nuevoSize = 9; 
-    } 
+      nuevoSize = 9;
+    }
     else {
       nuevoSize = 8;
     }

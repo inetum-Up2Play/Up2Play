@@ -4,9 +4,10 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'deporteImg',
   standalone: true 
 })
+
 export class DeporteImgPipe implements PipeTransform {
 
-
+  // Método para mapear el deporte
   transform(deporte: string): string {
     const cdnBase = 'https://up2play-mvp.github.io/CDN/deportes/';
     const map: Record<string, string> = {

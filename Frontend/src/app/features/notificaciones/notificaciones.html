@@ -8,7 +8,9 @@
                 </h1>
                 <p class="text-[#3D6C3F] text-lg font-normal">Mantente al día con tus
                     actividades deportivas y comunidad.</p>
-            </div> <p-button class="filtros pt-2 md:pt-0" label="Limpiar filtros" [outlined]="true"
+            </div> 
+            <!-- BOTÓN LIMPIAR FILTROS -->
+            <p-button class="filtros pt-2 md:pt-0" label="Limpiar filtros" [outlined]="true"
                 icon="pi pi-filter-slash" (onClick)="clear(dt2)" />
         </div>
         <div class="tabla overflow-hidden rounded-[15px] mt-4 mb-4">
@@ -122,6 +124,7 @@
                     </tr>
                 </ng-template>
 
+                <!-- MENSAJE SI NO SE ENCUENTRAN NOTIFICACIONES-->
                 <ng-template #emptymessage>
                     <tr>
                         <td colspan="5" class="text-center p-8 text-gray-500">

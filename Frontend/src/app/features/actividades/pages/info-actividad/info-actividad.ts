@@ -1,19 +1,6 @@
-import {
-  AfterViewInit,
-  Component,
-  effect,
-  inject,
-  Injector,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { AfterViewInit, Component, effect, inject, Injector, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, forkJoin, map, of } from 'rxjs';
 
@@ -86,6 +73,7 @@ interface ParticipanteView {
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
+
 export class InfoActividad implements OnInit, AfterViewInit {
   // =============================================================
   // INYECCIÓN DE DEPENDENCIAS

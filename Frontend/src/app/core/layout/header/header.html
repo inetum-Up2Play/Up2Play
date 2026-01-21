@@ -1,7 +1,10 @@
 <header #menuSuperior class="fixed top-0 w-full z-20" role="banner Superior">
+    <!-- Incluye ambos menús -->
     <p-menubar styleClass="contenedor-menubar !border-none !rounded-none" [model]="[]">
+
+        <!-- MENÚ LATERAL DE NAVEGACIÓN -->
         <p-drawer
-            styleClass="drawer m-6 !w-55 md:!w-80 !top-[var(--header-h)] !h-[calc(75%)] !rounded-border !border-emerald-700/0"
+            styleClass="drawer-header m-6 !w-55 md:!w-80 !top-[var(--header-h)] !h-[calc(75%)] !rounded-border !border-emerald-700/0"
             #drawerRef [(visible)]="visible" [style]="{ 'top': 'var(--header-h)' }" role="dialog" aria-modal="true"
             aria-labelledby="menu-title" cdkFocusInitial>
             <ng-template #headless>
@@ -31,6 +34,8 @@
                 </div>
             </ng-template>
         </p-drawer>
+
+        <!-- BOTÓN 3 BARRAS MENÚ LATERAL -->
         <ng-template #start>
             <div class="flex items-center md:pl-15 gap-5 xl:gap-10 aspect-3/1v min-w-36">
                 <p-button (click)="visible = true" icon="pi pi-bars"
@@ -40,13 +45,14 @@
                     alt="Up2Play" routerLink="/" aria-label="Ir a la página principal" />
             </div>
         </ng-template>
-
+        
+        <!-- MENÚ AVATAR -->
         <ng-template #end>
             <div class="card flex w-full justify-end md:pr-15">
                 <p-menu #menu [model]="avatarItems()" appendTo="body" styleClass="mobile-menu layout-menu"
                     [popup]="true"></p-menu>
 
-                    <!-- Abres el menú con el avatar -->
+                    <!-- Icono del avatar -->
                     <p-avatar (click)="menu.toggle($event)" [image]="perfilService.avatarGlobal() | avatarImg"
                         shape="circle" style="cursor: pointer" size="large" [attr.aria-label]="'Abrir menú de usuario'">
                     </p-avatar>

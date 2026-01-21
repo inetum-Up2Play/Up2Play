@@ -2,34 +2,27 @@
 <div class="min-h-screen flex justify-center bg-gray-50 dark:bg-[#121212]">
   <main class="w-full max-w-4xl mx-auto px-6 lg:px-8 py-12 lg:py-20">
       <nav class="flex justify-start animate-fade-in-down mb-8">
-        <p-button
-          label="Volver atrás"
-          icon="pi pi-arrow-left"
-          (onClick)="goBack()"
-          styleClass="p-button-text p-button-secondary text-brand hover:bg-brand-light/10 hover:transition-transform pl-0 transition-all duration-300"
-        ></p-button>
+        <!-- BOTÓN VOLVER ATRÁS -->
+        <p-button label="Volver atrás" icon="pi pi-arrow-left" (onClick)="goBack()"
+          styleClass="p-button-text p-button-secondary text-brand hover:bg-brand-light/10 
+          hover:transition-transform pl-0 transition-all duration-300">
+        </p-button>
       </nav>
+
     <div class="flex flex-col gap-12 relative">
-      <section
-        class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center"
-      >
+      <section class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center">
         <div class="flex flex-col gap-4">
-          <h1
-            class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark"
-          >
+          <h1 class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark">
             Política de Cancelación y Reembolsos
           </h1>
-          <p
-            class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto"
-          >
+          <p class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto">
             En UP2Play, queremos que tu experiencia sea justa y transparente.
             Consulta nuestras normas actualizadas.
           </p>
         </div>
 
-        <div
-          class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit px-4 py-1.5 rounded-full font-medium border border-brand-light/50"
-        >
+        <div class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit 
+          px-4 py-1.5 rounded-full font-medium border border-brand-light/50">
           <span class="material-symbols-outlined text-base">update</span>
           <span>Última actualización: {{ lastUpdate() }}</span>
         </div>
