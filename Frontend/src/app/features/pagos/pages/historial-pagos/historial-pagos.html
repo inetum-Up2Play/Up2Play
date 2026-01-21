@@ -3,11 +3,11 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col p-6 lg:py-10 lg:px-32 gap-8">
         <!-- Page Heading -->
-        <div class="flex flex-wrap justify-between gap-4 items-end">
-            <div class="flex flex-col gap-3 max-w-2xl">
-                <p class="text-[#152614] text-4xl font-bold leading-tight tracking-[-0.033em]">
+        <div class="flex flex-col">
+            <div class="flex flex-col gap-3">
+                <p class="text-[#152614] text-5xl font-bold leading-tight tracking-[-0.033em]">
                     Historial de Pagos</p>
-                <p class="text-[#3D6C3F] text-base font-normal leading-normal">Revisa tus transacciones pasadas,
+                <p class="text-[#3D6C3F] text-lg font-normal leading-normal">Revisa tus transacciones pasadas,
                     gestiona tus suscripciones y descarga tus facturas.</p>
             </div>
         </div>
@@ -18,13 +18,13 @@
                     <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">Total este mes</p>
                     <i class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-fill ph-money"></i>
                 </div>
-                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">45,00 €
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">+{{ ingresosMesActual() |
+                    currency:'EUR':'symbol':'1.2-2':'es-ES' }}
                 </p>
                 <p class="text-xs text-[#3D6C3F] flex items-center gap-1">
                     <span class="text-[#B1DF75] font-bold flex items-center"><span
                             class="material-symbols-outlined text-[16px]"><i class="ph-bold ph-trend-up"></i></span>
-                        +12%</span> vs mes
-                    anterior
+                    </span> Ingresos en crecimiento
                 </p>
             </div>
             <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
@@ -33,18 +33,24 @@
                     <i
                         class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-bold ph-clock-counter-clockwise"></i>
                 </div>
-                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">12,00 €
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">{{ precioUltimaActividad() |
+                    currency:'EUR':'symbol':'1.2-2':'es-ES' }}
                 </p>
-                <p class="text-xs text-[#3D6C3F]">Pádel Mix - Nivel Medio</p>
+                @if (tituloUltimaActividad()) {
+                <p class="text-xs text-[#3D6C3F]">{{ tituloUltimaActividad() }}</p>
+                } @else {
+                <p class="text-xs text-[#3D6C3F]">Sin actividades creadas</p>
+                }
             </div>
             <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
                 <div class="flex items-center justify-between">
                     <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">EVENTOS</p>
                     <i class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-bold ph-monitor-arrow-up"></i>
                 </div>
-                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">1 Activo
+                <p class="text-[#152614] tracking-tight text-3xl font-bold leading-tight">{{ totalActividadesMes() }}
+                    Actividades
                 </p>
-                <p class="text-xs text-[#3D6C3F]">Finaliza: 15 Oct 2026</p>
+                <p class="text-xs text-[#3D6C3F]">este mes</p>
             </div>
         </div>
 
@@ -174,12 +180,14 @@
                                 <span
                                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
                                     [ngClass]="{
-                  'bg-[#e3fcf0] text-[#0a6639]': pago.estado === 'Completado',
-                  'bg-[#fff7e6] text-[#7a5b00]': pago.estado === 'Fallido'
+                  'bg-[#e3fcf0] text-[#0a6639]': pago.estado === 'COMPLETADO',
+                  'bg-[#ffebe6] text-[#7a2300]': pago.estado === 'FALLIDO',   
+                  'bg-[#fff3cd] text-[#7a6200]': pago.estado === 'REEMBOLSADO'
                 }">
                                     <span class="size-2 rounded-full" [ngClass]="{
-                        'bg-[#13ec80]': pago.estado === 'Completado',
-                        'bg-[#ffc107]': pago.estado === 'Fallido'
+                        'bg-[#13ec80]': pago.estado === 'COMPLETADO',
+                        'bg-[#ff4d07]': pago.estado === 'FALLIDO',
+                        'bg-[#ffc107]': pago.estado === 'REEMBOLSADO'
                       }"></span>
                                     {{ pago.estado }}
                                 </span>

@@ -5,7 +5,7 @@
 
     @let act = actividad();
     @if (act) {
-    <!-- Columna izquierda -->
+    <!-- COLUMNA IZQ -->
     <div class="lg:pr-10">
         <h1 class="text-4xl font-bold mb-2 wrap-break-word">{{ act.nombre }}</h1>
         <p class="mb-4 text-sm flex items-center gap-2">Creado por
@@ -43,6 +43,8 @@
                 <strong> Precio:</strong> {{ act.precio == 0 ? 'Gratuita' : act.precio + '€' }}
             </p>
         </div>
+
+        <!-- BOTONES -->
         <div>
             <p-toast />
             <p-confirmdialog />
@@ -96,23 +98,34 @@
                     </button>
                     
                 } @else {
-                    <button (click)="reembolso()"
-                        class="cursor-pointer 
-                            bg-[#d97706] hover:bg-[#b45309] 
-                            text-[#F7F7F7] 
-                            font-semibold border-none py-2 px-4 rounded-[20px] 
-                            transition-all duration-200 
-                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
-                        Desapuntarse y reembolsar...
-                    </button>
-
-
+                    @if(noReembolso(act.fecha)) {
+                        <button (click)="desapuntarse()"
+                            class="cursor-pointer 
+                                bg-[#d97706] hover:bg-[#b45309] 
+                                text-[#F7F7F7] 
+                                font-semibold border-none py-2 px-4 rounded-[20px] 
+                                transition-all duration-200 
+                                hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
+                            Desapuntarse sin reembolso
+                        </button>
+                        
+                    } @else {
+                        <button (click)="desapuntarse()"
+                            class="cursor-pointer 
+                                bg-[#d97706] hover:bg-[#b45309] 
+                                text-[#F7F7F7] 
+                                font-semibold border-none py-2 px-4 rounded-[20px] 
+                                transition-all duration-200 
+                                hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
+                            Desapuntarse y reembolsar...
+                        </button>
+                    }
                 }
             }
         </div>
     </div>
 
-    <!-- Columna derecha -->
+    <!-- COLUMNA DERECHA -->
     <div class="mt-8 lg:mt-0">
         <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
             [src]="act.deporte | deporteImg" alt="actividad-img">
@@ -128,6 +141,8 @@
             <div class="flex mt-2 space-x-2">
             </div>
         </div>
+
+        <!-- AVATARES INSCRITOS -->
         <div class="card flex pt-2 w-full">
             <p-avatar-group>
                 <!-- Iteramos sobre 'participante' en lugar de solo 'avatarId' -->
@@ -146,28 +161,21 @@
     </div>
 
 
+    <!-- MAPA DE UBICACIÓN -->
     <div class="my-8 min-w-xs lg:col-span-full">
-
         <div id="map" style="height: 400px;" [class.error-map]="errorUbicacion()">
 
             @if (errorUbicacion()) {
             <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="error mapa"
                 style="width: 80px; height: 80px; display: block; margin: 0 auto;"><br>
             <p class="error-text">{{ errorUbicacion() }}</p>
-
-
-
             } @else {
             <ng-container #mapa>
-
             </ng-container>
             }
 
         </div>
-
     </div>
-
-
     }
 </div>
 <app-footer></app-footer>

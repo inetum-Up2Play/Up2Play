@@ -27,17 +27,6 @@ public class PagoService {
         this.notificacionService = notificacionService;
     }
 
-    /*
-     * ---------IMPORTANTE!!---------
-     * Método hecho, falta implementarlo una vez el usuario paga y stripe
-     * confirma el pago.
-     * Se usa en:
-     * // webhook de Stripe
-     * if (evento == PAYMENT_INTENT_SUCCEEDED) {
-     * pagoService.crearPago(actividad, usuario);
-     * } o en la manera que sea que se compruebe que el pago se ha realizado con
-     * éxito.
-     */
     public Pago crearPago(Actividad act, Usuario usuario) {
 
         Pago pago = new Pago();
@@ -119,6 +108,7 @@ public class PagoService {
                         p.getTotal(),
                         p.getUsuario().getId(),
                         p.getActividad().getId(),
+                        p.getEstado() != null ? p.getEstado().name() : null,
                         p.getActividad().getNombre()))
                 .toList();
     }

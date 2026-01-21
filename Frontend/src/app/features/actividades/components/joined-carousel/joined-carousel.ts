@@ -48,7 +48,6 @@ export class JoinedCarousel implements OnInit {
         this.activities.forEach(act => {
           this.actService.comprobarCreador(act.id).subscribe(flag => act.esCreador = flag);
         });
-        console.log(this.activities);
       },
       error: err => {
         console.error('Error cargando actividades', err);
@@ -67,7 +66,6 @@ export class JoinedCarousel implements OnInit {
 
       },
       error: (codigo) => {
-        console.log('Código de error recibido:', codigo); // Debug
         const mensaje = this.errorService.getMensajeError(codigo);
         this.errorService.showError(mensaje);
       }
@@ -80,10 +78,6 @@ export class JoinedCarousel implements OnInit {
 
   }
 
-  reembolso(id: number) {
-    console.log('reembolso unico');
-  }
-
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
@@ -94,6 +88,19 @@ export class JoinedCarousel implements OnInit {
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
+  noReembolso(fechaStr: string): boolean {
+    const fechaActividad = new Date(fechaStr).getTime();
+    const ahora = Date.now();
+    
+    // Calculamos 24h en milisegundos: 24h * 60min * 60seg * 1000ms
+    const unDiaEnMs = 24 * 60 * 60 * 1000; 
+    
+    const diferencia = fechaActividad - ahora;
+
+    return diferencia <= unDiaEnMs;
+  }
+
+  // Variables para configurar el responsive del carousel
   responsiveOptions = [
     {
       breakpoint: '1840px',

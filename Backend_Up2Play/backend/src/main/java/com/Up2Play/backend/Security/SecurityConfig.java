@@ -46,7 +46,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                // Permite peticiones desde otros orígenes (como Angular en localhost:4200)
+                // Permite peticiones desde otros orígenes (como Angular en localhost:4201)
                 .cors(cors -> {
                 })
                 // Desactiva CSRF (protección contra ataques de formularios, no necesaria con
@@ -84,7 +84,7 @@ public class SecurityConfig {
         CorsConfiguration cfg = new CorsConfiguration();
         // Orígenes permitidos (ajusta según tu frontend en desarrollo/producción)
         cfg.setAllowedOrigins(
-                List.of("http://localhost:4200", "http://localhost:8080", "https://dashboard.stripe.com"));
+                List.of("http://localhost:4201", "http://localhost:8082", "https://dashboard.stripe.com"));
         // Métodos HTTP permitidos (incluye OPTIONS para preflight)
         cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         // Headers permitidos (incluye Authorization para JWT)

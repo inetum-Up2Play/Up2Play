@@ -1,21 +1,22 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Header } from '../../../../core/layout/header/header';
-import { Footer } from '../../../../core/layout/footer/footer';
 import { CommonModule } from '@angular/common';
-import { ActService } from '../../../../core/services/actividad/act-service';
-import { EmptyActivities } from '../../../actividades/components/empty-activities/empty-activities';
-import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
 import { RouterLink } from '@angular/router';
-// 1. IMPORTAR FORMS MODULE (Para arreglar el error de ngModel)
 import { FormsModule } from '@angular/forms';
 
-// 2. IMPORTS DE PRIMENG (Para arreglar p-dropdown y p-datepicker)
+// IMPORTS DE PRIMENG 
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ButtonModule } from 'primeng/button';
 import { MultiSelect } from 'primeng/multiselect';
+
+import { Header } from '../../../../core/layout/header/header';
+import { Footer } from '../../../../core/layout/footer/footer';
+import { ActService } from '../../../../core/services/actividad/act-service';
+import { EmptyActivities } from '../../../actividades/components/empty-activities/empty-activities';
+import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
+
 @Component({
   selector: 'app-historial',
   imports: [
@@ -36,10 +37,9 @@ import { MultiSelect } from 'primeng/multiselect';
   templateUrl: './historial.html',
   styleUrl: './historial.scss',
 })
+
 export class Historial implements OnInit {
   private actService = inject(ActService);
-  // private messageService = inject(MessageService); // Descomenta si tienes el import
-  // private errorService = inject(ErrorService);     // Descomenta si tienes el import
 
   // 1. Declaración limpia de variables
   activities: any[] = [];
@@ -50,7 +50,7 @@ export class Historial implements OnInit {
 
   // Variables para filtros
   filterNombre: string = '';
-filterDeporte: string[] = [];
+  filterDeporte: string[] = [];
   filterFecha: Date | null = null;
 
   // 2. Usar ngOnInit para la lógica de carga inicial

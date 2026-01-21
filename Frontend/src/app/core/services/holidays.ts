@@ -1,9 +1,9 @@
-// src/app/core/services/holidays/holidays.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { EventInput } from '@fullcalendar/core';
 
+//INTERFACES
 export interface NagerHoliday {
   date: string;            // "2025-01-01"
   localName: string;       // "Año Nuevo"
@@ -27,6 +27,7 @@ export class HolidaysService {
 
   constructor(private http: HttpClient) {}
 
+  // Devuelve los festivos nacionales
   getSpainHolidays(year: number, opts: HolidayOptions): Observable<EventInput[]> {
     const url = `${this.baseUrl}/PublicHolidays/${year}/ES`;
 

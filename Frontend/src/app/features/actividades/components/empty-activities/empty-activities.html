@@ -1,27 +1,18 @@
-<div class="flex flex-col items-center justify-center text-center
-            mx-6 sm:mx-10 md:mx-12 2xl:mx-38
-            max-auto
-            my-5 
-            px-5 py-16
-            bg-white rounded-lg shadow-lg">
+<div class="flex flex-col items-center justify-center text-center mx-6 sm:mx-10 md:mx-12 2xl:mx-38
+            max-auto my-5 px-5 py-16 bg-white rounded-lg shadow-lg">
 
+    <!-- ICONO -->
     <i [class]="icon + ' text-6xl '"></i>
 
-    <h2 class="text-xl 
-                font-bold 
-                text-gray-800"
-                aria-hidden="true" focusable="false">
+    <h2 class="text-xl font-bold text-gray-800" aria-hidden="true" focusable="false">
         {{ title }}
     </h2>
 
-    <p class="text-lg
-                text-gray-600 
-                xl:max-w-lg">
+    <p class="text-lg text-gray-600 xl:max-w-lg">
         {{ message }}
     </p>
-    
+
     <div class="mt-4">
-    <ng-content></ng-content>
+        <ng-content></ng-content>
     </div>
 </div>
-

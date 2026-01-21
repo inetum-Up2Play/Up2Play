@@ -1,19 +1,6 @@
-import {
-  AfterViewInit,
-  Component,
-  effect,
-  inject,
-  Injector,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { AfterViewInit, Component, effect, inject, Injector, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, forkJoin, map, of } from 'rxjs';
 
@@ -86,6 +73,7 @@ interface ParticipanteView {
   templateUrl: './info-actividad.html',
   styleUrls: ['./info-actividad.scss'],
 })
+
 export class InfoActividad implements OnInit, AfterViewInit {
   // =============================================================
   // INYECCIÓN DE DEPENDENCIAS
@@ -393,6 +381,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
     ]);
   }
 
+  reembolsoATodos() {}
+
   // =============================================================
   // LÓGICA DEL MAPA (OpenLayers)
   // =============================================================
@@ -497,7 +487,15 @@ export class InfoActividad implements OnInit, AfterViewInit {
     this.errorService.showError(mensaje);
   }
 
-  // Placeholders
-  reembolsoATodos() {}
-  reembolso() {}
+  noReembolso(fechaStr: string): boolean {
+    const fechaActividad = new Date(fechaStr).getTime();
+    const ahora = Date.now();
+    
+    // Calculamos 24h en milisegundos: 24h * 60min * 60seg * 1000ms
+    const unDiaEnMs = 24 * 60 * 60 * 1000; 
+    
+    const diferencia = fechaActividad - ahora;
+
+    return diferencia <= unDiaEnMs;
+  }
 }

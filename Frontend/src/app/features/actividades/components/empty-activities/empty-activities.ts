@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './empty-activities.html',
   styleUrl: './empty-activities.scss'
 })
+
 export class EmptyActivities {
   //icono
   @Input() icon: string = ''; 

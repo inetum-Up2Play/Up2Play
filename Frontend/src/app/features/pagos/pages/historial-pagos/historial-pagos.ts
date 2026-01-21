@@ -6,19 +6,19 @@ import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
 import { catchError, finalize, forkJoin, map, of, switchMap, tap } from 'rxjs';
-import { PagosService, PagoDtoResp } from '../../../../core/services/pagos/pagos-service';
+import { PagosService, PagoDtoResp, ActividadCreadaDto } from '../../../../core/services/pagos/pagos-service';
 import { Actividad } from '../../../../shared/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
 
 
 interface Pago {
-  fecha: string;            // '14 Oct 2023'
-  hora: string;             // '18:30'
-  actividadTitulo: string;  // 'Fútbol 7 - Torneo'
-  actividadLugar: string;   // 'Polideportivo Central'
-  estado: 'Completado' | 'Fallido';
-  importe: number;          // ej. 15.00
-  deporte: string; // Nuevo: deporte
+  fecha: string;
+  hora: string;
+  actividadTitulo: string;
+  actividadLugar: string;
+  estado: 'COMPLETADO' | 'FALLIDO' | 'REEMBOLSADO';
+  importe: number;
+  deporte: string;
 }
 
 @Component({
@@ -31,9 +31,10 @@ export class HistorialPagos {
 
   private pagosService = inject(PagosService);
 
-  private actService = inject(ActService); // <-- reemplaza por tu nombre de servicio real
+  private actService = inject(ActService);
 
   // Estado de datos/UX
+  actividades = signal<ActividadCreadaDto[]>([]);
   pagos = signal<Pago[]>([]);
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
@@ -90,14 +91,11 @@ export class HistorialPagos {
     return `${hh}:${mm}`;
   }
 
-  /** Mapper: PagoDtoResp -> Pago (lo que usa tu tabla) */
-
   // ---------- Mapper DTO + Actividad -> Pago ----------
   private toPago(dto: PagoDtoResp, act?: Actividad): Pago {
     const d = dto.fecha ? new Date(dto.fecha) : null;
     const ok = d && !isNaN(d.getTime()) ? d : null;
 
-    // OJO: nombreActividad es el campo que llega del back
     const actividadTitulo = dto.nombreActividad ?? '';
 
     // Usamos datos de la actividad si existen; si no, dejamos vacío
@@ -109,7 +107,7 @@ export class HistorialPagos {
       hora: ok ? this.formatHora(ok) : '',
       actividadTitulo,
       actividadLugar,
-      estado: 'Completado',      // ajusta si incorporas estado real
+      estado: (dto.estado as Pago['estado']) ?? 'Completado',
       importe: Number(dto.total ?? 0),
       deporte
     };
@@ -119,7 +117,104 @@ export class HistorialPagos {
   // ====== Cargar del servicio ======
   ngOnInit(): void {
     this.loadPagosUsuarioActual();
+    this.loadCreadas();
   }
+
+  loadCreadas() {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.actService.listarActividadesCreadas()
+      .pipe(
+        tap(raw => {
+          if (Array.isArray(raw)) {
+            console.table(raw.map(a => ({
+              id: a.id,
+              nombre: a.nombre,
+              fecha: a.fecha,
+              inscritos: a.numPersInscritas,
+              precio: a.precio
+            })));
+          }
+        }),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe({
+        next: data => this.actividades.set(data ?? []),
+        error: err => {
+          console.error('[Actividades creadas] Error', err);
+          this.error.set('No se pudieron cargar tus actividades creadas.');
+          this.actividades.set([]);
+        }
+      });
+  }
+
+  /** Helpers de fecha */
+  private startOfThisMonth(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+  }
+  private endOfThisMonth(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+  }
+  private parseFecha(f?: string): Date | null {
+    if (!f) return null;
+    const d = new Date(f);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  /** Devuelve el nº de inscritos que pagan (inscritos totales - 1 creador), sin bajar de 0 */
+  private inscritosDePago(a: ActividadCreadaDto): number {
+    const inscritos = Number(a.numPersInscritas) || 0;
+    return Math.max(inscritos - 1, 0);
+  }
+
+  /** Actividades del mes actual (local) */
+  actividadesMesActual = computed(() => {
+    const from = this.startOfThisMonth();
+    const to = this.endOfThisMonth();
+    return this.actividades().filter(a => {
+      const d = this.parseFecha(a.fecha);
+      return d && d >= from && d <= to;
+    });
+  });
+
+  /** conteo de actividades del mes actual */
+  totalActividadesMes = computed(() => this.actividadesMesActual().length);
+
+  /** Ingresos del mes actual = sum(precio * inscritos) */
+  ingresosMesActual = computed(() => {
+    return this.actividadesMesActual().reduce((acc, a) => {
+      const precio = Number(a.precio) || 0;
+      const pagadores = this.inscritosDePago(a);
+      return acc + (precio * pagadores);
+    }, 0);
+  });
+
+  // Última actividad creada
+  ultimaActividad = computed(() => {
+    const list = this.actividades();
+    if (!list || list.length === 0) return null;
+
+    let latest: ActividadCreadaDto | null = null;
+    let latestTime = -Infinity;
+
+    for (const a of list) {
+      const d = this.parseFecha?.(a.fecha) ?? (a.fecha ? new Date(a.fecha) : null);
+      if (!d || isNaN(d.getTime())) continue;
+      const t = d.getTime();
+      if (t > latestTime) {
+        latest = a;
+        latestTime = t;
+      }
+    }
+    return latest;
+  });
+
+  // Propiedades listas para template
+  tituloUltimaActividad = computed(() => this.ultimaActividad()?.nombre ?? '');
+  precioUltimaActividad = computed(() => Number(this.ultimaActividad()?.precio ?? 0));
 
   loadPagosUsuarioActual() {
     this.loading.set(true);
@@ -141,7 +236,7 @@ export class HistorialPagos {
             map(act => ({ id, actividad: act as Actividad })),
             catchError(err => {
               console.error(`[Actividad ${id}] error`, err);
-              return of({ id, actividad: null as unknown as Actividad }); // guardamos null
+              return of({ id, actividad: null as unknown as Actividad });
             })
           );
         });
@@ -184,7 +279,6 @@ export class HistorialPagos {
     this.dateTo.set(to);
   }
 
-  // Handlers (reciben Date | null)
   onDateFromChange(value: Date | null) {
     this.dateFrom.set(value);
   }
@@ -193,7 +287,6 @@ export class HistorialPagos {
     this.dateTo.set(value);
   }
 
-  // Los de búsqueda e importes siguen igual (strings)
   onSearchInput(value: string) { this.search.set(value); }
   onAmountMinInput(value: string) { this.amountMin.set(value); }
   onAmountMaxInput(value: string) { this.amountMax.set(value); }

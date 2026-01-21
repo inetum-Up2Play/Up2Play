@@ -2,6 +2,7 @@ package com.Up2Play.backend.Model;
 
 import java.time.LocalDateTime;
 
+import com.Up2Play.backend.Model.converter.EstadoActividadConverter;
 import com.Up2Play.backend.Model.converter.EstadoPagoConverter;
 import com.Up2Play.backend.Model.enums.EstadoPago;
 

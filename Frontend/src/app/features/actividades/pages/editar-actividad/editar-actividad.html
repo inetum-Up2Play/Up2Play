@@ -2,11 +2,13 @@
 <main class="pt-5 pb-5 md:pt-8 md:pb-8">
     <div class="formulario w-[80%] min-w-xs p-4 md:max-w-5xl md:w-[70%] lg:w-[75%] card flex justify-center">
         <h1>EDITA TU ACTIVIDAD</h1>
+
+        <!-- FORMULARIO-->
         <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center gap-4 w-full">
+            <!-- TÍTULO -->
             <div class="flex flex-col gap-1 w-full">
                 <label for="nombre" class="flex items-center gap-2">
-                    <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
-                    Título
+                    <i class="pi pi-pencil"></i> Título
                 </label>
                 <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64"
                     [invalid]="isInvalid('nombre')" />
@@ -23,29 +25,31 @@
                 }
                 }
             </div>
+
+            <!-- DESCRIPCIÓN -->
             <div class="flex flex-col gap-1 w-full">
                 <label for="descripcion" class="flex items-center gap-2">
-                    <i class="pi pi-receipt"></i> <!-- Icono PrimeIcons -->
-                    Descripción
+                    <i class="pi pi-receipt"></i> Descripción
                 </label>
                 <textarea rows="5" cols="30" pTextarea id="descripcion" maxlength="499" formControlName="descripcion"
                     [invalid]="isInvalid('descripcion')"></textarea>
                 <!-- Manejo de errores para la DESCRIPCIÓN -->
                 @if (isInvalid('descripcion')) {
-                    @if (actividadForm.get('descripcion')?.hasError('profanity')) {
-                    <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o
-                        soez.</p-message>
-                    }
-                    @else if (actividadForm.get('descripcion')?.hasError('required')) {
-                    <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
-                    }
+                @if (actividadForm.get('descripcion')?.hasError('profanity')) {
+                <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o
+                    soez.</p-message>
+                }
+                @else if (actividadForm.get('descripcion')?.hasError('required')) {
+                <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
+                }
                 }
             </div>
+
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
+                <!-- DEPORTE -->
                 <div class="flex flex-col gap-1 w-full">
                     <label for="deporte" class="flex items-center gap-2">
-                        <i class="pi pi-trophy"></i> <!-- Icono PrimeIcons -->
-                        Deporte
+                        <i class="pi pi-trophy"></i> Deporte
                     </label>
                     <p-select [options]="deportes" formControlName="deporte" optionLabel="name" [filter]="true"
                         filterBy="name" [showClear]="true" class="w-full" [invalid]="isInvalid('deporte')">
@@ -64,30 +68,31 @@
                     <p-message severity="error" size="small" variant="simple">Escoge un deporte.</p-message>
                     }
                 </div>
+                <!-- MÁX. PARTICIPANTES -->
                 <div class="flex flex-col gap-1 w-full">
                     <label for="numPersTotales" class="flex items-center gap-2">
-                        <i class="pi pi-pencil"></i> <!-- Icono PrimeIcons -->
-                        Máximos participantes
+                        <i class="pi pi-pencil"></i> Máximos participantes
                     </label>
                     <p-inputNumber [min]="1" [max]="999" formControlName="numPersTotales" id="numPersTotales"
                         pKeyFilter="int" />
                 </div>
             </div>
+
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
+                <!-- FECHA -->
                 <div class="flex flex-col gap-1 w-full">
                     <label for="num_pers_totales" class="flex items-center gap-2">
-                        <i class="pi pi-calendar-minus"></i> <!-- Icono PrimeIcons -->
-                        Fecha
+                        <i class="pi pi-calendar-minus"></i> Fecha
                     </label>
                     <p-datepicker formControlName="fecha" dateFormat="dd-mm-yy" [invalid]="isInvalid('fecha')" />
                     @if (isInvalid('fecha')) {
                     <p-message severity="error" size="small" variant="simple">Fecha requerida.</p-message>
                     }
                 </div>
+                <!-- HORA -->
                 <div class="flex flex-col gap-1 w-full">
                     <label for="num_pers_totales" class="flex items-center gap-2">
-                        <i class="pi pi-clock"></i> <!-- Icono PrimeIcons -->
-                        Hora
+                        <i class="pi pi-clock"></i> Hora
                     </label>
                     <p-datepicker inputId="hora" formControlName="hora" [timeOnly]="true"
                         [invalid]="isInvalid('hora')" />
@@ -96,29 +101,32 @@
                     }
                 </div>
             </div>
+
+             <!-- UBICACIÓN -->
             <div class="flex flex-col gap-1 w-full">
                 <label for="num_pers_totales" class="flex items-center gap-2">
-                    <i class="pi pi-map-marker"></i> <!-- Icono PrimeIcons -->
-                    Ubicación
+                    <i class="pi pi-map-marker"></i> Ubicación
                 </label>
                 <input pInputText type="text" formControlName="ubicacion"
                     placeholder="Ej. Polideportivo Municipal, Calle Mayor 123" [invalid]="isInvalid('ubicacion')" />
                 <!-- Manejo de errores para la UBICACIÓN -->
                 @if (isInvalid('ubicacion')) {
-                    @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
-                    <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o
-                        soez.</p-message>
-                    }
-                    @else if (actividadForm.get('ubicacion')?.hasError('required')) {
-                    <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
-                    }
+                @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
+                <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o
+                    soez.</p-message>
+                }
+                @else if (actividadForm.get('ubicacion')?.hasError('required')) {
+                <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
+                }
                 }
             </div>
+
+
             <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
+                <!-- NIVEL DE DIFICULTAD -->
                 <div class="flex flex-col gap-1 w-full">
                     <label for="nivel" class="flex items-center gap-2">
-                        <i class="pi pi-flag"></i> <!-- Icono PrimeIcons -->
-                        Nivel
+                        <i class="pi pi-flag"></i>  Nivel
                     </label>
                     <p-select [options]="niveles" formControlName="nivel" optionLabel="name" class="w-full"
                         [invalid]="isInvalid('nivel')" />
@@ -126,15 +134,17 @@
                     <p-message severity="error" size="small" variant="simple">Elige un nivel.</p-message>
                     }
                 </div>
+                <!-- PRECIO -->
                 <div class="flex flex-col gap-1 w-full">
                     <label for="precio" class="flex items-center gap-2">
-                        <i class="pi pi-euro"></i> <!-- Icono PrimeIcons -->
-                        Precio (No puede ser modificado)
+                        <i class="pi pi-euro"></i> Precio (No puede ser modificado)
                     </label>
                     <p-inputnumber formControlName="precio" placeholder="0,00 €" mode="currency"
                         inputId="currency-germany" currency="EUR" locale="de-DE" [disabled]="true" />
                 </div>
             </div>
+
+            <!-- BOTÓN CONFIRMAR -->
             <button pButton severity="secondary" type="submit"><span pButtonLabel>Editar Actividad</span></button>
         </form>
     </div>

@@ -1,19 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
-import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
-import {
-  Notificacion
+import { catchError, Observable, throwError } from 'rxjs';
 
-} from '../../../shared/models/Notificacion';
+import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
+import { Notificacion } from '../../../shared/models/Notificacion';
+
 @Injectable({
   providedIn: 'root',
 })
 export class NotificacionesService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/notificaciones';
+  private baseUrl = 'http://localhost:8082/notificaciones';
 
   //Lista de notificaciones
   getNotificacionesUsuario(): Observable<Notificacion[]> {
@@ -29,8 +28,7 @@ export class NotificacionesService {
 
 
   //Decir que la notifcación está leída
-  marcarComoLeida(id: number): Observable<{ message: string }> {
-    return this.http
+  marcarComoLeida(id: number): Observable<{ message: string }> {    return this.http
       .put<{ message: string }>(`${this.baseUrl}/leerNotificacion/${id}`, {})
       .pipe(
         catchError((error: HttpErrorResponse) => {
@@ -40,7 +38,7 @@ export class NotificacionesService {
       );
   }
 
-
+  // Elimina una notificación
   eliminarNotificacion(id: number): Observable<{ message: string }> {
     return this.http
       .delete<{ message: string }>(`${this.baseUrl}/eliminarNotificacion/${id}`)

@@ -1,15 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
@@ -46,7 +41,8 @@ import { UserService } from '../../../../core/services/user/user-service';
   templateUrl: './crear-actividad.html',
   styleUrl: './crear-actividad.scss',
 })
-export class CrearActividad {
+
+export class CrearActividad implements OnInit {
   private messageService = inject(MessageService);
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
@@ -134,7 +130,6 @@ export class CrearActividad {
       precio: Number(raw.precio ?? 0),
     };
 
-    console.log('Payload listo para API:', payload);
 
     // Llamada a servicio
     this.actService.crearActividad(payload).subscribe({
@@ -188,7 +183,6 @@ export class CrearActividad {
     this.userService.getUsuario().subscribe({
       next: (user) => {
         this.pagosHabilitados.set(user?.pagosHabilitados ?? false);
-        console.log(user);
       }
     });
 

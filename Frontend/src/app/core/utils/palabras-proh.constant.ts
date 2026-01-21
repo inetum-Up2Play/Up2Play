@@ -1,3 +1,5 @@
+// Lista de palabras prohibidas para que no aparezcan en la app
+
 export const PALABRAS_PROHIBIDAS: string[] = [
   'imbécil',
   'imbecil',
