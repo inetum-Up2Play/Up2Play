@@ -80,7 +80,6 @@ export class Profile implements OnInit {
     this.perfilService.getPerfil().subscribe({
       next: (datosPerfil) => {
         this.perfil.set(datosPerfil);
-        console.log('Perfil cargado:', this.perfil());
         const imagenActual = (datosPerfil as any).imagenPerfil ?? 0;
         this.avatarPendiente.set(imagenActual);
       },

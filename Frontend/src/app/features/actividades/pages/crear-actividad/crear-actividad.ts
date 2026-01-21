@@ -130,7 +130,6 @@ export class CrearActividad implements OnInit {
       precio: Number(raw.precio ?? 0),
     };
 
-    console.log('Payload listo para API:', payload);
 
     // Llamada a servicio
     this.actService.crearActividad(payload).subscribe({
@@ -184,7 +183,6 @@ export class CrearActividad implements OnInit {
     this.userService.getUsuario().subscribe({
       next: (user) => {
         this.pagosHabilitados.set(user?.pagosHabilitados ?? false);
-        console.log(user);
       }
     });
 

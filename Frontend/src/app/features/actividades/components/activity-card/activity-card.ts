@@ -108,7 +108,6 @@ export class ActivityCard {
         // Aquí deberías llamar a la lógica de borrado real.
         // Si el backend gestiona el reembolso al borrar, llamamos a ejecutarEliminacion().
         // Si no, descomenta el log y pon tu lógica específica.
-        // console.log('Reembolso de actividad', this.actividadId);
         
         this.ejecutarEliminacion(); 
       },

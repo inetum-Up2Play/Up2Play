@@ -53,7 +53,6 @@ export class NewPasswordForm implements OnInit {
 
   ngOnInit(): void {
     this.email = this.userDataService.getEmail() ?? '';
-    console.log('Email cargado desde UserDataService:', this.email);
   }
 
   passwordValidator(control: AbstractControl): ValidationErrors | null {
@@ -87,7 +86,6 @@ export class NewPasswordForm implements OnInit {
       password: this.f.newPassword.value!,
     };
 
-    console.log('Payload a enviar:', payload);
 
     this.authService.saveNewPassword(payload).subscribe({
       next: (res) => {

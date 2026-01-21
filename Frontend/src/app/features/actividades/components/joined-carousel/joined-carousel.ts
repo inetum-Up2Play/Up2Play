@@ -48,7 +48,6 @@ export class JoinedCarousel implements OnInit {
         this.activities.forEach(act => {
           this.actService.comprobarCreador(act.id).subscribe(flag => act.esCreador = flag);
         });
-        console.log(this.activities);
       },
       error: err => {
         console.error('Error cargando actividades', err);
@@ -67,7 +66,6 @@ export class JoinedCarousel implements OnInit {
 
       },
       error: (codigo) => {
-        console.log('Código de error recibido:', codigo); // Debug
         const mensaje = this.errorService.getMensajeError(codigo);
         this.errorService.showError(mensaje);
       }

@@ -118,7 +118,6 @@ export class EditarActividad implements OnInit {
           numPersTotales: act.numPersTotales,
           precio: act.precio,
         });
-        console.log(act);
 
         this.cargando = false;
       },
@@ -248,7 +247,6 @@ export class EditarActividad implements OnInit {
       precio: formValue.precio,
     };
 
-    console.log(payload);
 
     this.actService.editarActividad(this.actividadId, payload).subscribe({
       next: (res) => {

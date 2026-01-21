@@ -127,8 +127,6 @@ export class HistorialPagos {
     this.actService.listarActividadesCreadas()
       .pipe(
         tap(raw => {
-          // LOG: lo que devuelve el backend
-          console.log('[GET /actividades/getCreadas] body:', raw);
           if (Array.isArray(raw)) {
             console.table(raw.map(a => ({
               id: a.id,
