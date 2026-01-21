@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
 
-
+// INTERFACES
 export interface PaymentInfo {
   actividadId: number;
   nombre: string;
@@ -73,7 +73,7 @@ export class PagosService {
     sessionStorage.removeItem('pending_payment');
   }
 
-
+  // Lista los pagos del usuario
   getPagosUsuarioActual(): Observable<PagoDtoResp[]> {
     return this.http.get<PagoDtoResp[]>(
       `${this.baseUrl}/getPagos`,

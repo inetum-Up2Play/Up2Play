@@ -37,6 +37,7 @@ export class UserDataService {
     sessionStorage.setItem(EMAIL_STORAGE_KEY, email);
   }
 
+  // DEVUELVE EL EMAIL DEL USER LOGGEADO
   getEmail(): string {
     return (this.emailSignal() ?? '').trim();
   }

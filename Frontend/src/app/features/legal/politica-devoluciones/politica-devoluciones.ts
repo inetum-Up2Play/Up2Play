@@ -1,15 +1,19 @@
 import { ViewportScroller, Location } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+
 import { AccordionModule } from 'primeng/accordion'; 
 import { Button } from 'primeng/button';
+
 import { Header } from '../../../core/layout/header/header';
 import { Footer } from '../../../core/layout/footer/footer';
+
 @Component({
   selector: 'app-politica-devoluciones',
   imports: [AccordionModule, Button, Header, Footer],
   templateUrl: './politica-devoluciones.html',
   styleUrl: './politica-devoluciones.scss',
 })
+
 export class PoliticaDevoluciones {
 private readonly viewportScroller = inject(ViewportScroller);
 

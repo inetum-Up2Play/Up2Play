@@ -2,14 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
-import { ErrorService } from '../../../../core/services/error/error-service';
 import { ActivityCard } from '../activity-card/activity-card';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { EmptyActivities } from '../empty-activities/empty-activities';
@@ -21,12 +19,10 @@ import { EmptyActivities } from '../empty-activities/empty-activities';
   templateUrl: './created-carousel.html',
   styleUrl: './created-carousel.scss'
 })
-export class CreatedCarousel {
+export class CreatedCarousel implements OnInit {
 
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
-  private messageService = inject(MessageService);
-  private errorService = inject(ErrorService);
   private router = inject(Router);
 
   activities: any[] = [];
@@ -54,9 +50,7 @@ export class CreatedCarousel {
   }
 
   editar(id: number) {
-
     return this.router.navigate([`/actividades/editar-actividad/${id}`]);
-
   }
 
   extraerHora(fecha: string): string {
@@ -69,6 +63,7 @@ export class CreatedCarousel {
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
+  // Responsive del carousel
   responsiveOptions = [
     {
       breakpoint: '1840px',

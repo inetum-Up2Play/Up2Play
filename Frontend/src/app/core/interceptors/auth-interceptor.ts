@@ -3,31 +3,19 @@ import { inject } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { AuthService } from '../services/auth/auth-service';
- 
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const token = auth.token;
- 
-  const shouldAttach = !!token && !auth.isTokenExpired();
- 
-  const isPublicAuthEndpoint = /(^|\/)auth(\/|$)/.test(req.url);
- 
 
-/*    const PUBLIC_AUTH_ENDPOINTS = [
-    '/auth/login',
-    '/auth/register',
-    '/auth/verification',           // ← corregido
-    '/auth/mail-recover',
-    '/auth/verification-password',
-    '/auth/new-password',
-  ]; */ 
-  
-  //const isPublicAuthEndpoint = PUBLIC_AUTH_ENDPOINTS.some((p) => req.url.includes(p));
+  const shouldAttach = !!token && !auth.isTokenExpired();
+
+  const isPublicAuthEndpoint = /(^|\/)auth(\/|$)/.test(req.url);
 
   const authReq = shouldAttach && !isPublicAuthEndpoint
     ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
     : req;
- 
+
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
       if (err.status === 403) {
@@ -36,5 +24,5 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       return throwError(() => err);
     })
   );
- 
+
 };
