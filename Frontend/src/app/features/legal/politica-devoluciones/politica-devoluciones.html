@@ -1,28 +1,39 @@
 <app-header></app-header>
 <div class="min-h-screen flex justify-center bg-gray-50 dark:bg-[#121212]">
   <main class="w-full max-w-4xl mx-auto px-6 lg:px-8 py-12 lg:py-20">
-      <nav class="flex justify-start animate-fade-in-down mb-8">
-        <!-- BOTÓN VOLVER ATRÁS -->
-        <p-button label="Volver atrás" icon="pi pi-arrow-left" (onClick)="goBack()"
-          styleClass="p-button-text p-button-secondary text-brand hover:bg-brand-light/10 
-          hover:transition-transform pl-0 transition-all duration-300">
-        </p-button>
-      </nav>
+    <nav class="flex justify-start animate-fade-in-down mb-8">
+      <!-- BOTÓN VOLVER ATRÁS -->
+      <p-button
+        label="Volver atrás"
+        icon="pi pi-arrow-left"
+        (onClick)="goBack()"
+        styleClass="p-button-text p-button-secondary text-brand hover:bg-brand-light/10 
+          hover:transition-transform pl-0 transition-all duration-300"
+      >
+      </p-button>
+    </nav>
 
     <div class="flex flex-col gap-12 relative">
-      <section class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center">
+      <section
+        class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center"
+      >
         <div class="flex flex-col gap-4">
-          <h1 class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark">
+          <h1
+            class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark"
+          >
             Política de Cancelación y Reembolsos
           </h1>
-          <p class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto">
+          <p
+            class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto"
+          >
             En UP2Play, queremos que tu experiencia sea justa y transparente.
             Consulta nuestras normas actualizadas.
           </p>
         </div>
 
-        <div class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit 
-          px-4 py-1.5 rounded-full font-medium border border-brand-light/50">
+        <div
+          class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit px-4 py-1.5 rounded-full font-medium border border-brand-light/50"
+        >
           <span class="material-symbols-outlined text-base">update</span>
           <span>Última actualización: {{ lastUpdate() }}</span>
         </div>
@@ -35,30 +46,30 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           @for (card of summaryCards; track card.title) {
-          <div
-            class="flex flex-col gap-4 rounded-xl border border-brand-light bg-white dark:bg-white/5 p-6 shadow-sm hover:shadow-md transition-shadow"
-          >
             <div
-              [class]="
-                'w-12 h-12 rounded-full flex items-center justify-center ' +
-                card.bgClass +
-                ' ' +
-                card.textClass
-              "
+              class="flex flex-col gap-4 rounded-xl border border-brand-light bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
             >
-              <span class="material-symbols-outlined text-2xl">{{
-                card.icon
-              }}</span>
+              <div
+                [class]="
+                  'w-12 h-12 rounded-full flex items-center justify-center ' +
+                  card.bgClass +
+                  ' ' +
+                  card.textClass
+                "
+              >
+                <span class="material-symbols-outlined text-2xl">{{
+                  card.icon
+                }}</span>
+              </div>
+              <div class="flex flex-col gap-2">
+                <h3 class="text-lg font-bold text-brand-dark">
+                  {{ card.title }}
+                </h3>
+                <p class="text-brand text-sm leading-relaxed opacity-90">
+                  {{ card.desc }}
+                </p>
+              </div>
             </div>
-            <div class="flex flex-col gap-2">
-              <h3 class="text-lg font-bold text-brand-dark">
-                {{ card.title }}
-              </h3>
-              <p class="text-brand text-sm leading-relaxed opacity-90">
-                {{ card.desc }}
-              </p>
-            </div>
-          </div>
           }
         </div>
       </section>
@@ -81,10 +92,10 @@
           >
             <p-accordion-panel
               value="conditions"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white dark:bg-white/5"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white"
             >
               <p-accordion-header
-                styleClass="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors p-5"
+                styleClass="hover:bg-gray-50 transition-colors p-5"
               >
                 <div class="flex items-center gap-4">
                   <span class="material-symbols-outlined text-brand"
@@ -145,10 +156,10 @@
 
             <p-accordion-panel
               value="deadlines"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white dark:bg-white/5"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white"
             >
               <p-accordion-header
-                styleClass="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors p-5"
+                styleClass="hover:bg-gray-50 transition-colors p-5"
               >
                 <div class="flex items-center gap-4">
                   <span class="material-symbols-outlined text-brand"
@@ -188,10 +199,10 @@
 
             <p-accordion-panel
               value="process"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white dark:bg-white/5"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white"
             >
               <p-accordion-header
-                styleClass="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors p-5"
+                styleClass="hover:bg-gray-50  transition-colors p-5"
               >
                 <div class="flex items-center gap-4">
                   <span class="material-symbols-outlined text-brand"
@@ -218,10 +229,10 @@
 
             <p-accordion-panel
               value="exceptions"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white dark:bg-white/5"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white"
             >
               <p-accordion-header
-                styleClass="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors p-5"
+                styleClass="hover:bg-gray-50 transition-colors p-5"
               >
                 <div class="flex items-center gap-4">
                   <span class="material-symbols-outlined text-brand"
@@ -240,15 +251,15 @@
                   </p>
                   <div class="grid gap-3 mb-4">
                     @for (item of exceptions; track item) {
-                    <div
-                      class="flex gap-3 items-start p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-brand-light"
-                    >
-                      <span
-                        class="material-symbols-outlined text-brand text-sm mt-0.5"
-                        >check_circle</span
+                      <div
+                        class="flex gap-3 items-start p-3 bg-gray-50 rounded-lg border border-brand-light"
                       >
-                      <span class="text-sm font-medium">{{ item }}</span>
-                    </div>
+                        <span
+                          class="material-symbols-outlined text-brand text-sm mt-0.5"
+                          >check_circle</span
+                        >
+                        <span class="text-sm font-medium">{{ item }}</span>
+                      </div>
                     }
                   </div>
                   <p
@@ -303,7 +314,7 @@
                   background: '#FFEE59',
                   color: '#152614',
                   border: 'none',
-                  'border-radius': '0.75rem'
+                  'border-radius': '0.75rem',
                 }"
               >
               </p-button>

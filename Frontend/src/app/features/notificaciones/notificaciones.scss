@@ -35,7 +35,12 @@ select {
 
 :host ::ng-deep .p-paginator-page {
     color: vars.$verde-oscuro !important;
-    background-color: #b1df7565 !important;
+    background-color: #b1df754d !important;
+}
+
+:host ::ng-deep .p-paginator-page-selected {
+    color: vars.$verde-oscuro !important;
+    background-color: #b1df75d0 !important;
 }
 
 :host ::ng-deep .p-paginator {

@@ -69,7 +69,7 @@
                         Eliminar y reembolsar
                     </button>
                 }
-            } @else if (!apuntado()) {
+            } @else if (!apuntado() && (actividad()?.estado === 'PENDIENTE')) {
 
                 @if (act.precio == 0.00) {
                     
@@ -90,7 +90,7 @@
                     </button>
 
                 }
-            } @else {
+            } @else if (actividad()?.estado === 'PENDIENTE') {
                 @if (act.precio == 0.00) {
                     <button (click)="desapuntarse()"
                         class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">

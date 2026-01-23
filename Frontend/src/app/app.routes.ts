@@ -6,6 +6,8 @@ import { Profile } from './features/profile/pages/profile/profile';
 import { Notificaciones } from './features/notificaciones/notificaciones';
 import { Historial } from './features/historial/pages/historial/historial';
 import { PoliticaDevoluciones } from './features/legal/politica-devoluciones/politica-devoluciones';
+import { TeminosCondiciones } from './features/legal/terminos-condiciones/teminos-condiciones/teminos-condiciones';
+import { PoliticaPrivacidad } from './features/legal/politica-privacidad/politica-privacidad/politica-privacidad';
 
 export const routes: Routes = [
   {
@@ -54,6 +56,14 @@ export const routes: Routes = [
       {
         path: 'legal/devoluciones',
         component: PoliticaDevoluciones,
+      },
+      {
+        path: 'legal/terminos-condiciones',
+        component: TeminosCondiciones,
+      },
+      {
+        path: 'legal/privacidad',
+        component: PoliticaPrivacidad,
       },
     ],
   },
