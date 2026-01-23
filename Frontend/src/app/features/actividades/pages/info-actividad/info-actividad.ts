@@ -144,7 +144,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
       },
       { injector: this.injector }
     );
-
     // Carga inicial
     this.cargarDatosActividad();
     this.cargarInscritos();
@@ -172,6 +171,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
         if (act.ubicacion) {
           this.resolverCoordenadas(act.ubicacion);
         }
+
+        console.log(act);
       },
       error: (e) => {
         this.messageService.add({

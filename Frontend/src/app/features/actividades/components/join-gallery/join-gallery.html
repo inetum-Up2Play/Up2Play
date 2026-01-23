@@ -13,9 +13,9 @@
     @for (act of visibleActivities; track act.id) {
     <app-activity-card [titulo]="act.nombre" [fecha]="extraerFecha(act.fecha)" [hora]="extraerHora(act.fecha)"
       [ubicacion]="act.ubicacion" [imagen]="act.deporte | deporteImg" [actividadId]="act.id"
-      [botonLabel]="act.precio == 0 ? '¡Apúntate!' : 'Apúntate por ' + act.precio + '€'"
+      [botonLabel]="act.numPersInscritas < act.numPersTotales ? act.precio == 0 ? '¡Apúntate!' : 'Apúntate por ' + act.precio + '€' : 'Actividad Completa'"
       [botonStyle]="act.precio == 0 ? 'btn-apuntarse' : 'btn-pagar'"
-      [botonAction]="act.precio == 0 ? apuntarse.bind(this, act.id) : pagar.bind(this, act.id)"
+      [botonAction]="act.numPersInscritas < act.numPersTotales ? act.precio == 0 ? apuntarse.bind(this, act.id) : pagar.bind(this, act.id) : undefined"
       [attr.aria-label]="act.nombre">
     </app-activity-card>
     }
