@@ -12,10 +12,12 @@ import { UserDataService } from '../../../../../core/services/auth/user-data-ser
 import { Header } from '../../../../../core/layout/header/header';
 import { Footer } from '../../../../../core/layout/footer/footer';
 import { DeporteImgPipe } from '../../../../actividades/pipes/deporte-img-pipe';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-payment',
-  imports: [ButtonModule, CurrencyPipe, Header, Footer, DatePipe, ProgressSpinner, DeporteImgPipe, TitleCasePipe, JsonPipe],
+  imports: [ButtonModule, CurrencyPipe, Header, Footer, DatePipe, ProgressSpinner, DeporteImgPipe, TitleCasePipe, JsonPipe, RouterLink],
   templateUrl: './payment.html',
   styleUrl: './payment.scss',
   providers: [MessageService]
