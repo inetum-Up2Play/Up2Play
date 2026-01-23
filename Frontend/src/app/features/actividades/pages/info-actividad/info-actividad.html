@@ -5,7 +5,6 @@
 
     @let act = actividad();
     @if (act) {
-    <!-- COLUMNA IZQ -->
     <div class="lg:pr-10">
         <h1 class="text-4xl font-bold mb-2 wrap-break-word">{{ act.nombre }}</h1>
         <p class="mb-4 text-sm flex items-center gap-2">Creado por
@@ -44,11 +43,10 @@
             </p>
         </div>
 
-        <!-- BOTONES -->
         <div>
             <p-toast />
             <p-confirmdialog />
-            @if (isCreador() && actividad()?.estado === 'PENDIENTE') {
+            @if (isCreador() && act.estado === 'PENDIENTE') {
             <button (click)="goEditar()"
                 class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
                 <i class="pi pi-pen-to-square"></i>
@@ -69,7 +67,8 @@
                         Eliminar y reembolsar
                     </button>
                 }
-            } @else if (!apuntado() && (actividad()?.estado === 'PENDIENTE')) {
+            
+            } @else if (!apuntado() && (act.estado === 'PENDIENTE')) {
 
                  @if (act.numPersInscritas < act.numPersTotales) {
 
@@ -90,11 +89,32 @@
                              <i class="pi pi-credit-card"></i> 
                              <span>Apúntate por {{ act.precio }}€</span>
                          </button>
-
+     
                      }
-                } 
+                } @else {
+                        
+                        @if (act.precio == 0.00) {
+                            
+                            <button 
+                                class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
+                                Actividad Completa
+                            </button>
+        
+                        } @else {
+                            <button
+                                class="cursor-pointer 
+                                    bg-[#FFEE59] hover:bg-[#e6d600] 
+                                    text-[#152614] 
+                                    font-semibold border-none py-2 px-4 rounded-[20px] 
+                                    flex items-center gap-2 shadow-md hover:shadow-lg transition-all">
+                                <i class="pi pi-credit-card"></i> 
+                                <span>Actividad Completa</span>
+                            </button>
+    
+                        }
+                    }
 
-            } @else if (actividad()?.estado === 'PENDIENTE') {
+            } @else if (act.estado === 'PENDIENTE') {
                 @if (act.precio == 0.00) {
                     <button (click)="desapuntarse()"
                         class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
@@ -129,7 +149,6 @@
         </div>
     </div>
 
-    <!-- COLUMNA DERECHA -->
     <div class="mt-8 lg:mt-0">
         <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
             [src]="act.deporte | deporteImg" alt="actividad-img">
@@ -146,10 +165,8 @@
             </div>
         </div>
 
-        <!-- AVATARES INSCRITOS -->
         <div class="card flex pt-2 w-full">
             <p-avatar-group>
-                <!-- Iteramos sobre 'participante' en lugar de solo 'avatarId' -->
                 @for (participante of avataresUsuarios().slice(0, 5); track $index) {
                 <p-avatar [image]="participante.avatarId | avatarImg" [pTooltip]="participante.nombre"
                     tooltipPosition="bottom" shape="circle" size="large"
@@ -165,7 +182,6 @@
     </div>
 
 
-    <!-- MAPA DE UBICACIÓN -->
     <div class="my-8 min-w-xs lg:col-span-full">
         <div id="map" style="height: 400px;" [class.error-map]="errorUbicacion()">
 
