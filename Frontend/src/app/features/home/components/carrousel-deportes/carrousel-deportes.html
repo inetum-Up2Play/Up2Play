@@ -120,7 +120,7 @@
                         [imagen]="activity.deporte | deporteImg" 
                         [botonLabel]="activity.numPersInscritas < activity.numPersTotales ? activity.precio == 0 ? '¡Apúntate!' : 'Apúntate por ' + activity.precio + '€' : 'Actividad Completa'"
                         [botonStyle]="activity.precio == 0 ? 'btn-apuntarse' : 'btn-pagar'"
-                        [botonAction]="activity.numPersInscritas < activity.numPersTotales ? activity.precio == 0 ? apuntarse.bind(this, activity.id) : pagar.bind(this, activity.id) : undefined"
+                        [botonAction]="activity.numPersInscritas < activity.numPersTotales ? activity.precio == 0 ? apuntarse.bind(this, activity.id) : pagar.bind(this, activity.id) : actCompleta.bind(this)"
                         [actividadId]="activity.id">
                     </app-activity-card>
                 </ng-template>

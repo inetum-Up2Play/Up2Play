@@ -499,4 +499,12 @@ export class InfoActividad implements OnInit, AfterViewInit {
 
     return diferencia <= unDiaEnMs;
   }
+
+  actCompleta() : void {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Atención',
+      detail: 'La actividad ya ha alcanzado el número máximo de inscritos.',
+    });
+  }
 }

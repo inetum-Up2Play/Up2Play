@@ -193,4 +193,11 @@ export class CarrouselDeportes {
     }
   ];
 
+  actCompleta() : void {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Atención',
+      detail: 'La actividad ya ha alcanzado el número máximo de inscritos.',
+    });
+  }
 }

@@ -15,7 +15,7 @@
       [ubicacion]="act.ubicacion" [imagen]="act.deporte | deporteImg" [actividadId]="act.id"
       [botonLabel]="act.numPersInscritas < act.numPersTotales ? act.precio == 0 ? '¡Apúntate!' : 'Apúntate por ' + act.precio + '€' : 'Actividad Completa'"
       [botonStyle]="act.precio == 0 ? 'btn-apuntarse' : 'btn-pagar'"
-      [botonAction]="act.numPersInscritas < act.numPersTotales ? act.precio == 0 ? apuntarse.bind(this, act.id) : pagar.bind(this, act.id) : undefined"
+      [botonAction]="act.numPersInscritas < act.numPersTotales ? act.precio == 0 ? apuntarse.bind(this, act.id) : pagar.bind(this, act.id) : actCompleta.bind(this)"
       [attr.aria-label]="act.nombre">
     </app-activity-card>
     }
