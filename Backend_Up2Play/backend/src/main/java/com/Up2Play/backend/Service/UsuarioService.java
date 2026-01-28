@@ -29,10 +29,12 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginExcepti
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
 import com.Up2Play.backend.Model.Actividad;
+import com.Up2Play.backend.Model.Pago;
 import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Repository.ActividadRepository;
+import com.Up2Play.backend.Repository.PagoRepository;
 import com.Up2Play.backend.Repository.PerfilRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
@@ -55,12 +57,14 @@ public class UsuarioService {
     private ActividadService actividadService;
     private ActividadRepository actividadRepository;
     private NotificacionService notificacionService;
-
+    private PagoRepository pagoRepository;
+    
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
             LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService,
             PerfilService perfilService, PerfilRepository perfilRepository, ActividadService actividadService,
-            ActividadRepository actividadRepository, NotificacionService notificacionService) {
+            ActividadRepository actividadRepository, NotificacionService notificacionService,
+            PagoRepository pagoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -72,6 +76,7 @@ public class UsuarioService {
         this.actividadService = actividadService;
         this.actividadRepository = actividadRepository;
         this.notificacionService = notificacionService;
+        this.pagoRepository = pagoRepository;
     }
 
     // Obtiene todos los usuarios en una lista
@@ -90,9 +95,15 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
+        List<Pago> pagos = pagoRepository.findByUsuario(usuario);
+        if (!pagos.isEmpty()) {
+
+            pagoRepository.deleteAll(pagos);
+
+        }
+
         notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
 
-        // eliminar usuario de las actividades en las que esta inscrito
         List<Actividad> actividades = actividadRepository.findAll();
         for (Actividad act : actividades) {
             if (!act.getUsuarioCreador().equals(usuario)) {
@@ -111,8 +122,8 @@ public class UsuarioService {
 
         if (usuario.getPerfil() != null) {
             Perfil perfil = usuario.getPerfil();
-            usuario.setPerfil(null); // rompe la relación en el grafo
-            perfilRepository.delete(perfil); // borra el perfil existente (managed)
+            usuario.setPerfil(null);
+            perfilRepository.delete(perfil);
         }
 
         usuarioRepository.deleteToken(usuario.getId());
