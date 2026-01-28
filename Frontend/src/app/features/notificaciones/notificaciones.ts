@@ -47,11 +47,14 @@ export class Notificaciones implements OnInit {
     this.tipos = [
       { label: 'INSCRITO', value: 'INSCRITO' },
       { label: 'PAGADO', value: 'PAGADO' },
+      { label: 'PAGO RECIBIDO', value: 'PAGO_RECIBIDO' },
+      { label: 'REEMBOLSADO', value: 'REEMBOLSADO' },
       { label: 'CREADA', value: 'CREADA' },
       { label: 'ACTUALIZADO', value: 'ACTUALIZADO' },
       { label: 'EDITADA', value: 'EDITADA' },
       { label: 'DESAPUNTADO', value: 'DESAPUNTADO' },
       { label: 'CANCELADA', value: 'CANCELADA' },
+      { label: 'PAGO FALLIDO', value: 'PAGO_FALLIDO' },
     ];
   }
 
@@ -93,12 +96,15 @@ export class Notificaciones implements OnInit {
       // Azules
       case 'EDITADA':
       case 'ACTUALIZADO':
+      case 'PAGO_RECIBIDO':
         return 'info';
       // Amarillos
       case 'DESAPUNTADO':
+      case 'REEMBOLSADO':
         return 'warn';
       // Rojos 
       case 'CANCELADA':
+      case'PAGO_FALLIDO':
         return 'danger';
       // Gris
       default:

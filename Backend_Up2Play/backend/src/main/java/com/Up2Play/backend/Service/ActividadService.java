@@ -573,15 +573,6 @@ public class ActividadService {
                 if (act.getEstado() != EstadoActividad.PENDIENTE) {
                     throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
                 } else {
-
-                    notificacionService.crearNotificacionPerfil(
-                            "Te has desapuntdo de " + act.getNombre() + ".",
-                            "Has cancelado tu inscripción en la actividad " + act.getNombre()
-                                    + ". Esperamos verte en otras actividades próximamente.",
-                            LocalDateTime.now(),
-                            EstadoNotificacion.fromValue("DESAPUNTADO"),
-                            act,
-                            usuario);
                     act.getUsuarios().remove(usuario);
                     usuario.getActividadesUnidas().remove(act);
                     act.setNumPersInscritas(act.getUsuarios().size());

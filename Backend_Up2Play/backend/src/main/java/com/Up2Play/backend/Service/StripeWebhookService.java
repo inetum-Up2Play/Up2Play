@@ -35,6 +35,9 @@ public class StripeWebhookService {
     private ActividadRepository actividadRepository;
 
     @Autowired
+    private NotificacionService notificacionService;
+
+    @Autowired
     private PagoService pagoService;
 
     public Map<String, Object> processWebhook(String payload, String signature) {
@@ -111,6 +114,8 @@ public class StripeWebhookService {
 
             Pago pago = pagoService.crearPagoSucceded(totalEnEuros, usuario, actividad, paymentId);
 
+            notificacionService.notificacionPagoConfirmado(pago);
+
             logger.info("PAGO GUARDADO en BD - ID: {}, Total: {}€, Usuario: {}, Actividad: {}",
                     pago.getId(), pago.getTotal(), usuario.getEmail(), actividad.getNombre());
 
@@ -161,6 +166,8 @@ public class StripeWebhookService {
 
                 Pago pagoFallido = pagoService.crearPagoFailed(totalEnEuros, usuario, actividad, paymentId,
                         errorMessage);
+
+                notificacionService.notificacionPagoFallido(pagoFallido);
 
                 logger.warn("Pago fallido guardado en BD - ID: {}", pagoFallido.getId());
 
@@ -237,6 +244,8 @@ public class StripeWebhookService {
                             pagoOriginal.getActividad(),
                             "no_refund_id_" + System.currentTimeMillis(),
                             "Refund completed");
+
+                    notificacionService.notificacionPagoReembolsado(pagoReembolsado);
 
                     logger.info("Pago reembolsado creado sin refundId específico");
                     result.put("status", "success");

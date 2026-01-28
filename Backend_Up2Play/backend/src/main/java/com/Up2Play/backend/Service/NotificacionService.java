@@ -189,33 +189,123 @@ public class NotificacionService {
         return notificacionGuardada;
     }
 
-    //notficaciones pago
-    public void notificacionPagoConfirmado(Pago pago){
+    @Transactional
+    public void notificacionPagoConfirmado(Pago pago) {
+        // Validar que el pago y sus relaciones existen
+        if (pago == null) {
+            throw new IllegalArgumentException("El pago no puede ser nulo");
+        }
+
         Actividad act = pago.getActividad();
         Usuario pagador = pago.getUsuario();
-        Usuario CreadorPagado = act.getUsuarioCreador();
-        LocalDateTime fecha = LocalDateTime.now();
-        
-        crearNotificacion(
-            "¡Pago confirmado!", 
-            "Has pagado correctamente la actividad " + act.getNombre(), 
-            fecha, 
-            EstadoNotificacion.fromValue("PAGADO"),
-            act, 
-            Set.of(pagador), 
-            CreadorPagado
-        );
 
+        if (act == null || pagador == null) {
+            throw new IllegalStateException("El pago no tiene actividad o usuario asociado");
+        }
+
+        Usuario creadorPagado = act.getUsuarioCreador();
+        LocalDateTime fecha = LocalDateTime.now();
+
+        // Verificar que el creador existe
+        if (creadorPagado == null) {
+            // Podrías notificar a un admin o manejar este caso
+            creadorPagado = pagador; // Otra opción
+        }
+
+        // Notificación al pagador
         crearNotificacion(
-            "¡Nuevo pago recibido", 
-            "El usuario " + pagador.getNombreUsuario() + " ha pagado tu actividad " + act.getNombre(), 
-            fecha, 
-            EstadoNotificacion.fromValue("PAGO_RECIBIDO"),
-            act, 
-            Set.of(CreadorPagado), 
-            pagador
-        );
-        
+                "¡Pago confirmado!",
+                "Has pagado correctamente la actividad: " + act.getNombre() + " por " +
+                        (pago.getTotal() > 0 ? pago.getTotal() + "€" : ""),
+                fecha,
+                EstadoNotificacion.PAGADO,
+                act,
+                Set.of(pagador),
+                creadorPagado);
+
+        // Notificación al creador (solo si no es el mismo usuario)
+        if (!pagador.equals(creadorPagado)) {
+            crearNotificacion(
+                    "¡Nuevo pago recibido!", // Añadí signo de exclamación
+                    "El usuario '" + pagador.getNombreUsuario() +
+                            "' ha pagado tu actividad '" + act.getNombre() +
+                            "' por " + (pago.getTotal() > 0 ? pago.getTotal() + "€" : ""),
+                    fecha,
+                    EstadoNotificacion.PAGO_RECIBIDO,
+                    act,
+                    Set.of(creadorPagado),
+                    pagador);
+        }
+    }
+
+    @Transactional
+    public void notificacionPagoFallido(Pago pago) {
+        // Validar que el pago y sus relaciones existen
+        if (pago == null) {
+            throw new IllegalArgumentException("El pago no puede ser nulo");
+        }
+
+        Actividad act = pago.getActividad();
+        Usuario pagador = pago.getUsuario();
+
+        if (act == null || pagador == null) {
+            throw new IllegalStateException("El pago no tiene actividad o usuario asociado");
+        }
+
+        Usuario creadorPagado = act.getUsuarioCreador();
+        LocalDateTime fecha = LocalDateTime.now();
+
+        // Verificar que el creador existe
+        if (creadorPagado == null) {
+            // Podrías notificar a un admin o manejar este caso
+            creadorPagado = pagador; // Otra opción
+        }
+
+        // Notificación al pagador
+        crearNotificacion(
+                "Pago Fallido...",
+                "Ha habido algun problema con el pago de la actividad: " + act.getNombre() + " por " +
+                        (pago.getTotal() > 0 ? pago.getTotal() + "€" : ""),
+                fecha,
+                EstadoNotificacion.PAGO_FALLIDO,
+                act,
+                Set.of(pagador),
+                creadorPagado);
+    }
+
+     @Transactional
+    public void notificacionPagoReembolsado(Pago pago) {
+        // Validar que el pago y sus relaciones existen
+        if (pago == null) {
+            throw new IllegalArgumentException("El pago no puede ser nulo");
+        }
+
+        Actividad act = pago.getActividad();
+        Usuario pagador = pago.getUsuario();
+
+        if (act == null || pagador == null) {
+            throw new IllegalStateException("El pago no tiene actividad o usuario asociado");
+        }
+
+        Usuario creadorPagado = act.getUsuarioCreador();
+        LocalDateTime fecha = LocalDateTime.now();
+
+        // Verificar que el creador existe
+        if (creadorPagado == null) {
+            // Podrías notificar a un admin o manejar este caso
+            creadorPagado = pagador; // Otra opción
+        }
+
+        // Notificación al pagador
+        crearNotificacion(
+                "Pago Reembolsado",
+                "Se ha rembolsado correctamente el pago de la actividad: " + act.getNombre() + " por " +
+                        (pago.getTotal() > 0 ? pago.getTotal() + "€" : ""),
+                fecha,
+                EstadoNotificacion.REEMBOLSADO,
+                act,
+                Set.of(pagador),
+                creadorPagado);
     }
 
     @Transactional
@@ -330,7 +420,6 @@ public class NotificacionService {
         }
     }
 
-    
     // En NotificacionService
     public void ActividadEliminada(Actividad actividad, List<String> emails) throws MessagingException {
         String subject = "Actividad eliminada";
@@ -391,13 +480,13 @@ public class NotificacionService {
         UsuarioNotificacion usuarioNotificacion = usuarioNotificacionRepository.findByUsuarioAndNotificacion(
                 usuario,
                 notificacion);
-        
+
         usuarioNotificacionRepository.deleteById(usuarioNotificacion.getId());
         return true;
 
     }
 
-        // Se eliminar en laabla M:N, y se pone en null
+    // Se eliminar en laabla M:N, y se pone en null
     @Transactional
     public Boolean EliminarNotificacionesAlEliminarUsuario(Long usuarioId) {
 
@@ -408,7 +497,6 @@ public class NotificacionService {
 
         List<UsuarioNotificacion> usuarioNotificacion = usuarioNotificacionRepository.findByUsuario(usuario);
 
-        
         for (UsuarioNotificacion eliminarUsuarioNotificacion : usuarioNotificacion) {
 
             usuarioNotificacionRepository.deleteById(eliminarUsuarioNotificacion.getId());
