@@ -27,6 +27,7 @@ import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Actividad;
 import com.Up2Play.backend.Model.Notificacion;
+import com.Up2Play.backend.Model.Pago;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
 import com.Up2Play.backend.Model.enums.EstadoNotificacion;
@@ -425,6 +426,13 @@ public class ActividadService {
             List<String> emails = act.getUsuarios().stream()
                     .map(Usuario::getEmail)
                     .toList();
+
+            List<Pago> pagos = pagoRepository.findByActividad(act);
+                if (!pagos.isEmpty()) {
+
+                    pagoRepository.deleteAll(pagos);
+
+                }       
 
             notificacionService.ActividadEliminada(act, emails);
 
