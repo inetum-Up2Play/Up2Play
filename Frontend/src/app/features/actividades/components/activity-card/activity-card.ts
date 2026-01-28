@@ -115,6 +115,8 @@ export class ActivityCard {
         this.mensajeCancelado();
       },
     });
+
+    
   }
 
   // --- Lógica Auxiliar ---
