@@ -1,6 +1,5 @@
 package com.Up2Play.backend.Model.enums;
 
-//enumerado nivel de la actividad
 public enum NivelDificultad {
 
     INICIADO("Iniciado"),
@@ -11,7 +10,7 @@ public enum NivelDificultad {
 
     private final String valorBD;
 
-    NivelDificultad (String valorBD){
+    NivelDificultad(String valorBD) {
         this.valorBD = valorBD;
     }
 
@@ -27,7 +26,5 @@ public enum NivelDificultad {
         }
         throw new IllegalArgumentException("Valor no válido: " + value);
     }
-
-
 
 }

@@ -58,7 +58,7 @@ public class UsuarioService {
     private ActividadRepository actividadRepository;
     private NotificacionService notificacionService;
     private PagoRepository pagoRepository;
-    
+
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
             LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService,
@@ -89,7 +89,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-   // Elimina un usuario por ID.
+    // Elimina un usuario por ID.
     @Transactional
     public void deleteUsuario(Long id) throws MessagingException {
         Usuario usuario = usuarioRepository.findById(id)

@@ -7,25 +7,22 @@ public enum EstadoNotificacion {
     PAGO_RECIBIDO("Pago Recibido"),
     REEMBOLSADO("Reembolsado"),
     PAGO_FALLIDO("Pago Fallido"),
-    ACTUALIZADO("Actualizado"), //editar perfil
+    ACTUALIZADO("Actualizado"),
     DESAPUNTADO("Desapuntado"),
     CANCELADA("Cancelada"),
     CREADA("Creada"),
-    EDITADA("Editada"); //editar actividad
- 
-    // iniciar atributo que va dentro del enum
+    EDITADA("Editada");
+
     private final String valorBD;
- 
-    //Constructor del enumerado
+
     EstadoNotificacion(String valorBD) {
         this.valorBD = valorBD;
     }
- 
-    //Getter
+
     public String getValorBD() {
         return valorBD;
     }
- 
+
     public static EstadoNotificacion fromValue(String value) {
         for (EstadoNotificacion estado : EstadoNotificacion.values()) {
             if (estado.valorBD.equalsIgnoreCase(value)) {
@@ -34,5 +31,5 @@ public enum EstadoNotificacion {
         }
         throw new IllegalArgumentException("Valor no válido: " + value);
     }
-    
+
 }

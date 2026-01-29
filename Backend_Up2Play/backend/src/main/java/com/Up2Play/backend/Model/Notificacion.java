@@ -29,7 +29,7 @@ public class Notificacion {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @Size(max = 255) // ajusta a 255 si la columna es 255
+    @Size(max = 255)
     @Column(name = "TITULO", length = 255)
     private String titulo;
 
@@ -47,8 +47,7 @@ public class Notificacion {
     @JoinColumn(name = "ID_ACTIVIDAD", nullable = true)
     private Actividad actividad;
 
-    @OneToMany(mappedBy = "notificacion", cascade = CascadeType.ALL,
-           orphanRemoval = true)
+    @OneToMany(mappedBy = "notificacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
 
     @ManyToOne

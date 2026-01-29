@@ -23,14 +23,13 @@ public class PagoController {
     private final PagoService pagoService;
     private final UsuarioRepository usuarioRepository;
 
-   
     public PagoController(PagoService pagoService,
             UsuarioRepository usuarioRepository) {
         this.pagoService = pagoService;
         this.usuarioRepository = usuarioRepository;
     }
 
-     //Listar todos los pagos de cada usuario
+    // Listar todos los pagos de cada usuario
     @GetMapping("/getPagos")
     public List<PagoDtoResp> getPagosPorUsuario(@AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();

@@ -75,9 +75,9 @@ public class NotificacionController {
         return ResponseEntity.ok(Map.of("message", "Has leído una notificación"));
     }
 
-    // Realmente se eliminar la instancia de la tabla M:N UsuarioNotificacion
     @DeleteMapping("/eliminarNotificacion/{id}")
-    public ResponseEntity<?> eliminarNotificacion(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
+    public ResponseEntity<?> eliminarNotificacion(@PathVariable Long id,
+            @AuthenticationPrincipal UserDetails principal) {
 
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)

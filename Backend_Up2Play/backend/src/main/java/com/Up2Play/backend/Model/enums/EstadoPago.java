@@ -8,7 +8,7 @@ public enum EstadoPago {
 
     private final String valorBD;
 
-    EstadoPago (String valorBD){
+    EstadoPago(String valorBD) {
         this.valorBD = valorBD;
     }
 
@@ -24,5 +24,5 @@ public enum EstadoPago {
         }
         throw new IllegalArgumentException("Valor no válido: " + value);
     }
-    
+
 }

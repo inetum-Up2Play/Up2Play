@@ -17,13 +17,13 @@ public enum SexoAElegir {
     }
 
     public static SexoAElegir fromValue(String value) {
-        if (value == null) return null;
+        if (value == null)
+            return null;
         for (SexoAElegir estado : values()) {
             if (estado.valorBD.equalsIgnoreCase(value.trim())) {
                 return estado;
             }
         }
-        // Normalizaciones comunes para no romper aunque llegue "OTRO" o "MASCULINO"
         return switch (value.trim().toLowerCase()) {
             case "masculino", "m" -> MASCULINO;
             case "femenino", "f" -> FEMENINO;
