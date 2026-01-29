@@ -6,12 +6,12 @@ import { Header } from '../../../../core/layout/header/header';
 import { JoinedCarousel } from '../../components/joined-carousel/joined-carousel';
 import { CreatedCarousel } from "../../components/created-carousel/created-carousel";
 import { Footer } from '../../../../core/layout/footer/footer';
-
+import { TabsModule } from 'primeng/tabs';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-actividades',
-  imports: [JoinGallery, Header, Footer,  JoinedCarousel, CreatedCarousel, ButtonModule, RouterModule],
+  imports: [JoinGallery, Header, Footer,  JoinedCarousel, CreatedCarousel, ButtonModule, RouterModule, TabsModule],
   templateUrl: './actividades.html',
   styleUrl: './actividades.scss'
 })

@@ -1,39 +1,99 @@
 <div class="content">
     <app-header></app-header>
 
-    <!-- BLOQUE MIS ACTIVIDADES -->
-    <div id="creadas" role="region" aria-label="Mis actividades">
-        <div class="text-center items-center  flex flex-col xl:flex-row lg:justify-between xl:text-left 
-        lg:mx-[clamp(3rem,3vw,20rem)] xl:mx-[clamp(4rem,4vw,25rem)] 2xl:mx-[clamp(6rem,8vw,25rem)] pt-5 md:pt-10">
-            <h1 class="font-extrabold text-2xl md:text-4xl">MIS ACTIVIDADES</h1>
-            <!-- Botón crear actividad -->
-            <button class="mt-3 xl:mt-0 hover:bg-[#4D834F]!" id="crear_actividad" pButton
-                [routerLink]="['/actividades', 'crear-actividad']">
-                <div class="px-4 flex items-center">
-                    <i class="pi pi-plus" aria-hidden="true" pButtonIcon></i>
-                    <span class="font-bold text-xl md:text-2xl pl-2" pButtonLabel>Nueva Actividad</span>
-                </div>
-            </button>
-        </div>
-        <app-created-carousel></app-created-carousel>
-    </div>
+    <main class="px-4 md:px-8 lg:px-16 py-6 gap-6">
+        <p-tabs value="0">
+            <p-tabpanels class="bg-transparent! border-none!">
+                <p-tabpanel value="0">
+                    <div class="flex flex-col gap-4">
+                        <div class="text-center items-center flex flex-col xl:flex-row lg:justify-between xl:text-left w-full md:pt-5 2xl:max-w-screen-2xl 2xl:mx-auto">
+                            <h1 class="font-extrabold text-2xl md:text-4xl">EXPLORA Y APÚNTATE</h1>
+                            <button
+                                class="mt-3 xl:mt-0 hover:bg-[#4D834F]!"
+                                id="crear_actividad"
+                                pButton
+                                [routerLink]="['/actividades', 'crear-actividad']">
+                                <div class="px-4 flex items-center">
+                                    <i class="pi pi-plus" aria-hidden="true" pButtonIcon></i>
+                                    <span class="font-bold text-xl md:text-2xl pl-2" pButtonLabel>Nueva Actividad</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </p-tabpanel>
 
-    <!-- BLOQUE EXPLORAR ACTIVIDADES -->
-    <div id="apuntate" role="region" aria-label="Explora y apúntate">
-        <div
-            class="text-center xl:text-left xl:ml-[clamp(4rem,4vw,25rem)] 2xl:ml-[clamp(6rem,8vw,25rem)] pt-5 md:pt-10">
-            <h1 class="font-extrabold text-2xl md:text-4xl">EXPLORA Y APÚNTATE</h1>
-        </div>
-        <app-join-gallery></app-join-gallery>
-    </div>
+                <p-tabpanel value="1">
+                    <div class="flex flex-col gap-4">
+                        <div class="text-center items-center flex flex-col xl:flex-row lg:justify-between xl:text-left w-full md:pt-5 2xl:max-w-screen-2xl 2xl:mx-auto">
+                            <h1 class="font-extrabold text-2xl md:text-4xl">MIS ACTIVIDADES</h1>
+                            <button
+                                class="mt-3 xl:mt-0 hover:bg-[#4D834F]!"
+                                id="crear_actividad"
+                                pButton
+                                [routerLink]="['/actividades', 'crear-actividad']">
+                                <div class="px-4 flex items-center">
+                                    <i class="pi pi-plus" aria-hidden="true" pButtonIcon></i>
+                                    <span class="font-bold text-xl md:text-2xl pl-2" pButtonLabel>Nueva Actividad</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </p-tabpanel>
 
-    <!-- BLOQUE ACTIVIDADES APUNTADAS -->
-    <div id="desapuntate" role="region" aria-label="Mis próximos planes">
-        <div class="text-center xl:text-left xl:ml-[clamp(4rem,4vw,25rem)] 2xl:ml-[clamp(6rem,8vw,25rem)]">
-            <h1 class="font-extrabold text-2xl md:text-4xl">MIS PRÓXIMOS PLANES</h1>
-        </div>
-        <app-joined-carousel></app-joined-carousel>
-    </div>
-    
+                <p-tabpanel value="2">
+                    <div class="flex flex-col gap-4">
+                        <div class="text-center items-center flex flex-col xl:flex-row lg:justify-between xl:text-left w-full md:pt-5 2xl:max-w-screen-2xl 2xl:mx-auto">
+                            <h1 class="font-extrabold text-2xl md:text-4xl">MIS PRÓXIMOS PLANES</h1>
+                            <button
+                                class="mt-3 xl:mt-0 hover:bg-[#4D834F]!"
+                                id="crear_actividad"
+                                pButton
+                                [routerLink]="['/actividades', 'crear-actividad']">
+                                <div class="px-4 flex items-center">
+                                    <i class="pi pi-plus" aria-hidden="true" pButtonIcon></i>
+                                    <span class="font-bold text-xl md:text-2xl pl-2" pButtonLabel>Nueva Actividad</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+
+            <p-tablist class="flex w-full 2xl:max-w-screen-2xl 2xl:mx-auto">
+                <p-tab
+                    value="0"
+                    class="cursor-pointer pb-3 pt-2 px-2 text-[#3D6C3F]! hover:text-[#111814]">
+                    <p class="font-bold">Explora y apúntate</p>
+                </p-tab>
+
+                <p-tab
+                    value="1"
+                    class="cursor-pointer pb-3 pt-2 px-2 bg-transparent text-[#3D6C3F]! hover:text-[#111814]">
+                    <p class="font-bold">Mis Actividades</p>
+                </p-tab>
+
+                <p-tab
+                    value="2"
+                    class="cursor-pointer pb-3 pt-2 px-2 bg-transparent text-[#3D6C3F]! hover:text-[#111814]">
+                    <p class="font-bold">Mis próximos planes</p>
+                </p-tab>
+            </p-tablist>
+
+            <p-tabpanels class="bg-transparent! border-none!">
+                <p-tabpanel value="0">
+                    <app-join-gallery></app-join-gallery>
+                </p-tabpanel>
+
+                <p-tabpanel value="1">
+                    <app-created-carousel></app-created-carousel>
+                </p-tabpanel>
+
+                <p-tabpanel value="2">
+                    <app-joined-carousel></app-joined-carousel>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </main>
+
     <app-footer></app-footer>
 </div>

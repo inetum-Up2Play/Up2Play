@@ -18,3 +18,14 @@ h1 {
     border: none;
     color: vars.$verde-oscuro;
 }
+
+:host ::ng-deep .p-tablist-tab-list {
+    background: transparent !important;
+
+    .p-tab-active {
+
+       border-color: vars.$verde-oscuro !important; 
+       border-bottom-width: 5px !important;
+    }
+    --p-tabs-active-bar-background:  vars.$verde-oscuro !important;
+}
