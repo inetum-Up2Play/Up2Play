@@ -273,7 +273,7 @@ public class NotificacionService {
                 creadorPagado);
     }
 
-     @Transactional
+    @Transactional
     public void notificacionPagoReembolsado(Pago pago) {
         // Validar que el pago y sus relaciones existen
         if (pago == null) {

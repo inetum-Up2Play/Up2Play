@@ -12,28 +12,30 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 public class EmailConfiguration {
 
-    //Email que se usará para enviar los correo, inyectado de archivo application.properties
+    // Email que se usará para enviar los correo, inyectado de archivo
+    // application.properties
     @Value("${spring.mail.username}")
     private String emailUsername;
 
-    //Contraseña para envisr correos, inyectado de archivo application.properties 
+    // Contraseña para envisr correos, inyectado de archivo application.properties
     @Value("${spring.mail.password}")
     private String emailPassword;
 
-    // Función que crea y configura el sistema de envío de correos. Usa el servidor SMTP de Gmail.
+    // Función que crea y configura el sistema de envío de correos. Usa el servidor
+    // SMTP de Gmail.
     @Bean
     public JavaMailSender javaMailSender() {
 
-        //Configuración del servidor del correo de Gmail
+        // Configuración del servidor del correo de Gmail
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        //Indica cuenta de Gmail para enviar correos
+        // Indica cuenta de Gmail para enviar correos
         mailSender.setUsername(emailUsername);
         mailSender.setPassword(emailPassword);
 
-        //Opciones adicionales
+        // Opciones adicionales
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");

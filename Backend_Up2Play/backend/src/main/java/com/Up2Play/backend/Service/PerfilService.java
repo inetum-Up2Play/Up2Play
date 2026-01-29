@@ -69,22 +69,21 @@ public class PerfilService {
 
     }
 
-@Transactional
-public PerfilDtoResp obtenerPerfil(Long id) {
-    PerfilDtoResp dto = perfilRepository.findById(id)
-        .map(p -> new PerfilDtoResp(
-            p.getId(),
-            p.getNombre(),
-            p.getApellido(),
-            p.getTelefono(),
-            p.getSexo(),
-            p.getFechaNacimiento(),
-            p.getIdiomas(),
-            p.getEmail(),
-            p.getImagenPerfil()
-        ))
-        .orElseThrow(() -> new PerfilNoEncontradoException("Perfil no encontrado"));
-    return dto;
-}
+    @Transactional
+    public PerfilDtoResp obtenerPerfil(Long id) {
+        PerfilDtoResp dto = perfilRepository.findById(id)
+                .map(p -> new PerfilDtoResp(
+                        p.getId(),
+                        p.getNombre(),
+                        p.getApellido(),
+                        p.getTelefono(),
+                        p.getSexo(),
+                        p.getFechaNacimiento(),
+                        p.getIdiomas(),
+                        p.getEmail(),
+                        p.getImagenPerfil()))
+                .orElseThrow(() -> new PerfilNoEncontradoException("Perfil no encontrado"));
+        return dto;
+    }
 
 }

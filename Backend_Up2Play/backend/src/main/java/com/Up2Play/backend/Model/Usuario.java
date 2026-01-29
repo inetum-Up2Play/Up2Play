@@ -24,37 +24,33 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-//Entidad Usuario que representa un usuario en la base de datos.
-
 @Entity
 @Table(name = "USUARIO")
 public class Usuario implements UserDetails {
 
-    // Campos principales de identificación y autenticación
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // autogenera el ID
-    @Column(unique = true, nullable = false) // único y no nulo
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long id;
 
     @NotBlank
     @Email
     @Column(unique = true)
-    private String email; // Email único y validado
+    private String email;
 
-    private String password; // Contraseña del usuario (debe encriptarse)
-    private String rol; // Rol del usuario (ej: ADMIN, USER)
+    private String password;
+    private String rol;
     @Column(name = "nombre_usuario", unique = true)
-    private String nombreUsuario; // Nombre de usuario único
+    private String nombreUsuario;
 
-    // Campos para verificación y estado
     @Column(name = "ENABLED", nullable = false)
-    private boolean enabled; // Indica si la cuenta está activa
+    private boolean enabled;
 
     @Column(name = "VERIFICATION_CODE")
-    private String verificationCode; // Código de verificación temporal
+    private String verificationCode;
 
     @Column(name = "VERIFICATION_EXPIRES_AT")
-    private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
+    private LocalDateTime verificationCodeExpiresAt;
 
     @OneToMany(mappedBy = "usuarioCreador", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Actividad> actividadesCreadas = new HashSet<>();
@@ -268,45 +264,36 @@ public class Usuario implements UserDetails {
         this.verificationCodeExpiresAt = verificationCodeExpiresAt;
     }
 
-    // Implementación de UserDetails para Spring Security
-
-    // Devuelve los permisos o roles del usuario
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
-    // Verifica si la cuenta no ha expirado. Siempre true por defecto.
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    // Verifica si la cuenta no está bloqueada. Siempre true por defecto.
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // Verifica si las credenciales no han expirado. Siempre true por defecto.
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    // Verifica si el usuario está habilitado.
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
-    // Retorna la password para autenticación.
     @Override
     public String getPassword() {
         return password;
     }
 
-    // Retorna el nombre de usuario (usa email).
     @Override
     public String getUsername() {
         return email;

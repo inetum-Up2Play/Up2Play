@@ -66,7 +66,7 @@ public class ActividadController {
         return actividadService.getActividadesApuntadasPendientes(usuariosId);
     }
 
-        @GetMapping("/getApuntadasCalendario")
+    @GetMapping("/getApuntadasCalendario")
     public List<ActividadDtoResp> getActividadesApuntadas(@AuthenticationPrincipal UserDetails principal) {
         // el getUsername recoge el correo, no el username
         String email = principal.getUsername();
@@ -91,7 +91,6 @@ public class ActividadController {
         return actividadService.getActividadesNoApuntadas(usuariosId);
     }
 
-
     @GetMapping("/isUsuarioApuntado/{id}")
     public boolean isUsuarioApuntado(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
         String email = principal.getUsername();
@@ -111,7 +110,8 @@ public class ActividadController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteActividad(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) throws MessagingException {
+    public void deleteActividad(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal)
+            throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
@@ -152,7 +152,8 @@ public class ActividadController {
 
     @PutMapping("editarActividad/{id}")
     public ResponseEntity<?> editarActividad(@PathVariable Long id,
-           @Valid @RequestBody EditarActividadDto editarActividadDto, @AuthenticationPrincipal UserDetails principal) throws MessagingException {
+            @Valid @RequestBody EditarActividadDto editarActividadDto, @AuthenticationPrincipal UserDetails principal)
+            throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
@@ -175,12 +176,13 @@ public class ActividadController {
     }
 
     @GetMapping("/getNoApuntadasPorDeporte")
-    public List<ActividadDtoResp> getActividadesNoApuntadasPorDeporte(@AuthenticationPrincipal UserDetails principal, @RequestParam String deporte) {
+    public List<ActividadDtoResp> getActividadesNoApuntadasPorDeporte(@AuthenticationPrincipal UserDetails principal,
+            @RequestParam String deporte) {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         Long usuariosId = usuario.getId();
-        return actividadService.getActividadesNoApuntadasPorDeporte(usuariosId,deporte);
+        return actividadService.getActividadesNoApuntadasPorDeporte(usuariosId, deporte);
     }
 
     @GetMapping("/getPasadasPorUsuario")
@@ -191,7 +193,5 @@ public class ActividadController {
         Long usuarioId = usuario.getId();
         return actividadService.getActividadesPasadasPorUsuario(usuarioId);
     }
-    
-
 
 }

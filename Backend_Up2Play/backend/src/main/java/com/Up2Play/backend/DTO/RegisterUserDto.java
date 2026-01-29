@@ -2,18 +2,16 @@ package com.Up2Play.backend.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-// DTO para datos de registro de nuevo usuario: email, contraseña y nombre de usuario.
 public class RegisterUserDto {
-    
+
     private String email;
-    
+
     @JsonProperty("password")
     private String password;
-    
+
     @JsonProperty("nombre_usuario")
     private String nombre_usuario;
 
-    //Getters y Setters
     public String getEmail() {
         return email;
     }

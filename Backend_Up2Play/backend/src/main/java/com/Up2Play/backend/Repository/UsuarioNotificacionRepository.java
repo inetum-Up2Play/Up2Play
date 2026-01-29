@@ -13,6 +13,7 @@ import com.Up2Play.backend.Model.UsuarioNotificacion;
 public interface UsuarioNotificacionRepository extends JpaRepository<UsuarioNotificacion, Long> {
 
     UsuarioNotificacion findByUsuarioAndNotificacion(Usuario usuario, Notificacion notificacion);
+
     List<UsuarioNotificacion> findByUsuario(Usuario usuario);
 
 }

@@ -18,26 +18,26 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // Clave secreta para firmar y verificar los tokens (se guarda en application.properties
+    // Clave secreta para firmar y verificar los tokens (se guarda en
+    // application.properties
     @Value("${spring.security.jwt.secret-key}")
     private String secretKeyBase64;
 
     // Tiempo de expiración del token en milisegundos (configurable)
     @Value("${spring.security.jwt.expiration-time}")
-    private long jwtExpiration; // ms
+    private long jwtExpiration;
 
-    //Extrae el email (username) del token
+    // Extrae el email (username) del token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    //Extrae una parte específica del token (una "claim")
+    // Extrae una parte específica del token (una "claim")
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         final Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
     }
 
-    
     // Genera un token JWT básico para el usuario (sin claims extras).
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -48,32 +48,33 @@ public class JwtService {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    //Retorna el tiempo de expiración configurado.
+    // Retorna el tiempo de expiración configurado.
     public long getExpirationTime() {
         return jwtExpiration;
     }
 
-    //Construye el token JWT con toda la información necesaria (claims, subject, fechas y firma).
+    // Construye el token JWT con toda la información necesaria (claims, subject,
+    // fechas y firma).
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + expiration);
 
         return Jwts.builder()
-                .claims(extraClaims) // Claims adicionales
-                .subject(userDetails.getUsername()) // Username como subject
-                .issuedAt(now) // Fecha de emisión
-                .expiration(exp) // Fecha de expiración
-                .signWith(getSecretKey(), Jwts.SIG.HS256) // Firma HS256
-                .compact(); // Compacta a string
+                .claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(now)
+                .expiration(exp)
+                .signWith(getSecretKey(), Jwts.SIG.HS256)
+                .compact();
     }
 
-    //Valida si el token es válido para el usuario especificado.
+    // Valida si el token es válido para el usuario especificado.
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
             return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
         } catch (Exception e) {
-            return false; // Cualquier error (ej: firma inválida) lo invalida
+            return false;
         }
     }
 
@@ -82,7 +83,7 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    //Extrae la fecha de expiración del token.
+    // Extrae la fecha de expiración del token.
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -90,13 +91,13 @@ public class JwtService {
     // Extrae toda la información del token (claims)
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSecretKey()) // Verifica firma con clave secreta
+                .verifyWith(getSecretKey())
                 .build()
-                .parseSignedClaims(token) // Parsea y verifica
-                .getPayload(); // Retorna payload (claims)
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
-    //Genera la clave secreta HMAC a partir de la cadena base64.
+    // Genera la clave secreta HMAC a partir de la cadena base64.
     private SecretKey getSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKeyBase64);
         return Keys.hmacShaKeyFor(keyBytes);

@@ -3,7 +3,6 @@ package com.Up2Play.backend.Exception;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class PalabrasProhibidas {
 
     public static final List<String> PALABRAS_PROHIBIDAS = Arrays.asList(
@@ -89,6 +88,5 @@ public class PalabrasProhibidas {
     public static List<String> getPalabrasProhibidas() {
         return PALABRAS_PROHIBIDAS;
     }
-
 
 }

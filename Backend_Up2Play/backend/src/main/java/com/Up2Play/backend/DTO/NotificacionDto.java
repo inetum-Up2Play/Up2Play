@@ -1,4 +1,5 @@
 package com.Up2Play.backend.DTO;
+
 public class NotificacionDto {
 
     private boolean leido;

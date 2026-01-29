@@ -109,7 +109,6 @@ public class StripeConnectController {
     public ResponseEntity<?> createP2PPayment(@RequestBody CreatePaymentRequest request,
             @AuthenticationPrincipal UserDetails principal) {
         try {
-            // Validación preventiva
             if (request.getActividadId() == null || request.getAmount() == null) {
                 return ResponseEntity.badRequest().body("Faltan datos: idActividad o monto");
             }
@@ -117,7 +116,6 @@ public class StripeConnectController {
             Usuario usuario = usuarioRepository.findByEmail(principal.getUsername())
                     .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-            // Llamamos al service con los parámetros corregidos para Direct Charge
             Map<String, Object> paymentIntent = stripeConnectService.createP2PPayment(
                     request.getAmount(),
                     request.getCurrency(),
@@ -154,10 +152,8 @@ public class StripeConnectController {
                 return ResponseEntity.ok(Map.of("pagosHabilitados", false));
             }
 
-            // Sincroniza con Stripe
             stripeConnectService.verificarYActualizarEstadoPagos(usuario.getStripeAccountId());
 
-            // Refrescamos el objeto usuario de la base de datos
             Usuario usuarioActualizado = usuarioRepository.findById(usuario.getId()).get();
 
             return ResponseEntity.ok(Map.of(
@@ -220,7 +216,6 @@ public class StripeConnectController {
      */
     @GetMapping("/return")
     public ResponseEntity<?> handleReturn() {
-        // Aquí rediriges al usuario a una página de éxito en tu frontend
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         response.put("message", "Onboarding completado exitosamente");
@@ -229,7 +224,6 @@ public class StripeConnectController {
 
     @GetMapping("/reauth")
     public ResponseEntity<?> handleReauth() {
-        // Aquí manejas cuando el usuario necesita reautenticarse
         Map<String, Object> response = new HashMap<>();
         response.put("success", false);
         response.put("message", "Necesitas completar la autenticación");

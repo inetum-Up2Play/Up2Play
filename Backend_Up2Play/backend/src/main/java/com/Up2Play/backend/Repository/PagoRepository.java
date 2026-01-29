@@ -15,27 +15,23 @@ import com.Up2Play.backend.Model.Usuario;
 @Repository
 public interface PagoRepository extends JpaRepository<Pago, Long> {
 
-    // Buscar lista pagos por su usuario
-    List<Pago> findByUsuario(Usuario usuario);
+        List<Pago> findByUsuario(Usuario usuario);
 
-    // Buscar lista pagos por actividad
-    List<Pago> findByActividad(Actividad actividad);
+        List<Pago> findByActividad(Actividad actividad);
 
-    Optional<Pago> findByStripePaymentId(String stripePaymentId);
+        Optional<Pago> findByStripePaymentId(String stripePaymentId);
 
-    // ÚNICA consulta que necesitas (versión mejorada)
-    @Query(value = "SELECT stripe_payment_id " +
-                   "FROM ( " +
-                   "  SELECT stripe_payment_id, fecha_pago " +
-                   "  FROM PAGO " +
-                   "  WHERE id_usuario = :usuarioId " +
-                   "    AND id_actividad = :actividadId " +
-                   "    AND estado = 'Completado' " +
-                   "  ORDER BY fecha_pago DESC " +
-                   ") " +
-                   "WHERE ROWNUM = 1",
-           nativeQuery = true)
-    Optional<String> findStripeIdByUsuarioAndActividad(
-            @Param("usuarioId") Long usuarioId,
-            @Param("actividadId") Long actividadId);
+        @Query(value = "SELECT stripe_payment_id " +
+                        "FROM ( " +
+                        "  SELECT stripe_payment_id, fecha_pago " +
+                        "  FROM PAGO " +
+                        "  WHERE id_usuario = :usuarioId " +
+                        "    AND id_actividad = :actividadId " +
+                        "    AND estado = 'Completado' " +
+                        "  ORDER BY fecha_pago DESC " +
+                        ") " +
+                        "WHERE ROWNUM = 1", nativeQuery = true)
+        Optional<String> findStripeIdByUsuarioAndActividad(
+                        @Param("usuarioId") Long usuarioId,
+                        @Param("actividadId") Long actividadId);
 }

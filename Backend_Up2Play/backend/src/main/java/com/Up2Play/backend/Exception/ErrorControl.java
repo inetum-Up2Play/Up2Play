@@ -38,29 +38,25 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@RestControllerAdvice // hace que escuche excepciones de controller y vevuelva un JSON
+@RestControllerAdvice
 public class ErrorControl {
 
-        // Mail ya registrado
-        @ExceptionHandler(CorreoRegistradoException.class) // para que el metodo se ejecute automáticamente si ocurre
-                                                           // una
-                                                           // excepción del tipo especificado
+        @ExceptionHandler(CorreoRegistradoException.class)
+
         public ResponseEntity<ErrorResponseDto> handleCorreoRegistrado(
-                        CorreoRegistradoException ex, // spring recoge el error ocurrido
-                        HttpServletRequest request // recoge la petición http que ha hecho el usuario, en este caso un
-                                                   // POST a
-                                                   // /register
+                        CorreoRegistradoException ex,
+                        HttpServletRequest request
+
         ) {
                 ErrorResponseDto body = new ErrorResponseDto(
-                                "CORREO_REGISTRADO", // código de error que he decidido definir
-                                ex.getMessage(), // el mensaje que vendrá en la excepción
-                                HttpStatus.CONFLICT.value(), // código del error - ERROR 409
-                                request.getRequestURI(), // la URL que el usuario estaba intentando acceder
-                                Instant.now() // fecha y hora actual
-                );
-                return ResponseEntity // devuelve la respuesta http
-                                .status(HttpStatus.CONFLICT) // con estado del error
-                                .body(body); // y el cuepo del error creado arriba
+                                "CORREO_REGISTRADO",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
         }
 
         // Nombre usuario ya registrado
@@ -425,9 +421,8 @@ public class ErrorControl {
                                 .status(HttpStatus.NOT_FOUND)
                                 .body(body);
         }
-        
 
-        //Error al desapuntarse despues de completada
+        // Error al desapuntarse despues de completada
         @ExceptionHandler(ErrorDesapuntarse.class)
         public ResponseEntity<ErrorResponseDto> handleErrorDesapuntarse(
                         ErrorDesapuntarse ex,
@@ -472,9 +467,5 @@ public class ErrorControl {
                                 .status(HttpStatus.CONFLICT)
                                 .body(body);
         }
-
-        
-        
-
 
 }

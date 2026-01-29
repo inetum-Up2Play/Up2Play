@@ -44,7 +44,7 @@ public class Actividad {
 
     @Convert(converter = NivelDificultadConverter.class)
     private NivelDificultad nivel;
-    
+
     private int numPersInscritas;
     private int numPersTotales;
 
@@ -54,7 +54,7 @@ public class Actividad {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_creador", nullable = false)
-    private Usuario usuarioCreador; // usuario creador de actividad
+    private Usuario usuarioCreador;
 
     @ManyToMany(mappedBy = "actividadesUnidas")
     private Set<Usuario> usuarios = new HashSet<>();
@@ -123,7 +123,7 @@ public class Actividad {
         this.notificaciones = notificaciones;
     }
 
-     public Actividad(Long id, @Size(max = 64) String nombre, @Size(max = 500) String descripcion, LocalDateTime fecha,
+    public Actividad(Long id, @Size(max = 64) String nombre, @Size(max = 500) String descripcion, LocalDateTime fecha,
             String ubicacion, String deporte, NivelDificultad nivel, int numPersInscritas, int numPersTotales,
             EstadoActividad estado, double precio, Usuario usuarioCreador, Set<Usuario> usuarios,
             Set<Notificacion> notificaciones, Set<Pago> pagos) {
@@ -143,7 +143,6 @@ public class Actividad {
         this.notificaciones = notificaciones;
         this.pagos = pagos;
     }
-
 
     public Long getId() {
         return id;
@@ -265,6 +264,5 @@ public class Actividad {
     public void setPagos(Set<Pago> pagos) {
         this.pagos = pagos;
     }
-    
 
 }

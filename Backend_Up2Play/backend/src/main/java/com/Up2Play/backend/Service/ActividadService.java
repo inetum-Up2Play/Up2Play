@@ -49,8 +49,6 @@ public class ActividadService {
     private StripeConnectService stripeConnectService;
     private PagoRepository pagoRepository;
 
-    // CRUD
-
     public ActividadService(ActividadRepository actividadRepository,
             UsuarioRepository usuarioRepository,
             NotificacionService notificacionService,
@@ -63,7 +61,6 @@ public class ActividadService {
         this.pagoRepository = pagoRepository;
     }
 
-    // Crear Actividad
     public Actividad crearActividad(ActividadDto input, Usuario usuario) {
 
         Actividad act = new Actividad();
@@ -106,11 +103,9 @@ public class ActividadService {
         act.setDeporte(input.getDeporte());
 
         double precio = Double.parseDouble(input.getPrecio());
-        // Si no tiene Stripe habilitado, no puedes crear actividades de precio > 0
         if (precio > 0) {
             if (usuario.getPagosHabilitados() == null || !usuario.getPagosHabilitados()
                     || usuario.getStripeAccountId() == null) {
-                // Debes crear esta excepción personalizada o usar una genérica
                 throw new PagosNoHabilitadosException(
                         "No puedes crear actividades de pago sin configurar Stripe en tu perfil.");
             }
@@ -126,7 +121,6 @@ public class ActividadService {
         usuarioApuntado.getActividadesUnidas().add(act);
         Actividad actGuardada = actividadRepository.save(act);
 
-        // Enviar notificacion
         Set<Usuario> usuariosUnidos = act.getUsuarios();
         notificacionService.crearNotificacion(
                 "La actividad " + act.getNombre() + " se ha creado correctamente.",
@@ -141,9 +135,7 @@ public class ActividadService {
         return actGuardada;
     }
 
-    // Listado todas las actividades
-
-    @Transactional // (readOnly = true)
+    @Transactional
     public List<ActividadDtoResp> getAllActividadesPendientes() {
         return actividadRepository.findAll().stream()
                 .peek(this::actualizarEstadoSiNecesario)
@@ -166,7 +158,7 @@ public class ActividadService {
                 .toList();
     }
 
-    @Transactional // (readOnly = true)
+    @Transactional
     public List<ActividadDtoResp> getAllActividades() {
         return actividadRepository.findAll().stream()
                 .peek(this::actualizarEstadoSiNecesario)
@@ -188,8 +180,7 @@ public class ActividadService {
                 .toList();
     }
 
-    // Lista de actividades creadas por un usuario
-    @Transactional // (readOnly = true)
+    @Transactional
     public List<ActividadDtoCreadas> getActividadesCreadas(Usuario usuario) {
         return actividadRepository.findByUsuarioCreador(usuario).stream()
                 .peek(this::actualizarEstadoSiNecesario)
@@ -211,7 +202,6 @@ public class ActividadService {
                 .toList();
     }
 
-    // Lista de actividades a las que un usuario está apuntado
     @Transactional
     public List<ActividadDtoResp> getActividadesApuntadasPendientes(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -238,7 +228,6 @@ public class ActividadService {
 
     }
 
-    // Lista de actividades a las que un usuario está apuntado
     @Transactional
     public List<ActividadDtoResp> getActividadesApuntadas(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -263,7 +252,6 @@ public class ActividadService {
 
     }
 
-    // Lista de actividades a las que un usuario no esta apuntado
     @Transactional
     public List<ActividadDtoResp> getActividadesNoApuntadas(Long usuarioId) {
 
@@ -292,7 +280,6 @@ public class ActividadService {
                 .toList();
     }
 
-    // Lista actividad por id
     @Transactional
     public ActividadDtoResp getActividad(Long id) {
         Actividad act = actividadRepository.findById(id)
@@ -317,7 +304,6 @@ public class ActividadService {
                 act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
     }
 
-    // Editar actividad
     @Transactional
     public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) throws MessagingException {
         Actividad act = actividadRepository.findById(id)
@@ -372,7 +358,6 @@ public class ActividadService {
 
             Actividad actEditada = actividadRepository.save(act);
 
-            // Enviar notificacion
             Set<Usuario> usuariosUnidos = act.getUsuarios();
             notificacionService.crearNotificacion(
                     "La actividad " + act.getNombre() + "  ha sido modificada.",
@@ -411,7 +396,6 @@ public class ActividadService {
 
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
 
-            // Enviar notificacion
             Set<Usuario> usuariosUnidos = act.getUsuarios();
             notificacionService.crearNotificacion(
                     "La actividad " + act.getNombre() + " ha sido cancelada.",
@@ -428,11 +412,11 @@ public class ActividadService {
                     .toList();
 
             List<Pago> pagos = pagoRepository.findByActividad(act);
-                if (!pagos.isEmpty()) {
+            if (!pagos.isEmpty()) {
 
-                    pagoRepository.deleteAll(pagos);
+                pagoRepository.deleteAll(pagos);
 
-                }       
+            }
 
             notificacionService.ActividadEliminada(act, emails);
 
@@ -488,7 +472,6 @@ public class ActividadService {
 
         usuarioRepository.save(usuario);
 
-        // Enviar notificacion
         notificacionService.crearNotificacionPerfil(
                 "¡Te has inscrito a  " + act.getNombre() + "!",
                 "¡Te has inscrito a  " + act.getNombre()
@@ -640,10 +623,6 @@ public class ActividadService {
                 act.getUsuarioCreador().getEmail());
     }
 
-    /**
-     * Recupera el ID de pago de Stripe desde la tabla 'pago'.
-     * Se utiliza para identificar qué transacción reembolsar en Stripe Connect.
-     */
     private String obtenerPaymentIdDeInscripcion(Long idActividad, Long idUsuario) {
         return pagoRepository.findStripeIdByUsuarioAndActividad(idUsuario, idActividad)
                 .orElse(null);
