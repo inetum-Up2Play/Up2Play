@@ -212,7 +212,7 @@
                                 <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">Precio</p>
 
                                 <p-inputnumber formControlName="precio" placeholder="0,00 €" mode="currency"
-                                    inputId="currency-germany" currency="EUR" locale="de-DE" class="w-full"
+                                    inputId="currency-germany" currency="EUR" locale="de-DE" class="w-full" [min]="0" [min]="1000"
                                     [inputStyleClass]="'w-full'"
                                     class="flex! w-full! rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! h-12! placeholder:text-[#7e887e]! text-base! font-normal!"></p-inputnumber>
                             </label>
