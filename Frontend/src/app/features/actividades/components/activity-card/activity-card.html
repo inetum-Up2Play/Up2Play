@@ -3,13 +3,33 @@
   <p-card #body class="card sh h-full">
     <!-- Imagen -->
     <ng-template #title>
-      <img (click)="infoActividad()" class="infoActividad" aria-label="Ver información de la actividad"
-        src="{{ imagen() }}" />
+      <div class="relative w-full">
+
+        <img (click)="redirigirInfoActividad()" class="infoActividad w-full object-cover block"
+          aria-label="Ver información de la actividad" src="{{ imagen() }}" />
+
+        <!-- Tag Precio -->
+        <div class="absolute bottom-2 right-2 z-10">
+          @if (precio() > 0) {
+          <p-tag severity="secondary" [value]="(precio() | currency:'EUR') || '0'" rounded="true"></p-tag>
+          } @else {
+          <p-tag severity="success" value="GRATIS" rounded="ture"></p-tag>
+          }
+        </div>
+
+        <!-- Tag Completada -->
+        <div class="absolute top-2 left-2 z-10">
+          @if (isCompletada()) {
+          <p-tag severity="info" value="COMPLETADA" rounded="true"></p-tag>
+          }
+        </div>
+
+      </div>
     </ng-template>
 
     <!-- Fecha -->
     <ng-template #subtitle>
-      <span class="inline-flex items-center gap-1">
+      <span class="inline-flex items-center gap-1 mt-1">
         <i class="ph-bold ph-calendar-blank align-middle leading-none" aria-hidden="true"></i>
         {{ fecha() }} - {{ hora() }}h
       </span>
@@ -17,7 +37,7 @@
 
     <!-- Título de la actividad -->
     <ng-template #content>
-      <p class="title infoActividad" aria-label="Detalles de la actividad" (click)="infoActividad()">
+      <p class="title infoActividad" aria-label="Detalles de la actividad" (click)="redirigirInfoActividad()">
         {{ titulo() }}
       </p>
       <!-- Ubicación -->
@@ -29,21 +49,19 @@
 
     <!-- Botones de la card -->
     <ng-template #footer>
-      <div class="flex items-end h-full mt-1 mb-0">
-        <p-confirmdialog />
-        <p-button [label]="botonLabel" [styleClass]="botonStyle" (onClick)="handleButtonClick('boton')"
-          [icon]="botonStyle === 'btn-pagar' ? 'pi pi-credit-card' : ''">
+      <div class="flex items-center justify-end w-full h-full  mb-0">
+        @if (isCompletada()) {
+          <p-button label="Ver detalles" (onClick)="redirigirInfoActividad()" [styleClass]="'btn-verDetalles'"
+          iconPos="right">
         </p-button>
-        
-        @if (eliminarLabel == "Eliminar") {
-        <p-button class="ml-4" [label]="eliminarLabel" [styleClass]="eliminarStyle"
-          (onClick)="handleButtonClick('eliminar')">
+        } @else if (isCreador()) {
+        <p-button label="Gestionar" (onClick)="redirigirInfoActividad()" [styleClass]="'btn-gestionar'" 
+        icon="pi pi-cog" iconPos="right">
         </p-button>
-        } @else if(eliminarLabel == "Eliminar y reembolsar") {
-        <p-button class="ml-4" [label]="eliminarLabel" [styleClass]="eliminarStyle"
-          (onClick)="handleButtonClick('reembolso-a-todos')">
+        } @else {
+        <p-button label="Ver detalles" (onClick)="redirigirInfoActividad()" [styleClass]="'btn-verDetalles'"
+          iconPos="right">
         </p-button>
-
         }
       </div>
     </ng-template>

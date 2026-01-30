@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { MessageModule } from 'primeng/message';
 import { Carousel } from 'primeng/carousel';
@@ -23,10 +22,8 @@ export class CreatedCarousel implements OnInit {
 
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
-  private router = inject(Router);
 
   activities: any[] = [];
-
 
   ngOnInit() {
     this.cargarActividades();
@@ -47,10 +44,6 @@ export class CreatedCarousel implements OnInit {
         this.activities = [];
       }
     });
-  }
-
-  editar(id: number) {
-    return this.router.navigate([`/actividades/editar-actividad/${id}`]);
   }
 
   extraerHora(fecha: string): string {

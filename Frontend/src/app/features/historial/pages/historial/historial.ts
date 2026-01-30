@@ -16,6 +16,7 @@ import { Footer } from '../../../../core/layout/footer/footer';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { EmptyActivities } from '../../../actividades/components/empty-activities/empty-activities';
 import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
+import { ActivityCard } from '../../../actividades/components/activity-card/activity-card';
 
 @Component({
   selector: 'app-historial',
@@ -33,6 +34,7 @@ import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
     IconFieldModule,
     InputIconModule,
     DatePickerModule,
+    ActivityCard
   ],
   templateUrl: './historial.html',
   styleUrl: './historial.scss',
@@ -118,6 +120,16 @@ export class Historial implements OnInit {
     this.filterDeporte = [];
     this.filterFecha = null;
     this.visibleActivities = [...this.activities]; // Restaurar lista completa
+  }
+
+  extraerHora(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
+  }
+
+  extraerFecha(fecha: string): string {
+    if (!fecha) return '';
+    return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
   // Opciones para el dropdown (puedes llenarlo dinámicamente o estático)

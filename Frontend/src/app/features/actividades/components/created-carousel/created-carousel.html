@@ -15,9 +15,8 @@
         <!-- PLANTILLA DE LA CARD -->
         <app-activity-card [attr.aria-label]="activity.nombre" [titulo]="activity.nombre"
           [fecha]="extraerFecha(activity.fecha)" [hora]="extraerHora(activity.fecha)" [ubicacion]="activity.ubicacion"
-          [imagen]="activity.deporte | deporteImg" [botonLabel]="'Editar'" [botonStyle]="'btn-editar'"
-          [botonAction]="editar" [eliminarLabel]="activity.precio != '0.00' ? 'Eliminar y reembolsar' : 'Eliminar'"
-          [eliminarStyle]="'btn-eliminar'" [actividadId]="activity.id" [attr.aria-label]="activity.nombre">
+          [imagen]="activity.deporte | deporteImg" [botonLabel]="'Gestionar'" [botonStyle]="'btn-editar'"
+          [actividadId]="activity.id" [attr.aria-label]="activity.nombre">
         </app-activity-card>
 
       </ng-template>
