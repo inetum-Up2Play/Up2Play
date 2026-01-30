@@ -1,14 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 
 import { ActivityCard } from '../activity-card/activity-card';
-import { ErrorService } from '../../../../core/services/error/error-service';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
@@ -24,10 +21,6 @@ export class JoinedCarousel implements OnInit {
 
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
-  private messageService = inject(MessageService);
-  private errorService = inject(ErrorService);
-  private router = inject(Router);
-
 
   activities: any[] = [];
 
@@ -56,28 +49,6 @@ export class JoinedCarousel implements OnInit {
     });
   }
 
-  desapuntarse(id: number) {
-    this.actService.desapuntarseActividad(id).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'info', summary: 'Vaya...', detail: 'Te has desapuntado de la actividad' });
-
-        //bus de recarga de actividaedes
-        this.actUpdateService.notifyUpdate();
-
-      },
-      error: (codigo) => {
-        const mensaje = this.errorService.getMensajeError(codigo);
-        this.errorService.showError(mensaje);
-      }
-    });
-  }
-
-  editar(id: number) {
-
-    return this.router.navigate([`/actividades/editar-actividad/${id}`]);
-
-  }
-
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
@@ -86,18 +57,6 @@ export class JoinedCarousel implements OnInit {
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
-  }
-
-  noReembolso(fechaStr: string): boolean {
-    const fechaActividad = new Date(fechaStr).getTime();
-    const ahora = Date.now();
-    
-    // Calculamos 24h en milisegundos: 24h * 60min * 60seg * 1000ms
-    const unDiaEnMs = 24 * 60 * 60 * 1000; 
-    
-    const diferencia = fechaActividad - ahora;
-
-    return diferencia <= unDiaEnMs;
   }
 
   // Variables para configurar el responsive del carousel

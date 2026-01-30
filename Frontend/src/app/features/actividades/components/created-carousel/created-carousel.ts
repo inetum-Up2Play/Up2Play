@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 
 import { MessageModule } from 'primeng/message';
@@ -27,7 +26,6 @@ export class CreatedCarousel implements OnInit {
 
 private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
-  private router = inject(Router);
 
   // Variables de datos
   activities: any[] = [];
@@ -57,12 +55,12 @@ private actService = inject(ActService);
     });
   }
 
-  // Nota: Si pasas esta función al hijo, asegúrate de que el 'this' no se pierda.
+/*   // Nota: Si pasas esta función al hijo, asegúrate de que el 'this' no se pierda.
   // A veces es mejor usar una arrow function: editar = (id: number) => { ... }
   editar(id: number) {
     return this.router.navigate([`/actividades/editar-actividad/${id}`]);
   }
-
+ */
   extraerHora(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[1].substring(0, 5) : '';
