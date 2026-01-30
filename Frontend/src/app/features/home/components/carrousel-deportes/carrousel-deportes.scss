@@ -31,8 +31,10 @@ span {
     color: vars.$verde-oscuro;
 }
 
+
 :host ::ng-deep .card {
-    max-width: 22rem;
+    width: 100%;
+    max-width: none;
     overflow: hidden;
     font-family: vars.$work-sans;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2),
@@ -40,19 +42,26 @@ span {
 }
 
 :host ::ng-deep .p-carousel-indicator-active button {
-    background-color: #3D6C3F !important;
-    opacity: 1; /* Asegura que se vea sólido */
-}
-
-:host ::ng-deep .boton-ver-mas p-button {
-    border-radius: 20px !important;
-    border-color: vars.$verde-oliva !important;
+    background-color:vars.$verde-oliva !important;
+    opacity: 1; 
 }
 
 :host ::ng-deep .boton-ver-mas {
-    border-color: vars.$verde-oliva; 
+    border-color: vars.$verde-oliva  !important;  
     border-radius: 20px;
-    color: vars.$verde-oliva;
+    color: vars.$verde-oliva  !important;
 }
+
+:host ::ng-deep .boton-ver-mas:hover {
+    border-color: vars.$verde-oliva !important;
+    background-color: vars.$verde-oliva !important; 
+    color: vars.$blanco !important;
+}
+
+
+
+
+
+
 
 

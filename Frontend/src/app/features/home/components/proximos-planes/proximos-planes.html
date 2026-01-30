@@ -3,12 +3,23 @@
     <section class="mx-auto p-7">
         <!-- Cabecera -->
         <header class="flex items-center justify-between">
-            <h1 class="text-2xl 2xl:text-3xl font-extrabold uppercase">
-                Próximos<br />planes
+            <h1 class="text-xl font-extrabold uppercase leading-6">
+                Próximos planes
             </h1>
 
-            <!-- Icono reloj -->
-            <i class="pi pi-clock" style="color: #3D6C3F; font-size: 3rem"></i>
+            <div class="relative w-12 h-12">
+
+                <!-- Primer icono (ph ph-clock) -->
+                <i class="ph ph-clock absolute inset-0 opacity-0 animate-clock"
+                    style="color: #3D6C3F; font-size: 2.5rem;"></i>
+
+                <!-- Segundo icono (ph ph-clock-afternoon) -->
+                <i class="ph ph-clock-afternoon absolute inset-0 opacity-100 animate-clock "
+                    style="color: #3D6C3F; font-size: 2.5rem"></i>
+            </div>
+
+
+
         </header>
 
         <!-- Separador superior -->
@@ -26,26 +37,26 @@
                 <a [routerLink]="['/actividades/info-actividad', a.id]"
                     class="min-w-0 flex flex-row justify-between items-center">
                     <div class="w-[75%]">
-                        <p class="text-sm text-black-600">
+                        <p class=" text-sm  text-black-600">
                             {{ (a.fecha | date:'dd/MM/yyyy - HH:mm') }}
                         </p>
 
-                        <h2 class="mt-1 text-xl font-bold truncate">
+                        <h2 class="mt-1 text-md font-bold truncate">
                             {{ a.nombre }}
                         </h2>
 
-                        <p class="mt-1 text-base text-gray-500 truncate">
+                        <p class="mt-1 text-sm text-base text-gray-500 truncate">
                             {{ a.ubicacion }}
                         </p>
                     </div>
 
-                    <div class="p-0.5 ml-4 border-2 border-[#3D6C3F] flex items-center rounded-sm">
-                        <span class="inline-flex h-6 w-6 items-center justify-center bg-[#3D6C3F] text-white rounded-xs"
+                    <div
+                        class="group p-0.5 ml-4 border-2 border-[#3D6C3F] flex items-center rounded-sm mr-4 hover:border-[#3d6c3fe8] transition-colors duration-200">
+                        <span
+                            class="inline-flex h-5 w-5 items-center justify-center bg-[#3D6C3F] text-white rounded-xs group-hover:bg-[#23d6c3fe8] transition-all duration-200"
                             aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <path d="M7 17L17 7M9 7h8v8"></path>
-                            </svg>
+                            <i
+                                class="ph-bold ph-arrow-up-right text-sm group-hover:translate-x-[1px] group-hover:-translate-y-[1px] transition-transform duration-200"></i>
                         </span>
                     </div>
                 </a>
@@ -62,8 +73,7 @@
 
         <!-- Botón Crear actividad -->
         <div class="pt-4 flex justify-center">
-            <button type="button"
-                class="cursor-pointer block w-[80%] rounded-2xl bg-[#3D6C3F] px-auto py-3 text-center text-lg xl:text-xl font-semibold
+            <button type="button" class="cursor-pointer block w-[50%] rounded-2xl bg-[#3D6C3F] px-auto py-3 text-center text-md font-semibold
                 text-white shadow-md transition hover:bg-[#3d6c3fe8] active:translate-y-[1px] whitespace-nowrap"
                 [routerLink]="['/actividades', 'crear-actividad']">
                 Crear actividad

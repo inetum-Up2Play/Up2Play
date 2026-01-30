@@ -22,16 +22,16 @@
                     h-full md:p-4 lg:p-6 lg:text-left lg:flex-row lg:gap-8 min-h-[250px] transition-transform hover:scale-[1.01]">
                     <!-- Avatar -->
                     <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
-                        class="my-2 md:my-0 w-24 h-24 md:w-30 md:h-30 xl:w-38 xl:h-38 2xl:w-50 2xl:h-50 rounded-full shadow-sm object-cover aspect-square">
+                        class="my-2 md:my-0 w-24 h-24 md:w-30 md:h-30 xl:w-38 xl:h-38 2xl:w-40 2xl:h-40 rounded-full shadow-sm object-cover aspect-square">
                     <!-- Texto bienvenida -->
-                    <div class="flex flex-col gap-2 w-full max-w-[65%]">
+                    <div class="flex flex-col gap-2 w-full max-w-[50%]">
                         <h1
-                            class="text-2xl lg:text-3xl xl:text-4xl 2xl:text-6xl font-extrabold text-gray-900 leading-tight truncate">
+                            class="text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-extrabold text-gray-900 leading-tight truncate">
                             ¡Hola, <br>
                             <span class="text-gray-900">{{ currentUsuario()!.nombreUsuario }}!</span>
                         </h1>
-                        <div class="w-full h-0.5 bg-gray-200 my-2"></div> <!-- Separador -->
-                        <p class="px-2 mb-2 md:mb-0 text-gray-500 italic text-lg">¿Listo para una nueva aventura?</p>
+                        <div class="w-full h-0.5 bg-gray-200 my-2 max-w-100"></div> <!-- Separador -->
+                        <p class="px-2 mb-2 md:mb-0 text-gray-500 italic text-md">¿Listo para una nueva aventura?</p>
                     </div>
                 </div>
 
@@ -68,16 +68,21 @@
     </div>
 
     <!-- ACORDEON -->
-    <div class="z-10 flex relative justify-center pt-12 md:pt-8">
+    <div class="z-10 flex relative justify-center pt-12 md:pt-8 pl-23">
         <app-stepper-info class="w-[90%] md:w-[85%]"></app-stepper-info>
     </div>
 
     <!-- TU ESPACIO -->
     <div
-        class="flex flex-col gap-4 2xl:gap-8 xl:flex-row justify-between relative h-auto mt-16 mb-[2%] mx-6 md:mx-12 lg:mx-20 2xl:mx-34 z-10 ">
-        <app-proximos-planes class="w-auto xl:w-[23%]"></app-proximos-planes>
+        class="flex flex-col xl:flex-row
+               justify-center  
+               relative z-10 
+               gap-4 2xl:gap-8
+               h-auto mt-10 mb-16 
+               md:mx-12 lg:mx-20 2xl:mx-34  ">
+        <app-proximos-planes class="w-full xl:w-[30%] max-w-md"></app-proximos-planes>
 
-        <div class="w-auto xl:w-[73%] h-auto mb-[2%] relative">
+        <div class="w-full xl:w-[60%] max-w-5xl h-full relative">
             <app-calendar></app-calendar>
         </div>
     </div>
