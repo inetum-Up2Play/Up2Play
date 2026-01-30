@@ -63,12 +63,12 @@ export class Notificaciones implements OnInit {
     // Usa los valores exactos del Enum del backend
     this.tipos = [
       { label: 'INSCRITO', value: 'INSCRITO' },
-      { label: 'PAGADO', value: 'PAGADO' },
-      { label: 'PAGO RECIBIDO', value: 'PAGO_RECIBIDO' },
-      { label: 'REEMBOLSADO', value: 'REEMBOLSADO' },
       { label: 'CREADA', value: 'CREADA' },
+      { label: 'PAGO RECIBIDO', value: 'PAGO_RECIBIDO' },
       { label: 'ACTUALIZADO', value: 'ACTUALIZADO' },
       { label: 'EDITADA', value: 'EDITADA' },
+      { label: 'PAGADO', value: 'PAGADO' },
+      { label: 'REEMBOLSADO', value: 'REEMBOLSADO' },
       { label: 'DESAPUNTADO', value: 'DESAPUNTADO' },
       { label: 'CANCELADA', value: 'CANCELADA' },
       { label: 'PAGO FALLIDO', value: 'PAGO_FALLIDO' },

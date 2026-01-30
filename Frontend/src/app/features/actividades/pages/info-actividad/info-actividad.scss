@@ -7,7 +7,6 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin-top: 20px;
   position: relative;
 }
 
@@ -45,4 +44,11 @@ h1 {
 
 ::ng-deep .p-tooltip-bottom .p-tooltip-arrow {
   border-bottom-color: vars.$verde-oliva;
+}
+
+/* En tu archivo CSS del componente */
+:host ::ng-deep .p-progressbar-value {
+        
+        background: vars.$verde-oliva;
+
 }

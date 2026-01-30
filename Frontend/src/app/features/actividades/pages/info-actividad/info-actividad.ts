@@ -16,6 +16,7 @@ import { MessageModule } from 'primeng/message';
 import { RatingModule } from 'primeng/rating';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
+import {ProgressBar} from 'primeng/progressbar';
 
 // --- OpenLayers ---
 import Feature from 'ol/Feature';
@@ -44,6 +45,7 @@ import { Usuario } from '../../../../shared/models/usuario.model';
 import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 
+
 interface ParticipanteView {
   nombre: string;
   avatarId: number;
@@ -63,6 +65,7 @@ interface ParticipanteView {
     FormsModule,
     ReactiveFormsModule,
     ToastModule,
+    ProgressBar,
     MessageModule,
     Header,
     DeporteImgPipe,
@@ -250,6 +253,19 @@ export class InfoActividad implements OnInit, AfterViewInit {
     });
   }
 
+calcularPorcentajeParticipacion(): number {
+  const actividad = this.actividad();
+  const numPersTotales = actividad?.numPersTotales;
+  
+  if (!numPersTotales || numPersTotales === 0) {
+    return 0;
+  }
+  
+  const porcentaje = (this.avataresUsuarios().length / numPersTotales) * 100;
+  
+  // Redondeamos a 2 decimales
+  return Math.round(porcentaje * 100) / 100;
+}
   // =============================================================
   // ACCIONES DE USUARIO (Botones)
   // =============================================================
