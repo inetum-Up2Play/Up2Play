@@ -1,51 +1,51 @@
-<div class="py-5 2xl:p-10 m-2 h-full flex items-center justify-center">
-  <!-- CARD -->
-  <p-card #body class="card sh h-full">
-    <!-- Imagen -->
-    <ng-template #title>
-      <img (click)="infoActividad()" class="infoActividad" aria-label="Ver información de la actividad"
-        src="{{ imagen() }}" />
-    </ng-template>
+  <div class="py-5 2xl:p-10 m-2 h-full flex items-center justify-center">
+    <!-- CARD -->
+    <p-card #body class="card sh h-full">
+      <!-- Imagen -->
+      <ng-template #title>
+        <img (click)="infoActividad()" class="infoActividad" aria-label="Ver información de la actividad"
+          src="{{ imagen() }}" />
+      </ng-template>
 
-    <!-- Fecha -->
-    <ng-template #subtitle>
-      <span class="inline-flex items-center gap-1">
-        <i class="ph-bold ph-calendar-blank align-middle leading-none" aria-hidden="true"></i>
-        {{ fecha() }} - {{ hora() }}h
-      </span>
-    </ng-template>
+      <!-- Fecha -->
+      <ng-template #subtitle>
+        <span class="inline-flex items-center gap-1">
+          <i class="ph-bold ph-calendar-blank align-middle leading-none" aria-hidden="true"></i>
+          {{ fecha() }} - {{ hora() }}h
+        </span>
+      </ng-template>
 
-    <!-- Título de la actividad -->
-    <ng-template #content>
-      <p class="title infoActividad" aria-label="Detalles de la actividad" (click)="infoActividad()">
-        {{ titulo() }}
-      </p>
-      <!-- Ubicación -->
-      <span class="inline-flex items-center gap-1">
-        <i class="ph-fill ph-map-pin align-middle leading-none" aria-hidden="true"></i>
-        {{ ubicacion() }}
-      </span>
-    </ng-template>
+      <!-- Título de la actividad -->
+      <ng-template #content>
+        <p class="title infoActividad" aria-label="Detalles de la actividad" (click)="infoActividad()">
+          {{ titulo() }}
+        </p>
+        <!-- Ubicación -->
+        <span class="inline-flex items-center gap-1">
+          <i class="ph-fill ph-map-pin align-middle leading-none" aria-hidden="true"></i>
+          {{ ubicacion() }}
+        </span>
+      </ng-template>
 
-    <!-- Botones de la card -->
-    <ng-template #footer>
-      <div class="flex items-end h-full mt-1 mb-0">
-        <p-confirmdialog />
-        <p-button [label]="botonLabel" [styleClass]="botonStyle" (onClick)="handleButtonClick('boton')"
-          [icon]="botonStyle === 'btn-pagar' ? 'pi pi-credit-card' : ''">
-        </p-button>
-        
-        @if (eliminarLabel == "Eliminar") {
-        <p-button class="ml-4" [label]="eliminarLabel" [styleClass]="eliminarStyle"
-          (onClick)="handleButtonClick('eliminar')">
-        </p-button>
-        } @else if(eliminarLabel == "Eliminar y reembolsar") {
-        <p-button class="ml-4" [label]="eliminarLabel" [styleClass]="eliminarStyle"
-          (onClick)="handleButtonClick('reembolso-a-todos')">
-        </p-button>
+      <!-- Botones de la card -->
+      <ng-template #footer>
+        <div class="flex items-end h-full mt-1 mb-0">
+          <p-confirmdialog />
+          <p-button [label]="botonLabel" [styleClass]="botonStyle" (onClick)="handleButtonClick('boton')"
+            [icon]="botonStyle === 'btn-pagar' ? 'pi pi-credit-card' : ''">
+          </p-button>
+          
+          @if (eliminarLabel == "Eliminar") {
+          <p-button class="ml-4" [label]="eliminarLabel" [styleClass]="eliminarStyle"
+            (onClick)="handleButtonClick('eliminar')">
+          </p-button>
+          } @else if(eliminarLabel == "Eliminar y reembolsar") {
+          <p-button class="ml-4" [label]="eliminarLabel" [styleClass]="eliminarStyle"
+            (onClick)="handleButtonClick('reembolso-a-todos')">
+          </p-button>
 
-        }
-      </div>
-    </ng-template>
-  </p-card>
-</div>
+          }
+        </div>
+      </ng-template>
+    </p-card>
+  </div>

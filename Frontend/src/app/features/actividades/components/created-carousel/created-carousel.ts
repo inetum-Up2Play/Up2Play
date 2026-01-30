@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+
 import { MessageModule } from 'primeng/message';
-import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 
@@ -11,27 +11,35 @@ import { ActUpdateService } from '../../../../core/services/actividad/act-update
 import { ActivityCard } from '../activity-card/activity-card';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { EmptyActivities } from '../empty-activities/empty-activities';
+import { DataViewModule } from 'primeng/dataview';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-created-carousel',
-  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule, DeporteImgPipe, EmptyActivities],
+  imports: [CommonModule, MessageModule, ButtonModule, DataViewModule, SelectButtonModule, FormsModule, ActivityCard, ToastModule, DeporteImgPipe, EmptyActivities],
   templateUrl: './created-carousel.html',
   styleUrl: './created-carousel.scss'
 })
 export class CreatedCarousel implements OnInit {
 
-  private actService = inject(ActService);
+private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
   private router = inject(Router);
 
+  // Variables de datos
   activities: any[] = [];
 
+  // Variables de configuración del DataView
+  layout: 'list' | 'grid' = 'grid'; // Por defecto en cuadrícula
+  options: any[] = ['list', 'grid'];
 
   ngOnInit() {
     this.cargarActividades();
 
-    //Recargar al recibir notificación (unirse/desunirse)
+    // Recargar al recibir notificación (unirse/desunirse)
     this.actUpdateService.update$.subscribe(() => {
       this.cargarActividades();
     });
@@ -49,6 +57,8 @@ export class CreatedCarousel implements OnInit {
     });
   }
 
+  // Nota: Si pasas esta función al hijo, asegúrate de que el 'this' no se pierda.
+  // A veces es mejor usar una arrow function: editar = (id: number) => { ... }
   editar(id: number) {
     return this.router.navigate([`/actividades/editar-actividad/${id}`]);
   }
@@ -62,29 +72,6 @@ export class CreatedCarousel implements OnInit {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
-
-  // Responsive del carousel
-  responsiveOptions = [
-    {
-      breakpoint: '1840px',
-      numVisible: 3,
-      numScroll: 1
-    },
-    {
-      breakpoint: '1200px',
-      numVisible: 2,
-      numScroll: 1
-    },
-    {
-      breakpoint: '992px',
-      numVisible: 2,
-      numScroll: 1
-    },
-    {
-      breakpoint: '768px',
-      numVisible: 1,
-      numScroll: 1
-    }
-  ];
-
 }
+
+
