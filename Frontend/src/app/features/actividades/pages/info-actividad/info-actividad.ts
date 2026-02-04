@@ -44,7 +44,7 @@ import { Perfil } from '../../../../shared/models/Perfil';
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
-
+import {DatePipe} from '@angular/common';
 
 interface ParticipanteView {
   nombre: string;
@@ -68,6 +68,7 @@ interface ParticipanteView {
     ProgressBar,
     MessageModule,
     Header,
+    DatePipe,
     DeporteImgPipe,
     AvatarPipe,
     Footer,

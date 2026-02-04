@@ -57,7 +57,7 @@
                 <!-- Tags -->
                 <div class="flex flex-wrap mt-6 pt-6 border-t border-gray-100 justify-around"></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border mb-4 border-gray-100">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
 
                 <div class="my-0 min-w-xs lg:col-span-full">
                     <div id="map" style="height: 300px;" [class.error-map]="errorUbicacion()">
@@ -84,15 +84,17 @@
                     <!-- Date & Time -->
                     <div class="flex items-start gap-4 mb-2">
                         <div
-                            class="bg-[#B1DF75]/60 p-4 rounded-xl flex flex-col items-center justify-center min-w-[64px] border border-gray-100">
-                            <i class="ph ph-calendar-dots"></i>
+                            class="bg-[#B1DF75]/60 p-3 rounded-xl flex flex-col items-center justify-center min-w-[64px] border border-gray-100">
+                            <i class="ph-fill ph-calendar text-3xl"></i>
                         </div>
                         <div>
                             <div class="flex">
-                                <p><strong>Fecha: </strong>{{ extraerFecha(acti.fecha) }}</p>
+                                <span class="first-letter:uppercase lowercase text-lg"><strong>{{ acti.fecha |
+                                        date:'EEEE, d \'de\' MMMM \'' }}</strong></span>
                             </div>
-                            <div class="flex">
-                                <p><strong>Hora: </strong>{{ extraerHora(acti.fecha) }}</p>
+                            <div class="flex items-center gap-1 mt-1">
+                                <i class="ph-fill ph-clock"></i>
+                                <p>{{ extraerHora(acti.fecha) }}</p>
                             </div>
                         </div>
                     </div>
@@ -100,10 +102,17 @@
                     <!-- Location Mini Map -->
                     <div class="mb-6">
                         <div class="flex items-center gap-2 mb-2">
-                            <p class="wrap-break-word"><i class="pi pi-map-marker" style="color:#3D6C3F"></i>
-                                <strong> Punto de encuentro:</strong> {{ acti.ubicacion }}
-                            </p>
+
+                            <i class="ph-fill ph-map-pin"></i>
+                            <p class="wrap-break-word">
+                                <strong> Punto de encuentro</strong>
+                            </p><br>
                         </div>
+
+                        <p class="wrap-break-word text-sm italic ml-5">
+                            {{ acti.ubicacion }}
+                        </p>
+
                     </div>
                     <!-- Join Button -->
                     <div>
@@ -116,14 +125,14 @@
                         </button>
                         @if(acti.precio == 0.00) {
                         <button (click)="eliminar($event)"
-                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#6a040f] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
                             Eliminar
                         </button>
 
                         } @else {
 
                         <button (click)="reembolsoATodos()"
-                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#6a040f] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
                             Eliminar
                         </button>
                         }
@@ -132,14 +141,13 @@
 
                         @if (acti.numPersInscritas < acti.numPersTotales) { @if (acti.precio==0.00) { <button
                             (click)="apuntarse()"
-                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-lime-800 hover:bg-lime-700 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#3D6C3F]/90 hover:bg-[#3D6C3F] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#3D6C3F]/25">
                             ¡Apúntate!
                             </button>
 
                             } @else {
                             <button (click)="pagar()"
-                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#FFEE59] hover:bg-[#e6d600]  transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
-                                <i class="pi pi-credit-card"></i>
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#FFEE59]/90 hover:bg-[#FFEE59]  transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#FFEE59]/25">
                                 <span>Apúntate por {{ acti.precio }}€</span>
                             </button>
 
@@ -148,17 +156,12 @@
 
                             @if (acti.precio == 0.00) {
 
-                            <button (click)="actCompleta()" class="cursor-pointer bg-lime-800 hover:bg-lime-700
-                                 text-white font-bold py-2 px-4 rounded-3xl">
+                            <button (click)="actCompleta()" class="flex w-full  items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-gray-300 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-gray-100">
                                 Actividad Completa
                             </button>
 
                             } @else {
-                            <button (click)="actCompleta()" class="cursor-pointer 
-                                    bg-[#FFEE59] hover:bg-[#e6d600] text-[#152614] 
-                                    font-semibold border-none py-2 px-4 rounded-[20px] 
-                                    flex items-center gap-2 shadow-md hover:shadow-lg transition-all">
-                                <i class="pi pi-credit-card"></i>
+                            <button (click)="actCompleta()" class="flex w-full  items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-gray-300 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-gray-100">
                                 <span>Actividad Completa</span>
                             </button>
 
@@ -168,27 +171,27 @@
                             } @else if (acti.estado === 'PENDIENTE') {
                             @if (acti.precio == 0.00) {
                             <button (click)="desapuntarse()"
-                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-neutral-600 hover:bg-neutral-500 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
                                 Desapuntarse
                             </button>
-                            <p class="text-xs text-center italic mt-1 text-gray-500 ">*Solo se puede reembolsar 24h
+                            <p class="text-xs text-center italic mt-3 text-gray-500 ">*Solo se puede reembolsar 24h
                                 horas antes de la actividad*</p>
 
                             } @else {
                             @if(noReembolso(acti.fecha)) {
                             <button (click)="desapuntarse()"
-                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-neutral-600 hover:bg-neutral-500 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
                                 Desapuntarse
                             </button>
-                            <p class="text-xs text-center  italic mt-1 text-gray-500">*No se reembolsara el dinero de la
+                            <p class="text-xs text-center  italic mt-3 text-gray-500">*No se reembolsara el dinero de la
                                 actividad*</p>
 
                             } @else {
                             <button (click)="desapuntarse()"
-                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#6a040f] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
                                 Reembolsar
                             </button>
-                            <p class="text-xs text-center mt-1 italic text-gray-500">*Solo se puede reembolsar 24h horas
+                            <p class="text-xs text-center mt-3 italic text-gray-500">*Solo se puede reembolsar 24h horas
                                 antes de la actividad*</p>
                             }
                             }
