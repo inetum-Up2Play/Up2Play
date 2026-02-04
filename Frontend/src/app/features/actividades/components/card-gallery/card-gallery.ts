@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { Router } from '@angular/router';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-card-gallery',
@@ -29,6 +30,7 @@ import { Router } from '@angular/router';
     ActivityCard,
     ToastModule,
     DeporteImgPipe,
+    ConfirmDialog
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './card-gallery.html',
@@ -77,26 +79,26 @@ export class CardGallery {
   }
 
   calcularPageSize() {
-      const width = window.innerWidth;
-      let nuevoSize = 8; 
+    const width = window.innerWidth;
+    let nuevoSize = 8;
 
-      if (width >= 1536) {
-        nuevoSize = 8;
-      } 
-      else if (width >= 1280) {
-        nuevoSize = 9;
-      } 
-      else {
-        nuevoSize = 8;
-      }
+    if (width >= 1536) {
+      nuevoSize = 8;
+    }
+    else if (width >= 1280) {
+      nuevoSize = 9;
+    }
+    else {
+      nuevoSize = 8;
+    }
 
-      if (this.pageSize !== nuevoSize) {
-        this.pageSize = nuevoSize;
-        if (this.activities.length > 0) {
-          this.updateVisibleActivities();
-        }
+    if (this.pageSize !== nuevoSize) {
+      this.pageSize = nuevoSize;
+      if (this.activities.length > 0) {
+        this.updateVisibleActivities();
       }
     }
+  }
 
   cargarActividades() {
     this.currentPage = 1;
@@ -135,12 +137,10 @@ export class CardGallery {
     });
   }
 
-  eliminar(event: Event, id: number) {
-
+  eliminar(event: MouseEvent, id: number) {
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message:
-        '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
+      target: event.currentTarget as HTMLElement, // << clave
+      message: '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
       header: '¡Cuidado!',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Cancelar',
@@ -161,6 +161,11 @@ export class CardGallery {
               summary: 'Actividad eliminada',
               detail: 'Actividad eliminada correctamente',
             });
+
+            // Actualiza la lista local (opcional, da mejor UX)
+            this.activities = this.activities.filter(a => a.id !== id);
+            this.updateVisibleActivities();
+
             setTimeout(() => {
               this.router.navigate(['/actividades']);
             }, 2500);
@@ -177,6 +182,7 @@ export class CardGallery {
       },
     });
   }
+
 
   updateVisibleActivities() {
     // Lógica para "Mostrar más": muestra desde el 0 hasta el límite actual
