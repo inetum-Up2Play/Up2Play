@@ -1,0 +1,33 @@
+@use 'styles/variables' as vars;
+
+:host {
+    --p-dataview-content-background: transparent !important;
+    --p-dataview-header-background: transparent !important;
+    --p-dataview-header-border-bottom: none !important;
+
+
+    
+}
+:host ::ng-deep .p-dataview .p-dataview-header {
+    border: none !important;
+    background: transparent !important; 
+    padding-bottom: 0; 
+}
+
+.ver-mas-container {
+  padding-top: 1.5rem;    /* Siempre */
+  padding-bottom: 1.5rem; /* Siempre */
+  padding-left: 2rem;     /* Por defecto */
+  padding-right: 2rem;    /* Por defecto */
+}
+
+:host ::ng-deep .boton-ver-mas p-button {
+    border-radius: 20px !important;
+    border-color: vars.$verde-oliva !important;
+}
+
+:host ::ng-deep .boton-ver-mas {
+    border-color: vars.$verde-oliva; 
+    border-radius: 20px;
+    color: vars.$verde-oliva;
+}

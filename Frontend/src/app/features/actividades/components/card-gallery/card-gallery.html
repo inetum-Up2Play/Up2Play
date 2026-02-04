@@ -1,0 +1,67 @@
+@if (activities.length === 0) {
+    <app-empty-activities ... ></app-empty-activities>
+} @else {
+    <div class="xl:p-5 xl:px-9 2xl:px-24">
+        
+        <p-dataview class="border-none!" #dv [value]="visibleActivities" [layout]="layout">
+            
+            <ng-template #header>
+               <div class="flex justify-end">
+                   <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+                       <ng-template #item let-item>
+                           <i class="pi text-[#152614] text-2xl!" [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
+                       </ng-template>
+                   </p-selectbutton>
+               </div>
+            </ng-template>
+
+            <ng-template #list let-items>
+                <div class="flex flex-col">
+                    @for (activity of items; track activity.id; let first = $first) {
+                        <div class="flex flex-col sm:flex-row..." ...>
+                            </div>
+                    }
+                    
+                    <div class="flex justify-center mt-4">
+                        @if (visibleActivities.length < activities.length) { 
+                            <p-button label="Mostrar más" icon="pi pi-refresh" (onClick)="loadMore()"></p-button>
+                        }
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #grid let-items>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                    @for (activity of items; track activity.id) {
+                        <div class="w-full">
+                            <app-activity-card 
+                                class="h-full block"
+                                [titulo]="activity.nombre"
+                                [fecha]="extraerFecha(activity.fecha)" 
+                                [hora]="extraerHora(activity.fecha)" 
+                                [ubicacion]="activity.ubicacion"
+                                [imagen]="activity.deporte | deporteImg" 
+                                [botonLabel]="'Gestionar'" 
+                                [actividadId]="activity.id">
+                            </app-activity-card>
+                        </div>
+                        } 
+                </div>
+
+                <div class="flex justify-center md:justify-end ver-mas-container md:px-0 mt-6">
+                    @if (visibleActivities.length < activities.length) { 
+                      <p-button 
+                          styleClass="boton-ver-mas" 
+                          label="Mostrar más actividades" 
+                          variant="outlined" 
+                          icon="pi pi-refresh" 
+                          severity="contrast" 
+                          (onClick)="loadMore()">
+                      </p-button>
+                    }
+                </div>
+            </ng-template>
+
+        </p-dataview>
+    </div>
+}

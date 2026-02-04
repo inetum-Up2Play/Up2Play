@@ -4,11 +4,16 @@ import { CrearActividad } from './pages/crear-actividad/crear-actividad';
 import { InfoActividad } from './pages/info-actividad/info-actividad';
 import { EditarActividad } from './pages/editar-actividad/editar-actividad';
 import { ActService } from '../../core/services/actividad/act-service';
+import { ProvaActividad } from './pages/prova-actividad/prova-actividad';
 
 export const ACT_ROUTES: Routes = [
   {
     path: '',
     component: Actividades,
+  },
+  {
+    path: 'actividades',
+    component: ProvaActividad,
   },
   {
     path: 'crear-actividad',
