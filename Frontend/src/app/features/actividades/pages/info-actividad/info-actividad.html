@@ -1,201 +1,253 @@
 <app-header></app-header>
-<div
-    class="overflow-hidden grid grid-cols-1 lg:grid-cols-2  xl:grid-cols-2 lg:gap-10 xl:gap-10  sm:gap-5 md:gap-5  
-    p-12 sm:p-14 md:p-16 lg:p-25 mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto lg:max-w-6xl my-4 sm:my-6 md:my-10 bg-white rounded-lg shadow-lg">
 
-    @let act = actividad();
-    @if (act) {
-    <div class="lg:pr-10">
-        <h1 class="text-4xl font-bold mb-2 wrap-break-word">{{ act.nombre }}</h1>
-        <p class="mb-4 text-sm flex items-center gap-2">Creado por
-            <img [src]="avatarIdCreador()| avatarImg" alt="avatarCreador" class="max-w-8">
-            {{act.usuarioCreadorNombre}}
-        </p><br>
+@let acti = actividad();
+@if (acti) {
+<main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Main Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- LEFT COLUMN: Main Content -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Hero Image & Title -->
+            <div class="relative group rounded-xl overflow-hidden shadow-sm">
+                <div class="relative h-[320px] w-full overflow-hidden rounded-md group">
+                    <!-- Imagen -->
+                    <img class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        [src]="acti.deporte | deporteImg" alt="actividad-img">
 
-        <p><i class="pi pi-trophy" style="color:#3D6C3F"></i>
-            <span class="font-bold"> Deporte: </span>{{ act.deporte }}
-        </p><br>
+                    <!-- Gradiente sobrepuesto -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
-        <p class="mb-6 text-justify wrap-break-word">{{ act.descripcion }}</p>
-
-        <div class="space-y-6 mb-6">
-            <div class="flex items-center space-x-1">
-                <p><i class="pi pi-chart-line" style="color:#3D6C3F"></i>
-                    <strong class="mr-1"> Nivel: </strong>
-
-                <form [formGroup]="formRating" class="ml-2">
-                    <p-rating formControlName="rating" [readonly]="true">
-                        <ng-template #onicon>
-                            <i class="pi pi-flag-fill"></i>
-                        </ng-template>
-                        <ng-template #officon>
-                            <i class="pi pi-flag"></i>
-                        </ng-template>
-                    </p-rating>
-                </form>
+                    <!-- Badge u otros elementos sobre el gradiente -->
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-[#B1DF75]/80 text-black text-sm font-bold px-3 py-1.5 rounded-full">
+                            {{ acti.deporte }}
+                        </span>
+                    </div>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 leading-tight">{{ acti.nombre }}</h1>
+                    <div class="flex flex-wrap gap-4 text-white/90 text-sm font-medium">
+                        <div class="flex items-center gap-1">
+                            <i class="ph ph-chart-bar text-[#B1DF75]"></i>{{ acti.nivel }}
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <i class="ph ph-currency-circle-dollar text-[#B1DF75]"></i> {{ acti.precio }}€ / persona
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- Description & Details -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-text-main">Acerca de la actividad</h2>
+                    <!-- Organizer Badge -->
+                    <div class="flex items-center gap-3 bg-gray-100 p-2 pr-4 rounded-full border border-gray-200">
+                        <div class="size-10 rounded-full bg-cover bg-center" data-alt="Organizer Alex profile picture">
+                            <img [src]="avatarIdCreador()| avatarImg" alt="avatarCreador">
+                        </div>
+                        <div class="flex flex-col">
+                            <p class="">Organizador <strong>{{acti.usuarioCreadorNombre}}</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="prose max-w-none text-text-secondary">
 
-            <p class="wrap-break-word"><i class="pi pi-map-marker" style="color:#3D6C3F"></i>
-                <strong> Punto de encuentro:</strong> {{ act.ubicacion }}
-            </p>
-            <p><i class="pi pi-euro" style="color:#3D6C3F"></i>
-                <strong> Precio:</strong> {{ act.precio == 0 ? 'Gratuita' : act.precio + '€' }}
-            </p>
+                    <p class="mb-6 text-justify wrap-break-word">{{ acti.descripcion }}</p>
+                </div>
+                <!-- Tags -->
+                <div class="flex flex-wrap mt-6 pt-6 border-t border-gray-100 justify-around"></div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+
+                <div class="my-0 min-w-xs lg:col-span-full">
+                    <div id="map" style="height: 300px;" [class.error-map]="errorUbicacion()">
+
+                        @if (errorUbicacion()) {
+                        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="error mapa"
+                            style="width: 80px; height: 80px; display: block; margin: 0;"><br>
+                        <p class="error-text">{{ errorUbicacion() }}</p>
+                        } @else {
+                        <ng-container #mapa>
+                        </ng-container>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
         </div>
+        <!-- RIGHT COLUMN: Sticky Sidebar -->
+        <div class="lg:col-span-1 sticky top-26 h-fit space-y-6">
+            <div class="space-y-6">
+                <!-- Main Action Card -->
+                <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                    <!-- Date & Time -->
+                    <div class="flex items-start gap-4 mb-2">
+                        <div
+                            class="bg-[#B1DF75]/60 p-3 rounded-xl flex flex-col items-center justify-center min-w-[64px] border border-gray-100">
+                            <i class="ph-fill ph-calendar text-3xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex">
+                                <span class="first-letter:uppercase lowercase text-lg"><strong>{{ acti.fecha |
+                                        date:'EEEE, d \'de\' MMMM \'' }}</strong></span>
+                            </div>
+                            <div class="flex items-center gap-1 mt-1">
+                                <i class="ph-fill ph-clock"></i>
+                                <p>{{ extraerHora(acti.fecha) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="border-gray-100 mb-6" />
+                    <!-- Location Mini Map -->
+                    <div class="mb-6">
+                        <div class="flex items-center gap-2 mb-2">
 
-        <div>
-            <p-toast />
-            <p-confirmdialog />
-            @if (isCreador() && act.estado === 'PENDIENTE') {
-            <button (click)="goEditar()"
-                class="cursor-pointer bg-[#B1DF75] hover:bg-[#9ecc63] text-black font-bold py-2 px-4 rounded-3xl">
-                <i class="pi pi-pen-to-square"></i>
-                Editar
-            </button>
-                @if(act.precio == 0.00) {
-                    <button (click)="eliminar($event)"
-                        class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
-                        <i class="pi pi-trash"></i>
-                        Eliminar
-                    </button>
-                    
-                } @else {
-                    
-                    <button (click)="reembolsoATodos()"
-                        class="cursor-pointer bg-[#9d0208] hover:bg-[#6a040f] text-white font-bold ml-4 py-2 px-4 rounded-3xl">
-                        <i class="pi pi-trash"></i>
-                        Eliminar y reembolsar
-                    </button>
-                }
-            
-            } @else if (!apuntado() && (act.estado === 'PENDIENTE')) {
+                            <i class="ph-fill ph-map-pin"></i>
+                            <p class="wrap-break-word">
+                                <strong> Punto de encuentro</strong>
+                            </p><br>
+                        </div>
 
-                 @if (act.numPersInscritas < act.numPersTotales) {
+                        <p class="wrap-break-word text-sm italic ml-5">
+                            {{ acti.ubicacion }}
+                        </p>
 
-                     @if (act.precio == 0.00) {
-                         
-                         <button (click)="apuntarse()"
-                             class="cursor-pointer bg-lime-800 hover:bg-lime-700 text-white font-bold py-2 px-4 rounded-3xl">
-                             ¡Apúntate!
-                         </button>
-     
-                     } @else {
-                         <button (click)="pagar()"
-                             class="cursor-pointer 
-                                 bg-[#FFEE59] hover:bg-[#e6d600] 
-                                 text-[#152614] 
-                                 font-semibold border-none py-2 px-4 rounded-[20px] 
-                                 flex items-center gap-2 shadow-md hover:shadow-lg transition-all">
-                             <i class="pi pi-credit-card"></i> 
-                             <span>Apúntate por {{ act.precio }}€</span>
-                         </button>
-     
-                     }
-                } @else {
-                        
-                        @if (act.precio == 0.00) {
-                            
-                            <button (click)="actCompleta()"
-                                class="cursor-pointer bg-lime-800 hover:bg-lime-700
-                                 text-white font-bold py-2 px-4 rounded-3xl">
+                    </div>
+                    <!-- Join Button -->
+                    <div>
+                        <p-toast />
+                        <p-confirmdialog />
+                        @if (isCreador() && acti.estado === 'PENDIENTE') {
+                        <button (click)="goEditar()"
+                            class="flex w-full mb-3 cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#B1DF75]/85 hover:bg-[#B1DF75] transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                            Editar
+                        </button>
+                        @if(acti.precio == 0.00) {
+                        <button (click)="eliminar($event)"
+                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
+                            Eliminar
+                        </button>
+
+                        } @else {
+
+                        <button (click)="reembolsoATodos()"
+                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
+                            Eliminar
+                        </button>
+                        }
+
+                        } @else if (!apuntado() && (acti.estado === 'PENDIENTE')) {
+
+                        @if (acti.numPersInscritas < acti.numPersTotales) { @if (acti.precio==0.00) { <button
+                            (click)="apuntarse()"
+                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#3D6C3F]/90 hover:bg-[#3D6C3F] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#3D6C3F]/25">
+                            ¡Apúntate!
+                            </button>
+
+                            } @else {
+                            <button (click)="pagar()"
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#FFEE59]/90 hover:bg-[#FFEE59]  transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#FFEE59]/25">
+                                <span>Apúntate por {{ acti.precio }}€</span>
+                            </button>
+
+                            }
+                            } @else {
+
+                            @if (acti.precio == 0.00) {
+
+                            <button (click)="actCompleta()" class="flex w-full  items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-gray-300 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-gray-100">
                                 Actividad Completa
                             </button>
-        
-                        } @else {
-                            <button (click)="actCompleta()"
-                                class="cursor-pointer 
-                                    bg-[#FFEE59] hover:bg-[#e6d600] text-[#152614] 
-                                    font-semibold border-none py-2 px-4 rounded-[20px] 
-                                    flex items-center gap-2 shadow-md hover:shadow-lg transition-all">
-                                <i class="pi pi-credit-card"></i> 
+
+                            } @else {
+                            <button (click)="actCompleta()" class="flex w-full  items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-gray-300 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-gray-100">
                                 <span>Actividad Completa</span>
                             </button>
-    
-                        }
-                    }
 
-            } @else if (act.estado === 'PENDIENTE') {
-                @if (act.precio == 0.00) {
-                    <button (click)="desapuntarse()"
-                        class="cursor-pointer bg-neutral-600 hover:bg-neutral-500 text-white font-bold py-2 px-4 rounded-3xl">
-                        Desapúntate...
-                    </button>
-                    
-                } @else {
-                    @if(noReembolso(act.fecha)) {
-                        <button (click)="desapuntarse()"
-                            class="cursor-pointer 
-                                bg-[#d97706] hover:bg-[#b45309] 
-                                text-[#F7F7F7] 
-                                font-semibold border-none py-2 px-4 rounded-[20px] 
-                                transition-all duration-200 
-                                hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
-                            Desapuntarse sin reembolso
-                        </button>
-                        
-                    } @else {
-                        <button (click)="desapuntarse()"
-                            class="cursor-pointer 
-                                bg-[#d97706] hover:bg-[#b45309] 
-                                text-[#F7F7F7] 
-                                font-semibold border-none py-2 px-4 rounded-[20px] 
-                                transition-all duration-200 
-                                hover:shadow-[0_4px_8px_rgba(0,0,0,0.15)]">
-                            Desapuntarse y reembolsar...
-                        </button>
-                    }
-                }
-            }
-        </div>
-    </div>
+                            }
+                            }
 
-    <div class="mt-8 lg:mt-0">
-        <img class="rounded-md mb-6 w-full aspect-video sm:aspect-3/2 object-cover lg:max-w-full"
-            [src]="act.deporte | deporteImg" alt="actividad-img">
+                            } @else if (acti.estado === 'PENDIENTE') {
+                            @if (acti.precio == 0.00) {
+                            <button (click)="desapuntarse()"
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
+                                Desapuntarse
+                            </button>
+                            <p class="text-xs text-center italic mt-3 text-gray-500 ">*Solo se puede reembolsar 24h
+                                horas antes de la actividad*</p>
 
-        <p-card class="w-full">
-            <p><strong>Fecha</strong><br>{{ extraerFecha(act.fecha) }}</p>
-            <p-divider></p-divider>
-            <p><strong>Hora</strong><br>{{ extraerHora(act.fecha) }}</p>
-        </p-card>
+                            } @else {
+                            @if(noReembolso(acti.fecha)) {
+                            <button (click)="desapuntarse()"
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
+                                Desapuntarse
+                            </button>
+                            <p class="text-xs text-center  italic mt-3 text-gray-500">*No se reembolsara el dinero de la
+                                actividad*</p>
 
-        <div class="mt-4">
-            <p class="font-semibold">Personas inscritas {{ avataresUsuarios().length }} / {{ act.numPersTotales }}</p>
-            <div class="flex mt-2 space-x-2">
+                            } @else {
+                            <button (click)="desapuntarse()"
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
+                                Reembolsar
+                            </button>
+                            <p class="text-xs text-center mt-3 italic text-gray-500">*Solo se puede reembolsar 24h horas
+                                antes de la actividad*</p>
+                            }
+                            }
+                            }
+                    </div>
+                </div>
+                <!-- Participants List Card -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex gap-2 items-center">
+                            <i class="ph ph-users"></i>
+                            <h3 class="font-bold text-main">Asistentes</h3>
+                        </div>
+                        <span class="text-black  text-sm font-bold px-2 py-1 rounded-lg">{{
+                            avataresUsuarios().length }} / {{ acti.numPersTotales }}</span>
+                    </div>
+                    <!-- Progress Bar con PrimeNG -->
+
+                    <!-- Attendees Grid -->
+                    <div class="mb-4">
+
+                        <p-avatar-group>
+                            @for (participante of avataresUsuarios().slice(0, 5); track $index) {
+                            <p-avatar [image]="participante.avatarId | avatarImg" [pTooltip]="participante.nombre"
+                                tooltipPosition="bottom" shape="circle" size="large"
+                                styleClass="border-2 border-white" />
+                            }
+
+                            @if (avataresUsuarios().length > 5) {
+                            <p-avatar [label]="'+' + (avataresUsuarios().length - 5)" shape="circle" size="large"
+                                styleClass="border-2 border-white bg-slate-200 text-slate-700 font-semibold" />
+                            }
+                        </p-avatar-group>
+
+
+                    </div>
+
+
+                    <div>
+                        <p-progressbar [value]="calcularPorcentajeParticipacion()" [showValue]="false" styleClass="h-2"
+                            [style]="{'border-radius': '9999px'}">
+                        </p-progressbar>
+
+                        <!-- Texto informativo debajo de la barra -->
+                        <div class="flex justify-center text-xs text-gray-500 mt-1">
+
+                            <span>{{ calcularPorcentajeParticipacion() }}% ocupado</span>
+
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
         </div>
-
-        <div class="card flex pt-2 w-full">
-            <p-avatar-group>
-                @for (participante of avataresUsuarios().slice(0, 5); track $index) {
-                <p-avatar [image]="participante.avatarId | avatarImg" [pTooltip]="participante.nombre"
-                    tooltipPosition="bottom" shape="circle" size="large"
-                    styleClass="border-2 border-white cursor-pointer" />
-                }
-
-                @if (avataresUsuarios().length > 5) {
-                <p-avatar [label]="'+' + (avataresUsuarios().length - 5)" shape="circle" size="large"
-                    styleClass="border-2 border-white bg-slate-200 text-slate-700 font-semibold" />
-                }
-            </p-avatar-group>
-        </div>
     </div>
-
-
-    <div class="my-8 min-w-xs lg:col-span-full">
-        <div id="map" style="height: 400px;" [class.error-map]="errorUbicacion()">
-
-            @if (errorUbicacion()) {
-            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="error mapa"
-                style="width: 80px; height: 80px; display: block; margin: 0 auto;"><br>
-            <p class="error-text">{{ errorUbicacion() }}</p>
-            } @else {
-            <ng-container #mapa>
-            </ng-container>
-            }
-
-        </div>
-    </div>
-    }
-</div>
+</main>
+}
 <app-footer></app-footer>
