@@ -12,13 +12,14 @@
         <p-dataview class="border-none!" #dv [value]="visibleActivities" [layout]="layout">
             
             <ng-template #header>
-                <div class="flex justify-end">
-                    <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
-                        <ng-template #item let-item>
-                            <i class="pi text-[#152614] text-2xl!" [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
-                        </ng-template>
-                    </p-selectbutton>
-                </div>
+               <div class="flex justify-end">
+                   <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+                       <ng-template #item let-item>
+                        <i class="pi text-[#3D6C3F] text-2xl!"
+                            [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
+                    </ng-template>
+                   </p-selectbutton>
+               </div>
             </ng-template>
 
             <ng-template #list let-items>

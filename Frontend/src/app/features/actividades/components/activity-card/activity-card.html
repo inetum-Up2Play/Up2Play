@@ -11,7 +11,7 @@
         <!-- Tag Precio -->
         <div class="absolute bottom-2 right-2 z-10">
           @if (precio() > 0) {
-          <p-tag severity="secondary" [value]="(precio() | currency:'EUR') || '0'" rounded="true"></p-tag>
+          <p-tag severity="primary" [value]="(precio() | currency:'EUR') || '0'" rounded="true"></p-tag>
           } @else {
           <p-tag severity="success" value="GRATIS" rounded="ture"></p-tag>
           }
@@ -49,7 +49,7 @@
 
     <!-- Botones de la card -->
     <ng-template #footer>
-      <div class="flex items-center justify-end w-full h-full  mb-0">
+      <div class="flex items-end justify-end w-full h-full  mb-0">
         @if (isCompletada()) {
           <p-button label="Ver detalles" (onClick)="redirigirInfoActividad()" [styleClass]="'btn-verDetalles'"
           iconPos="right">

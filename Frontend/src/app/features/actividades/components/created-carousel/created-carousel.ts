@@ -14,6 +14,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,8 @@ import { CommonModule } from '@angular/common';
 })
 export class CreatedCarousel implements OnInit {
 
-private actService = inject(ActService);
+  private actService = inject(ActService);
+  private router = inject(Router);
   private actUpdateService = inject(ActUpdateService);
 
   // Variables de datos
@@ -41,6 +43,8 @@ private actService = inject(ActService);
     this.actUpdateService.update$.subscribe(() => {
       this.cargarActividades();
     });
+
+
   }
 
   cargarActividades() {
@@ -64,6 +68,11 @@ private actService = inject(ActService);
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
+
+  redirigirInfoActividad(id: number | string) {
+    return this.router.navigate(['/actividades/info-actividad', id]);
+  }
+
 }
 
 
