@@ -12,6 +12,9 @@ import { ActivityCard } from '../activity-card/activity-card';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ToastModule } from 'primeng/toast';
 import { Observable } from 'rxjs';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card-gallery',
@@ -27,12 +30,22 @@ import { Observable } from 'rxjs';
     ToastModule,
     DeporteImgPipe,
   ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './card-gallery.html',
   styleUrl: './card-gallery.scss',
 })
 export class CardGallery {
-private actService = inject(ActService);
+  private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
+  private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
+  private errorService = inject(ErrorService);
+  private router = inject(Router);
+
+  private manejarError(codigo: number) {
+    const mensaje = this.errorService.getMensajeError(codigo);
+    this.errorService.showError(mensaje);
+  }
 
   tipo = input.required<string>();
 
@@ -42,7 +55,8 @@ private actService = inject(ActService);
 
   activities: any[] = [];
   visibleActivities: any[] = [];
-  
+  actividadId!: number;
+
   pageSize = 8;
   currentPage = 1;
   noHayActividades = true;
@@ -84,8 +98,8 @@ private actService = inject(ActService);
   }
 
   cargarActividades() {
-    this.currentPage = 1; 
-    this.noHayActividades = true; 
+    this.currentPage = 1;
+    this.noHayActividades = true;
 
 
     let llamarservicio: Observable<any[]>;
@@ -120,6 +134,49 @@ private actService = inject(ActService);
     });
   }
 
+  eliminar(event: Event, id: number) {
+
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message:
+        '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
+      header: '¡Cuidado!',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Eliminar',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.actService.deleteActividad(id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Actividad eliminada',
+              detail: 'Actividad eliminada correctamente',
+            });
+            setTimeout(() => {
+              this.router.navigate(['/actividades']);
+            }, 2500);
+          },
+          error: (codigo) => this.manejarError(codigo),
+        });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Rechazado',
+          detail: 'Has cancelado la eliminación',
+        });
+      },
+    });
+  }
+
   updateVisibleActivities() {
     // Lógica para "Mostrar más": muestra desde el 0 hasta el límite actual
     const end = this.pageSize * this.currentPage;
@@ -139,5 +196,9 @@ private actService = inject(ActService);
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
+  }
+
+  redirigirInfoActividad(id: number | string) {
+    return this.router.navigate(['/actividades/info-actividad', id]);
   }
 }
