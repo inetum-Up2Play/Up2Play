@@ -12,7 +12,9 @@ import { ActivityCard } from '../activity-card/activity-card';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ToastModule } from 'primeng/toast';
 import { Observable } from 'rxjs';
-
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-card-gallery',
   imports: [
@@ -23,6 +25,9 @@ import { Observable } from 'rxjs';
     DataViewModule,
     SelectButtonModule,
     FormsModule,
+    InputTextModule,
+    IconField,
+    InputIcon,
     ActivityCard,
     ToastModule,
     DeporteImgPipe,
@@ -31,7 +36,7 @@ import { Observable } from 'rxjs';
   styleUrl: './card-gallery.scss',
 })
 export class CardGallery {
-private actService = inject(ActService);
+  private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
 
   tipo = input.required<string>();
@@ -41,11 +46,14 @@ private actService = inject(ActService);
   options: any[] = ['list', 'grid'];
 
   activities: any[] = [];
-  visibleActivities: any[] = [];
+  filteredActivities: any[] = []; // Actividades después de filtrar
+  visibleActivities: any[] = []; // Actividades visibles (paginación)
   
   pageSize = 8;
   currentPage = 1;
   noHayActividades = true;
+
+  filterNombre: string = '';
 
   ngOnInit() {
     this.calcularPageSize();
@@ -77,7 +85,7 @@ private actService = inject(ActService);
     // Solo actualizamos si cambia el tamaño 
     if (this.pageSize !== nuevoSize) {
       this.pageSize = nuevoSize;
-      if (this.activities.length > 0) {
+      if (this.filteredActivities.length > 0) {
         this.updateVisibleActivities();
       }
     }
@@ -86,7 +94,6 @@ private actService = inject(ActService);
   cargarActividades() {
     this.currentPage = 1; 
     this.noHayActividades = true; 
-
 
     let llamarservicio: Observable<any[]>;
 
@@ -108,22 +115,46 @@ private actService = inject(ActService);
     llamarservicio.subscribe({
       next: (data) => {
         this.activities = data;
+        this.filteredActivities = [...data]; // Inicializar filteredActivities
         this.noHayActividades = this.activities.length === 0;
-        this.updateVisibleActivities();
+        this.applyFilters(); // Aplicar filtros iniciales (si hay)
       },
       error: (err) => {
         console.error('Error cargando actividades:', err);
         this.activities = [];
+        this.filteredActivities = [];
         this.visibleActivities = [];
         this.noHayActividades = true;
       },
     });
   }
 
+  // Lógica de Filtrado
+  applyFilters() {
+    this.currentPage = 1; // Resetear paginación al filtrar
+    
+    // Filtrar las actividades
+    this.filteredActivities = this.activities.filter((act) => {
+      const matchNombre = this.filterNombre
+        ? act.nombre.toLowerCase().includes(this.filterNombre.toLowerCase())
+        : true;
+
+      return matchNombre;
+    });
+
+    // Actualizar actividades visibles
+    this.updateVisibleActivities();
+  }
+
+  clearFilters() {
+    this.filterNombre = '';
+    this.applyFilters(); // Aplicar filtro vacío
+  }
+
   updateVisibleActivities() {
-    // Lógica para "Mostrar más": muestra desde el 0 hasta el límite actual
+    // Calcular el índice final basado en la página actual
     const end = this.pageSize * this.currentPage;
-    this.visibleActivities = this.activities.slice(0, end);
+    this.visibleActivities = this.filteredActivities.slice(0, end);
   }
 
   loadMore() {
