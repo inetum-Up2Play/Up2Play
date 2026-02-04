@@ -1,30 +1,83 @@
 @if (activities.length === 0) {
-    <app-empty-activities ... ></app-empty-activities>
+    <app-empty-activities 
+        icon="ph-light ph-users-three" 
+        title="¿Tienes algo en mente?"
+        message="¡Crea tu actividad y reúne a tu equipo!" 
+        aria-live="polite" 
+        aria-atomic="true">
+    </app-empty-activities>
+
 } @else {
     <div class="xl:p-5 xl:px-9 2xl:px-24">
-        
         <p-dataview class="border-none!" #dv [value]="visibleActivities" [layout]="layout">
             
             <ng-template #header>
-               <div class="flex justify-end">
-                   <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
-                       <ng-template #item let-item>
-                           <i class="pi text-[#152614] text-2xl!" [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
-                       </ng-template>
-                   </p-selectbutton>
-               </div>
+                <div class="flex justify-end">
+                    <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+                        <ng-template #item let-item>
+                            <i class="pi text-[#152614] text-2xl!" [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
+                        </ng-template>
+                    </p-selectbutton>
+                </div>
             </ng-template>
 
             <ng-template #list let-items>
                 <div class="flex flex-col">
                     @for (activity of items; track activity.id; let first = $first) {
-                        <div class="flex flex-col sm:flex-row..." ...>
+                        <div class="flex flex-col sm:flex-row sm:items-center py-6 gap-4" 
+                             [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
+                            
+                            <div class="md:w-40 relative flex-shrink-0">
+                                <img class="block mx-auto rounded w-full object-cover" 
+                                     [src]="activity.deporte | deporteImg" 
+                                     [alt]="activity.nombre" 
+                                     style="max-width: 150px; aspect-ratio: 16/9;" />
                             </div>
+
+                            <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
+                                <div class="flex flex-col justify-start gap-2">
+                                    <div>
+                                        <span class="font-medium text-[#152614] text-sm">
+                                            {{ extraerFecha(activity.fecha) }} • {{ extraerHora(activity.fecha) }}
+                                        </span>
+                                        <div class="text-lg font-medium mt-2 text-[#3D6C3F]">{{ activity.nombre }}</div>
+                                        <div class="flex items-center gap-2 text-sm text-[#152614] mt-1">
+                                            <i class="pi pi-map-marker"></i> 
+                                            <span>{{ activity.ubicacion }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col md:items-end gap-4">
+                                    <span class="text-xl font-bold">{{ activity.precio | currency:'EUR' }}</span>
+                                    <div class="flex flex-row gap-2">
+                                        <button pButton 
+                                                icon="pi pi-cog" 
+                                                label="Gestionar" 
+                                                class="p-button-outlined p-button-sm">
+                                        </button>
+                                        <button pButton 
+                                                icon="pi pi-trash" 
+                                                class="p-button-danger p-button-outlined p-button-sm"
+                                                [label]="activity.precio != '0.00' ? 'Reembolsar' : 'Eliminar'">
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
-                    
-                    <div class="flex justify-center mt-4">
+
+                    <div class="flex justify-center mt-6">
                         @if (visibleActivities.length < activities.length) { 
-                            <p-button label="Mostrar más" icon="pi pi-refresh" (onClick)="loadMore()"></p-button>
+                            <p-button 
+                                styleClass="boton-ver-mas" 
+                                label="Mostrar más actividades" 
+                                variant="outlined" 
+                                icon="pi pi-refresh" 
+                                severity="contrast" 
+                                (onClick)="loadMore()"
+                                [attr.aria-label]="'Mostrar más actividades'">
+                            </p-button>
                         }
                     </div>
                 </div>
@@ -36,28 +89,31 @@
                         <div class="w-full">
                             <app-activity-card 
                                 class="h-full block"
+                                [attr.aria-label]="activity.nombre" 
                                 [titulo]="activity.nombre"
                                 [fecha]="extraerFecha(activity.fecha)" 
                                 [hora]="extraerHora(activity.fecha)" 
                                 [ubicacion]="activity.ubicacion"
                                 [imagen]="activity.deporte | deporteImg" 
                                 [botonLabel]="'Gestionar'" 
+                                [botonStyle]="'btn-editar'"
                                 [actividadId]="activity.id">
                             </app-activity-card>
                         </div>
-                        } 
+                    } 
                 </div>
 
                 <div class="flex justify-center md:justify-end ver-mas-container md:px-0 mt-6">
                     @if (visibleActivities.length < activities.length) { 
-                      <p-button 
-                          styleClass="boton-ver-mas" 
-                          label="Mostrar más actividades" 
-                          variant="outlined" 
-                          icon="pi pi-refresh" 
-                          severity="contrast" 
-                          (onClick)="loadMore()">
-                      </p-button>
+                        <p-button 
+                            styleClass="boton-ver-mas" 
+                            label="Mostrar más actividades" 
+                            variant="outlined" 
+                            icon="pi pi-refresh" 
+                            severity="contrast" 
+                            (onClick)="loadMore()" 
+                            [attr.aria-label]="'Mostrar más actividades'">
+                        </p-button>
                     }
                 </div>
             </ng-template>
