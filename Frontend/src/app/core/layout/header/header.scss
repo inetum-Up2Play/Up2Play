@@ -3,10 +3,9 @@
 
 /* Al usar ViewEncapsulation.None, no necesitamos :host ni ::ng-deep */
 p-menubar.contenedor-menubar {
-  background-color: vars.$verde-oliva;
-  border: none;
+  background-color: vars.$verde-oliva !important;
   border-radius: 0;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .logo {
@@ -46,20 +45,39 @@ p-menubar.contenedor-menubar {
   color: white !important;
   letter-spacing: .03em;
   padding-right: 2rem;
+  border: none !important;
+  box-shadow: inset 0px 15px 15px -10px rgba(0, 0, 0, 0.4) !important;
 
   li {
     margin: 0.5rem;
+    border-radius: 6px; 
+    transition: background-color 0.2s ease; 
+    border-radius: 50px !important; 
+
+    a, button {
+        border-radius: 50px !important; 
+    }
+
+    a, button:hover {
+        border-radius: 50px !important; 
+    }
 
     .active {
-      color: vars.$verde-oliva !important;
-      background-color: vars.$amarillo !important;
+      background-color: rgba(255, 255, 255, 0.3) !important;
+      font-weight: bold;
+      i {
+          color: vars.$amarillo !important;
+        }
     }
+    
 
-    &:hover {
-      color: vars.$verde-oliva !important;
-      background-color: vars.$amarillo !important;
-      border-radius: 6px;
-    }
+    &:hover {      
+      color: white !important;
+      border-radius: 50px !important; 
+
+      background-color: rgba(255, 255, 255, 0.2) !important;
+      
+
   }
 }
 
@@ -106,5 +124,20 @@ p-menubar.contenedor-menubar {
   li:hover,
   a:hover {
     color: vars.$verde-oliva !important;
+  }
+}
+}
+
+/* En header.scss */
+
+.logout-item {
+  font-weight: bold;
+
+  i {
+    color: vars.$msg-error-claro !important;
+  }
+
+  &:hover {
+    background-color: rgba(139, 0, 0, 0.1) !important;
   }
 }

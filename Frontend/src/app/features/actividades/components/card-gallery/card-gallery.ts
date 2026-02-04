@@ -12,9 +12,15 @@ import { ActivityCard } from '../activity-card/activity-card';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ToastModule } from 'primeng/toast';
 import { Observable } from 'rxjs';
+
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-card-gallery',
   imports: [
@@ -32,12 +38,22 @@ import { InputTextModule } from 'primeng/inputtext';
     ToastModule,
     DeporteImgPipe,
   ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './card-gallery.html',
   styleUrl: './card-gallery.scss',
 })
 export class CardGallery {
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
+  private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
+  private errorService = inject(ErrorService);
+  private router = inject(Router);
+
+  private manejarError(codigo: number) {
+    const mensaje = this.errorService.getMensajeError(codigo);
+    this.errorService.showError(mensaje);
+  }
 
   tipo = input.required<string>();
 
@@ -82,7 +98,7 @@ export class CardGallery {
       nuevoSize = 8;
     }
 
-    // Solo actualizamos si cambia el tamaño 
+    // Solo actualizamos si cambia el tamaño
     if (this.pageSize !== nuevoSize) {
       this.pageSize = nuevoSize;
       if (this.filteredActivities.length > 0) {
@@ -92,8 +108,8 @@ export class CardGallery {
   }
 
   cargarActividades() {
-    this.currentPage = 1; 
-    this.noHayActividades = true; 
+    this.currentPage = 1;
+    this.noHayActividades = true;
 
     let llamarservicio: Observable<any[]>;
 
@@ -151,6 +167,48 @@ export class CardGallery {
     this.applyFilters(); // Aplicar filtro vacío
   }
 
+  eliminar(event: Event, id: number) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message:
+        '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
+      header: '¡Cuidado!',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Eliminar',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.actService.deleteActividad(id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Actividad eliminada',
+              detail: 'Actividad eliminada correctamente',
+            });
+            setTimeout(() => {
+              this.router.navigate(['/actividades']);
+            }, 2500);
+          },
+          error: (codigo) => this.manejarError(codigo),
+        });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Rechazado',
+          detail: 'Has cancelado la eliminación',
+        });
+      },
+    });
+  }
+
   updateVisibleActivities() {
     // Calcular el índice final basado en la página actual
     const end = this.pageSize * this.currentPage;
@@ -170,5 +228,9 @@ export class CardGallery {
   extraerFecha(fecha: string): string {
     if (!fecha) return '';
     return fecha.includes('T') ? fecha.split('T')[0] : '';
+  }
+
+  redirigirInfoActividad(id: number | string) {
+    return this.router.navigate(['/actividades/info-actividad', id]);
   }
 }

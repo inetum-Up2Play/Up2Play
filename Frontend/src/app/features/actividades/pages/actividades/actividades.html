@@ -72,15 +72,15 @@
 
             <p-tabpanels class="bg-transparent! border-none!">
                 <p-tabpanel value="0">
-                    <app-join-gallery></app-join-gallery>
+                    <app-card-gallery [tipo]="'explora-apuntate'"></app-card-gallery>
                 </p-tabpanel>
 
                 <p-tabpanel value="1">
-                    <app-created-carousel></app-created-carousel>
+                    <app-card-gallery [tipo]="'mis-actividades'"></app-card-gallery>
                 </p-tabpanel>
 
                 <p-tabpanel value="2">
-                    <app-joined-carousel></app-joined-carousel>
+                    <app-card-gallery [tipo]="'proximos-planes'"></app-card-gallery>
                 </p-tabpanel>
             </p-tabpanels>
         </p-tabs>
