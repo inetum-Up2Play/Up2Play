@@ -1,4 +1,4 @@
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
@@ -20,13 +20,16 @@ import { PerfilService } from '../../services/perfil/perfil-service';
 interface MenuItemPages {
   label: string;
   icon: string;
-  route?: string;
+  route?: string;      
+  command?: () => void; 
+  styleClass?: string; 
+
   children?: MenuItem[];
 }
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule, AvatarPipe],
+  imports: [RouterModule, RouterLink, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule, AvatarPipe],
   templateUrl: './header.html',
   styleUrls: ['./header.scss'],
   encapsulation: ViewEncapsulation.None
@@ -47,12 +50,20 @@ export class Header implements OnInit {
   visible = false;
 
   items: MenuItemPages[] = [
-    { label: 'Inicio', icon: 'pi pi-home', route: '/' },
-    { label: 'Actividades', icon: 'pi pi-bookmark', route: '/actividades' },
-    { label: 'Pagos', icon: 'pi pi-chart-line', route: '/pagos/historial-pagos' },
-    { label: 'Notificaciones', icon: 'pi pi-users', route: '/notificaciones' },
-    { label: 'Historial', icon: 'pi pi-calendar', route: '/historial' },
-    { label: 'Mi Cuenta', icon: 'pi pi-cog', route: '/perfil' },
+    { label: 'Inicio', icon: 'ph-fill ph-house', route: '/' },
+    { label: 'Actividades', icon: 'ph-fill ph-bookmark-simple', route: '/actividades' },
+    { label: 'Pagos', icon: 'ph-fill ph-cardholder', route: '/pagos/historial-pagos' },
+    { label: 'Notificaciones', icon: 'ph-fill ph-bell', route: '/notificaciones' },
+    { label: 'Historial', icon: 'ph-fill ph-clock-counter-clockwise', route: '/historial' },
+    { label: 'Mi Cuenta', icon: 'ph-fill ph-user', route: '/perfil' },
+{ 
+      label: 'Cerrar sesión', 
+      icon: 'ph-fill ph-sign-out', 
+      styleClass: 'logout-item', 
+      command: () => {
+        this.authService.logout(); 
+      } 
+    },
   ];
 
   trackByLabel(item: MenuItemPages) {
@@ -64,7 +75,7 @@ export class Header implements OnInit {
     return exact ? this.router.url === route : this.router.url.startsWith(route);
   }
 
-  // avatarItems se construye usando el email almacenado en el signal
+/*    // avatarItems se construye usando el email almacenado en el signal
   public avatarItems = computed<MenuItem[]>(() => {
     const email = this.userEmailSignal();
     return [
@@ -83,7 +94,7 @@ export class Header implements OnInit {
         }
       }
     ];
-  })
+  })  */
 
   ngOnInit(): void {
     // Obtiene el email la primera vez

@@ -1,33 +1,53 @@
-<header #menuSuperior class="fixed top-0 w-full z-20" role="banner Superior">
+<header #menuSuperior class="fixed top-0 w-full z-1200"
+    role="banner Superior">
     <!-- Incluye ambos menús -->
-    <p-menubar styleClass="contenedor-menubar !border-none !rounded-none" [model]="[]">
+    <p-menubar styleClass="contenedor-menubar !border-none !rounded-none"
+        [model]="[]">
 
         <!-- MENÚ LATERAL DE NAVEGACIÓN -->
         <p-drawer
-            styleClass="drawer-header m-6 !w-55 md:!w-80 !top-[var(--header-h)] !h-[calc(75%)] !rounded-border !border-emerald-700/0"
-            #drawerRef [(visible)]="visible" [style]="{ 'top': 'var(--header-h)' }" role="dialog" aria-modal="true"
+            styleClass="drawer-header !top-[var(--header-h)] h-full! w-[calc(65%)]! md:w-[calc(45%)]! lg:w-[calc(30%)]! xl:w-[calc(25%)]! 2xl:w-[calc(20%)]! 3xl:w-[calc(10%)]!"
+            #drawerRef [(visible)]="visible"
+            [style]="{ 'top': 'var(--header-h)' }" role="dialog"
+            aria-modal="true"
             aria-labelledby="menu-title" cdkFocusInitial>
             <ng-template #headless>
                 <div class="flex flex-col">
-                    <nav aria-label="Menú principal" class="overflow-y-auto menu-items">
-                        <h2 class="pl-6 pt-6 text-2xl font-extrabold">Menú</h2>
+                    <nav aria-label="Menú principal"
+                        class="overflow-y-auto menu-items">
                         <ul class="list-none pt-4 pl-6 m-0">
-                            @for (item of items; track item.route ?? item.label) {
+                            @for (item of items; track item.route ?? item.label)
+                            {
                             <li>
                                 @if (item.route) {
-                                <a pRipple [routerLink]="item.route" [class.active]="isActive(item.route)"
+                                <a pRipple [routerLink]="item.route"
+                                    [class.active]="isActive(item.route)"
                                     class="flex items-center p-4 rounded-border duration-150 p-ripple">
-                                    <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>
-                                    <span class="font-extrabold">{{ item.label }}</span>
+                                    <i class="{{ item.icon }} mr-2"
+                                        aria-hidden="true"></i>
+                                    <span class="font-extrabold">{{ item.label
+                                        }}</span>
                                 </a>
                                 } @else {
-                                <button styleClass="boton-header" pRipple type="button"
-                                    class="flex items-center w-full text-left p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors duration-150 p-ripple">
-                                    <i class="{{ item.icon }} mr-2" aria-hidden="true"></i>
-                                    <span class="font-medium">{{ item.label }}</span>
+                                <button
+                                    pRipple
+                                    type="button"
+                                    (click)="item.command ? item.command() : null"
+                                    [class]="item.styleClass"
+                                    class="flex items-center w-full text-left p-4 rounded-border text-white hover:bg-white/10 transition-colors duration-150 p-ripple cursor-pointer">
+                                    <i [class]="item.icon" class="mr-2 text-xl"
+                                        aria-hidden="true"></i>
+                                    <span class="font-bold">{{ item.label
+                                        }}</span>
                                 </button>
                                 }
                             </li>
+
+                            @if (item.label === 'Historial') {
+                            <li class="h-px bg-white/20 my-2 mx-2"
+                                aria-hidden="true"></li>
+                            }
+
                             }
                         </ul>
                     </nav>
@@ -37,25 +57,43 @@
 
         <!-- BOTÓN 3 BARRAS MENÚ LATERAL -->
         <ng-template #start>
-            <div class="flex items-center md:pl-15 gap-5 xl:gap-10 aspect-3/1v min-w-36">
-                <p-button (click)="visible = true" icon="pi pi-bars"
-                    styleClass="!bg-emerald-700/0 !border-emerald-700/0 boton-hamburguesa"
-                    [attr.aria-label]="'Abrir menú de navegación'" />
-                <img class="logo h-10" src="../../../../assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png"
-                    alt="Up2Play" routerLink="/" aria-label="Ir a la página principal" />
+            <div
+                class="flex items-center md:pl-15 gap-5 xl:gap-10 aspect-3/1v min-w-36">
+                <button
+                    (click)="visible = !visible"
+                    type="button"
+                    class="group flex items-center gap-1 p-2 text-white bg-white/10 hover:text-up2play-yellow transition-colors rounded-lg focus:outline-none focus:ring-2 focus:ring-up2play-light-green/50"
+                    [attr.aria-expanded]="visible"
+                    aria-label="Alternar menú de navegació">
+
+                    <span class="material-symbols-outlined text-3xl">menu</span>
+
+                    <span
+                        class="material-symbols-outlined text-2xl transition-transform duration-300"
+                        [class.rotate-90]="visible">
+                        expand_more
+                    </span>
+
+                </button>
+                <img class="logo h-10"
+                    src="../../../../assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png"
+                    alt="Up2Play" routerLink="/"
+                    aria-label="Ir a la página principal" />
             </div>
         </ng-template>
-        
+
         <!-- MENÚ AVATAR -->
         <ng-template #end>
             <div class="card flex w-full justify-end md:pr-15">
-                <p-menu #menu [model]="avatarItems()" appendTo="body" styleClass="mobile-menu layout-menu"
-                    [popup]="true"></p-menu>
-
-                    <!-- Icono del avatar -->
-                    <p-avatar (click)="menu.toggle($event)" [image]="perfilService.avatarGlobal() | avatarImg"
-                        shape="circle" style="cursor: pointer" size="large" [attr.aria-label]="'Abrir menú de usuario'">
-                    </p-avatar>
+                <!-- (click)="menu.toggle($event)" -->
+                <p-avatar
+                    [routerLink]="['/perfil']"
+                    [image]="perfilService.avatarGlobal() | avatarImg"
+                    shape="circle"
+                    style="cursor: pointer"
+                    size="large"
+                    [attr.aria-label]="'Ir a mi perfil'">
+                </p-avatar>
             </div>
         </ng-template>
     </p-menubar>
