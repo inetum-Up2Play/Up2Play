@@ -1,153 +1,288 @@
 <app-header></app-header>
-<main class="pt-5 pb-5 md:pt-8 md:pb-8">
-    <div class="formulario w-[80%] min-w-xs p-4 md:max-w-5xl md:w-[70%] lg:w-[75%] card flex justify-center">
-        <h1>CREA TU ACTIVIDAD</h1>
 
-        <!-- FORMULARIO -->
-        <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center gap-4 w-full">
-            <!-- TÍTULO -->
-            <div class="flex flex-col gap-1 w-full">
-                <label for="nombre" class="flex items-center gap-2">
-                    <i class="pi pi-pencil"></i> Título
-                </label>
-                <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64"
-                    [invalid]="isInvalid('nombre')" />
-                <!-- Manejo de errores para el TÍTULO -->
-                @if (isInvalid('nombre')) {
-                <!-- Verificación de error específico: profanity -->
-                @if (actividadForm.get('nombre')?.hasError('profanity')) {
-                <p-message severity="error" size="small" variant="simple">El título contiene lenguaje inapropiado o
-                    soez.</p-message>
-                }
-                <!-- Verificación de error específico: required (solo si no hay profanity para evitar duplicados) -->
-                @else if (actividadForm.get('nombre')?.hasError('required')) {
-                <p-message severity="error" size="small" variant="simple">Ponle un título a tu actividad.</p-message>
-                }
-                }
+<div class="layout-container flex h-full grow flex-col px-4 sm:px-6 lg:px-20 py-8 lg:py-10">
+    <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()"
+        class="layout-content-container flex flex-col max-w-7xl w-full mx-auto flex-1">
+        <!-- Page Heading -->
+        <div class="flex flex-wrap justify-between gap-4 pb-8 border-b border-[#3D6C3F]/25 mb-8">
+            <div class="flex flex-col gap-2">
+                <h1 class="text-[#152614] text-3xl md:text-5xl font-black leading-tight tracking-[-0.033em]">
+                    Crear nueva actividad</h1>
+                <p class="text-[#3D6C3F] text-lg font-normal leading-normal">Organiza un
+                    evento deportivo y encuentra compañeros de equipo cerca de ti.</p>
             </div>
+        </div>
+        <!-- Form Container -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Main Form -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Section: Details -->
+                <div class="bg-[#F7F7F7] rounded-xl p-6 shadow-sm border border-[#f6f8f7]">
+                    <h2
+                        class="text-[#152614] text-[20px] font-bold leading-tight tracking-[-0.015em] pb-6 flex items-center gap-2">
+                        <i class="ph-duotone ph-receipt text-[#B1DF75] text-2xl"></i>
+                        Detalles del evento
+                    </h2>
+                    <div class="flex flex-col gap-6">
+                        <!-- Activity Name -->
+                        <label class="flex flex-col w-full">
+                            <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">
+                                Nombre de la actividad</p>
+                            <input pInputText type="text" id="nombre" formControlName="nombre" maxlength="64"
+                                [invalid]="isInvalid('nombre')"
+                                class="form-input! flex! w-full! rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! h-fit! px-4! placeholder:text-[#7e887e]! text-base! font-normal!"
+                                placeholder="Ej: Partido de fútbol 5 amistoso" value="" />
+                            <!-- Manejo de errores para el TÍTULO -->
+                            @if (isInvalid('nombre')) {
+                            <!-- Verificación de error específico: profanity -->
+                            @if (actividadForm.get('nombre')?.hasError('profanity')) {
+                            <p-message severity="error" size="small" variant="simple">El título contiene lenguaje
+                                inapropiado o
+                                soez.</p-message>
+                            }
+                            <!-- Verificación de error específico: required (solo si no hay profanity para evitar duplicados) -->
+                            @else if (actividadForm.get('nombre')?.hasError('required')) {
+                            <p-message severity="error" size="small" variant="simple">Ponle un título a tu
+                                actividad.</p-message>
+                            }
+                            }
+                        </label>
+                        <!-- Sport Selector -->
+                        <div class="flex flex-col w-full justify-between">
+                            <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">
+                                Deporte</p>
+                            <div class="flex flex-col gap-4 md:flex md:flex-row md:gap-8">
+                                <div class="flex flex-col w-full md:w-[70%]">
+                                    <p-select [options]="deportes" formControlName="deporte" optionLabel="name"
+                                        [filter]="true" filterBy="name" [showClear]="true"
+                                        [invalid]="isInvalid('deporte')"
+                                        class="h-fit rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! placeholder:text-[#7e887e]! text-base! font-normal!"
+                                        placeholder="Selecciona un deporte" value="">
+                                        <ng-template #selectedItem let-deporteEscogido>
+                                            <div class="flex items-center gap-2">
+                                                <div>{{ deporteEscogido.name }}</div>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template let-deportes #item>
+                                            <div class="flex items-center gap-2">
+                                                <div>{{ deportes.name }}</div>
+                                            </div>
+                                        </ng-template>
+                                    </p-select>
+                                    @if (isInvalid('deporte')) {
+                                    <p-message severity="error" size="small" variant="simple">Escoge un
+                                        deporte.</p-message>
+                                    }
+                                </div>
+                                <div class="w-full px-6 md:w-[30%] md:mx-4">
+                                    <!-- Sport Option: Active -->
+                                    <div
+                                        class="flex flex-col items-center justify-center-safe gap-2 p-4 rounded-xl border-2 border-[#B1DF75] bg-[#B1DF75]/10 text-[#B1DF75] transition-all">
+                                        <!-- ICONO DINÁMICO -->
+                                        <span class="material-symbols-outlined text-4xl"
+                                            [ngClass]="(actividadForm.get('deporte')?.value?.name | iconDeporte)"></span>
 
-            <!-- DESCRIPCIÓN -->
-            <div class="flex flex-col gap-1 w-full">
-                <label for="descripcion" class="flex items-center gap-2">
-                    <i class="pi pi-receipt"></i> Descripción
-                </label>
-                <textarea rows="5" cols="30" pTextarea id="descripcion" maxlength="499" formControlName="descripcion"
-                    [invalid]="isInvalid('descripcion')"></textarea>
-                <!-- Manejo de errores para la DESCRIPCIÓN -->
-                @if (isInvalid('descripcion')) {
-                @if (actividadForm.get('descripcion')?.hasError('profanity')) {
-                <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje inapropiado o
-                    soez.</p-message>
-                }
-                @else if (actividadForm.get('descripcion')?.hasError('required')) {
-                <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
-                }
-                }
-            </div>
+                                        <!-- NOMBRE DEL DEPORTE -->
+                                        <span class="text-xl font-bold">
+                                            {{ actividadForm.get('deporte')?.value?.name || 'Deporte' }}
+                                        </span>
 
-
-            <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
-                <!-- DEPORTE -->
-                <div class="flex flex-col gap-1 w-full">
-                    <label for="deporte" class="flex items-center gap-2">
-                        <i class="pi pi-trophy"></i> Deporte
-                    </label>
-                    <p-select [options]="deportes" formControlName="deporte" optionLabel="name" [filter]="true"
-                        filterBy="name" [showClear]="true" class="w-full" [invalid]="isInvalid('deporte')">
-                        <ng-template #selectedItem let-deporteEscogido>
-                            <div class="flex items-center gap-2">
-                                <div>{{ deporteEscogido.name }}</div>
+                                    </div>
+                                </div>
                             </div>
-                        </ng-template>
-                        <ng-template let-deportes #item>
-                            <div class="flex items-center gap-2">
-                                <div>{{ deportes.name }}</div>
+                        </div>
+                        <!-- Description -->
+                        <label class="flex flex-col w-full">
+                            <div class="flex justify-between items-baseline pb-2">
+                                <p class="text-[#152614] text-sm font-semibold leading-normal">
+                                    Descripción</p>
+                                <span class="text-xs text-[#152614]/50">{{ descripcionLength }}/500</span>
                             </div>
-                        </ng-template>
-                    </p-select>
-                    @if (isInvalid('deporte')) {
-                    <p-message severity="error" size="small" variant="simple">Escoge un deporte.</p-message>
-                    }
+                            <textarea rows="5" cols="30" pTextarea id="descripcion" maxlength="499"
+                                formControlName="descripcion" [invalid]="isInvalid('descripcion')" class="form-textarea flex w-full rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! placeholder:text-[#7e887e]! text-base! font-normal! min-h-32 px-4 py-3
+                            resize-y"
+                                placeholder="Describe la actividad, requisitos (ej. traer equipación) o detalles adicionales..."></textarea>
+                            <!-- Manejo de errores para la DESCRIPCIÓN -->
+                            @if (isInvalid('descripcion')) {
+                            @if (actividadForm.get('descripcion')?.hasError('profanity')) {
+                            <p-message severity="error" size="small" variant="simple">La descripción contiene lenguaje
+                                inapropiado o
+                                soez.</p-message>
+                            }
+                            @else if (actividadForm.get('descripcion')?.hasError('required')) {
+                            <p-message severity="error" size="small" variant="simple">Describe tu actividad.</p-message>
+                            }
+                            }
+
+                        </label>
+                        <!-- Nivel Selector -->
+                        <div class="flex flex-col w-full justify-between">
+                            <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">
+                                Nivel de dificultad</p>
+                            <p-select [options]="niveles" formControlName="nivel" optionLabel="name" class="w-full"
+                                [invalid]="isInvalid('nivel')"
+                                class="h-fit rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! placeholder:text-[#7e887e]! text-base! font-normal!"
+                                placeholder="Selecciona el nivel recomendado para la actividad" value="">
+                            </p-select>
+                            @if (isInvalid('nivel')) {
+                            <p-message severity="error" size="small" variant="simple">Elige un nivel.</p-message>
+                            }
+                        </div>
+                    </div>
                 </div>
-                <!-- MÁX. PARTICIPANTES -->
-                <div class="flex flex-col gap-1 w-full">
-                    <label for="numPersTotales" class="flex items-center gap-2">
-                        <i class="pi pi-pencil"></i> Máximos participantes
-                    </label>
-                    <p-inputNumber [min]="1" [max]="999" formControlName="numPersTotales" id="numPersTotales"
-                        pKeyFilter="int" />
+                <!-- Section: Location & Media -->
+                <div class="bg-[#F7F7F7] rounded-xl p-6 shadow-sm border border-[#f6f8f7]">
+                    <h2
+                        class="text-[#152614] text-[20px] font-bold leading-tight tracking-[-0.015em] pb-6 flex items-center gap-2">
+                        <i class="ph-duotone ph-map-pin text-[#B1DF75] text-2xl"></i>
+                        Ubicación
+                    </h2>
+                    <div class="flex flex-col gap-6">
+                        <label class="flex flex-col w-full">
+                            <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">
+                                ¿Dónde se juega?</p>
+                            <input pInputText type="text" formControlName="ubicacion"
+                                placeholder="Ej. Polideportivo Municipal, Calle Mayor 123"
+                                [invalid]="isInvalid('ubicacion')"
+                                class="flex! w-full! rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! h-12! px-4! placeholder:text-[#7e887e]! text-base! font-normal!">
+                            <!-- Manejo de errores para la UBICACIÓN -->
+                            @if (isInvalid('ubicacion')) {
+                            @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
+                            <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje
+                                inapropiado o
+                                soez.</p-message>
+                            }
+                            @else if (actividadForm.get('ubicacion')?.hasError('required')) {
+                            <p-message severity="error" size="small" variant="simple">La ubicación es
+                                necesaria.</p-message>
+                            }
+                            }
+                        </label>
+                        <!-- Map Preview -->
+                        <div class="w-full h-48 rounded-xl overflow-hidden relative group shadow-sm">
+                            <img class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                                data-alt="Map view of a city layout" data-location="City map view"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAc7dB8FknrXEqlqVw-kGIhW4jFmSxPx1EvNTxuRlkKPxbGAuUuaZkhff_pYnvt2uGSYpCdC9MH9MiGyxVnuT360hH30qKfotTid9wbNcv6TMh5bQ10xyIrpL2u2zsQsCgZQOg3JTs9lrZvNgcVemlmXUbfF3QF0PlaZBtywSJ6x_29qsTWOsmh5gJV3jh6d5aFWncyDZFPlEkqGE6CnTW68x_l48YPTAX-j4KWb1WaK1KPwwhObs6eShkTZ0fZVJ-84Aegvq3p-jw" />
+                        </div>
+                    </div>
                 </div>
             </div>
+            <!-- Right Column: Logistics & Actions -->
+            <div class="space-y-8 h-fit sticky top-26">
+                <!-- Logistics Card -->
+                <div class="bg-[#F7F7F7] rounded-xl p-6 shadow-sm border border-[#f6f8f7]">
+                    <h2
+                        class="text-[#152614] text-[20px] font-bold leading-tight tracking-[-0.015em] pb-6 flex items-center gap-2">
+                        <i class="ph-duotone ph-clock text-2xl text-[#B1DF75]"></i>
+                        Horario y Cupos
+                    </h2>
+                    <div class="flex flex-col gap-5">
+                        <!-- Date -->
 
-            <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
-                <!-- FECHA -->
-                <div class="flex flex-col gap-1 w-full">
-                    <label for="num_pers_totales" class="flex items-center gap-2">
-                        <i class="pi pi-calendar-minus"></i> Fecha
-                    </label>
-                    <p-datepicker formControlName="fecha" dateFormat="dd-mm-yy" [invalid]="isInvalid('fecha')" />
-                    @if (isInvalid('fecha')) {
-                    <p-message severity="error" size="small" variant="simple">Fecha requerida.</p-message>
-                    }
+                        <label class="flex flex-col w-full">
+                            <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">Fecha</p>
+                            <p-datepicker formControlName="fecha" dateFormat="dd-mm-yy" [invalid]="isInvalid('fecha')"
+                                placeholder="dd-mm-aaaa" [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay"
+                                class="flex! w-full! rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! h-12! placeholder:text-[#7e887e]! text-base! font-normal!" />
+                            @if (isInvalid('fecha')) {
+                            <p-message severity="error" size="small" variant="simple">Fecha requerida.</p-message>
+                            }
+                        </label>
+
+                        <!-- Time Grid -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="flex flex-col w-full">
+                                <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">
+                                    Hora inicio</p>
+                                <p-datepicker inputId="hora" formControlName="hora" [timeOnly]="true"
+                                    [invalid]="isInvalid('hora')" [iconDisplay]="'input'" [showIcon]="true"
+                                    [timeOnly]="true" inputId="templatedisplay" placeholder="hh:mm"
+                                    class="flex! w-full! rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! h-12! placeholder:text-[#7e887e]! text-base! font-normal!">
+                                    <ng-template #inputicon let-clickCallBack="clickCallBack">
+                                        <i class="pi pi-stopwatch text-[#3D6C3F]" (click)="clickCallBack($event)"></i>
+                                    </ng-template></p-datepicker>
+
+                                @if (isInvalid('hora')) {
+                                <p-message severity="error" size="small" variant="simple">Especifica una
+                                    hora.</p-message>
+                                }
+                            </label>
+
+                            <label class="flex flex-col w-full">
+                                <p class="text-[#152614] text-sm font-semibold leading-normal pb-2">Precio</p>
+
+                                <p-inputnumber formControlName="precio" placeholder="0,00 €" mode="currency"
+                                    inputId="currency-germany" currency="EUR" locale="de-DE" class="w-full" [min]="0" [min]="1000"
+                                    [inputStyleClass]="'w-full'"
+                                    class="flex! w-full! rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! h-12! placeholder:text-[#7e887e]! text-base! font-normal!"></p-inputnumber>
+                            </label>
+
+                        </div>
+                        <!-- Participants Stepper -->
+                        <div class="flex flex-col w-full pt-2">
+                            <div class="flex justify-between items-center pb-2">
+                                <p class="text-[#152614] text-sm font-semibold leading-normal">
+                                    Participantes</p>
+                                <span class="text-[#B1DF75] text-sm font-bold">999 máx</span>
+                            </div>
+
+                            <div
+                                class="w-full rounded-xl text-[#3D6C3F] border border-transparent focus-within:border-[#B1DF75]/50 hover:border-[#B1DF75] transition-colors shadow-sm bg-[#3D6C3F]/5 placeholder:text-[#7e887e] text-base font-normal flex items-center justify-between gap-2 p-2">
+                                <button type="button"
+                                    class="size-10 flex items-center justify-center rounded-lg bg-white/80 text-[#152614] shadow-sm hover:bg-white transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                                    (click)="decrement('numPersTotales')" [disabled]="isAtMin('numPersTotales')"
+                                    aria-label="Restar participante">
+                                    <span class="material-symbols-outlined text-lg">remove</span>
+                                </button>
+
+                                <p-inputNumber [min]="1" [max]="999" [step]="1" [showButtons]="false"
+                                    formControlName="numPersTotales" id="numPersTotales" pKeyFilter="int"
+                                    placeholder="1" class="flex-1"
+                                    [inputStyleClass]="
+                                    '!w-full text-center text-xl! px-4 rounded-xl
+                                    bg-transparent text-[#152614] placeholder:text-[#7e887e]
+                                    border !border-none !shadow-none focus:!outline-none focus:!shadow-none'"></p-inputNumber>
+
+                                <button type="button"
+                                    class="size-10 flex items-center justify-center rounded-lg bg-[#B1DF75]/80 text-[#152614] shadow-sm hover:bg-[#B1DF75]/90 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                                    (click)="increment('numPersTotales')" [disabled]="isAtMax('numPersTotales')"
+                                    aria-label="Sumar participante">
+                                    <span class="material-symbols-outlined text-lg">add</span>
+                                </button>
+                            </div>
+
+                        </div>
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col gap-3 mt-8">
+
+                            <button type="submit"
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#B1DF75]/85 hover:bg-[#B1DF75] transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#B1DF75]/25">
+                                <span class="truncate">Publicar Actividad</span>
+                            </button>
+
+                            <button type="button" (click)="cancelar()"
+                                class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#152614]/5 hover:bg-[#152614]/10 transition-colors text-[#152614] text-base font-medium">
+                                <span class="truncate">Cancelar</span>
+                            </button>
+
+                        </div>
+                    </div>
                 </div>
-                <!-- HORA -->
-                <div class="flex flex-col gap-1 w-full">
-                    <label for="num_pers_totales" class="flex items-center gap-2">
-                        <i class="pi pi-clock"></i> Hora
-                    </label>
-                    <p-datepicker inputId="hora" formControlName="hora" [timeOnly]="true"
-                        [invalid]="isInvalid('hora')" />
-                    @if (isInvalid('hora')) {
-                    <p-message severity="error" size="small" variant="simple">Especifica una hora.</p-message>
-                    }
+                <!-- Tips Card -->
+                <div class="bg-linear-to-br from-[#B1DF75]/20 to-transparent rounded-xl p-5 border border-[#B1DF75]/20">
+                    <div class="flex gap-3">
+                        <span class="material-symbols-outlined text-[#B1DF75]">tips_and_updates</span>
+                        <div class="flex flex-col gap-1">
+                            <p class="text-sm font-bold text-[#152614]">Recomendación</p>
+                            <p class="text-xs text-[#3D6C3F]/80 leading-relaxed">Las actividades con
+                                una descripción detallada y un título llamativo tienen un 65% más de probabilidades de
+                                completarse.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+    </form>
+</div>
 
-            <div class="flex flex-col gap-1 w-full">
-                <!-- UBICACIÓN -->
-                <label for="num_pers_totales" class="flex items-center gap-2">
-                    <i class="pi pi-map-marker"></i> Ubicación
-                </label>
-                <input pInputText type="text" formControlName="ubicacion"
-                    placeholder="Ej. Polideportivo Municipal, Calle Mayor 123" [invalid]="isInvalid('ubicacion')" />
-                <!-- Manejo de errores para la UBICACIÓN -->
-                @if (isInvalid('ubicacion')) {
-                    @if (actividadForm.get('ubicacion')?.hasError('profanity')) {
-                    <p-message severity="error" size="small" variant="simple">La ubicación contiene lenguaje inapropiado o
-                        soez.</p-message>
-                    }
-                    @else if (actividadForm.get('ubicacion')?.hasError('required')) {
-                    <p-message severity="error" size="small" variant="simple">La ubicación es necesaria.</p-message>
-                    }
-                }
-            </div>
-
-
-            <div class="flex flex-col gap-4 md:flex-row md:gap-6 w-full">
-                <!-- NIVEL DE DIFICULTAD -->
-                <div class="flex flex-col gap-1 w-full">
-                    <label for="num_pers_totales" class="flex items-center gap-2">
-                        <i class="pi pi-flag"></i> Nivel
-                    </label>
-                    <p-select [options]="niveles" formControlName="nivel" optionLabel="name" class="w-full"
-                        [invalid]="isInvalid('nivel')" />
-                    @if (isInvalid('nivel')) {
-                    <p-message severity="error" size="small" variant="simple">Elige un nivel.</p-message>
-                    }
-                </div>
-                <!-- PRECIO -->
-                <div class="flex flex-col gap-1 w-full">
-                    <label for="num_pers_totales" class="flex items-center gap-2">
-                        <i class="pi pi-euro"></i> Precio
-                    </label>
-                    <p-inputnumber formControlName="precio" placeholder="0,00 €" mode="currency"
-                        inputId="currency-germany" currency="EUR" locale="de-DE" />
-                </div>
-            </div>
-
-            <!-- BOTÓN CONFIRMAR -->
-            <button pButton severity="secondary" type="submit"><span pButtonLabel>Crear Actividad</span></button>
-        </form>
-    </div>
-</main>
 <app-footer></app-footer>
