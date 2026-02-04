@@ -5,59 +5,70 @@
     <div class="hero relative w-full">
 
         <!-- FONDO DE IMAGEN -->
-        <div class="absolute top-0 left-0 lg:w-[130%] xl:w-[130%] 2xl:w-[110%] z-0 overflow-hidden invisible lg:visible">
+        <div
+            class="absolute top-0 left-0 lg:w-[130%] xl:w-[130%] 2xl:w-[110%] z-0 overflow-hidden invisible lg:visible">
             <img src="../../../assets/home/FondoAlternativa.png" alt="Fondo home"
                 class="object-cover object-bottom opacity-80">
         </div>
 
         <!-- TARJETAS -->
         <div
-            class="h-fit relative z-10 container mx-auto px-4 pt-10 pb-10 md:py-16 lg:py-22 xl:py-28 lg:px-20 max-w-[90%] lg:max-w-[95%] 2xl:max-w-[90%]">
+            class="h-fit relative z-10 container mx-auto px-4 pt-10 pb-10 md:py-16 lg:py-22 xl:py-28 lg:px-10 max-w-[90%] lg:max-w-[95%] 2xl:max-w-[55%]">
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2  gap-8">
+
 
                 <!-- 1. TARJETA IZQUIERDA -->
-                <div
-                    class=" text-card bg-white rounded-2xl shadow-xl flex flex-col justify-center items-center text-center 
-                    h-full md:p-4 lg:p-6 lg:text-left lg:flex-row lg:gap-8 min-h-[250px] transition-transform hover:scale-[1.01]">
-                    <!-- Avatar -->
-                    <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
-                        class="my-2 md:my-0 w-24 h-24 md:w-30 md:h-30 xl:w-38 xl:h-38 2xl:w-40 2xl:h-40 rounded-full shadow-sm object-cover aspect-square">
-                    <!-- Texto bienvenida -->
-                    <div class="flex flex-col gap-2 w-full max-w-[50%]">
+                <div class="text-card bg-white rounded-2xl shadow-xl flex flex-col justify-center items-center text-center 
+                            h-full md:p-8 w-full transition-transform hover:scale-[1.01]">
+
+                    <!-- Contenedor principal para avatar + nombre en la misma fila -->
+                    <div class="flex flex-col lg:flex-row justify-center items-center gap-5 w-full">
+                        <!-- Avatar -->
+                        <img [src]="perfilService.avatarGlobal() | avatarImg" alt="Avatar"
+                            class="w-24 h-24 md:w-30 md:h-30 xl:w-28 xl:h-28 2xl:w-33 2xl:h-33 rounded-full shadow-sm object-cover aspect-square">
+
+                        <!-- Nombre de usuario -->
                         <h1
-                            class="text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-extrabold text-gray-900 leading-tight truncate">
+                            class="text-2xl lg:text-3xl text-left xl:text-[3rem] 2xl:text-[3.3rem] font-extrabold text-gray-900 xl:leading-12 2xl:leading-13 truncate">
                             ¡Hola, <br>
                             <span class="text-gray-900">{{ currentUsuario()!.nombreUsuario }}!</span>
+
                         </h1>
-                        <div class="w-full h-0.5 bg-gray-200 my-2 max-w-100"></div> <!-- Separador -->
-                        <p class="px-2 mb-2 md:mb-0 text-gray-500 italic text-md">¿Listo para una nueva aventura?</p>
+
+                    </div>
+                    <div class="w-full h-0.5 bg-gray-200 ml-[35%]  max-w-[60%] mt-2"></div> <!-- Separador -->
+
+                    <!-- Separador y texto "Listo para..." debajo del conjunto -->
+                    <div class="w-full mt-4">
+
+                        <p class="px-2 text-gray-500 italic text-lg mt-4">¿Listo para una nueva aventura?</p>
                     </div>
                 </div>
 
                 <!-- 2. COLUMNA DERECHA -->
-                <div class="h-90 flex flex-col gap-6">
+                <div class="h-75 flex flex-col gap-5">
                     <!-- Planes Creados -->
                     <div
-                        class="p-creados h-full rounded-2xl shadow-xl p-5 relative overflow-hidden flex flex-col justify-center transition-transform hover:scale-[1.01]">
-                        <div class="z-10">
+                        class="p-creados h-full rounded-2xl shadow-xl p-5 relative overflow-hidden flex flex-col w-full justify-center transition-transform hover:scale-[1.01]">
+                        <div class="z-10 -space-y-3">
                             <h1
-                                class="font-bold text-[#3D6C3F] text-2xl lg:text-4xl 2xl:text-5xl uppercase tracking-wide">
+                                class="font-bold text-[#3D6C3F] text-2xl lg:text-4xl 2xl:text-4xl uppercase tracking-wide">
                                 PLANES CREADOS</h1>
-                            <div class="flex items-center gap-2">
-                                <i class="ph ph-lightning text-[#3D6C3F] text-5xl lg:text-6xl 2xl:text-7xl"></i>
-                                <span class="text-5xl lg:text-6xl 2xl:text-7xl font-black text-[#3D6C3F]">{{
+                            <div class="flex items-baseline">
+                                <i class="ph ph-lightning text-[#3D6C3F] text-5xl lg:text-6xl 2xl:text-6xl"></i>
+                                <span class="text-5xl lg:text-6xl 2xl:text-7xl font-black text-[#3D6C3F] ">{{
                                     planesCreados() }}</span>
                             </div>
                         </div>
                     </div>
                     <!-- Planes Unidos -->
                     <div
-                        class="p-unidos h-full rounded-2xl shadow-xl p-5 relative overflow-hidden flex flex-col justify-center transition-transform hover:scale-[1.01]">
-                        <h1 class="font-bold text-[#B1DF75] text-2xl lg:text-4xl 2xl:text-5xl uppercase tracking-wide">
+                        class="p-unidos h-full -space-y-3 rounded-2xl shadow-xl p-5 relative overflow-hidden flex flex-col justify-center transition-transform w-full hover:scale-[1.01]">
+                        <h1 class="font-bold text-[#B1DF75] text-2xl lg:text-4xl 2xl:text-4xl uppercase tracking-wide">
                             PLANES UNIDOS</h1>
-                        <div class="flex items-center gap-2">
-                            <i class="ph ph-hand-peace text-[#B1DF75] text-5xl lg:text-6xl 2xl:text-7xl"></i>
+                        <div class="flex items-baseline">
+                            <i class="ph ph-hand-peace text-[#B1DF75] text-5xl lg:text-6xl 2xl:text-6xl"></i>
                             <span class="text-5xl lg:text-6xl 2xl:text-7xl font-black text-[#B1DF75]">{{
                                 planesUnidos() }}</span>
                         </div>
@@ -73,8 +84,7 @@
     </div>
 
     <!-- TU ESPACIO -->
-    <div
-        class="flex flex-col xl:flex-row
+    <div class="flex flex-col xl:flex-row
                justify-center  
                relative z-10 
                gap-4 2xl:gap-8
