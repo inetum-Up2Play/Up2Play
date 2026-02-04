@@ -19,14 +19,30 @@ import { Notificacion } from '../../shared/models/Notificacion';
 import { NotificacionesService } from '../../core/services/notificaciones/notificaciones-service';
 import { Header } from '../../core/layout/header/header';
 import { Footer } from '../../core/layout/footer/footer';
+import { CamelcasePipe } from '../../shared/pipes/camelcase-pipe';
 
 @Component({
   selector: 'app-notificaciones',
-  imports: [ToastModule, AccordionModule, TableModule, TagModule, IconFieldModule, InputTextModule, InputIconModule, MultiSelectModule, SelectModule, HttpClientModule, CommonModule, ButtonModule, Header, Footer],
+  imports: [
+    ToastModule,
+    AccordionModule,
+    CamelcasePipe,
+    TableModule,
+    TagModule,
+    IconFieldModule,
+    InputTextModule,
+    InputIconModule,
+    MultiSelectModule,
+    SelectModule,
+    HttpClientModule,
+    CommonModule,
+    ButtonModule,
+    Header,
+    Footer,
+  ],
   templateUrl: './notificaciones.html',
   styleUrl: './notificaciones.scss',
 })
-
 export class Notificaciones implements OnInit {
   private notificacionesService = inject(NotificacionesService);
   private messageService = inject(MessageService);
@@ -44,14 +60,15 @@ export class Notificaciones implements OnInit {
   }
 
   configurarFiltros() {
+    // Usa los valores exactos del Enum del backend
     this.tipos = [
       { label: 'INSCRITO', value: 'INSCRITO' },
-      { label: 'PAGADO', value: 'PAGADO' },
-      { label: 'PAGO RECIBIDO', value: 'PAGO_RECIBIDO' },
-      { label: 'REEMBOLSADO', value: 'REEMBOLSADO' },
       { label: 'CREADA', value: 'CREADA' },
+      { label: 'PAGO RECIBIDO', value: 'PAGO_RECIBIDO' },
       { label: 'ACTUALIZADO', value: 'ACTUALIZADO' },
       { label: 'EDITADA', value: 'EDITADA' },
+      { label: 'PAGADO', value: 'PAGADO' },
+      { label: 'REEMBOLSADO', value: 'REEMBOLSADO' },
       { label: 'DESAPUNTADO', value: 'DESAPUNTADO' },
       { label: 'CANCELADA', value: 'CANCELADA' },
       { label: 'PAGO FALLIDO', value: 'PAGO_FALLIDO' },
@@ -75,10 +92,9 @@ export class Notificaciones implements OnInit {
       },
 
       error: (err) => {
-        console.error('❌ Error cargando notificaciones:', err);
-      }
+        console.error('Error cargando notificaciones:', err);
+      },
     });
-
   }
 
   clear(table: Table) {
@@ -86,25 +102,37 @@ export class Notificaciones implements OnInit {
   }
 
   // Definir tipo de la notificación
-  getSeverity(tipo: string): "success" | "info" | "warn" | "danger" | "secondary" | "contrast" | undefined {
-    switch (tipo) {
-      // VerdeS
+  getSeverity(
+    tipo: string,
+  ):
+    | 'success'
+    | 'info'
+    | 'warn'
+    | 'danger'
+    | 'secondary'
+    | 'contrast'
+    | undefined {
+    // Primero normalizamos el tipo para comparación (convertimos barras bajas a espacios)
+    const tipoNormalizado = tipo.replace(/_/g, ' ');
+
+    switch (tipoNormalizado) {
+      // Verdes
       case 'INSCRITO':
       case 'CREADA':
-      case 'PAGADO':
+      case 'PAGO RECIBIDO':
         return 'success';
       // Azules
       case 'EDITADA':
       case 'ACTUALIZADO':
-      case 'PAGO_RECIBIDO':
+      case 'PAGADO':
         return 'info';
       // Amarillos
       case 'DESAPUNTADO':
       case 'REEMBOLSADO':
         return 'warn';
-      // Rojos 
+      // Rojos
       case 'CANCELADA':
-      case'PAGO_FALLIDO':
+      case 'PAGO FALLIDO':
         return 'danger';
       // Gris
       default:
@@ -112,37 +140,35 @@ export class Notificaciones implements OnInit {
     }
   }
 
-
   marcarComoLeida(notificacion: Notificacion): void {
     if (notificacion.leido) return;
 
     this.notificacionesService.marcarComoLeida(notificacion.id).subscribe({
       next: (res) => {
-
         // Actualiza la UI solo si el backend fue bien
         notificacion.leido = true;
       },
       error: (err) => {
         console.error('❌ Error al marcar como leída:', err);
-      }
+      },
     });
   }
 
   eliminarNotificacion(notificacion: Notificacion): void {
     this.notificacionesService.eliminarNotificacion(notificacion.id).subscribe({
       next: (res) => {
-
         // Quitar de la lista una vez confirmado
-        const actual = this.notificaciones().filter(n => n.id !== notificacion.id);
+        const actual = this.notificaciones().filter(
+          (n) => n.id !== notificacion.id,
+        );
         this.notificaciones.set(actual);
 
         this.messageService.add({
           severity: 'success',
           summary: 'Notificación eliminada',
           detail: res?.message ?? `Se eliminó: ${notificacion.titulo}`,
-          life: 2500
+          life: 2500,
         });
-
       },
       error: (err) => {
         console.error('❌ Error al eliminar notificación:', err);
@@ -151,11 +177,9 @@ export class Notificaciones implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: err?.message ?? 'No se pudo eliminar la notificación',
-          life: 3500
+          life: 3500,
         });
-
-      }
+      },
     });
   }
-
 }
