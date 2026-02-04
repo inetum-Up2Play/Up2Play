@@ -63,25 +63,26 @@ private actService = inject(ActService);
   }
 
   calcularPageSize() {
-    const width = window.innerWidth;
-    let nuevoSize = 8;
+      const width = window.innerWidth;
+      let nuevoSize = 8; 
 
-    if (width >= 1536) {
-      nuevoSize = 8;
-    } else if (width >= 1280) {
-      nuevoSize = 9; // Ajuste para pantallas grandes
-    } else {
-      nuevoSize = 8;
-    }
+      if (width >= 1536) {
+        nuevoSize = 8;
+      } 
+      else if (width >= 1280) {
+        nuevoSize = 9;
+      } 
+      else {
+        nuevoSize = 8;
+      }
 
-    // Solo actualizamos si cambia el tamaño 
-    if (this.pageSize !== nuevoSize) {
-      this.pageSize = nuevoSize;
-      if (this.activities.length > 0) {
-        this.updateVisibleActivities();
+      if (this.pageSize !== nuevoSize) {
+        this.pageSize = nuevoSize;
+        if (this.activities.length > 0) {
+          this.updateVisibleActivities();
+        }
       }
     }
-  }
 
   cargarActividades() {
     this.currentPage = 1; 

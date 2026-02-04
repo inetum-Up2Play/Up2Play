@@ -4,9 +4,6 @@
     --p-dataview-content-background: transparent !important;
     --p-dataview-header-background: transparent !important;
     --p-dataview-header-border-bottom: none !important;
-
-
-
 }
 
 :host ::ng-deep .p-dataview .p-dataview-header {
@@ -33,10 +30,10 @@
 }
 
 .ver-mas-container {
-  padding-top: 1.5rem;    /* Siempre */
-  padding-bottom: 1.5rem; /* Siempre */
-  padding-left: 2rem;     /* Por defecto */
-  padding-right: 2rem;    /* Por defecto */
+  padding-top: 1.5rem;   
+  padding-bottom: 1.5rem; 
+  padding-left: 2rem;    
+  padding-right: 2rem;    
 }
 
 :host ::ng-deep .boton-ver-mas .p-button {
