@@ -2,6 +2,8 @@ import { AfterViewInit, Component, effect, inject, Injector, OnInit, signal } fr
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+
 import { catchError, forkJoin, map, of } from 'rxjs';
 
 // --- PrimeNG ---
@@ -17,6 +19,7 @@ import { RatingModule } from 'primeng/rating';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import {ProgressBar} from 'primeng/progressbar';
+import { ButtonModule } from 'primeng/button';
 
 // --- OpenLayers ---
 import Feature from 'ol/Feature';
@@ -44,7 +47,6 @@ import { Perfil } from '../../../../shared/models/Perfil';
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
-import {DatePipe} from '@angular/common';
 
 interface ParticipanteView {
   nombre: string;
@@ -72,6 +74,7 @@ interface ParticipanteView {
     DeporteImgPipe,
     AvatarPipe,
     Footer,
+    ButtonModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './info-actividad.html',
@@ -103,6 +106,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
   apuntado = signal<boolean>(false);
+  loading = signal(false);
 
   // UI & Participantes
   isCreador = signal<boolean>(false);
@@ -254,19 +258,19 @@ export class InfoActividad implements OnInit, AfterViewInit {
     });
   }
 
-calcularPorcentajeParticipacion(): number {
-  const actividad = this.actividad();
-  const numPersTotales = actividad?.numPersTotales;
-  
-  if (!numPersTotales || numPersTotales === 0) {
-    return 0;
+  calcularPorcentajeParticipacion(): number {
+    const actividad = this.actividad();
+    const numPersTotales = actividad?.numPersTotales;
+    
+    if (!numPersTotales || numPersTotales === 0) {
+      return 0;
+    }
+    
+    const porcentaje = (this.avataresUsuarios().length / numPersTotales) * 100;
+    
+    // Redondeamos a 2 decimales
+    return Math.round(porcentaje * 100) / 100;
   }
-  
-  const porcentaje = (this.avataresUsuarios().length / numPersTotales) * 100;
-  
-  // Redondeamos a 2 decimales
-  return Math.round(porcentaje * 100) / 100;
-}
   // =============================================================
   // ACCIONES DE USUARIO (Botones)
   // =============================================================
@@ -351,7 +355,6 @@ calcularPorcentajeParticipacion(): number {
   }
 
   eliminar(event: Event) {
-    console.log("prova");
     this.confirmationService.confirm({
       message:
         '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
@@ -368,6 +371,7 @@ calcularPorcentajeParticipacion(): number {
         severity: 'danger',
       },
       accept: () => {
+        this.loading.set(true);
         this.actService.deleteActividad(this.actividadId).subscribe({
           next: () => {
             this.messageService.add({
@@ -379,10 +383,14 @@ calcularPorcentajeParticipacion(): number {
               this.router.navigate(['/actividades']);
             }, 2500);
           },
-          error: (codigo) => this.manejarError(codigo),
+          error: (codigo) => {
+            this.loading.set(false);
+            this.manejarError(codigo)
+          },
         });
       },
       reject: () => {
+        this.loading.set(false);
         this.messageService.add({
           severity: 'warn',
           summary: 'Rechazado',

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -39,6 +39,7 @@ interface ResendVerificationDto {
   templateUrl: './verification-form.component.html',
   styleUrls: ['./verification-form.component.scss'],
 })
+
 export class VerificationFormComponent implements OnInit {
   private userDataService = inject(UserDataService);
   private authService = inject(AuthService);
@@ -48,6 +49,7 @@ export class VerificationFormComponent implements OnInit {
   private fb = inject(FormBuilder);
 
   errorMessage: string | null = null;
+  loading = signal(false);
 
   resendMessageVisible = false;
 
@@ -58,7 +60,6 @@ export class VerificationFormComponent implements OnInit {
 
   token = '';
   email = '';
-  loading = false;
   errorMessageToken = '';
 
   form = this.fb.group({
@@ -99,10 +100,10 @@ export class VerificationFormComponent implements OnInit {
   }
 
   validateToken(token: string): void {
-    this.loading = true;
+    this.loading.set(true);
     this.authService.validateToken(token).subscribe({
       next: (res: string | { email: string }) => {
-        this.loading = false;
+        this.loading.set(false);
         if (typeof res === 'string') {
           this.errorMessageToken = res;  //Muestra respuesta con string
         } else {
@@ -110,7 +111,7 @@ export class VerificationFormComponent implements OnInit {
         }
       },
       error: (err) => {
-        this.loading = false;
+        this.loading.set(false);
         this.errorMessageToken = 'Token inválido o expirado.';
         console.error('Error validando token:', err);
       },
@@ -132,14 +133,16 @@ export class VerificationFormComponent implements OnInit {
     this.authService.verification(payload).subscribe({
       next: (res) => {
         if (res === true) {
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/auth/login']);
         } else {
+          this.loading.set(false);
           const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
           this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
         }
       },
       error: () => {
+        this.loading.set(false);
         this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
       }
     });
