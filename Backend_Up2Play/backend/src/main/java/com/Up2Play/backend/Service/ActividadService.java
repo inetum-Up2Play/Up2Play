@@ -439,6 +439,58 @@ public class ActividadService {
         }
     }
 
+    @Transactional
+    public void deleteActividadUsu(Long idActividad, Long idUsuario) throws MessagingException {
+        Actividad act = actividadRepository.findById(idActividad)
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
+
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+                    "La actividad " + act.getNombre() + " ha sido cancelada.",
+                    "La actividad " + act.getNombre()
+                            + " ha sido cancelada.  Lamentamos los inconvenientes y esperamos verte en próximas actividades.",
+                    LocalDateTime.now(),
+                    EstadoNotificacion.fromValue("CANCELADA"),
+                    act,
+                    usuariosUnidos,
+                    usuario);
+
+            List<String> emails = act.getUsuarios().stream()
+                    .map(Usuario::getEmail)
+                    .toList();
+
+            List<Pago> pagos = pagoRepository.findByActividad(act);
+            if (!pagos.isEmpty()) {
+
+                pagoRepository.deleteAll(pagos);
+
+            }
+
+            notificacionService.ActividadEliminada(act, emails);
+
+            for (Notificacion n : act.getNotificaciones()) {
+                n.setActividad(null);
+            }
+            act.getNotificaciones().clear();
+
+            for (Usuario inscrito : act.getUsuarios()) {
+                inscrito.getActividadesUnidas().remove(act);
+                usuarioRepository.save(inscrito);
+            }
+
+            act.getUsuarios().clear();
+
+            actividadRepository.delete(act);
+
+        } else {
+            throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
+        }
+    }
+
     // Unirse a Actividad
     @Transactional
     public ActividadDtoResp unirActividad(Long idActividad, Long idUsuario) {
