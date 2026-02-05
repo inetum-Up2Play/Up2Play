@@ -113,7 +113,7 @@ public class UsuarioService {
                 actividadRepository.save(act);
 
             } else {
-                actividadService.deleteActividad(act.getId(), usuario.getId());
+                actividadService.deleteActividadUsu(act.getId(), usuario.getId());
 
             }
         }
