@@ -52,7 +52,6 @@ public class ApplicationConfiguration {
      * contraseñas (passwordEncoder) para verificar si el usuario existe y si la
      * contraseña es correcta.
      **/
-    @SuppressWarnings("deprecation")
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
             BCryptPasswordEncoder passwordEncoder) {
