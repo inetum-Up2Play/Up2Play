@@ -17,6 +17,7 @@
 // CARD
 :host ::ng-deep .p-card-body {
     height: 100% !important;
+    padding: 0 !important;
 }
 
 :host ::ng-deep .p-card-footer {

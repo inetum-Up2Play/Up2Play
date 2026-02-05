@@ -1,6 +1,6 @@
-<div class="py-5 2xl:p-10 m-2 h-full flex items-center justify-center">
+<div class="py-5 mx-2 h-full flex items-center justify-center">
   <!-- CARD -->
-  <p-card #body class="card sh h-full">
+  <p-card #body class="card sh h-full overflow-hidden">
     <!-- Imagen -->
     <ng-template #title>
       <div class="relative w-full">
@@ -29,7 +29,7 @@
 
     <!-- Fecha -->
     <ng-template #subtitle>
-      <span class="inline-flex items-center gap-1 mt-1">
+      <span class="inline-flex items-center gap-1 mt-1 mx-4">
         <i class="ph-bold ph-calendar-blank align-middle leading-none" aria-hidden="true"></i>
         {{ fecha() }} - {{ hora() }}h
       </span>
@@ -37,11 +37,11 @@
 
     <!-- Título de la actividad -->
     <ng-template #content>
-      <p class="title infoActividad" aria-label="Detalles de la actividad" (click)="redirigirInfoActividad()">
+      <p class="title infoActividad mx-4" aria-label="Detalles de la actividad" (click)="redirigirInfoActividad()">
         {{ titulo() }}
       </p>
       <!-- Ubicación -->
-      <span class="inline-flex items-center gap-1">
+      <span class="inline-flex items-center gap-1 mx-4">
         <i class="ph-fill ph-map-pin align-middle leading-none" aria-hidden="true"></i>
         {{ ubicacion() }}
       </span>
@@ -49,7 +49,7 @@
 
     <!-- Botones de la card -->
     <ng-template #footer>
-      <div class="flex items-end justify-end w-full h-full  mb-0">
+      <div class="flex items-end justify-end w-full h-full mb-0 p-4">
         @if (isCompletada()) {
           <p-button label="Ver detalles" (onClick)="redirigirInfoActividad()" [styleClass]="'btn-verDetalles'"
           iconPos="right">
