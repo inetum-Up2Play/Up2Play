@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, signal, viewChild, OnInit } from '@angular/core';
-import { CurrencyPipe, DatePipe, JsonPipe, TitleCasePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
-  imports: [ButtonModule, CurrencyPipe, Header, Footer, DatePipe, ProgressSpinner, DeporteImgPipe, TitleCasePipe, JsonPipe, RouterLink],
+  imports: [ButtonModule, CurrencyPipe, Header, Footer, DatePipe, ProgressSpinner, DeporteImgPipe, TitleCasePipe, RouterLink],
   templateUrl: './payment.html',
   styleUrl: './payment.scss',
   providers: [MessageService]
