@@ -351,8 +351,8 @@ calcularPorcentajeParticipacion(): number {
   }
 
   eliminar(event: Event) {
+    console.log("prova");
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       message:
         '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
       header: '¡Cuidado!',
