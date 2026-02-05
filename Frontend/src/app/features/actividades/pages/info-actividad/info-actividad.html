@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <app-header></app-header>
 
 @let acti = actividad();
@@ -116,7 +117,6 @@
                     </div>
                     <!-- Join Button -->
                     <div>
-                        <p-toast />
                         <p-confirmdialog />
                         @if (isCreador() && acti.estado === 'PENDIENTE') {
                         <button (click)="goEditar()"

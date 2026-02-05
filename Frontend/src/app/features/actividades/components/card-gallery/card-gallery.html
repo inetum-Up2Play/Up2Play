@@ -8,19 +8,28 @@
 
         <ng-template #header>
             <div class="bg-white p-4 rounded-2xl border border-[#f0f4f2] shadow-sm mb-8">
-                <!-- CONTENEDOR PRINCIPAL: Filtro y botones en la misma línea -->
+                <!-- PRIMERA FILA: Filtros y selector de vista -->
                 <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                    <!-- FILTRO DE BÚSQUEDA -->
+                    <!-- CONTENEDOR DE FILTROS -->
                     <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto grow">
+                        <!-- Filtro por nombre -->
                         <p-iconfield iconPosition="left" class="w-full md:flex-1">
                             <p-inputicon styleClass="ph ph-magnifying-glass !text-[#3D6C3F]/80"></p-inputicon>
                             <input pInputText type="text" [(ngModel)]="filterNombre" (ngModelChange)="applyFilters()"
                                 placeholder="Buscar por nombre de actividad (ej. Padel, Yoga)..."
                                 class="w-full text-sm text-[#3D6C3F]/80! placeholder-[#3D6C3F]/80! bg-white focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors" />
                         </p-iconfield>
+
+                        <!-- Filtro por deporte -->
+                        <p-multiSelect class="w-full md:flex-1" [options]="deportesOptions" [(ngModel)]="filterDeporte"
+                            (onChange)="applyFilters()" (onClear)="applyFilters()" placeholder="Deportes"
+                            optionLabel="label" optionValue="value" selectedItemsLabel="{0} deportes seleccionados"
+                            [maxSelectedLabels]="1" [showClear]="true"
+                            styleClass="w-full text-base !text-[#3D6C3F]/80 bg-white focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors [&_.p-placeholder]:!text-[#3D6C3F]/80">
+                        </p-multiSelect>
                     </div>
 
-                    <!-- SELECTOR DE VISTA -->
+                    <!-- SELECTOR DE VISTA (derecha) -->
                     <div class="flex justify-end w-full md:w-auto">
                         <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false" class="h-full">
                             <ng-template #item let-item>
@@ -30,13 +39,54 @@
                         </p-selectbutton>
                     </div>
                 </div>
+
+                <!-- SEGUNDA FILA: Filtros activos (solo si hay filtros) -->
+                @if (filterDeporte.length > 0 || filterNombre) {
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs text-gray-400 font-medium mr-2">Filtros activos:</span>
+
+                        <!-- Filtro por deporte -->
+                        @if (filterDeporte.length > 0) {
+                        @for (deporte of filterDeporte; track deporte) {
+                        <div
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#3D6C3F]/10 text-[#3D6C3F] text-xs font-bold border border-[#3D6C3F]/20 animate-fade-in">
+                            <span>{{ deporte }}</span>
+                            <button (click)="removeDeporte(deporte)"
+                                class="hover:text-[#152614] cursor-pointer flex items-center ml-1">
+                                <i class="ph ph-x text-xs"></i>
+                            </button>
+                        </div>
+                        }
+                        }
+
+                        <!-- Filtro por nombre -->
+                        @if (filterNombre) {
+                        <div
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#3D6C3F]/10 text-[#3D6C3F] text-xs font-bold border border-[#3D6C3F]/20 animate-fade-in">
+                            <i class="ph ph-magnifying-glass text-xs"></i>
+                            <span>"{{ filterNombre }}"</span>
+                            <button (click)="filterNombre = ''; applyFilters()"
+                                class="hover:text-[#152614] cursor-pointer flex items-center ml-1">
+                                <i class="ph ph-x text-xs"></i>
+                            </button>
+                        </div>
+                        }
+
+                        <!-- Botón para limpiar todos -->
+                        @if (filterDeporte.length > 0 || filterNombre) {
+                        <button (click)="clearFilters()"></button>
+                        }
+                    </div>
+                </div>
+                }
             </div>
         </ng-template>
 
         <ng-template #list let-items>
             <div class="flex flex-col">
                 <!-- Mensaje si no hay resultados con filtro -->
-                @if (items.length === 0 && filterNombre) {
+                @if (items.length === 0 && (filterNombre || filterDeporte.length > 0)) {
                 <div class="flex flex-col items-center justify-center">
                     <app-empty-activities class="w-full" icon="ph ph-smiley-sad" title="Tu lista está vacía..."
                         message="¡No se han encontrado actividades con este filtro!" aria-live="polite"
@@ -117,7 +167,7 @@
             </div>
 
             <!-- Mensaje si no hay resultados con filtro -->
-            @if (items.length === 0 && filterNombre) {
+            @if (items.length === 0 && (filterNombre || filterDeporte.length > 0)) {
             <div class="flex flex-col items-center justify-center">
                 <app-empty-activities class="w-full" icon="ph ph-smiley-sad" title="Tu lista está vacía..."
                     message="¡No se han encontrado actividades con este filtro!" aria-live="polite" aria-atomic="true">
