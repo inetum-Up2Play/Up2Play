@@ -123,7 +123,7 @@
                         <div class="flex flex-col md:items-end gap-4">
                             <span class="text-xl font-bold">{{ activity.precio | currency:'EUR' }}</span>
                             <div class="flex flex-row gap-2">
-                                @if (isCreador()) {
+                                @if (esCreador(activity)) {
                                 <button pButton icon="pi pi-cog" label="Gestionar"
                                     class="p-button-secondary p-button-outlined p-button-sm"
                                     (click)="redirigirInfoActividad(activity.id)">

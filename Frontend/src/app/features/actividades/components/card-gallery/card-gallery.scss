@@ -39,13 +39,45 @@
 :host ::ng-deep .boton-ver-mas .p-button {
     border-radius: 20px !important;
     border-color: vars.$verde-oliva !important;
+    color: vars.$verde-oliva !important;
+
+    &:hover {
+        border-radius: 20px !important;
+        border-color: vars.$verde-oliva !important;
+        color: vars.$verde-oliva !important;
+        background-color: vars.$verde-claro !important;
+    }
 }
 
 :host ::ng-deep .boton-ver-mas {
     border-color: vars.$verde-oliva;
     border-radius: 20px;
     color: vars.$verde-oliva;
+
+    &:hover {
+        border-radius: 20px !important;
+        border-color: vars.$verde-oliva !important;
+        color: vars.$verde-oliva !important;
+        background-color: #b1df7525 !important;
+    }
 }
+
+
+/* Hace que el icono rote 180° al hacer hover/focus sobre el botón */
+:host ::ng-deep .boton-ver-mas .p-button-icon,
+:host ::ng-deep .boton-ver-mas .pi {
+    transition: transform 300ms ease;
+    transform-origin: center;
+    will-change: transform;
+}
+
+:host ::ng-deep .boton-ver-mas:hover .p-button-icon,
+:host ::ng-deep .boton-ver-mas:hover .pi,
+:host ::ng-deep .boton-ver-mas:focus-visible .p-button-icon,
+:host ::ng-deep .boton-ver-mas:focus-visible .pi {
+    transform: rotate(180deg);
+}
+
 
 //BTN VER-DETALLES
 :host ::ng-deep .btn-verDetalles {

@@ -27,6 +27,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { MultiSelect } from 'primeng/multiselect';
+import { UserService } from '../../../../core/services/user/user-service';
+
 
 @Component({
   selector: 'app-card-gallery',
@@ -58,6 +60,7 @@ export class CardGallery {
   private confirmationService = inject(ConfirmationService);
   private errorService = inject(ErrorService);
   private router = inject(Router);
+  private userService = inject(UserService)
 
   private manejarError(codigo: number) {
     const mensaje = this.errorService.getMensajeError(codigo);
@@ -80,10 +83,11 @@ export class CardGallery {
   filterNombre: string = '';
   filterDeporte: string[] = [];
 
-  isCreador = computed(() => this.tipo() === 'mis-actividades');
+  userId: number | null = null;
 
   ngOnInit() {
     this.calcularPageSize();
+    this.obtenerUsuarioActual();
     this.cargarActividades();
 
     // Suscribirse a cambios externos (ej: al borrar/crear una actividad)
@@ -185,6 +189,18 @@ export class CardGallery {
     this.filterNombre = '';
     this.filterDeporte = [];
     this.applyFilters(); // Aplicar filtro vacío
+  }
+
+
+  obtenerUsuarioActual() {
+    this.userService.getUsuario().subscribe({
+      next: (user) => this.userId = user.id,
+      error: () => this.userId = null
+    });
+  }
+
+  esCreador(activity: any): boolean {
+    return this.userId !== null && activity.usuarioCreadorId === this.userId;
   }
 
   eliminar(event: Event, id: number) {
