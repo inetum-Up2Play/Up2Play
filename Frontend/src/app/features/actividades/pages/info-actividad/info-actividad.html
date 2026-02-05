@@ -131,9 +131,9 @@
 
                         } @else {
 
-                        <button (click)="reembolsoATodos()"
+                        <button (click)="eliminar($event)"
                             class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-[#9d0208]/85 hover:bg-[#9d0208] transition-colors text-[#F7F7F7] text-base font-bold tracking-[0.015em] shadow-lg shadow-[#9d0208]/25">
-                            Eliminar
+                            Eliminar y reembolsar
                         </button>
                         }
 
@@ -160,12 +160,7 @@
                                 Actividad Completa
                             </button>
 
-                            } @else {
-                            <button (click)="actCompleta()" class="flex w-full  items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-gray-300 transition-colors text-[#152614] text-base font-bold tracking-[0.015em] shadow-lg shadow-gray-100">
-                                <span>Actividad Completa</span>
-                            </button>
-
-                            }
+                            } 
                             }
 
                             } @else if (acti.estado === 'PENDIENTE') {
