@@ -2,14 +2,14 @@
     <app-header></app-header>
 
     <!-- SECCIÓN HERO -->
-    <div class="hero relative w-full">
+    <div class="hero relative w-full min-h-[600px]">
 
         <!-- FONDO DE IMAGEN -->
-        <div
-            class="absolute top-0 left-0 lg:w-[130%] xl:w-[130%] 2xl:w-[110%] z-0 overflow-hidden invisible lg:visible">
-            <img src="../../../assets/home/FondoAlternativa.png" alt="Fondo home"
-                class="object-cover object-bottom opacity-80">
-        </div>
+         <div class="absolute inset-0 z-0 overflow-hidden">
+        <img src="../../../assets/home/fomdo_prueba2.webp" alt="Fondo home"
+            class="w-full h-full object-cover object-[center_70%] 
+                   mask-[linear-gradient(to_bottom,black_75%,transparent_100%)]">
+    </div>
 
         <!-- TARJETAS -->
         <div
@@ -79,7 +79,7 @@
     </div>
 
     <!-- ACORDEON -->
-    <div class="z-10 flex relative justify-center pt-12 md:pt-8 pl-23">
+    <div class="z-10 flex relative justify-center mt-5 pt-12 md:pt-8 pl-23">
         <app-stepper-info class="w-[90%] md:w-[85%]"></app-stepper-info>
     </div>
 
