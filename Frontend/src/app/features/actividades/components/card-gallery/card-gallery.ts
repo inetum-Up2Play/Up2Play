@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, input } from '@angular/core';
+import { Component, computed, HostListener, inject, input, signal } from '@angular/core';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 import { ButtonModule } from 'primeng/button';
@@ -63,6 +63,8 @@ export class CardGallery {
   currentPage = 1;
   noHayActividades = true;
 
+  isCreador = computed(() => this.tipo() === 'mis-actividades'); 
+
   ngOnInit() {
     this.calcularPageSize();
     this.cargarActividades();
@@ -79,26 +81,26 @@ export class CardGallery {
   }
 
   calcularPageSize() {
-      const width = window.innerWidth;
-      let nuevoSize = 8; 
+    const width = window.innerWidth;
+    let nuevoSize = 8;
 
-      if (width >= 1536) {
-        nuevoSize = 8;
-      } 
-      else if (width >= 1280) {
-        nuevoSize = 9;
-      } 
-      else {
-        nuevoSize = 8;
-      }
+    if (width >= 1536) {
+      nuevoSize = 8;
+    }
+    else if (width >= 1280) {
+      nuevoSize = 9;
+    }
+    else {
+      nuevoSize = 8;
+    }
 
-      if (this.pageSize !== nuevoSize) {
-        this.pageSize = nuevoSize;
-        if (this.activities.length > 0) {
-          this.updateVisibleActivities();
-        }
+    if (this.pageSize !== nuevoSize) {
+      this.pageSize = nuevoSize;
+      if (this.activities.length > 0) {
+        this.updateVisibleActivities();
       }
     }
+  }
 
   cargarActividades() {
     this.currentPage = 1;
@@ -137,7 +139,7 @@ export class CardGallery {
     });
   }
 
-  
+
   eliminar(event: Event, id: number) {
     console.log("prova");
     this.confirmationService.confirm({
