@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { JoinedCarousel } from './joined-carousel';
+import { CardGallery } from './card-gallery';
 
-describe('JoinedCarousel', () => {
-  let component: JoinedCarousel;
-  let fixture: ComponentFixture<JoinedCarousel>;
+describe('CardGallery', () => {
+  let component: CardGallery;
+  let fixture: ComponentFixture<CardGallery>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [JoinedCarousel]
+      imports: [CardGallery]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(JoinedCarousel);
+    fixture = TestBed.createComponent(CardGallery);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

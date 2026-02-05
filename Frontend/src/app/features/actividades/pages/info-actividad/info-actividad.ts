@@ -16,6 +16,7 @@ import { MessageModule } from 'primeng/message';
 import { RatingModule } from 'primeng/rating';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
+import {ProgressBar} from 'primeng/progressbar';
 
 // --- OpenLayers ---
 import Feature from 'ol/Feature';
@@ -43,6 +44,7 @@ import { Perfil } from '../../../../shared/models/Perfil';
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { AvatarPipe } from '../../../../shared/pipes/avatar-pipe';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+import {DatePipe} from '@angular/common';
 
 interface ParticipanteView {
   nombre: string;
@@ -63,8 +65,10 @@ interface ParticipanteView {
     FormsModule,
     ReactiveFormsModule,
     ToastModule,
+    ProgressBar,
     MessageModule,
     Header,
+    DatePipe,
     DeporteImgPipe,
     AvatarPipe,
     Footer,
@@ -250,6 +254,19 @@ export class InfoActividad implements OnInit, AfterViewInit {
     });
   }
 
+calcularPorcentajeParticipacion(): number {
+  const actividad = this.actividad();
+  const numPersTotales = actividad?.numPersTotales;
+  
+  if (!numPersTotales || numPersTotales === 0) {
+    return 0;
+  }
+  
+  const porcentaje = (this.avataresUsuarios().length / numPersTotales) * 100;
+  
+  // Redondeamos a 2 decimales
+  return Math.round(porcentaje * 100) / 100;
+}
   // =============================================================
   // ACCIONES DE USUARIO (Botones)
   // =============================================================
@@ -334,8 +351,8 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   eliminar(event: Event) {
+    console.log("prova");
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       message:
         '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
       header: '¡Cuidado!',

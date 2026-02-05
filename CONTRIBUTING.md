@@ -79,13 +79,13 @@ Las convenciones de nombres son esenciales para mantener la organización y clar
     // Este método se usa para validar tokens expirados antes de renovar sesión
     function validarToken() { ... }
     
-
 ### Generales
 
 - **Usar Guiones**: Se recomienda usar guiones para separar palabras en lugar de espacios.
 - **Mantenerlo Corto y Descriptivo**: Los nombres deben ser fáciles de escribir y entender, transmitiendo la información necesaria.
 - **Minúsculas**: Usar letras minúsculas para evitar confusiones, ya que Git distingue entre mayúsculas y minúsculas.
 - **Evita caracteres especiales.**
+- **Comando para actualizar ramas borradas.**: Primero realizar `git fetch -p`y luego `git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -D`
 ---
 
 ## **Normas básicas para contribuir**

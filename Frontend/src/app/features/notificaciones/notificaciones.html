@@ -8,10 +8,10 @@
                 </h1>
                 <p class="text-[#3D6C3F] text-lg font-normal">Mantente al día con tus
                     actividades deportivas y comunidad.</p>
-            </div> 
+            </div>
             <!-- BOTÓN LIMPIAR FILTROS -->
-            <p-button class="filtros pt-2 md:pt-0" label="Limpiar filtros" [outlined]="true"
-                icon="pi pi-filter-slash" (onClick)="clear(dt2)" />
+            <p-button class="filtros pt-2 md:pt-0" label="Limpiar filtros" [outlined]="true" icon="pi pi-filter-slash"
+                (onClick)="clear(dt2)" />
         </div>
         <div class="tabla overflow-hidden rounded-[15px] mt-4 mb-4">
 
@@ -41,7 +41,8 @@
                                     <p-select [options]="tipos" (onChange)="filter($event.value)" placeholder="Todos"
                                         [showClear]="true" appendTo="body" class="w-full">
                                         <ng-template let-option #item>
-                                            <p-tag [value]="option.value" [severity]="getSeverity(option.value)" />
+                                            <p-tag [value]="option.value | camelcase"
+                                                [severity]="getSeverity(option.value)" />
                                         </ng-template>
                                     </p-select>
                                 </ng-template>
@@ -80,7 +81,8 @@
 
                         <td>
                             <p-tag [severity]="getSeverity(notificacion.estadoNotificacion)"
-                                [value]="notificacion.estadoNotificacion"></p-tag>
+                                [value]="notificacion.estadoNotificacion | camelcase">
+                            </p-tag>
                         </td>
 
                         <td>

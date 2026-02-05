@@ -19,6 +19,8 @@ import { Header } from '../../../../core/layout/header/header';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
 import { Footer } from '../../../../core/layout/footer/footer';
+import { CommonModule } from '@angular/common';
+import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
 
 
 @Component({
@@ -38,6 +40,8 @@ import { Footer } from '../../../../core/layout/footer/footer';
     InputIconModule,
     SelectModule,
     KeyFilterModule,
+    CommonModule,
+    IconDeportePipe
   ],
   templateUrl: './editar-actividad.html',
   styleUrl: './editar-actividad.scss',
@@ -75,6 +79,59 @@ export class EditarActividad implements OnInit {
     return new Date(1970, 0, 1, d.getHours(), d.getMinutes(), d.getSeconds());
   }
 
+  private clamp(val: number, min: number, max: number): number {
+    return Math.min(Math.max(val, min), max);
+  }
+
+  private stepOf(ctrlName: string): number {
+    // en caso de querer custom step por control
+    return 1;
+  }
+
+  getCtrl(ctrlName: string) {
+    return this.actividadForm.get(ctrlName)!;
+  }
+
+  isAtMin(ctrlName: string): boolean {
+    const c = this.getCtrl(ctrlName);
+    const min = 1;
+    return (Number(c.value) || 0) <= min;
+  }
+
+  isAtMax(ctrlName: string): boolean {
+    const c = this.getCtrl(ctrlName);
+    const max = 999;
+    return (Number(c.value) || 0) >= max;
+  }
+
+  increment(ctrlName: string): void {
+    const c = this.getCtrl(ctrlName);
+    const min = 1, max = 999, step = this.stepOf(ctrlName);
+    const current = Number(c.value) || 0;
+    const next = this.clamp(current + step, min, max);
+    c.setValue(next);
+    c.markAsDirty();
+    c.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+  }
+
+  decrement(ctrlName: string): void {
+    const c = this.getCtrl(ctrlName);
+    const min = 1, max = 999, step = this.stepOf(ctrlName);
+    const current = Number(c.value) || 0;
+    const next = this.clamp(current - step, min, max);
+    c.setValue(next);
+    c.markAsDirty();
+    c.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+  }
+
+  get descripcionLength(): number {
+    return (this.actividadForm.get('descripcion')?.value?.length ?? 0);
+  }
+
+  cancelar() {
+    this.actService['router'].navigate(['/actividades']);
+  }
+
   deportes: { name: string }[] = [];
   deporteEscogido: string | undefined;
 
@@ -91,7 +148,7 @@ export class EditarActividad implements OnInit {
     nivel: ['', [Validators.required]], // mapea a tu enum
     estado: ['', [Validators.required]],
     numPersTotales: [0, [Validators.required, Validators.min(1)]],
-    precio: [{value: null, disabled: true}],
+    precio: [{ value: null, disabled: true }],
   });
 
   actividadId!: number;
@@ -145,53 +202,54 @@ export class EditarActividad implements OnInit {
 
     // Inicializar deportes
     this.deportes = [
+      { name: 'Ajedrez' },
+      { name: 'Artes Marciales' },
       { name: 'Atletismo' },
+      { name: 'Badminton' },
       { name: 'Balonmano' },
       { name: 'Basquet' },
       { name: 'Béisbol' },
       { name: 'Billar' },
       { name: 'Boxeo' },
-      { name: 'Críquet' },
       { name: 'Ciclismo' },
-      { name: 'Escalada' },
-      { name: 'Esgrima' },
-      { name: 'Esquí' },
-      { name: 'Futbol' },
-      { name: 'Gimnasia' },
-      { name: 'Golf' },
-      { name: 'Hockey' },
-      { name: 'Artes Marciales' },
-      { name: 'Natación' },
-      { name: 'Patinaje' },
-      { name: 'Ping Pong' },
-      { name: 'Piragüismo' },
-      { name: 'Rugby' },
-      { name: 'Remo' },
-      { name: 'Snowboard' },
-      { name: 'Surf' },
-      { name: 'Tenis' },
-      { name: 'Triatlón' },
-      { name: 'Voleibol' },
-      { name: 'Waterpolo' },
-      { name: 'Ajedrez' },
-      { name: 'Badminton' },
       { name: 'Crossfit' },
+      { name: 'Críquet' },
       { name: 'Danza Deportiva' },
       { name: 'Entrenamiento de fuerza' },
       { name: 'Equitación' },
+      { name: 'Escalada' },
+      { name: 'Esgrima' },
+      { name: 'Esquí' },
       { name: 'Fútbol Americano' },
+      { name: 'Futbol' },
+      { name: 'Frisbee' },
+      { name: 'Gimnasia' },
+      { name: 'Golf' },
+      { name: 'Hockey' },
       { name: 'Lucha Libre' },
       { name: 'Motocross' },
+      { name: 'Natación' },
       { name: 'Padel' },
       { name: 'Parkour' },
-      { name: 'Skateboarding' },
-      { name: 'Squash' },
-      { name: 'Tiro con Arco' },
-      { name: 'Frisbee' },
-      { name: 'Senderismo' },
-      { name: 'Running' },
+      { name: 'Patinaje' },
       { name: 'Petanca' },
+      { name: 'Ping Pong' },
+      { name: 'Piragüismo' },
+      { name: 'Remo' },
+      { name: 'Rugby' },
+      { name: 'Running' },
+      { name: 'Senderismo' },
+      { name: 'Skateboarding' },
+      { name: 'Snowboard' },
+      { name: 'Squash' },
+      { name: 'Surf' },
+      { name: 'Tenis' },
+      { name: 'Tiro con Arco' },
+      { name: 'Triatlón' },
+      { name: 'Voleibol' },
+      { name: 'Waterpolo' }
     ];
+
     this.niveles = [
       { name: 'Iniciado' },
       { name: 'Principiante' },

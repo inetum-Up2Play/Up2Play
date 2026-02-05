@@ -138,30 +138,28 @@
 
                     <thead>
                         <tr class="bg-[#f6f8f7] border-b border-[#dbe6e0]">
-                            <th class="text-left py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                            <th class="text-left py-4 px-12 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
                                 Fecha</th>
-                            <th class="text-left py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                            <th class="text-left py-4 px-12 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
                                 Actividad</th>
-                            <th class="text-left py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                            <th class="text-left py-4 px-12 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
                                 Estado</th>
-                            <th class="text-right py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
+                            <th class="text-right py-4 px-12 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
                                 Importe</th>
-                            <th class="text-center py-4 px-6 text-xs font-bold text-[#3D6C3F] uppercase tracking-wider">
-                                Acción</th>
                         </tr>
                     </thead>
 
                     <tbody class="divide-y divide-[#f0f4f2]">
                         @for (pago of filteredPagos(); track trackPago($index, pago)) {
                         <tr class="group hover:bg-[#fcfdfd] transition-colors">
-                            <td class="py-4 px-6 text-sm text-[#152614] font-medium">
+                            <td class="py-4 px-12 text-sm text-[#152614] font-medium">
                                 <div class="flex flex-col">
                                     <span>{{ pago.fecha }}</span>
                                     <span class="text-xs text-[#3D6C3F]">{{ pago.hora }}</span>
                                 </div>
                             </td>
 
-                            <td class="py-4 px-6">
+                            <td class="py-4 px-12">
                                 <div class="flex items-center gap-3">
                                     <div
                                         class="h-10 w-10 rounded-full bg-[#B1DF75]/15 text-[#B1DF75] flex items-center justify-center">
@@ -176,7 +174,7 @@
                                 </div>
                             </td>
 
-                            <td class="py-4 px-6">
+                            <td class="py-4 px-12">
                                 <span
                                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
                                     [ngClass]="{
@@ -193,17 +191,9 @@
                                 </span>
                             </td>
 
-                            <td class="py-4 px-6 text-right">
+                            <td class="py-4 px-12 text-right">
                                 <span class="text-base font-bold text-[#152614]">- {{ pago.importe | number:'1.2-2' }}
                                     €</span>
-                            </td>
-
-                            <td class="py-4 px-6 text-center">
-                                <button
-                                    class="p-2 rounded-lg hover:bg-[#f0f4f2] text-[#3D6C3F] hover:text-[#152614] transition-colors cursor-pointer"
-                                    title="Descargar Factura">
-                                    <i class="text-[20px] ph-bold ph-download-simple"></i>
-                                </button>
                             </td>
                         </tr>
                         } @empty {
