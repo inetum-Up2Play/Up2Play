@@ -1,78 +1,173 @@
-/* 
+/*
 The styles added here would be global styles to the project.
-Here has to be imported the other style files (from the src/styles/)
 */
 
 @use "./tailwind.css";
 @use "primeicons/primeicons.css";
-
 @use 'styles/variables' as vars;
 @use 'styles/mixins' as mix;
-
 @use 'sass:color';
 
+/* =========================================
+   1. VARIABLES DE MARCA (COLORES BASE)
+   ========================================= */
+:root {
+  /* Paleta de Colores Principal */
+  --brand-verde-claro: #B1DF75;
+  --brand-verde-oliva: #3D6C3F;
+  --brand-verde-oscuro: #152614;
+  --brand-blanco: #F7F7F7;
+  --brand-hover: rgb(230, 230, 230);
+  /* Colores de Estado / Auxiliares */
+  --brand-error: #8B0000;
+  /* Interpolación de SASS a CSS Var */
+  /* Variaciones con Opacidad (para fondos seleccionados) */
+  --brand-verde-claro-alpha: rgba(177, 223, 117, 0.54);
+  --brand-focus-alpha: rgba(177, 177, 177, 0.26);
+  --brand-selected-focus-alpha: rgba(128, 180, 60, 0.29);
+}
 
-
-/* IMAGEN GRIS DE FONDO DE LA APP */
+/* =========================================
+   2. ESTILOS GENERALES DE LA APP
+   ========================================= */
 .header-background-active {
   background-image: url('/assets/background/fondo_ok.webp');
-  /* Reemplaza con la URL correcta */
   background-size: cover;
-  /* Cubre todo el viewport */
   background-repeat: no-repeat;
   background-attachment: fixed;
-  /* Opcional: para que el fondo no se mueva al hacer scroll */
 }
 
-//Hace que el contenido de la app aparezca luego del header
 .header-offset-active {
   padding-top: var(--header-h);
-  /* Usamos el valor calculado en el header.component.ts */
 }
 
+.p-toast {
+  z-index: 2000 !important;
+}
 
+/* =========================================
+   3. BLOQUES DE COMPONENTES PRIME NG
+   ========================================= */
+
+/* --- BLOQUE: SELECT & MULTISELECT --- */
+.p-multiselect,
+.p-select {
+  /* Fondos y Estados */
+  --p-multiselect-option-selected-background: var(--brand-verde-claro-alpha) !important;
+  --p-multiselect-option-focus-background: var(--brand-focus-alpha);
+  --p-multiselect-option-selected-focus-background: var(--brand-selected-focus-alpha);
+  --p-select-option-selected-background: var(--brand-verde-claro-alpha) !important;
+  --p-select-option-focus-background: var(--brand-focus-alpha);
+  --p-select-option-selected-focus-background: var(--brand-selected-focus-alpha);
+
+  /* Textos */
+  --p-multiselect-option-selected-color: var(--brand-verde-oscuro) !important;
+  --p-multiselect-option-selected-focus-color: var(--brand-verde-oliva) !important;
+  --p-select-option-selected-color: var(--brand-verde-oscuro) !important;
+  --p-select-option-selected-focus-color: var(--brand-verde-oliva) !important;
+
+  /* Checkbox interno */
+  --p-checkbox-checked-background: var(--brand-verde-oliva) !important;
+  --p-checkbox-checked-hover-background: var(--brand-verde-oliva) !important;
+  --p-checkbox-checked-border-color: var(--brand-verde-oliva);
+}
+
+/* --- BLOQUE: DATEPICKER --- */
+.p-datepicker {
+  /* Icono Input */
+  --p-datepicker-input-icon-color: var(--brand-verde-oliva);
+
+  /* Estructura Principal */
+  --p-datepicker-panel-background: var(--brand-blanco);
+  --p-datepicker-panel-color: var(--brand-verde-oscuro);
+  --p-datepicker-header-background: var(--brand-blanco);
+  --p-datepicker-header-color: var(--brand-verde-oscuro);
+
+  /* Calendario: Días */
+  --p-datepicker-week-day-color: var(--brand-verde-oscuro);
+  --p-datepicker-date-color: var(--brand-verde-oscuro);
+  --p-datepicker-date-hover-background: var(--brand-hover);
+  /* Calendario: Selección */
+  --p-datepicker-date-selected-background: var(--brand-verde-claro);
+  --p-datepicker-date-selected-color: var(--brand-verde-oscuro);
+
+  /* Selectores de Año/Mes */
+  --p-datepicker-select-month-color: var(--brand-verde-oscuro);
+  --p-datepicker-select-month-hover-background: var(--brand-hover);
+  --p-datepicker-select-year-color: var(--brand-verde-oscuro);
+  --p-datepicker-select-year-hover-background: var(--brand-hover);
+
+  /* Botonera Inferior */
+  --p-datepicker-today-background: rgb(200, 200, 200);
+  /* Mantenido gris neutro */
+  --p-datepicker-today-color: var(--brand-verde-oscuro);
+  --p-button-ghost-secondary-color: var(--brand-verde-oscuro);
+}
+
+/* --- BLOQUE: DATATABLE (FILTROS) --- */
+/* Atacamos todas las posibles clases del overlay del filtro */
+.p-datatable,
+.p-datatable-filter-overlay,
+.p-column-filter-overlay {
+  /* 1. EL CONTENEDOR FLOTANTE (POPOVER) */
+  --p-datatable-filter-overlay-popover-background: var(--brand-blanco);
+  --p-datatable-filter-overlay-popover-color: var(--brand-verde-oscuro);
+  --p-datatable-filter-overlay-popover-border-color: var(--brand-verde-oliva);
+  --p-datatable-filter-overlay-popover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --p-datatable-filter-overlay-popover-padding: 1rem;
+  --p-datatable-filter-overlay-popover-gap: 0.5rem;
+  --p-datatable-filter-overlay-popover-border-radius: 6px;
+
+  /* 2. LÍNEAS Y SEPARADORES */
+  --p-datatable-filter-rule-border-color: var(--brand-verde-oliva);
+  --p-datatable-filter-constraint-separator-border-color: var(--brand-verde-oliva);
+
+  /* 3. ITEMS DE LA LISTA (TEXTOS Y FONDOS) */
+  --p-datatable-filter-constraint-color: var(--brand-verde-oscuro);
+  /* Estado: Hover / Focus */
+  --p-datatable-filter-constraint-focus-background: var(--brand-hover);
+  --p-datatable-filter-constraint-focus-color: var(--brand-verde-oscuro);
+
+  /* Estado: Seleccionado */
+  --p-datatable-filter-constraint-selected-background: var(--brand-verde-claro);
+  --p-datatable-filter-constraint-selected-color: var(--brand-verde-oscuro);
+  /* Estado: Seleccionado + Focus */
+  --p-datatable-filter-constraint-selected-focus-background: var(--brand-verde-claro);
+  --p-datatable-filter-constraint-selected-focus-color: var(--brand-verde-oscuro);
+
+  /* 4. DROPDOWNS INTERNOS (SI LOS HUBIERA) */
+  --p-datatable-filter-overlay-select-background: var(--brand-blanco);
+  --p-datatable-filter-overlay-select-border-color: var(--brand-verde-oliva);
+  --p-datatable-filter-overlay-select-color: var(--brand-verde-oscuro);
+}
+
+/* =========================================
+   4. CLASES PERSONALIZADAS (DIÁLOGOS)
+   ========================================= */
 .cd-eliminar {
-
   .p-dialog {
-
     padding: 2em !important;
-
   }
 
   .p-confirmdialog-reject-button {
-
-    color: vars.$verde-oscuro;
-    background-color: vars.$blanco;
+    color: var(--brand-verde-oscuro);
+    background-color: var(--brand-blanco);
     border: none;
 
     &:hover {
-      background-color: vars.$blanco !important;
-      border: none !important;
-      color: vars.$verde-oscuro !important;
-      border-color: none !important;
+      background-color: var(--brand-blanco) !important;
+      color: var(--brand-verde-oscuro) !important;
       transform: scale(1.05) !important;
-
     }
-
   }
 
   .p-confirmdialog-accept-button {
-
-    background-color: vars.$msg-error-oscuro;
+    background-color: var(--brand-error);
     border: none;
 
     &:hover {
-      background-color: vars.$msg-error-oscuro !important;
-      border: none !important;
-      border-color: none !important;
+      background-color: var(--brand-error) !important;
       transform: scale(1.05) !important;
-
     }
   }
-
-}
-
-/* Debe ir en el style.scss global para que afecte al componente inyectado en el body */
-.p-toast {
-    z-index: 2000 !important;
 }
