@@ -95,47 +95,55 @@ export class CarrouselDeportes {
     });
   }
 
-    pagar(id: number) {
+  get carouselClasses(): any {
+    return {
+      'single-item': this.activities.length === 1,
+      'two-items': this.activities.length === 2,
+      'three-or-more': this.activities.length >= 3
+    };
+  }
+
+  pagar(id: number) {
     const act = this.activities.find(a => a.id === id);
 
     if (!act) return;
 
-      this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
-        next: (creador) => {
-          // Ya tenemos al usuario creador, verificamos su Stripe ID
-          if (creador && creador.stripeAccountId) {
+    this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
+      next: (creador) => {
+        // Ya tenemos al usuario creador, verificamos su Stripe ID
+        if (creador && creador.stripeAccountId) {
 
-            // Todo correcto: Guardamos y navegamos
-            this.pagosService.setActivity({
-              actividadId: act.id,
-              nombre: act.nombre,
-              precio: act.precio,
-              organizadorStripeId: creador.stripeAccountId,
-              deporte: act.deporte,
-              fecha: act.fecha,
-              ubicacion: act.ubicacion
-            });
+          // Todo correcto: Guardamos y navegamos
+          this.pagosService.setActivity({
+            actividadId: act.id,
+            nombre: act.nombre,
+            precio: act.precio,
+            organizadorStripeId: creador.stripeAccountId,
+            deporte: act.deporte,
+            fecha: act.fecha,
+            ubicacion: act.ubicacion
+          });
 
-            this.router.navigate(['/pagos/pago']);
+          this.router.navigate(['/pagos/pago']);
 
-          } else {
-            // El creador existe, pero no tiene pagos configurados
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error de Pago',
-              detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
-            });
-          }
-        },
-        error: (err) => {
-          console.error(err);
+        } else {
+          // El creador existe, pero no tiene pagos configurados
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo contactar con el servidor para verificar al organizador.'
+            summary: 'Error de Pago',
+            detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
           });
         }
-      });
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo contactar con el servidor para verificar al organizador.'
+        });
+      }
+    });
   }
 
   apuntarse(id: number) {
@@ -143,21 +151,21 @@ export class CarrouselDeportes {
 
     if (!act) return;
 
-      this.actService.unirteActividad(id).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: '¡Enhorabuena!',
-            detail: 'Te has unido a la actividad'
-          });
-          // Bus de recarga de actividaedes
-          this.actUpdateService.notifyUpdate();
-        },
-        error: (codigo) => {
-          const mensaje = this.errorService.getMensajeError(codigo);
-          this.errorService.showError(mensaje);
-        }
-      });
+    this.actService.unirteActividad(id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: '¡Enhorabuena!',
+          detail: 'Te has unido a la actividad'
+        });
+        // Bus de recarga de actividaedes
+        this.actUpdateService.notifyUpdate();
+      },
+      error: (codigo) => {
+        const mensaje = this.errorService.getMensajeError(codigo);
+        this.errorService.showError(mensaje);
+      }
+    });
   }
 
   extraerHora(fecha: string): string {
@@ -193,7 +201,7 @@ export class CarrouselDeportes {
     }
   ];
 
-  actCompleta() : void {
+  actCompleta(): void {
     this.messageService.add({
       severity: 'warn',
       summary: 'Atención',

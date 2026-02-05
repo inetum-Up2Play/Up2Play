@@ -58,6 +58,51 @@ span {
     color: vars.$blanco !important;
 }
 
+/* Estilos base del carrusel */
+:host ::ng-deep p-carousel .p-carousel-container {
+  transition: max-width 0.3s ease;
+}
+
+/* Cuando hay 1 actividad - carrusel más estrecho */
+:host ::ng-deep p-carousel.single-item .p-carousel-container {
+  max-width: 400px !important;
+  margin: 0 auto;
+}
+
+/* Cuando hay 2 actividades - carrusel mediano */
+:host ::ng-deep p-carousel.two-items .p-carousel-container {
+  max-width: 800px !important;
+  margin: 0 auto;
+}
+
+/* Cuando hay 3 o más - carrusel ancho (default) */
+:host ::ng-deep p-carousel.three-or-more .p-carousel-container {
+  max-width: 100% !important;
+}
+
+/* Centrar las cards individuales dentro del carrusel */
+:host ::ng-deep p-carousel.single-item .p-carousel-item,
+:host ::ng-deep p-carousel.two-items .p-carousel-item {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Ajustar ancho máximo de cada card */
+:host ::ng-deep p-carousel.single-item .card {
+  width: 100% !important;
+  max-width: 350px !important;
+}
+
+:host ::ng-deep p-carousel.two-items .card {
+  width: 100% !important;
+  max-width: 350px !important;
+}
+
+:host ::ng-deep p-carousel.three-or-more .card {
+  width: 100% !important;
+  max-width: none !important;
+}
+
 
 
 
