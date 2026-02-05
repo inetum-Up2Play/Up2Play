@@ -1,4 +1,11 @@
-import { Component, computed, HostListener, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  HostListener,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +26,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { MultiSelect } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-card-gallery',
@@ -34,6 +42,7 @@ import { InputIcon } from 'primeng/inputicon';
     ToastModule,
     DeporteImgPipe,
     ConfirmDialog,
+    MultiSelect,
     InputTextModule,
     IconField,
     InputIcon,
@@ -69,6 +78,7 @@ export class CardGallery {
 
   filteredActivities: any[] = [];
   filterNombre: string = '';
+  filterDeporte: string[] = [];
 
   isCreador = computed(() => this.tipo() === 'mis-actividades');
 
@@ -82,6 +92,14 @@ export class CardGallery {
     });
   }
 
+  removeDeporte(deporteToRemove: string) {
+    // Filtramos el array para quitar el que hemos pulsado
+    this.filterDeporte = this.filterDeporte.filter(
+      (d) => d !== deporteToRemove,
+    );
+    this.applyFilters();
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.calcularPageSize();
@@ -93,11 +111,9 @@ export class CardGallery {
 
     if (width >= 1536) {
       nuevoSize = 8;
-    }
-    else if (width >= 1280) {
+    } else if (width >= 1280) {
       nuevoSize = 9;
-    }
-    else {
+    } else {
       nuevoSize = 8;
     }
 
@@ -111,7 +127,6 @@ export class CardGallery {
 
   cargarActividades() {
     this.currentPage = 1;
-
 
     let llamarservicio: Observable<any[]>;
 
@@ -145,7 +160,6 @@ export class CardGallery {
     });
   }
 
-
   // Lógica de Filtrado
   applyFilters() {
     this.currentPage = 1; // Resetear paginación al filtrar
@@ -156,7 +170,11 @@ export class CardGallery {
         ? act.nombre.toLowerCase().includes(this.filterNombre.toLowerCase())
         : true;
 
-      return matchNombre;
+      const matchDeporte = this.filterDeporte && this.filterDeporte.length > 0
+        ? this.filterDeporte.includes(act.deporte)
+        : true;
+
+      return matchNombre && matchDeporte;
     });
 
     // Actualizar actividades visibles
@@ -165,13 +183,12 @@ export class CardGallery {
 
   clearFilters() {
     this.filterNombre = '';
+    this.filterDeporte = [];
     this.applyFilters(); // Aplicar filtro vacío
   }
 
-
-
   eliminar(event: Event, id: number) {
-    console.log("prova");
+    console.log('prova');
     this.confirmationService.confirm({
       message:
         '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
@@ -235,4 +252,54 @@ export class CardGallery {
   redirigirInfoActividad(id: number | string) {
     return this.router.navigate(['/actividades/info-actividad', id]);
   }
+
+  // Opciones para el dropdown (puedes llenarlo dinámicamente o estático)
+  deportesOptions = [
+    { label: 'Atletismo', value: 'Atletismo' },
+    { label: 'Balonmano', value: 'Balonmano' },
+    { label: 'Basquet', value: 'Basquet' },
+    { label: 'Béisbol', value: 'Béisbol' },
+    { label: 'Billar', value: 'Billar' },
+    { label: 'Boxeo', value: 'Boxeo' },
+    { label: 'Críquet', value: 'Críquet' },
+    { label: 'Ciclismo', value: 'Ciclismo' },
+    { label: 'Escalada', value: 'Escalada' },
+    { label: 'Esgrima', value: 'Esgrima' },
+    { label: 'Esquí', value: 'Esquí' },
+    { label: 'Futbol', value: 'Futbol' },
+    { label: 'Gimnasia', value: 'Gimnasia' },
+    { label: 'Golf', value: 'Golf' },
+    { label: 'Hockey', value: 'Hockey' },
+    { label: 'Artes Marciales', value: 'Artes Marciales' },
+    { label: 'Natación', value: 'Natación' },
+    { label: 'Patinaje', value: 'Patinaje' },
+    { label: 'Ping Pong', value: 'Ping Pong' },
+    { label: 'Piragüismo', value: 'Piragüismo' },
+    { label: 'Rugby', value: 'Rugby' },
+    { label: 'Remo', value: 'Remo' },
+    { label: 'Snowboard', value: 'Snowboard' },
+    { label: 'Surf', value: 'Surf' },
+    { label: 'Tenis', value: 'Tenis' },
+    { label: 'Triatlón', value: 'Triatlón' },
+    { label: 'Voleibol', value: 'Voleibol' },
+    { label: 'Waterpolo', value: 'Waterpolo' },
+    { label: 'Ajedrez', value: 'Ajedrez' },
+    { label: 'Badminton', value: 'Badminton' },
+    { label: 'Crossfit', value: 'Crossfit' },
+    { label: 'Danza Deportiva', value: 'Danza Deportiva' },
+    { label: 'Entrenamiento de fuerza', value: 'Entrenamiento de fuerza' },
+    { label: 'Equitación', value: 'Equitación' },
+    { label: 'Fútbol Americano', value: 'Fútbol Americano' },
+    { label: 'Lucha Libre', value: 'Lucha Libre' },
+    { label: 'Motocross', value: 'Motocross' },
+    { label: 'Padel', value: 'Padel' },
+    { label: 'Parkour', value: 'Parkour' },
+    { label: 'Skateboarding', value: 'Skateboarding' },
+    { label: 'Squash', value: 'Squash' },
+    { label: 'Tiro con Arco', value: 'Tiro con Arco' },
+    { label: 'Frisbee', value: 'Frisbee' },
+    { label: 'Senderismo', value: 'Senderismo' },
+    { label: 'Running', value: 'Running' },
+    { label: 'Petanca', value: 'Petanca' },
+  ];
 }
