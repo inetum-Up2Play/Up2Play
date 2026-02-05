@@ -22,9 +22,9 @@
 
                     <!-- SELECTOR DE VISTA -->
                     <div class="flex justify-end w-full md:w-auto">
-                        <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+                        <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false" class="h-full">
                             <ng-template #item let-item>
-                                <i class="pi text-[#3D6C3F] text-2xl"
+                                <i class="pi text-[#3D6C3F] p-[20%]"
                                     [ngClass]="{ 'pi-bars': item === 'list', 'pi-th-large': item === 'grid' }"></i>
                             </ng-template>
                         </p-selectbutton>

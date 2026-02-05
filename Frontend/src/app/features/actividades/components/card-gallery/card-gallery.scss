@@ -13,8 +13,13 @@
 }
 
 :host ::ng-deep .p-togglebutton {
-
-    --p-togglebutton-content-checked-background: #b1df7538 !important;
+    --p-togglebutton-border-color: #94a3b87a !important;
+    --p-togglebutton-checked-border-color: #94a3b87a !important;
+    --p-togglebutton-content-checked-background: none !important;
+    --p-togglebutton-checked-background: #b1df7550 !important;
+    --p-togglebutton-background: none !important;
+    --p-togglebutton-hover-background: #b1df7517 !important;
+    --p-togglebutton-content-checked-shadow: none !important;
 }
 
 
