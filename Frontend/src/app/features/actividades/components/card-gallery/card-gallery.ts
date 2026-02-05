@@ -12,9 +12,15 @@ import { ActivityCard } from '../activity-card/activity-card';
 import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ToastModule } from 'primeng/toast';
 import { Observable } from 'rxjs';
+
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { Router } from '@angular/router';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-card-gallery',
@@ -26,9 +32,13 @@ import { Router } from '@angular/router';
     DataViewModule,
     SelectButtonModule,
     FormsModule,
+    InputTextModule,
+    IconField,
+    InputIcon,
     ActivityCard,
     ToastModule,
     DeporteImgPipe,
+    ConfirmDialog
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './card-gallery.html',
@@ -54,12 +64,14 @@ export class CardGallery {
   options: any[] = ['list', 'grid'];
 
   activities: any[] = [];
-  visibleActivities: any[] = [];
-  actividadId!: number;
-
+  filteredActivities: any[] = []; // Actividades después de filtrar
+  visibleActivities: any[] = []; // Actividades visibles (paginación)
+  
   pageSize = 8;
   currentPage = 1;
   noHayActividades = true;
+
+  filterNombre: string = '';
 
   ngOnInit() {
     this.calcularPageSize();
@@ -77,31 +89,29 @@ export class CardGallery {
   }
 
   calcularPageSize() {
-      const width = window.innerWidth;
-      let nuevoSize = 8; 
+    const width = window.innerWidth;
+    let nuevoSize = 8;
 
-      if (width >= 1536) {
-        nuevoSize = 8;
-      } 
-      else if (width >= 1280) {
-        nuevoSize = 9;
-      } 
-      else {
-        nuevoSize = 8;
-      }
+    if (width >= 1536) {
+      nuevoSize = 8;
+    } else if (width >= 1280) {
+      nuevoSize = 9; // Ajuste para pantallas grandes
+    } else {
+      nuevoSize = 8;
+    }
 
-      if (this.pageSize !== nuevoSize) {
-        this.pageSize = nuevoSize;
-        if (this.activities.length > 0) {
-          this.updateVisibleActivities();
-        }
+    // Solo actualizamos si cambia el tamaño
+    if (this.pageSize !== nuevoSize) {
+      this.pageSize = nuevoSize;
+      if (this.filteredActivities.length > 0) {
+        this.updateVisibleActivities();
       }
     }
+  }
 
   cargarActividades() {
     this.currentPage = 1;
     this.noHayActividades = true;
-
 
     let llamarservicio: Observable<any[]>;
 
@@ -123,24 +133,46 @@ export class CardGallery {
     llamarservicio.subscribe({
       next: (data) => {
         this.activities = data;
+        this.filteredActivities = [...data]; // Inicializar filteredActivities
         this.noHayActividades = this.activities.length === 0;
-        this.updateVisibleActivities();
+        this.applyFilters(); // Aplicar filtros iniciales (si hay)
       },
       error: (err) => {
         console.error('Error cargando actividades:', err);
         this.activities = [];
+        this.filteredActivities = [];
         this.visibleActivities = [];
         this.noHayActividades = true;
       },
     });
   }
 
-  eliminar(event: Event, id: number) {
+  // Lógica de Filtrado
+  applyFilters() {
+    this.currentPage = 1; // Resetear paginación al filtrar
+    
+    // Filtrar las actividades
+    this.filteredActivities = this.activities.filter((act) => {
+      const matchNombre = this.filterNombre
+        ? act.nombre.toLowerCase().includes(this.filterNombre.toLowerCase())
+        : true;
 
+      return matchNombre;
+    });
+
+    // Actualizar actividades visibles
+    this.updateVisibleActivities();
+  }
+
+  clearFilters() {
+    this.filterNombre = '';
+    this.applyFilters(); // Aplicar filtro vacío
+  }
+
+  eliminar(event: Event, id: number) {
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message:
-        '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
+      target: event.currentTarget as HTMLElement, // << clave
+      message: '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
       header: '¡Cuidado!',
       icon: 'pi pi-info-circle',
       rejectLabel: 'Cancelar',
@@ -161,6 +193,11 @@ export class CardGallery {
               summary: 'Actividad eliminada',
               detail: 'Actividad eliminada correctamente',
             });
+
+            // Actualiza la lista local (opcional, da mejor UX)
+            this.activities = this.activities.filter(a => a.id !== id);
+            this.updateVisibleActivities();
+
             setTimeout(() => {
               this.router.navigate(['/actividades']);
             }, 2500);
@@ -178,10 +215,11 @@ export class CardGallery {
     });
   }
 
+
   updateVisibleActivities() {
-    // Lógica para "Mostrar más": muestra desde el 0 hasta el límite actual
+    // Calcular el índice final basado en la página actual
     const end = this.pageSize * this.currentPage;
-    this.visibleActivities = this.activities.slice(0, end);
+    this.visibleActivities = this.filteredActivities.slice(0, end);
   }
 
   loadMore() {
