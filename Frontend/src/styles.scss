@@ -71,3 +71,8 @@ Here has to be imported the other style files (from the src/styles/)
   }
 
 }
+
+/* Debe ir en el style.scss global para que afecte al componente inyectado en el body */
+.p-toast {
+    z-index: 2000 !important;
+}
