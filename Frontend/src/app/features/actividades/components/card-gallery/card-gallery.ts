@@ -16,6 +16,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { Router } from '@angular/router';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-card-gallery',
@@ -30,9 +33,12 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
     ActivityCard,
     ToastModule,
     DeporteImgPipe,
-    ConfirmDialog
+    ConfirmDialog,
+    InputTextModule,
+    IconField,
+    InputIcon,
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService],
   templateUrl: './card-gallery.html',
   styleUrl: './card-gallery.scss',
 })
@@ -57,13 +63,14 @@ export class CardGallery {
 
   activities: any[] = [];
   visibleActivities: any[] = [];
-  actividadId!: number;
 
   pageSize = 8;
   currentPage = 1;
-  noHayActividades = true;
 
-  isCreador = computed(() => this.tipo() === 'mis-actividades'); 
+  filteredActivities: any[] = [];
+  filterNombre: string = '';
+
+  isCreador = computed(() => this.tipo() === 'mis-actividades');
 
   ngOnInit() {
     this.calcularPageSize();
@@ -96,7 +103,7 @@ export class CardGallery {
 
     if (this.pageSize !== nuevoSize) {
       this.pageSize = nuevoSize;
-      if (this.activities.length > 0) {
+      if (this.filteredActivities.length > 0) {
         this.updateVisibleActivities();
       }
     }
@@ -104,7 +111,6 @@ export class CardGallery {
 
   cargarActividades() {
     this.currentPage = 1;
-    this.noHayActividades = true;
 
 
     let llamarservicio: Observable<any[]>;
@@ -127,17 +133,41 @@ export class CardGallery {
     llamarservicio.subscribe({
       next: (data) => {
         this.activities = data;
-        this.noHayActividades = this.activities.length === 0;
-        this.updateVisibleActivities();
+        this.filteredActivities = [...data]; // Inicializar filteredActivities
+        // this.updateVisibleActivities();
+        this.applyFilters(); // Aplicar filtros iniciales (si hay)
       },
       error: (err) => {
         console.error('Error cargando actividades:', err);
         this.activities = [];
         this.visibleActivities = [];
-        this.noHayActividades = true;
       },
     });
   }
+
+
+  // Lógica de Filtrado
+  applyFilters() {
+    this.currentPage = 1; // Resetear paginación al filtrar
+
+    // Filtrar las actividades
+    this.filteredActivities = this.activities.filter((act) => {
+      const matchNombre = this.filterNombre
+        ? act.nombre.toLowerCase().includes(this.filterNombre.toLowerCase())
+        : true;
+
+      return matchNombre;
+    });
+
+    // Actualizar actividades visibles
+    this.updateVisibleActivities();
+  }
+
+  clearFilters() {
+    this.filterNombre = '';
+    this.applyFilters(); // Aplicar filtro vacío
+  }
+
 
 
   eliminar(event: Event, id: number) {
@@ -183,7 +213,8 @@ export class CardGallery {
   updateVisibleActivities() {
     // Lógica para "Mostrar más": muestra desde el 0 hasta el límite actual
     const end = this.pageSize * this.currentPage;
-    this.visibleActivities = this.activities.slice(0, end);
+    this.visibleActivities = this.filteredActivities.slice(0, end);
+    //this.visibleActivities = this.activities.slice(0, end);
   }
 
   loadMore() {

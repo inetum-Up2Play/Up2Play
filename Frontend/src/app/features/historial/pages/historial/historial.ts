@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 // IMPORTS DE PRIMENG 
@@ -28,7 +27,6 @@ import { ActivityCard } from '../../../actividades/components/activity-card/acti
     DeporteImgPipe,
     MultiSelect,
     FormsModule,
-    RouterLink,
     ButtonModule,
     InputTextModule,
     IconFieldModule,
