@@ -29,7 +29,8 @@
             </div>
             <div class="flex flex-col gap-2 rounded-xl p-6 border border-[#dbe6e0] bg-white shadow-sm">
                 <div class="flex items-center justify-between">
-                    <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">Última actividad a la vista</p>
+                    <p class="text-[#3D6C3F] text-sm font-medium uppercase tracking-wider">Última actividad a la vista
+                    </p>
                     <i
                         class="text-[#B1DF75] bg-[#B1DF75]/10 p-1.5 rounded-lg text-2xl ph-bold ph-clock-counter-clockwise"></i>
                 </div>
@@ -57,10 +58,10 @@
         <!-- Filter & Search Bar -->
         <div class="flex flex-col md:flex-row gap-4 justify-between items-center bg-[#f6f8f7] p-2 rounded-2xl">
             <!-- Buscar por actividad -->
-            <div class="w-full md:w-auto md:flex-1 md:max-w-md">
-                <label class="flex flex-col w-full h-12">
+            <div class="w-full md:w-auto md:flex-1 md:max-w-md ">
+                <label class="flex flex-col w-full h-10 py-[-2]">
                     <div
-                        class="flex w-full flex-1 items-center rounded-xl h-full bg-white border border-transparent focus-within:border-[#B1DF75]/50 hover:border-[#B1DF75] transition-colors shadow-sm">
+                        class="flex w-full flex-1 items-center rounded-xl h-full bg-white border border-gray-200 focus-within:border-[#B1DF75]/50 hover:border-[#B1DF75] transition-colors shadow-sm">
                         <div class="text-[#3D6C3F]/85 flex items-center justify-center pl-4">
                             <i class="ph-bold ph-magnifying-glass"></i>
                         </div>
@@ -150,7 +151,7 @@
                     </thead>
 
                     <tbody class="divide-y divide-[#f0f4f2]">
-                        @for (pago of filteredPagos(); track trackPago($index, pago)) {
+                        @for (pago of paginatedPagos(); track trackPago($index, pago)) {
                         <tr class="group hover:bg-[#fcfdfd] transition-colors">
                             <td class="py-4 px-12 text-sm text-[#152614] font-medium">
                                 <div class="flex flex-col">
@@ -178,15 +179,15 @@
                                 <span
                                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
                                     [ngClass]="{
-                  'bg-[#e3fcf0] text-[#0a6639]': pago.estado === 'COMPLETADO',
-                  'bg-[#ffebe6] text-[#7a2300]': pago.estado === 'FALLIDO',   
-                  'bg-[#fff3cd] text-[#7a6200]': pago.estado === 'REEMBOLSADO'
-                }">
+                                                'bg-[#e3fcf0] text-[#0a6639]': pago.estado === 'COMPLETADO',
+                                                'bg-[#ffebe6] text-[#7a2300]': pago.estado === 'FALLIDO',   
+                                                'bg-[#fff3cd] text-[#7a6200]': pago.estado === 'REEMBOLSADO'
+                                            }">
                                     <span class="size-2 rounded-full" [ngClass]="{
-                        'bg-[#13ec80]': pago.estado === 'COMPLETADO',
-                        'bg-[#ff4d07]': pago.estado === 'FALLIDO',
-                        'bg-[#ffc107]': pago.estado === 'REEMBOLSADO'
-                      }"></span>
+                                                'bg-[#13ec80]': pago.estado === 'COMPLETADO',
+                                                'bg-[#ff4d07]': pago.estado === 'FALLIDO',
+                                                'bg-[#ffc107]': pago.estado === 'REEMBOLSADO'
+                                            }"></span>
                                     {{ pago.estado }}
                                 </span>
                             </td>
@@ -217,10 +218,17 @@
                     pagos
                 </p>
                 <div class="flex gap-2">
-                    <button
-                        class="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-500 cursor-not-allowed opacity-50">Anterior</button>
-                    <button
-                        class="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm font-medium text-[#152614] hover:border-[#B1DF75] transition-colors cursor-pointer">Siguiente</button>
+                    <button (click)="prevPage()" [disabled]="currentPage() === 1"
+                        class="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm font-medium transition-colors"
+                        [ngClass]="currentPage() === 1 ? 'opacity-50 cursor-not-allowed text-gray-400' : 'text-[#152614] hover:border-[#B1DF75] cursor-pointer'">
+                        Anterior
+                    </button>
+
+                    <button (click)="nextPage()" [disabled]="currentPage() >= totalPages()"
+                        class="px-3 py-1 rounded-lg border border-gray-300 bg-white text-sm font-medium transition-colors"
+                        [ngClass]="currentPage() >= totalPages() ? 'opacity-50 cursor-not-allowed text-gray-400' : 'text-[#152614] hover:border-[#B1DF75] cursor-pointer'">
+                        Siguiente
+                    </button>
                 </div>
             </div>
         </div>
