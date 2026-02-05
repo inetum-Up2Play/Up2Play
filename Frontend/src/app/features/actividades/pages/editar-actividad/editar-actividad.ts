@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -54,6 +54,8 @@ export class EditarActividad implements OnInit {
   private messageService = inject(MessageService);
   private router = inject(Router);
   private errorService = inject(ErrorService);
+
+  loading = signal(false);
 
   private pad2(n: number): string {
     return n < 10 ? `0${n}` : `${n}`;
@@ -282,6 +284,7 @@ export class EditarActividad implements OnInit {
       return;
     }
 
+    this.loading.set(true);
     this.guardando = true;
 
     const formValue = this.actividadForm.value;
@@ -308,19 +311,16 @@ export class EditarActividad implements OnInit {
 
     this.actService.editarActividad(this.actividadId, payload).subscribe({
       next: (res) => {
-        this.guardando = false;
         if (res === true) {
           this.messageService.add({
             severity: 'success',
             summary: 'Guardado',
             detail: 'Actividad actualizada correctamente.',
           });
-          setTimeout(() => {
-            this.router.navigate([
-              '/actividades/info-actividad',
-              this.actividadId,
-            ]);
-          }, 2000);
+
+          this.router.navigate(['/actividades/info-actividad', this.actividadId]);
+
+          this.guardando = false;
         } else {
           const mensaje = this.errorService.getMensajeError(res); // Se traduce el mensaje con el controlErrores.ts
           this.errorService.showError(mensaje);

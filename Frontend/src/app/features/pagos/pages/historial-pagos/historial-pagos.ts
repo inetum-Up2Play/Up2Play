@@ -1,4 +1,4 @@
-import { Component, computed, signal, OnInit, inject } from '@angular/core';
+import { Component, computed, signal, OnInit, inject, untracked } from '@angular/core';
 import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
 import { CommonModule } from '@angular/common';
@@ -30,7 +30,6 @@ interface Pago {
 export class HistorialPagos {
 
   private pagosService = inject(PagosService);
-
   private actService = inject(ActService);
 
   // Estado de datos/UX
@@ -118,6 +117,8 @@ export class HistorialPagos {
   ngOnInit(): void {
     this.loadPagosUsuarioActual();
     this.loadCreadas();
+    this.filteredPagos(); 
+    untracked(() => this.currentPage.set(1));
   }
 
   loadCreadas() {
@@ -325,9 +326,34 @@ export class HistorialPagos {
 
   get showingRange() {
     const total = this.filteredPagos().length;
-    const from = total ? 1 : 0;
-    const to = Math.min(5, total);
+    if (total === 0) return { from: 0, to: 0, total: 0 };
+
+    const from = (this.currentPage() - 1) * this.pageSize + 1;
+    const to = Math.min(this.currentPage() * this.pageSize, total);
+
     return { from, to, total };
+  }
+
+    // ---- Variables de paginación ----
+  currentPage = signal<number>(1);
+  pageSize = 5;
+  paginatedPagos = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize;
+    return this.filteredPagos().slice(startIndex, startIndex + this.pageSize);
+  });
+  totalPages = computed(() => Math.ceil(this.filteredPagos().length / this.pageSize));
+
+  // ---- Navegación de páginas ----
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update(p => p + 1);
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update(p => p - 1);
+    }
   }
 }
 

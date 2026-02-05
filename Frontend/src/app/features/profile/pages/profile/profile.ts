@@ -139,6 +139,7 @@ export class Profile implements OnInit {
   }
 
   eliminarCuenta() {
+    this.loading.set(true);
     this.userService.eliminarUsuario().subscribe({
       next: () => {
         this.messageService.add({
@@ -148,6 +149,7 @@ export class Profile implements OnInit {
         });
       },
       error: (err) => {
+        this.loading.set(false);
         console.error('Error eliminando la cuenta', err);
         this.errorService.showError(err);
       },

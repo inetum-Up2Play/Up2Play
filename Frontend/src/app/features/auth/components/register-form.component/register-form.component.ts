@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -55,6 +55,7 @@ export class RegisterFormComponent {
 
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
+  loading = signal(false);
 
 
   // En un futuro poner esto en el shard y exportarlo
@@ -81,6 +82,8 @@ export class RegisterFormComponent {
       this.form.markAllAsTouched(); // enseña errores
       return;
     }
+    
+    this.loading.set(true);
 
     const payload = {
       email: this.f.email.value,
@@ -91,6 +94,7 @@ export class RegisterFormComponent {
     this.authService.register(payload).subscribe((res) => {
       if (res === true) {
         this.userDataService.setEmail(payload.email); // ← Guarda el email
+        this.loading.set(false);
         this.router.navigate(['/auth/verification']);
       } else {
         this.errorService.showError(this.errorService.getMensajeError(res));

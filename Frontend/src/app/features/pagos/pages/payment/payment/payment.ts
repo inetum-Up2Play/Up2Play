@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, signal, viewChild, OnInit } from '@angular/core';
 import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +12,6 @@ import { UserDataService } from '../../../../../core/services/auth/user-data-ser
 import { Header } from '../../../../../core/layout/header/header';
 import { Footer } from '../../../../../core/layout/footer/footer';
 import { DeporteImgPipe } from '../../../../actividades/pipes/deporte-img-pipe';
-import { RouterLink } from '@angular/router';
 
 
 @Component({
@@ -22,6 +21,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './payment.scss',
   providers: [MessageService]
 })
+
 export class Payment implements OnInit {
   private stripeService = inject(StripeService);
   private messageService = inject(MessageService);
