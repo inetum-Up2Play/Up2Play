@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { Router } from '@angular/router';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-card-gallery',
@@ -29,6 +30,7 @@ import { Router } from '@angular/router';
     ActivityCard,
     ToastModule,
     DeporteImgPipe,
+    ConfirmDialog
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './card-gallery.html',
@@ -135,10 +137,10 @@ export class CardGallery {
     });
   }
 
+  
   eliminar(event: Event, id: number) {
-
+    console.log("prova");
     this.confirmationService.confirm({
-      target: event.target as EventTarget,
       message:
         '¿Seguro que quieres eliminar esta actividad? Si es de pago, se procederá al reembolso.',
       header: '¡Cuidado!',
@@ -161,9 +163,7 @@ export class CardGallery {
               summary: 'Actividad eliminada',
               detail: 'Actividad eliminada correctamente',
             });
-            setTimeout(() => {
-              this.router.navigate(['/actividades']);
-            }, 2500);
+            this.actUpdateService.notifyUpdate();
           },
           error: (codigo) => this.manejarError(codigo),
         });

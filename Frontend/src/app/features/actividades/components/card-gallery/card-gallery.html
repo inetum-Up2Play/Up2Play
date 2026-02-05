@@ -83,7 +83,7 @@
                     </div>
                 </div>
             </ng-template> <ng-template #grid let-items>
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 2xl:gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                     @for (activity of items; track activity.id) {
                         <div class="w-full">
                             <app-activity-card class="h-full block" 
@@ -93,6 +93,7 @@
                                 [hora]="extraerHora(activity.fecha)" 
                                 [ubicacion]="activity.ubicacion"
                                 [imagen]="activity.deporte | deporteImg" 
+                                [precio]="activity.precio"
                                 [botonLabel]="'Gestionar'"
                                 [botonStyle]="'btn-editar'" 
                                 [actividadId]="activity.id">
@@ -118,3 +119,4 @@
         </p-dataview>
     </div>
 }
+<p-confirmDialog></p-confirmDialog>
