@@ -52,7 +52,7 @@
                             <div class="flex flex-col gap-4 md:flex md:flex-row md:gap-8">
                                 <div class="flex flex-col w-full md:w-[70%]">
                                     <p-select [options]="deportes" formControlName="deporte" optionLabel="label"
-                                        [filter]="true" filterBy="name" [showClear]="true"
+                                        [filter]="true" filterBy="label" [showClear]="true"
                                         [invalid]="isInvalid('deporte')"
                                         class="h-fit rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! placeholder:text-[#7e887e]! text-base! font-normal!"
                                         placeholder="Selecciona un deporte" value="">
