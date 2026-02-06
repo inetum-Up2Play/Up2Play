@@ -4,7 +4,7 @@
 <div class="layout-container flex h-full grow flex-col px-4 sm:px-6 lg:px-20 py-8 lg:py-10">
     <form [formGroup]="actividadForm" (ngSubmit)="onSubmit()"
         class="layout-content-container flex flex-col max-w-7xl w-full mx-auto flex-1">
-        <!-- Page Heading -->
+        <!-- Heading -->
         <div class="flex flex-wrap justify-between gap-4 pb-8 border-b border-[#3D6C3F]/25 mb-8">
             <div class="flex flex-col gap-2">
                 <h1 class="text-[#152614] text-3xl md:text-5xl font-bold leading-tight tracking-[-0.033em]">
@@ -35,13 +35,11 @@
                                 placeholder="Ej: Partido de fútbol 5 amistoso" value="" />
                             <!-- Manejo de errores para el TÍTULO -->
                             @if (isInvalid('nombre')) {
-                            <!-- Verificación de error específico: profanity -->
                             @if (actividadForm.get('nombre')?.hasError('profanity')) {
                             <p-message severity="error" size="small" variant="simple">El título contiene lenguaje
                                 inapropiado o
                                 soez.</p-message>
                             }
-                            <!-- Verificación de error específico: required (solo si no hay profanity para evitar duplicados) -->
                             @else if (actividadForm.get('nombre')?.hasError('required')) {
                             <p-message severity="error" size="small" variant="simple">Ponle un título a tu
                                 actividad.</p-message>
@@ -54,19 +52,19 @@
                                 Deporte</p>
                             <div class="flex flex-col gap-4 md:flex md:flex-row md:gap-8">
                                 <div class="flex flex-col w-full md:w-[70%]">
-                                    <p-select [options]="deportes" formControlName="deporte" optionLabel="name"
+                                    <p-select [options]="deportes" formControlName="deporte" optionLabel="label"
                                         [filter]="true" filterBy="name" [showClear]="true"
                                         [invalid]="isInvalid('deporte')"
                                         class="h-fit rounded-xl! text-[#3D6C3F]! border! border-transparent! focus-within:border-[#B1DF75]/50! hover:border-[#B1DF75]! transition-colors! shadow-sm! focus:outline-0! bg-[#3D6C3F]/5! placeholder:text-[#7e887e]! text-base! font-normal!"
                                         placeholder="Selecciona un deporte" value="">
                                         <ng-template #selectedItem let-deporteEscogido>
                                             <div class="flex items-center gap-2">
-                                                <div>{{ deporteEscogido.name }}</div>
+                                                <div>{{ deporteEscogido.label }}</div>
                                             </div>
                                         </ng-template>
                                         <ng-template let-deportes #item>
                                             <div class="flex items-center gap-2">
-                                                <div>{{ deportes.name }}</div>
+                                                <div>{{ deportes.label }}</div>
                                             </div>
                                         </ng-template>
                                     </p-select>
@@ -81,11 +79,10 @@
                                         class="flex flex-col items-center justify-center-safe gap-2 p-4 rounded-xl border-2 border-[#B1DF75] bg-[#B1DF75]/10 text-[#B1DF75] transition-all">
                                         <!-- ICONO DINÁMICO -->
                                         <span class="material-symbols-outlined text-4xl"
-                                            [ngClass]="(actividadForm.get('deporte')?.value?.name | iconDeporte)"></span>
+                                            [ngClass]="(actividadForm.get('deporte')?.value?.label | iconDeporte)"></span>
 
-                                        <!-- NOMBRE DEL DEPORTE -->
                                         <span class="text-xl font-bold">
-                                            {{ actividadForm.get('deporte')?.value?.name || 'Deporte' }}
+                                            {{ actividadForm.get('deporte')?.value?.label || 'Deporte' }}
                                         </span>
 
                                     </div>

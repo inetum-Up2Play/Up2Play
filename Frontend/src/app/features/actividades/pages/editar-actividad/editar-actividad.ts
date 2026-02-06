@@ -1,26 +1,31 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+// Angular
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ToastModule } from 'primeng/toast';
-import { InputIconModule } from 'primeng/inputicon';
-import { TextareaModule } from 'primeng/textarea';
-import { SelectModule } from 'primeng/select';
-import { KeyFilterModule } from 'primeng/keyfilter';
+// PrimeNG
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
+import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
+import { KeyFilterModule } from 'primeng/keyfilter';
 import { MessageModule } from 'primeng/message';
-import { MessageService } from 'primeng/api';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { ToastModule } from 'primeng/toast';
 
-import { ActService } from '../../../../core/services/actividad/act-service';
+// App (layout, pipes, servicios, utils, validadores)
+import { Footer } from '../../../../core/layout/footer/footer';
 import { Header } from '../../../../core/layout/header/header';
+import { ActService } from '../../../../core/services/actividad/act-service';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
-import { Footer } from '../../../../core/layout/footer/footer';
-import { CommonModule } from '@angular/common';
 import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
+import { DEPORTES, Opcion } from '../../../../core/utils/deportes.constant';
+import { NIVELES } from '../../../../core/utils/niveles.constant';
 
 
 @Component({
@@ -134,7 +139,7 @@ export class EditarActividad implements OnInit {
     this.actService['router'].navigate(['/actividades']);
   }
 
-  deportes: { name: string }[] = [];
+  deportes: Opcion[] = [];
   deporteEscogido: string | undefined;
 
   niveles: { name: string }[] = [];
@@ -167,7 +172,7 @@ export class EditarActividad implements OnInit {
           descripcion: act.descripcion,
           fecha: new Date(act.fecha),
           hora: this.extraerHoraDate(act.fecha),
-          deporte: this.deportes.find((d) => d.name === act.deporte) ?? null,
+          deporte: this.deportes.find((d) => d.label === act.deporte) ?? null,
           nivel:
             this.niveles.find(
               (n) => n.name.toUpperCase() === act.nivel.toUpperCase()
@@ -202,63 +207,9 @@ export class EditarActividad implements OnInit {
       return;
     }
 
-    // Inicializar deportes
-    this.deportes = [
-      { name: 'Ajedrez' },
-      { name: 'Artes Marciales' },
-      { name: 'Atletismo' },
-      { name: 'Badminton' },
-      { name: 'Balonmano' },
-      { name: 'Basquet' },
-      { name: 'Béisbol' },
-      { name: 'Billar' },
-      { name: 'Boxeo' },
-      { name: 'Ciclismo' },
-      { name: 'Crossfit' },
-      { name: 'Críquet' },
-      { name: 'Danza Deportiva' },
-      { name: 'Entrenamiento de fuerza' },
-      { name: 'Equitación' },
-      { name: 'Escalada' },
-      { name: 'Esgrima' },
-      { name: 'Esquí' },
-      { name: 'Fútbol Americano' },
-      { name: 'Futbol' },
-      { name: 'Frisbee' },
-      { name: 'Gimnasia' },
-      { name: 'Golf' },
-      { name: 'Hockey' },
-      { name: 'Lucha Libre' },
-      { name: 'Motocross' },
-      { name: 'Natación' },
-      { name: 'Padel' },
-      { name: 'Parkour' },
-      { name: 'Patinaje' },
-      { name: 'Petanca' },
-      { name: 'Ping Pong' },
-      { name: 'Piragüismo' },
-      { name: 'Remo' },
-      { name: 'Rugby' },
-      { name: 'Running' },
-      { name: 'Senderismo' },
-      { name: 'Skateboarding' },
-      { name: 'Snowboard' },
-      { name: 'Squash' },
-      { name: 'Surf' },
-      { name: 'Tenis' },
-      { name: 'Tiro con Arco' },
-      { name: 'Triatlón' },
-      { name: 'Voleibol' },
-      { name: 'Waterpolo' }
-    ];
+    this.deportes = DEPORTES;
 
-    this.niveles = [
-      { name: 'Iniciado' },
-      { name: 'Principiante' },
-      { name: 'Intermedio' },
-      { name: 'Avanzado' },
-      { name: 'Experto' },
-    ];
+    this.niveles = NIVELES;
 
     this.cargarActividad(this.actividadId);
   }
@@ -293,16 +244,15 @@ export class EditarActividad implements OnInit {
 
     // Combinar fecha y hora en formato ISO
     const fechaDate: Date = raw.fecha instanceof Date ? raw.fecha : new Date(raw.fecha);
-    const horaDate: Date = raw.hora; // ya es Date
+    const horaDate: Date = raw.hora;
 
-    // Prepara el payload acorde al backend (strings/números/enum names)
     const payload = {
       nombre: formValue.nombre,
       descripcion: formValue.descripcion,
       fecha: this.formatDateTime(fechaDate, horaDate), // formato "yyyy-MM-dd'T'HH:mm:ss"
       ubicacion: formValue.ubicacion,
-      deporte: formValue.deporte.name, // convertir objeto a string
-      nivel: formValue.nivel.name, // convertir objeto a string
+      deporte: formValue.deporte.label,
+      nivel: formValue.nivel.name,
       estado: formValue.estado,
       numPersTotales: formValue.numPersTotales,
       precio: formValue.precio,
