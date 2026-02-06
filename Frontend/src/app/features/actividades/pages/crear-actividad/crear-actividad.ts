@@ -1,26 +1,35 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+// Angular
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
+// PrimeNG
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { InputIconModule } from 'primeng/inputicon';
-import { TextareaModule } from 'primeng/textarea';
-import { SelectModule } from 'primeng/select';
-import { KeyFilterModule } from 'primeng/keyfilter';
+import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
+import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { KeyFilterModule } from 'primeng/keyfilter';
+import { MessageModule } from 'primeng/message';
+import { SelectModule } from 'primeng/select';
+import { TextareaModule } from 'primeng/textarea';
+import { ToastModule } from 'primeng/toast';
+
+// App (layout, servicios, validadores, pipes, utils)
+import { Footer } from '../../../../core/layout/footer/footer';
+import { Header } from '../../../../core/layout/header/header';
 
 import { ActService } from '../../../../core/services/actividad/act-service';
-import { Header } from '../../../../core/layout/header/header';
 import { ErrorService } from '../../../../core/services/error/error-service';
-import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
-import { Footer } from '../../../../core/layout/footer/footer';
 import { UserService } from '../../../../core/services/user/user-service';
+
+import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
+
 import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
+
+import { DEPORTES, Opcion } from '../../../../core/utils/deportes.constant';
+import { NIVELES } from '../../../../core/utils/niveles.constant';
 
 @Component({
   selector: 'app-crear-actividad',
@@ -83,7 +92,7 @@ export class CrearActividad implements OnInit {
       deporte: [null, Validators.required],
       nivel: [null, Validators.required],
       numPersTotales: [1, [Validators.required, Validators.min(1), Validators.max(999)]],
-      precio: [0, Validators.required], // valor por defecto
+      precio: [0, Validators.required],
     });
   }
 
@@ -93,7 +102,6 @@ export class CrearActividad implements OnInit {
   }
 
   private stepOf(ctrlName: string): number {
-    // en caso de querer custom step por control
     return 1;
   }
 
@@ -167,7 +175,7 @@ export class CrearActividad implements OnInit {
       return;
     }
 
-    // Defensive: asegura que son Date
+    // asegura que son Date
     const fechaDate: Date =
       raw.fecha instanceof Date ? raw.fecha : new Date(raw.fecha);
     const horaDate: Date =
@@ -178,7 +186,7 @@ export class CrearActividad implements OnInit {
       descripcion: raw.descripcion?.trim(),
       fecha: this.formatDateTime(fechaDate, horaDate), // campo combinado
       ubicacion: raw.ubicacion?.trim(),
-      deporte: raw.deporte?.name ?? raw.deporte ?? null, // envia string
+      deporte: raw.deporte?.label ?? raw.deporte ?? null,
       nivel: raw.nivel?.name ?? raw.nivel ?? null, // envia string
       numPersTotales: Number(raw.numPersTotales), // envia numero
       precio: Number(raw.precio ?? 0),
@@ -202,10 +210,10 @@ export class CrearActividad implements OnInit {
           // Redirigir a la lista de actividades
           setTimeout(() => {
             this.actService['router'].navigate(['/actividades']);
-          }, 1500); // espera 1.5 segundos para que se vea el toast
+          }, 1500);
         } else {
-          const mensaje = this.errorService.getMensajeError(res); // Se traduce el mensaje con el controlErrores.ts
-          this.errorService.showError(mensaje); // Se muestra con PrimeNG
+          const mensaje = this.errorService.getMensajeError(res);
+          this.errorService.showError(mensaje);
         }
       },
 
@@ -227,7 +235,7 @@ export class CrearActividad implements OnInit {
     return !!(control && control.invalid && control.touched);
   }
 
-  deportes: any[] | undefined;
+  deportes: Opcion[] = [];
   deporteEscogido: string | undefined;
 
   fecha: Date | undefined;
@@ -244,62 +252,9 @@ export class CrearActividad implements OnInit {
       }
     });
 
-    // Inicializar deportes
-    this.deportes = [
-      { name: 'Ajedrez' },
-      { name: 'Artes Marciales' },
-      { name: 'Atletismo' },
-      { name: 'Badminton' },
-      { name: 'Balonmano' },
-      { name: 'Basquet' },
-      { name: 'Béisbol' },
-      { name: 'Billar' },
-      { name: 'Boxeo' },
-      { name: 'Ciclismo' },
-      { name: 'Crossfit' },
-      { name: 'Críquet' },
-      { name: 'Danza Deportiva' },
-      { name: 'Entrenamiento de fuerza' },
-      { name: 'Equitación' },
-      { name: 'Escalada' },
-      { name: 'Esgrima' },
-      { name: 'Esquí' },
-      { name: 'Fútbol Americano' },
-      { name: 'Futbol' },
-      { name: 'Frisbee' },
-      { name: 'Gimnasia' },
-      { name: 'Golf' },
-      { name: 'Hockey' },
-      { name: 'Lucha Libre' },
-      { name: 'Motocross' },
-      { name: 'Natación' },
-      { name: 'Padel' },
-      { name: 'Parkour' },
-      { name: 'Patinaje' },
-      { name: 'Petanca' },
-      { name: 'Ping Pong' },
-      { name: 'Piragüismo' },
-      { name: 'Remo' },
-      { name: 'Rugby' },
-      { name: 'Running' },
-      { name: 'Senderismo' },
-      { name: 'Skateboarding' },
-      { name: 'Snowboard' },
-      { name: 'Squash' },
-      { name: 'Surf' },
-      { name: 'Tenis' },
-      { name: 'Tiro con Arco' },
-      { name: 'Triatlón' },
-      { name: 'Voleibol' },
-      { name: 'Waterpolo' }
-    ];
+    // Inicializar JSON deportes
+    this.deportes = DEPORTES;
 
-    this.niveles = [
-      { name: 'Iniciado' },
-      { name: 'Principiante' },
-      { name: 'Intermedio' },
-      { name: 'Avanzado' },
-      { name: 'Experto' },
-    ];
+    this.niveles = NIVELES;
   }
 }

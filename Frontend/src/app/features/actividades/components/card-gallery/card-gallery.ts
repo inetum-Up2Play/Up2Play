@@ -1,29 +1,36 @@
-import { Component, HostListener, inject, input, signal } from '@angular/core';
-import { Router } from '@angular/router';
+// Angular
 import { CommonModule } from '@angular/common';
+import { Component, HostListener, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
+// RxJS
 import { Observable } from 'rxjs';
 
-
-import { ButtonModule } from 'primeng/button';
-import { MessageModule } from 'primeng/message';
-import { DataViewModule } from 'primeng/dataview';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { ToastModule } from 'primeng/toast';
+// PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { InputTextModule } from 'primeng/inputtext';
+import { DataViewModule } from 'primeng/dataview';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
 import { MultiSelect } from 'primeng/multiselect';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ToastModule } from 'primeng/toast';
 
-import { UserService } from '../../../../core/services/user/user-service';
+// App (componentes/pipes/utils/servicios)
+import { ActivityCard } from '../activity-card/activity-card';
+import { EmptyActivities } from '../empty-activities/empty-activities';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
-import { EmptyActivities } from '../empty-activities/empty-activities';
 import { ErrorService } from '../../../../core/services/error/error-service';
-import { ActivityCard } from '../activity-card/activity-card';
-import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
+import { UserService } from '../../../../core/services/user/user-service';
+
+import { DEPORTES } from '../../../../core/utils/deportes.constant';
 
 @Component({
   selector: 'app-card-gallery',
@@ -86,7 +93,7 @@ export class CardGallery {
     this.obtenerUsuarioActual();
     this.cargarActividades();
 
-    // Suscribirse a cambios externos (ej: al borrar/crear una actividad)
+    // Suscribirse a cambios externos
     this.actUpdateService.update$.subscribe(() => {
       this.cargarActividades();
     });
@@ -148,8 +155,8 @@ export class CardGallery {
     llamarservicio.subscribe({
       next: (data) => {
         this.activities = data;
-        this.filteredActivities = [...data]; // Inicializar filteredActivities
-        this.applyFilters(); // Aplicar filtros iniciales (si hay)
+        this.filteredActivities = [...data];
+        this.applyFilters(); // Aplicar filtros iniciales
       },
       error: (err) => {
         console.error('Error cargando actividades:', err);
@@ -181,7 +188,7 @@ export class CardGallery {
   clearFilters() {
     this.filterNombre = '';
     this.filterDeporte = [];
-    this.applyFilters(); 
+    this.applyFilters();
   }
 
   /*=== LÓGICA SI EL USUARIO ES CREADOR ===*/
@@ -267,53 +274,6 @@ export class CardGallery {
     return this.router.navigate(['/actividades/info-actividad', id]);
   }
 
-  // Opciones para el dropdown (puedes llenarlo dinámicamente o estático)
-  deportesOptions = [
-    { label: 'Atletismo', value: 'Atletismo' },
-    { label: 'Balonmano', value: 'Balonmano' },
-    { label: 'Basquet', value: 'Basquet' },
-    { label: 'Béisbol', value: 'Béisbol' },
-    { label: 'Billar', value: 'Billar' },
-    { label: 'Boxeo', value: 'Boxeo' },
-    { label: 'Críquet', value: 'Críquet' },
-    { label: 'Ciclismo', value: 'Ciclismo' },
-    { label: 'Escalada', value: 'Escalada' },
-    { label: 'Esgrima', value: 'Esgrima' },
-    { label: 'Esquí', value: 'Esquí' },
-    { label: 'Futbol', value: 'Futbol' },
-    { label: 'Gimnasia', value: 'Gimnasia' },
-    { label: 'Golf', value: 'Golf' },
-    { label: 'Hockey', value: 'Hockey' },
-    { label: 'Artes Marciales', value: 'Artes Marciales' },
-    { label: 'Natación', value: 'Natación' },
-    { label: 'Patinaje', value: 'Patinaje' },
-    { label: 'Ping Pong', value: 'Ping Pong' },
-    { label: 'Piragüismo', value: 'Piragüismo' },
-    { label: 'Rugby', value: 'Rugby' },
-    { label: 'Remo', value: 'Remo' },
-    { label: 'Snowboard', value: 'Snowboard' },
-    { label: 'Surf', value: 'Surf' },
-    { label: 'Tenis', value: 'Tenis' },
-    { label: 'Triatlón', value: 'Triatlón' },
-    { label: 'Voleibol', value: 'Voleibol' },
-    { label: 'Waterpolo', value: 'Waterpolo' },
-    { label: 'Ajedrez', value: 'Ajedrez' },
-    { label: 'Badminton', value: 'Badminton' },
-    { label: 'Crossfit', value: 'Crossfit' },
-    { label: 'Danza Deportiva', value: 'Danza Deportiva' },
-    { label: 'Entrenamiento de fuerza', value: 'Entrenamiento de fuerza' },
-    { label: 'Equitación', value: 'Equitación' },
-    { label: 'Fútbol Americano', value: 'Fútbol Americano' },
-    { label: 'Lucha Libre', value: 'Lucha Libre' },
-    { label: 'Motocross', value: 'Motocross' },
-    { label: 'Padel', value: 'Padel' },
-    { label: 'Parkour', value: 'Parkour' },
-    { label: 'Skateboarding', value: 'Skateboarding' },
-    { label: 'Squash', value: 'Squash' },
-    { label: 'Tiro con Arco', value: 'Tiro con Arco' },
-    { label: 'Frisbee', value: 'Frisbee' },
-    { label: 'Senderismo', value: 'Senderismo' },
-    { label: 'Running', value: 'Running' },
-    { label: 'Petanca', value: 'Petanca' },
-  ];
+  // Dropdown JSON deportes
+  deportesOptions = DEPORTES;
 }
