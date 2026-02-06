@@ -99,8 +99,8 @@
                     [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
 
                     <div class="md:w-40 relative shrink-0">
-                        <img class="block mx-auto rounded w-full object-cover" [src]="activity.deporte | deporteImg"
-                            [alt]="activity.nombre" style="max-width: 150px; aspect-ratio: 16/9;"
+                        <img class="block mx-auto rounded w-full object-cover sm:max-w-[250px]" [src]="activity.deporte | deporteImg"
+                            [alt]="activity.nombre" style="aspect-ratio: 16/9;"
                             alt=" {{ activity.nombre }}" />
                     </div>
 
