@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { HistorialPagos } from './historial-pagos';
 
 describe('HistorialPagos', () => {
@@ -8,7 +11,13 @@ describe('HistorialPagos', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HistorialPagos]
+      imports: [HistorialPagos],
+      providers: [
+        provideHttpClient(),
+        MessageService,
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     })
     .compileComponents();
 

@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { EditarActividad } from './editar-actividad';
 
 describe('EditarActividad', () => {
@@ -8,7 +11,13 @@ describe('EditarActividad', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditarActividad]
+      imports: [EditarActividad],
+      providers: [
+        provideHttpClient(),
+        MessageService,
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     })
     .compileComponents();
 

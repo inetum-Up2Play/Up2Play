@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { VerificationPasswordForm } from './verification-password-form';
 
 describe('VerificationPasswordForm', () => {
@@ -8,7 +11,13 @@ describe('VerificationPasswordForm', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VerificationPasswordForm]
+      imports: [VerificationPasswordForm],
+      providers: [
+        provideHttpClient(),
+        MessageService,
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     })
     .compileComponents();
 

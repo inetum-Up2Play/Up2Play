@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { PoliticaDevoluciones } from './politica-devoluciones';
 
 describe('PoliticaDevoluciones', () => {
@@ -8,7 +11,13 @@ describe('PoliticaDevoluciones', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PoliticaDevoluciones]
+      imports: [PoliticaDevoluciones],
+      providers: [
+        provideHttpClient(),
+        provideNoopAnimations(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     })
     .compileComponents();
 

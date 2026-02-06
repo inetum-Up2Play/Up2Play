@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http'; 
+import { provideHttpClientTesting } from '@angular/common/http/testing'; 
+import { provideRouter } from '@angular/router'; 
 import { TeminosCondiciones } from './teminos-condiciones';
 
 describe('TeminosCondiciones', () => {
@@ -8,7 +10,12 @@ describe('TeminosCondiciones', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TeminosCondiciones]
+      imports: [TeminosCondiciones],
+      providers: [ 
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]) 
+      ]
     })
     .compileComponents();
 

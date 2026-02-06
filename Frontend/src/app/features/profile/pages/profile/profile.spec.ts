@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http'; 
+import { MessageService } from 'primeng/api';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClientTesting } from '@angular/common/http/testing'; 
+import { provideRouter } from '@angular/router'; 
 import { Profile } from './profile';
 
 describe('Profile', () => {
@@ -8,7 +12,14 @@ describe('Profile', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Profile]
+      imports: [Profile],
+      providers: [ 
+        provideHttpClient(),
+        MessageService,
+        provideNoopAnimations(),
+        provideHttpClientTesting(),
+        provideRouter([]) 
+      ]
     })
     .compileComponents();
 

@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { PagoDenegado } from './pago-denegado';
 
 describe('PagoDenegado', () => {
@@ -8,9 +11,14 @@ describe('PagoDenegado', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PagoDenegado]
-    })
-    .compileComponents();
+      imports: [PagoDenegado],
+      providers: [
+        provideHttpClient(),
+        MessageService,
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PagoDenegado);
     component = fixture.componentInstance;

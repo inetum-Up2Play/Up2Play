@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { StripeCallback } from './stripe-callback';
 
 describe('StripeCallback', () => {
@@ -8,7 +11,13 @@ describe('StripeCallback', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StripeCallback]
+      imports: [StripeCallback],
+      providers: [
+        provideHttpClient(),
+        MessageService,
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     })
     .compileComponents();
 

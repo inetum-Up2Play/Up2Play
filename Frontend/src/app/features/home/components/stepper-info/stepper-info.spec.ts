@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { StepperInfo } from './stepper-info';
 
 describe('StepperInfo', () => {
@@ -8,7 +8,10 @@ describe('StepperInfo', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StepperInfo]
+      imports: [StepperInfo],
+        providers: [
+        provideNoopAnimations(),
+      ],
     })
     .compileComponents();
 

@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http'; 
+import { MessageService } from 'primeng/api';
+import { provideHttpClientTesting } from '@angular/common/http/testing'; 
+import { provideRouter } from '@angular/router'; 
 import { Actividades } from './actividades';
 
 describe('Actividades', () => {
@@ -8,7 +11,13 @@ describe('Actividades', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Actividades]
+      imports: [Actividades],
+      providers: [ 
+        provideHttpClient(),
+        MessageService,
+        provideHttpClientTesting(),
+        provideRouter([]) 
+      ]
     })
     .compileComponents();
 

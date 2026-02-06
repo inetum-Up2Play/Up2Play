@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { NewPasswordForm } from './new-password-form';
 
 describe('NewPasswordForm', () => {
@@ -8,7 +11,13 @@ describe('NewPasswordForm', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewPasswordForm]
+      imports: [NewPasswordForm],
+      providers: [
+        provideHttpClient(),
+        MessageService,
+        provideHttpClientTesting(),
+        provideRouter([]),
+      ],
     })
     .compileComponents();
 
