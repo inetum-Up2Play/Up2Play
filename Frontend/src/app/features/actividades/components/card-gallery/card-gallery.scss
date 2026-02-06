@@ -30,6 +30,12 @@
 }
 
 :host ::ng-deep .p-button {
+    --p-button-outlined-primary-hover-background: #8b000011 !important;
+    --p-button-outlined-primary-border-color: #8B0000 !important;
+    --p-button-outlined-primary-color: #8B0000 !important;
+}
+
+:host ::ng-deep .p-button {
     --p-button-outlined-secondary-hover-background: rgba(128, 128, 128, 0.103) !important;
     --p-button-outlined-secondary-border-color: gray !important;
 }
