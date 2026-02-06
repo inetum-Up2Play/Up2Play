@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class IconDeportePipe implements PipeTransform {
 
-
   // Fallback genérico si no hay icono específico
   private static readonly DEFAULT_ICON = 'ph ph-list-magnifying-glass';
 
@@ -21,7 +20,6 @@ export class IconDeportePipe implements PipeTransform {
   }
 
   // Mapa deporte (slug) -> clase de icono (Phosphor)
-  // Ajusta libremente las clases a tu set real.
   private static readonly ICON_DEPORTES: Record<string, string> = {
     atletismo: 'ph ph-person-simple-run',
     balonmano: 'ph ph-meteor',          
@@ -71,11 +69,7 @@ export class IconDeportePipe implements PipeTransform {
     petanca: 'ph ph-boules'
   };
 
-  /**
-   * Devuelve la clase del icono para el deporte indicado.
-   * @param deporte Nombre o slug del deporte (con o sin acentos).
-   * @returns Clase CSS del icono (si no hay match, devuelve un fallback).
-   */
+  /* Devuelve el icono para el deporte indicado */
 
   transform(deporte: string | null | undefined): string {
     if (!deporte) return IconDeportePipe.DEFAULT_ICON;

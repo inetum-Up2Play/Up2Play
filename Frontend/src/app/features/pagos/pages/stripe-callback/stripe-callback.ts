@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-stripe-callback',
@@ -13,15 +14,11 @@ export class StripeCallback {
   private router = inject(Router);
 
   goToProfile() {
-
     return this.router.navigate([`/perfil`]);
-
   }
 
   
   goToCrearActividad() {
-
     return this.router.navigate([`/actividades/crear-actividad`]);
-
   }
 }

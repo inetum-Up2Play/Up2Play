@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
@@ -19,7 +20,6 @@ import { Header } from '../../../../core/layout/header/header';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
 import { Footer } from '../../../../core/layout/footer/footer';
-import { CommonModule } from '@angular/common';
 import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
 
 
@@ -77,7 +77,7 @@ export class EditarActividad implements OnInit {
   private extraerHoraDate(fechaIso: string): Date | null {
     if (!fechaIso) return null;
 
-    const d = new Date(fechaIso); // parsea "2025-12-17T18:30:00"
+    const d = new Date(fechaIso); // Ejemplo "2025-12-17T18:30:00"
     return new Date(1970, 0, 1, d.getHours(), d.getMinutes(), d.getSeconds());
   }
 
@@ -86,7 +86,6 @@ export class EditarActividad implements OnInit {
   }
 
   private stepOf(ctrlName: string): number {
-    // en caso de querer custom step por control
     return 1;
   }
 
@@ -147,7 +146,7 @@ export class EditarActividad implements OnInit {
     hora: ['', [Validators.required]],
     ubicacion: ['', [Validators.required, prohibidasValidator()]],
     deporte: ['', [Validators.required]],
-    nivel: ['', [Validators.required]], // mapea a tu enum
+    nivel: ['', [Validators.required]], 
     estado: ['', [Validators.required]],
     numPersTotales: [0, [Validators.required, Validators.min(1)]],
     precio: [{ value: null, disabled: true }],
@@ -161,7 +160,6 @@ export class EditarActividad implements OnInit {
     this.cargando = true;
     this.actService.getActividad(id).subscribe({
       next: (act) => {
-        // Si el backend envía fecha en ISO, y usas <input type="datetime-local">, transforma:
         this.actividadForm.patchValue({
           nombre: act.nombre,
           descripcion: act.descripcion,

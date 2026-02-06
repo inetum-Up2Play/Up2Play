@@ -23,7 +23,6 @@ interface MenuItemPages {
   route?: string;      
   command?: () => void; 
   styleClass?: string; 
-
   children?: MenuItem[];
 }
 
@@ -56,7 +55,7 @@ export class Header implements OnInit {
     { label: 'Notificaciones', icon: 'ph-fill ph-bell', route: '/notificaciones' },
     { label: 'Historial', icon: 'ph-fill ph-clock-counter-clockwise', route: '/historial' },
     { label: 'Mi Cuenta', icon: 'ph-fill ph-user', route: '/perfil' },
-{ 
+    { 
       label: 'Cerrar sesión', 
       icon: 'ph-fill ph-sign-out', 
       styleClass: 'logout-item', 
@@ -73,28 +72,7 @@ export class Header implements OnInit {
   // Página activa 
   isActive(route: string, exact = true): boolean {
     return exact ? this.router.url === route : this.router.url.startsWith(route);
-  }
-
-/*    // avatarItems se construye usando el email almacenado en el signal
-  public avatarItems = computed<MenuItem[]>(() => {
-    const email = this.userEmailSignal();
-    return [
-      {
-        label: email && email.length > 0 ? email : 'Mi Cuenta',
-        icon: 'pi pi-envelope',
-        command: () => {
-          this.router.navigate(['/perfil']);
-        }
-      },
-      {
-        label: 'Cerrar sesión',
-        icon: 'pi pi-sign-out',
-        command: () => {
-          this.authService.logout();
-        }
-      }
-    ];
-  })  */
+  } 
 
   ngOnInit(): void {
     // Obtiene el email la primera vez
@@ -135,13 +113,13 @@ export class Header implements OnInit {
   ngAfterViewInit() {
     const headerEl = this.headerRef.nativeElement;
 
-    // Calculo altura del header y la asigno a la variable CSS --header-h
+    // Calcula altura del header y la asigna a la variable CSS --header-h
     const setVar = () => {
       const h = headerEl.getBoundingClientRect().height;
       document.documentElement.style.setProperty('--header-h', `${h}px`);
     };
 
-    // Inicializo la variable CSS --header-h
+    // Inicializa la variable CSS --header-h
     setVar();
 
     // Observa cambios dinámicos

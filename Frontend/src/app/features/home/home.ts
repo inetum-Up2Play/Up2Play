@@ -25,7 +25,6 @@ export class Home implements OnInit {
   private userService = inject(UserService);
   private actService = inject(ActService);
 
-  private userEmailSignal = signal<string>('');
   public currentUsuario = toSignal(this.userService.getUsuario(), { initialValue: null });
 
   public planesUnidos = signal<number>(0);

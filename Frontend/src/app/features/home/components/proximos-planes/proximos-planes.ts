@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { PrimeIcons } from 'primeng/api';
+import { AsyncPipe, DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { map } from 'rxjs';
+
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { Actividad } from '../../../../shared/models/Actividad';
-import { Router, RouterLink } from '@angular/router';
-import { map, tap } from 'rxjs';
-import { AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-proximos-planes',
@@ -14,9 +14,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 })
 export class ProximosPlanes {
   private actService = inject(ActService);
-  private router = inject(Router);
 
-  // Observable original
   proximosPlanes$ = this.actService.listarActividadesApuntadas();
 
   // Ordena por fecha más cercana (ascendente) y limita a 5.
@@ -25,11 +23,10 @@ export class ProximosPlanes {
       const toEpoch = (value: unknown): number => {
         if (value == null) return Number.POSITIVE_INFINITY;
 
-        // Si es string, intentamos formato ISO
         const s = String(value).trim();
         if (!s) return Number.POSITIVE_INFINITY;
 
-        // Caso ISO "yyyy-MM-ddTHH:mm:ss(.SSS)"
+        // "yyyy-MM-ddTHH:mm:ss(.SSS)"
         const isoDate = new Date(s);
         if (!isNaN(isoDate.getTime())) {
           return isoDate.getTime();

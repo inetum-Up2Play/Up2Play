@@ -1,5 +1,7 @@
 import { Component, effect, input, output, inject, model } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -10,12 +12,11 @@ import { MessageModule } from 'primeng/message';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { CommonModule } from '@angular/common';
-import { Usuario } from '../../../../shared/models/usuario.model';
-import { Perfil } from '../../../../shared/models/Perfil';
-import { Profile } from '../../pages/profile/profile';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
+
+import { Usuario } from '../../../../shared/models/usuario.model';
+import { Perfil } from '../../../../shared/models/Perfil';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
 
 
@@ -28,39 +29,31 @@ export interface CambiarPasswordDto {
   newPassword: string;
 }
 
-
 @Component({
   selector: 'app-form-profile',
   imports: [DialogModule, ToastModule, MultiSelectModule, ReactiveFormsModule, InputTextModule, ButtonModule, FormsModule, SelectModule, DatePicker, InputNumberModule, MessageModule, InputIconModule, IconFieldModule, CommonModule],
   templateUrl: './form-profile.html',
   styleUrl: './form-profile.scss'
 })
+
 export class FormProfile {
-  /** Visibilidad del diálogo (two-way con model()) */
   passwordDialogVisible = model<boolean>(false);
 
-  /** Evento para que el padre llame al servicio de cambiar contraseña */
   changePassword = output<CambiarPasswordDto>();
 
-  /** Datos que vienen del padre (signals) */
   usuario = input<Usuario | null>(null);
   perfil = input<Perfil | null>(null);
 
-  /** Evento de cambios de perfil hacia el padre */
   cambiosPerfil = output<Perfil>();
 
-  // ====== Estado local ======
   loading = false;
 
-  // ====== Formularios ======
   formulario!: FormGroup;
   pwdForm!: FormGroup;
 
-  // ====== Inyecciones ======
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
 
-  // ====== Datos auxiliares ======
   readonly sexos: SexoOption[] = [
     { label: 'Masculino', value: 'MASCULINO' },
     { label: 'Femenino', value: 'FEMENINO' },

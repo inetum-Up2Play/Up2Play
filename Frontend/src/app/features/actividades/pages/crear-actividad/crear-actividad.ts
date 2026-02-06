@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -19,7 +20,6 @@ import { ErrorService } from '../../../../core/services/error/error-service';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
 import { Footer } from '../../../../core/layout/footer/footer';
 import { UserService } from '../../../../core/services/user/user-service';
-import { CommonModule } from '@angular/common';
 import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
 
 @Component({
@@ -137,7 +137,6 @@ export class CrearActividad implements OnInit {
     return (this.actividadForm.get('descripcion')?.value?.length ?? 0);
   }
 
-
   onSubmit(): void {
     this.formSubmitted = true;
     const raw = this.actividadForm.value;
@@ -177,7 +176,7 @@ export class CrearActividad implements OnInit {
     const payload = {
       nombre: raw.nombre?.trim(),
       descripcion: raw.descripcion?.trim(),
-      fecha: this.formatDateTime(fechaDate, horaDate), // <-- único campo combinado
+      fecha: this.formatDateTime(fechaDate, horaDate), // campo combinado
       ubicacion: raw.ubicacion?.trim(),
       deporte: raw.deporte?.name ?? raw.deporte ?? null, // envia string
       nivel: raw.nivel?.name ?? raw.nivel ?? null, // envia string
@@ -186,7 +185,7 @@ export class CrearActividad implements OnInit {
     };
 
 
-    // Llamada a servicio
+    // LLAMADA AL SERVICIO CREAR ACTIVIDAD 
     this.actService.crearActividad(payload).subscribe({
       next: (res) => {
         if (res === true) {

@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, Input, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, Input, input, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
@@ -39,7 +39,7 @@ export class ActivityCard implements OnInit{
       .subscribe((flag) => this.isCreador.set(flag));
   }
 
-  // --- Inputs (Decoradores - Manteniendo consistencia con tu código) ---
+  // --- Inputs ---
   @Input() botonLabel!: string;
   @Input() botonStyle!: string;
 

@@ -1,5 +1,6 @@
 @use 'styles/variables' as vars;
 
+/* Quitar estilos del DataView */
 :host {
     --p-dataview-content-background: transparent !important;
     --p-dataview-header-background: transparent !important;
@@ -12,6 +13,7 @@
     padding-bottom: 0;
 }
 
+/* Selector de vista (grid/list) */
 :host ::ng-deep .p-togglebutton {
     --p-togglebutton-border-color: #94a3b87a !important;
     --p-togglebutton-checked-border-color: #94a3b87a !important;
@@ -22,7 +24,7 @@
     --p-togglebutton-content-checked-shadow: none !important;
 }
 
-
+/* Configuración de botones Outlined (Danger, Primary, Secondary) */
 :host ::ng-deep .p-button {
     --p-button-outlined-danger-hover-background: #8b000011 !important;
     --p-button-outlined-danger-border-color: #8B0000 !important;
@@ -40,6 +42,7 @@
     --p-button-outlined-secondary-border-color: gray !important;
 }
 
+/* Botón "Ver más" con rotación de icono */
 .ver-mas-container {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
@@ -53,95 +56,54 @@
     color: vars.$verde-oliva !important;
 
     &:hover {
-        border-radius: 20px !important;
-        border-color: vars.$verde-oliva !important;
-        color: vars.$verde-oliva !important;
         background-color: vars.$verde-claro !important;
     }
 }
 
-:host ::ng-deep .boton-ver-mas {
-    border-color: vars.$verde-oliva;
-    border-radius: 20px;
-    color: vars.$verde-oliva;
-
-    &:hover {
-        border-radius: 20px !important;
-        border-color: vars.$verde-oliva !important;
-        color: vars.$verde-oliva !important;
-        background-color: #b1df7525 !important;
-    }
-}
-
-
-/* Hace que el icono rote 180° al hacer hover/focus sobre el botón */
-:host ::ng-deep .boton-ver-mas .p-button-icon,
-:host ::ng-deep .boton-ver-mas .pi {
-    transition: transform 300ms ease;
-    transform-origin: center;
-    will-change: transform;
-}
-
-:host ::ng-deep .boton-ver-mas:hover .p-button-icon,
-:host ::ng-deep .boton-ver-mas:hover .pi,
-:host ::ng-deep .boton-ver-mas:focus-visible .p-button-icon,
-:host ::ng-deep .boton-ver-mas:focus-visible .pi {
+:host ::ng-deep .boton-ver-mas:hover .p-button-icon {
     transform: rotate(180deg);
 }
 
-
-//BTN VER-DETALLES
+/* Botón "Ver detalles" con animación de subrayado y cambio de icono */
 :host ::ng-deep .btn-verDetalles {
     background: transparent !important;
     border: solid 1px transparent !important;
-    box-shadow: none !important;
     color: #374151 !important;
-    padding: 0 !important; // Sin relleno para que la línea quede pegada al texto
     font-weight: 600;
-    transition: color 0.3s ease;
     overflow: visible !important;
 
-    // Línea Inferior (animación)
+    // Animación de la línea inferior
     .p-button-label:after {
         content: '';
         position: absolute;
         width: 100%;
-        height: 1px; // Grosor de la línea
-        bottom: 2px; // Distancia respecto al texto
+        height: 1px;
+        bottom: 2px;
         left: 0;
         background-color: vars.$verde-oliva;
-
-        transform: scaleX(0); // Estado inicial invisible (ancho 0)
-        transform-origin: bottom left; // Al salir, se va hacia la izquierda
+        transform: scaleX(0);
+        transform-origin: bottom left;
         transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-    // Creamos nuestra propia flecha
+    // Icono dinámico (cambia de '>' a '->' en hover)
     &::after {
-        font-family: 'PrimeIcons'; // Usamos la fuente de iconos
-        content: '\e901'; // Código de '>' 
+        font-family: 'PrimeIcons';
+        content: '\e901'; 
         font-size: 0.8rem;
         transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
     &:hover {
-        color: vars.$verde-oliva !important; // Texto más negro 
+        color: vars.$verde-oliva !important;
 
-        // Animación de la línea: de izquierda a derecha
         .p-button-label::after {
             transform: scaleX(1);
-            transform-origin: bottom left;
         }
 
-        // Cambia de forma y se desliza
         &::after {
-            content: '\e91b'; // Cambio a '->' (pi-arrow-right)
-            transform: translateX(5px); // Deslizar a la derecha
-            transition: transform 0.4s ease, opacity 0.4s ease;
+            content: '\e91b'; // pi-arrow-right
+            transform: translateX(5px);
         }
-    }
-
-    &:active {
-        transform: scale(0.95); // Pequeña pulsación al hacer click
     }
 }

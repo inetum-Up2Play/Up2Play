@@ -77,15 +77,14 @@
                 </button>
                 <img class="logo h-10"
                     src="../../../../assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png"
-                    alt="Up2Play" routerLink="/"
+                    alt="Logo Up2Play" routerLink="/"
                     aria-label="Ir a la página principal" />
             </div>
         </ng-template>
 
-        <!-- MENÚ AVATAR -->
+        <!-- AVATAR -->
         <ng-template #end>
             <div class="card flex w-full justify-end md:pr-15">
-                <!-- (click)="menu.toggle($event)" -->
                 <p-avatar
                     [routerLink]="['/perfil']"
                     [image]="perfilService.avatarGlobal() | avatarImg"

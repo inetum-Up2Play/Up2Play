@@ -1,34 +1,29 @@
-import {
-  Component,
-  computed,
-  HostListener,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
-import { ActService } from '../../../../core/services/actividad/act-service';
-import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { Component, HostListener, inject, input, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+
+
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { CommonModule } from '@angular/common';
-import { EmptyActivities } from '../empty-activities/empty-activities';
 import { DataViewModule } from 'primeng/dataview';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { FormsModule } from '@angular/forms';
-import { ActivityCard } from '../activity-card/activity-card';
-import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 import { ToastModule } from 'primeng/toast';
-import { Observable } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ErrorService } from '../../../../core/services/error/error-service';
-import { Router } from '@angular/router';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { MultiSelect } from 'primeng/multiselect';
-import { UserService } from '../../../../core/services/user/user-service';
 
+import { UserService } from '../../../../core/services/user/user-service';
+import { ActService } from '../../../../core/services/actividad/act-service';
+import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
+import { EmptyActivities } from '../empty-activities/empty-activities';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { ActivityCard } from '../activity-card/activity-card';
+import { DeporteImgPipe } from '../../pipes/deporte-img-pipe';
 
 @Component({
   selector: 'app-card-gallery',
@@ -53,6 +48,7 @@ import { UserService } from '../../../../core/services/user/user-service';
   templateUrl: './card-gallery.html',
   styleUrl: './card-gallery.scss',
 })
+
 export class CardGallery {
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
@@ -72,10 +68,8 @@ export class CardGallery {
   // Configuración del DataView
   layout: 'list' | 'grid' = 'grid';
   options: any[] = ['list', 'grid'];
-
   activities: any[] = [];
   visibleActivities: any[] = [];
-
   pageSize = 8;
   currentPage = 1;
 
@@ -155,7 +149,6 @@ export class CardGallery {
       next: (data) => {
         this.activities = data;
         this.filteredActivities = [...data]; // Inicializar filteredActivities
-        // this.updateVisibleActivities();
         this.applyFilters(); // Aplicar filtros iniciales (si hay)
       },
       error: (err) => {
@@ -166,11 +159,10 @@ export class CardGallery {
     });
   }
 
-  // Lógica de Filtrado
+  /*=== LÓGICA DE FILTROS ===*/
   applyFilters() {
-    this.currentPage = 1; // Resetear paginación al filtrar
+    this.currentPage = 1; 
 
-    // Filtrar las actividades
     this.filteredActivities = this.activities.filter((act) => {
       const matchNombre = this.filterNombre
         ? act.nombre.toLowerCase().includes(this.filterNombre.toLowerCase())
@@ -183,17 +175,16 @@ export class CardGallery {
       return matchNombre && matchDeporte;
     });
 
-    // Actualizar actividades visibles
     this.updateVisibleActivities();
   }
 
   clearFilters() {
     this.filterNombre = '';
     this.filterDeporte = [];
-    this.applyFilters(); // Aplicar filtro vacío
+    this.applyFilters(); 
   }
 
-
+  /*=== LÓGICA SI EL USUARIO ES CREADOR ===*/
   obtenerUsuarioActual() {
     this.userService.getUsuario().subscribe({
       next: (user) => this.userId = user.id,
@@ -205,7 +196,7 @@ export class CardGallery {
     return this.userId !== null && activity.usuarioCreadorId === this.userId;
   }
 
-  eliminar(event: Event, id: number) {
+  eliminar( id: number) {
     console.log('prova');
     this.confirmationService.confirm({
       message:
@@ -253,10 +244,8 @@ export class CardGallery {
   }
 
   updateVisibleActivities() {
-    // Lógica para "Mostrar más": muestra desde el 0 hasta el límite actual
     const end = this.pageSize * this.currentPage;
     this.visibleActivities = this.filteredActivities.slice(0, end);
-    //this.visibleActivities = this.activities.slice(0, end);
   }
 
   loadMore() {

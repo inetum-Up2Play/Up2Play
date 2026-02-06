@@ -1,16 +1,16 @@
-
 import { Component, inject } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { map, tap, BehaviorSubject, switchMap, combineLatest, forkJoin, of } from 'rxjs';
+
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+
 import { ActService } from '../../../../core/services/actividad/act-service';
-import { map, tap, BehaviorSubject, switchMap, combineLatest, forkJoin } from 'rxjs';
 import { Actividad } from '../../../../shared/models/Actividad';
-import { Router } from '@angular/router';
-import { HolidaysService } from '../../../../core/services/holidays';
-import { of } from 'rxjs';
+import { HolidaysService } from '../../../../core/services/calendar/holidays';
 
 @Component({
   selector: 'app-calendar',
@@ -111,9 +111,7 @@ function normalizeToDay(fecha: string): string {
   return fecha.includes('T') ? fecha.split('T')[0] : fecha;
 }
 
-function actividadToEventConColor(
-  act: Actividad,
-  isOwner: boolean,
+function actividadToEventConColor( act: Actividad, isOwner: boolean,
   colors: {
     ownerBg: string; ownerBorder: string; ownerText: string;
     otherBg: string; otherBorder: string; otherText: string;

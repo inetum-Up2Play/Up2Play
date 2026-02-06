@@ -24,11 +24,10 @@ export class AvatarProfile implements OnInit {
   private injector = inject(Injector);
 
   ngOnInit(): void {
-    //Para saber cuál es el avatar y si cambia desde el padre
-    effect(() => {
+    effect(() => {    //Para saber cuál es el avatar y si cambia desde el padre
       const currentImagen = this.perfil()?.imagenPerfil;
       if (currentImagen) {
-        this.selectedAvatarId.set(currentImagen); //Borde verde 
+        this.selectedAvatarId.set(currentImagen);  
       }
     }, { injector: this.injector });
   }

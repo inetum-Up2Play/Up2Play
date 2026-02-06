@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { TabsModule } from 'primeng/tabs';
+import { ButtonModule } from 'primeng/button';
+
 import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
 import { CardGallery } from '../../components/card-gallery/card-gallery';
-
-import { TabsModule } from 'primeng/tabs';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-actividades',

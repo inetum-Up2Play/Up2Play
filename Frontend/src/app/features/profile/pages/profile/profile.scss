@@ -1,13 +1,10 @@
 @use 'styles/variables' as vars;
 
-
-//BTN EDITAR
 :host ::ng-deep .btn-eliminar {
     background-color: vars.$msg-error-oscuro;
     border: none;
     border-radius: 15px;
 }
-
 
 :host ::ng-deep .btn-eliminar:hover {
     background-color: vars.$msg-error-oscuro !important;

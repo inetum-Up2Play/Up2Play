@@ -4,7 +4,6 @@
 @let acti = actividad();
 @if (acti) {
 <main class="grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <!-- Main Grid Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- LEFT COLUMN: Main Content -->
         <div class="lg:col-span-2 space-y-8">
@@ -18,13 +17,14 @@
                     <!-- Gradiente sobrepuesto -->
                     <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent"></div>
 
-                    <!-- Badge u otros elementos sobre el gradiente -->
                     <div class="absolute top-4 left-4">
                         <span class="bg-[#B1DF75]/80 text-black text-sm font-bold px-3 py-1.5 rounded-full">
                             {{ acti.deporte }}
                         </span>
                     </div>
                 </div>
+
+                <!-- Datos sobre la imagen-->
                 <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                     <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 leading-tight">{{ acti.nombre }}</h1>
                     <div class="flex flex-wrap gap-4 text-white/90 text-sm font-medium">
@@ -37,11 +37,12 @@
                     </div>
                 </div>
             </div>
+
             <!-- Description & Details -->
             <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-xl font-bold text-text-main">Acerca de la actividad</h2>
-                    <!-- Organizer Badge -->
+                    <!-- Organizador de la actividad -->
                     <div class="flex items-center gap-3 bg-gray-100 p-2 pr-4 rounded-full border border-gray-200">
                         <div class="size-10 rounded-full bg-cover bg-center" data-alt="Organizer Alex profile picture">
                             <img [src]="avatarIdCreador()| avatarImg" alt="avatarCreador">

@@ -47,7 +47,6 @@ export class MailFormComponent {
       return;
     }
 
-    //Descomentar cuando se haya hecho la lógica en el authService
     const payload = {
       email: this.emailText
     };
@@ -55,8 +54,8 @@ export class MailFormComponent {
     this.authService.newPasswordCode(payload).subscribe({
       next: (res) => {
         if (res === true) {
-          this.userDataService.setEmail(this.emailText); // Guarda el email
-          this.router.navigate(['/auth/verification-password']); // Habrá que cambiarlo al nuevo
+          this.userDataService.setEmail(this.emailText);           // Guarda el email
+          this.router.navigate(['/auth/verification-password']); 
         } else {
           const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
           this.errorService.showError(mensaje);                    // Se muestra con PrimeNG

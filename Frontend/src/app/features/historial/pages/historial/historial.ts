@@ -41,7 +41,6 @@ import { ActivityCard } from '../../../actividades/components/activity-card/acti
 export class Historial implements OnInit {
   private actService = inject(ActService);
 
-  // 1. Declaración limpia de variables
   activities: any[] = [];
   visibleActivities: any[] = [];
   noHayActividades = true;
@@ -53,16 +52,9 @@ export class Historial implements OnInit {
   filterDeporte: string[] = [];
   filterFecha: Date | null = null;
 
-  // 2. Usar ngOnInit para la lógica de carga inicial
   ngOnInit(): void {
     this.cargarActividades();
   }
-
-  removeDeporte(deporteToRemove: string) {
-  // Filtramos el array para quitar el que hemos pulsado
-  this.filterDeporte = this.filterDeporte.filter(d => d !== deporteToRemove);
-  this.applyFilters();
-}
 
   cargarActividades() {
     this.actService.listarActividadesPasadas().subscribe({
@@ -84,22 +76,17 @@ export class Historial implements OnInit {
     this.numeroActividades += 3;
   }
 
- // Lógica de Filtrado
+  // Lógica de Filtrado
   applyFilters() {
     this.visibleActivities = this.activities.filter((act) => {
-      // 1. Filtro Nombre
       const matchNombre = this.filterNombre
         ? act.nombre.toLowerCase().includes(this.filterNombre.toLowerCase())
         : true;
 
-      // CAMBIO 2: Lógica para MultiSelect (Array)
-      // Si el array tiene elementos, miramos si el deporte de la actividad está DENTRO (.includes)
-      // Si el array está vacío (0), devolvemos true (mostrar todos)
       const matchDeporte = this.filterDeporte && this.filterDeporte.length > 0
         ? this.filterDeporte.includes(act.deporte)
         : true;
 
-      // 3. Filtro Fecha
       let matchFecha = true;
       if (this.filterFecha) {
         const actDate = new Date(act.fecha);
@@ -118,6 +105,11 @@ export class Historial implements OnInit {
     this.filterDeporte = [];
     this.filterFecha = null;
     this.visibleActivities = [...this.activities]; // Restaurar lista completa
+  }
+
+  removeDeporte(deporteToRemove: string) {
+    this.filterDeporte = this.filterDeporte.filter(d => d !== deporteToRemove);
+    this.applyFilters();
   }
 
   extraerHora(fecha: string): string {

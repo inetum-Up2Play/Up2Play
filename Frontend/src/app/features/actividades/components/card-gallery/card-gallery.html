@@ -94,6 +94,7 @@
                     </app-empty-activities>
                 </div>
                 }
+                <!-- ACTIVIDADES EN FORMATO LISTA -->
                 @for (activity of items; track activity.id; let first = $first) {
                 <div class="flex flex-col sm:flex-row sm:items-center py-6 gap-4"
                     [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
@@ -121,6 +122,7 @@
                             </div>
                         </div>
 
+                        <!-- BOTONES (parte derecha de la lista) -->
                         <div class="flex flex-col md:items-end gap-4">
                             <span class="text-xl font-bold">{{ activity.precio | currency:'EUR' }}</span>
                             <div class="flex flex-row gap-2">
@@ -132,7 +134,7 @@
                                 <button pButton icon="pi pi-trash" [loading]="loading()"
                                     class="p-button-danger p-button-outlined p-button-sm min-w-32"
                                     [label]="activity.precio != '0.00' ? 'Reembolsar' : 'Eliminar'"
-                                    (click)="eliminar($event, activity.id)">
+                                    (click)="eliminar(activity.id)">
                                 </button>
                                 } @else {
                                 <p-button label="Ver detalles" (onClick)="redirigirInfoActividad(activity.id)"
@@ -145,6 +147,7 @@
                 </div>
                 }
 
+                <!-- BOTÓN CARGAR MÁS ACTIVIDADES -->
                 <div class="flex justify-center mt-6">
                     @if (visibleActivities.length < filteredActivities.length) { <p-button styleClass="boton-ver-mas"
                         label="Mostrar más actividades" variant="outlined" icon="pi pi-refresh" severity="contrast"
@@ -153,6 +156,8 @@
                         }
                 </div>
             </div>
+
+        <!-- ACTIVIDADES EN FORMATO GRID -->    
         </ng-template> <ng-template #grid let-items>
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                 @for (activity of items; track activity.id) {
@@ -176,6 +181,7 @@
             </div>
             }
 
+            <!-- BOTÓN CARGAR MÁS ACTIVIDADES -->
             <div class="flex justify-center md:justify-end ver-mas-container md:px-0 mt-6">
                 @if (visibleActivities.length < filteredActivities.length) { <p-button styleClass="boton-ver-mas"
                     label="Mostrar más actividades" variant="outlined" icon="pi pi-refresh" severity="contrast"

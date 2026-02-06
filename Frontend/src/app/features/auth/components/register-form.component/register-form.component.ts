@@ -57,8 +57,6 @@ export class RegisterFormComponent {
   showConfirmPassword: boolean = false;
   loading = signal(false);
 
-
-  // En un futuro poner esto en el shard y exportarlo
   private PASSWORD_POLICY = /^(?=.*\p{Ll})(?=.*\p{Lu})(?=.*\p{Nd})(?=.*[^\p{L}\p{N}\s])(?!.*\s).+$/u;
 
   form = this.fb.group(
@@ -93,7 +91,7 @@ export class RegisterFormComponent {
 
     this.authService.register(payload).subscribe((res) => {
       if (res === true) {
-        this.userDataService.setEmail(payload.email); // ← Guarda el email
+        this.userDataService.setEmail(payload.email); 
         this.loading.set(false);
         this.router.navigate(['/auth/verification']);
       } else {

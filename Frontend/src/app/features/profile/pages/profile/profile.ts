@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output, signal} from '@angular/core'
+import { Component, inject, OnInit, signal} from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http';
 ;
 
@@ -14,10 +14,8 @@ import { Footer } from '../../../../core/layout/footer/footer';
 import { CambiarPasswordDto, FormProfile } from '../../components/form-profile/form-profile';
 import { AvatarProfile } from '../../components/avatar-profile/avatar-profile';
 import { AllowStripeProfile } from '../../components/allow-stripe-profile/allow-stripe-profile';
-
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { Perfil } from '../../../../shared/models/Perfil';
-
 import { PerfilService } from '../../../../core/services/perfil/perfil-service';
 import { UserService } from '../../../../core/services/user/user-service';
 import { AuthService } from '../../../../core/services/auth/auth-service';
@@ -41,6 +39,7 @@ import { StripeService } from '../../../../core/services/pagos/stripe-service';
   styleUrl: './profile.scss',
   providers: [MessageService, ConfirmationService],
 })
+
 export class Profile implements OnInit {
   private userService = inject(UserService);
   private perfilService = inject(PerfilService);
@@ -158,7 +157,6 @@ export class Profile implements OnInit {
     setTimeout(() => {
       this.authService.logout();
     }, 2500);
-    //this.perfilService.eliminarPerfil();
   }
 
   // Pop-up de confirmación para eliminar cuenta
@@ -212,7 +210,7 @@ export class Profile implements OnInit {
       });
   }
 
-  // Hbilitar pagos con Stripe
+  // Habilitar pagos con Stripe
   habilitarPagos() {
     this.loading.set(true);
     this.stripeService.getOnboardingLink().subscribe({
@@ -232,10 +230,8 @@ export class Profile implements OnInit {
   verificarEstadoStripe() {
     this.stripeService.checkStatus().subscribe({
     next: (res) => {
-      // 1. Actualizamos la señal independiente (opcional si la usas en otro sitio)
       this.pagosHabilitados.set(res.pagosHabilitados);
 
-      // 2. LA CLAVE: Actualizamos el objeto usuario para que el @if y el [input] del HTML reaccionen
       const usuarioActual = this.usuario();
       if (usuarioActual) {
         this.usuario.set({
