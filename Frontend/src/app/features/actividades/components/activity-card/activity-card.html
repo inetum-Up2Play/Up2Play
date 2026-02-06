@@ -31,7 +31,7 @@
     <ng-template #subtitle>
       <span class="inline-flex items-center gap-1 mt-1 mx-4">
         <i class="ph-bold ph-calendar-blank align-middle leading-none" aria-hidden="true"></i>
-        {{ fecha() }} - {{ hora() }}h
+        {{ fecha() | date:'dd/MM/yyyy' }} - {{ hora() }}h
       </span>
     </ng-template>
 
