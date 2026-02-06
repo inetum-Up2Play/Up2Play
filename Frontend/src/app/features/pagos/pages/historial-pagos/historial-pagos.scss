@@ -1,0 +1,50 @@
+@use 'styles/variables' as vars;
+
+:host {
+  font-family: #{vars.$work-sans};
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: #{vars.$montserrat};
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: #{vars.$work-sans};
+}
+
+/* Afecta a todos los p-inputtext dentro del componente */
+:host {
+  /* Sin padding base */
+  --p-inputtext-padding-y: 0;
+  --p-inputtext-padding-x: 0;
+  /* Si usas tamaños sm / lg, quítales padding también */
+  --p-inputtext-sm-padding-y: 0;
+  --p-inputtext-sm-padding-x: 0;
+  --p-inputtext-lg-padding-y: 0;
+  --p-inputtext-lg-padding-x: 0;
+
+ /* placeholder y texto */
+  --p-inputtext-placeholder-color: rgba(61,108,63,0.60); /* #3D6C3F al 60% */
+  --p-inputtext-color: #3D6C3F; /* si también quieres el texto del input */
+
+  /* borde “invisible” en reposo/hover/focus */
+  --p-inputtext-border-color: transparent;
+  --p-inputtext-hover-border-color: transparent;
+  --p-inputtext-focus-border-color: transparent;
+
+  /* sin sombra y sin anillo de foco */
+  --p-inputtext-shadow: none;
+  --p-inputtext-focus-ring-shadow: none;
+  --p-inputtext-focus-ring-width: 0;
+  --p-inputtext-focus-ring-style: solid;
+  /* no importa si width=0 */
+  --p-inputtext-focus-ring-color: transparent;
+}

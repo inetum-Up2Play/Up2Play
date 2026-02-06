@@ -34,7 +34,7 @@ public class PerfilController {
     }
 
     @PutMapping("editarPerfil/{id}")
-    public ResponseEntity<?> updatePerfil(@PathVariable Long id,@Valid @RequestBody PerfilDto perfilDto,
+    public ResponseEntity<?> updatePerfil(@PathVariable Long id, @Valid @RequestBody PerfilDto perfilDto,
             @AuthenticationPrincipal UserDetails principal) {
 
         String email = principal.getUsername();
@@ -51,14 +51,14 @@ public class PerfilController {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
- 
+
         return perfilService.obtenerPerfil(usuario.getPerfil().getId());
     }
 
     @GetMapping("/obtenerPerfil/{id}")
     public PerfilDtoResp obtenerPerfilByUserId(@PathVariable Long id) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));       
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         return perfilService.obtenerPerfil(usuario.getPerfil().getId());
     }
 }

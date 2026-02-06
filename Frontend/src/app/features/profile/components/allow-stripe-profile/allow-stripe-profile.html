@@ -1,0 +1,44 @@
+<div
+  class="mb-3 py-4 px-6 md:py-6 md:px-8 lg:px-10 bg-white rounded-lg shadow w-full h-fit justify-between items-center flex md:flex-row flex-col">
+  @if (!pagosHabilitados()) {
+  <div class="md:max-w-130 xl:max-w-175 mb-4 md:mb-0">
+    <h2 class="font-bold xl:text-2xl lg:text-xl text-lg pb-2">¿Quieres crear actividades de pago?</h2>
+    <p>Necesitarás una cuenta de Stripe para poder organizar actividades de pago y recibir los ingresos, haz click
+      al botón i sigue los pasos.</p>
+  </div>
+
+  <button (click)="habilitarPagos()" [disabled]="loading()"
+    class="group relative inline-flex items-center bg-[#3D6C3F] h-fit px-6 py-3 rounded-2xl text-white font-semibold cursor-pointer
+            transition-transform duration-300 ease-in-out hover:scale-105
+            after:content-[''] after:inline-block after:w-0 group-hover:after:w-4 after:transition-[width] after:duration-300 after:ease-in-out">
+    @if (loading()) { <i class="pi pi-spin pi-spinner mr-2"></i> }
+    Ir a Stripe
+    <svg class="w-4 h-4 ms-1.5 -me-0.5 transition-transform duration-300 ease-in-out group-hover:translate-x-2"
+      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+        d="M19 12H5m14 0-5 5m5-5-5-5" />
+    </svg>
+  </button>
+  } @else {
+
+  <div class="stripe-linked-card">
+
+    <div class="success-animation">
+      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+      </svg>
+    </div>
+
+    <div class="card-content">
+      <h2 class="title">¡Cuenta de Stripe vinculada con éxito!</h2>
+      <p class="message">Ahora puedes organizar actividades con precio y comenzar a recibir pagos de manera segura.</p>
+      <a href="https://docs.stripe.com/" class="secondary-link" aria-label="Más información sobre Stripe">
+        <span class="link-icon"><i class="ph ph-info"></i></span>
+        Aprende más sobre pagos con Stripe
+      </a>
+    </div>
+  </div>
+  }
+
+</div>

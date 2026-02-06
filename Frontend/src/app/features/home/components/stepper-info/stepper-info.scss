@@ -1,0 +1,60 @@
+@use 'styles/variables' as vars;
+
+.card {
+    font-family: vars.$work-sans;
+    font-size: larger;
+}
+
+h3 {
+    font-weight: bold;
+}
+
+:host ::ng-deep .p-step {
+    font-family: vars.$montserrat;
+}
+
+:host ::ng-deep .p-step-title {
+    color: vars.$verde-oscuro !important;
+    font-weight: 400;
+    font-size: 1.6rem !important;
+    text-wrap: wrap;
+    text-align: left;
+    &:hover {
+        scale: 1.01;
+    }
+}
+
+:host ::ng-deep .p-step-number {
+    color: vars.$verde-oliva !important;
+    border-color: vars.$verde-oliva !important;
+    background-color: transparent !important;
+    height: 3rem !important;
+    width: 3rem !important;
+    font-size: 1.3rem !important;
+}
+
+:host ::ng-deep .p-stepper-separator {
+    background-color: vars.$verde-oscuro !important;
+    inline-size: 0.5px !important;
+}
+
+:host ::ng-deep .p-steppanel {
+    background-color: transparent;
+
+    & div {
+        border-style: none;
+        border-radius: 16px;
+        gap: 0;
+    }
+}
+
+:host ::ng-deep .p-button {
+    background-color: vars.$verde-claro !important;
+    color: vars.$verde-oscuro !important;
+    border: none !important;
+    font-size: 1.1rem;
+
+    &.p-button-secondary {
+        background-color: lightgrey !important;
+    }
+}

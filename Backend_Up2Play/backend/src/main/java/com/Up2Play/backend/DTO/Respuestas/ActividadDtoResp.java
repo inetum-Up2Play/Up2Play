@@ -1,18 +1,18 @@
 package com.Up2Play.backend.DTO.Respuestas;
 
 public record ActividadDtoResp(
-    Long id,
-    String nombre,
-    String descripcion,
-    String fecha,
-    String ubicacion,
-    String deporte,
-    String nivel,
-    int numPersInscritas,
-    int numPersTotales,
-    String estado,
-    double precio,
-    Long usuarioCreadorId,
-    String usuarioCreadorNombre,
-    String usuarioCreadorEmail
-) {}
+        Long id,
+        String nombre,
+        String descripcion,
+        String fecha,
+        String ubicacion,
+        String deporte,
+        String nivel,
+        int numPersInscritas,
+        int numPersTotales,
+        String estado,
+        double precio,
+        Long usuarioCreadorId,
+        String usuarioCreadorNombre,
+        String usuarioCreadorEmail) {
+}

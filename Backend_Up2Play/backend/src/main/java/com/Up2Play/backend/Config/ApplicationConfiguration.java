@@ -17,29 +17,30 @@ import com.Up2Play.backend.Repository.UsuarioRepository;
 */
 @Configuration
 public class ApplicationConfiguration {
-    
-    //Inyección del repositorio
+
+    // Inyección del repositorio
     private final UsuarioRepository usuarioRepository;
 
-    //Constructor que recibe el acceso a la base de datos
+    // Constructor que recibe el acceso a la base de datos
     public ApplicationConfiguration(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    //Función que busca un usuario por su email. Es usado cuando alguien intenta iniciar sesión.
+    // Función que busca un usuario por su email. Es usado cuando alguien intenta
+    // iniciar sesión.
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> usuarioRepository.findByEmail(username)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
     }
 
-    //Función para codificar contraseñas.
+    // Función para codificar contraseñas.
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    //Función para coordinar el proceso de login
+    // Función para coordinar el proceso de login
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
@@ -47,11 +48,14 @@ public class ApplicationConfiguration {
 
     /**
      * Función para validar credenciales.
-     * Usa el buscador de usuarios (userDetailsService) y el codificador de contraseñas (passwordEncoder) para verificar si el usuario existe y si la contraseña es correcta.
-    **/
+     * Usa el buscador de usuarios (userDetailsService) y el codificador de
+     * contraseñas (passwordEncoder) para verificar si el usuario existe y si la
+     * contraseña es correcta.
+     **/
     @SuppressWarnings("deprecation")
     @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
+            BCryptPasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
@@ -59,4 +63,3 @@ public class ApplicationConfiguration {
     }
 
 }
-

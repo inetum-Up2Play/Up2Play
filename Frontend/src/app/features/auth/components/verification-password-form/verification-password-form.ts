@@ -79,7 +79,6 @@ export class VerificationPasswordForm {
     this.resendMessageVisible = true;
     this.authService.resendNewPasswordCode(payload).subscribe({});
 
-    console.log(this.email);
 
     setTimeout(() => {
       this.resendMessageVisible = false;

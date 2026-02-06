@@ -1,15 +1,13 @@
 package com.Up2Play.backend.DTO;
 
-//DTO para verificación de cuenta de usuario: email y código de verificación.
 public class VerifyUserDto {
-    
+
     private String email;
-    
+
     private String verificationCode;
 
     private String token;
 
-    // Getters y Setters
     public String getEmail() {
         return email;
     }

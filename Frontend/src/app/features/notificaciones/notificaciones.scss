@@ -1,0 +1,82 @@
+@use 'styles/variables' as vars;
+
+:host {
+    font-family: #{vars.$work-sans};
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: #{vars.$montserrat};
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: #{vars.$work-sans};
+}
+
+:host ::ng-deep .filtros .p-button {
+    color: vars.$verde-oliva !important;
+    border-color: vars.$verde-oliva !important;
+
+    .hover {
+        background-color: black !important;
+    }
+}
+
+:host ::ng-deep .eliminar .p-button {
+    color: red;
+}
+
+:host ::ng-deep .p-paginator-page {
+    color: vars.$verde-oscuro !important;
+    background-color: #b1df754d !important;
+}
+
+:host ::ng-deep .p-paginator-page-selected {
+    color: vars.$verde-oscuro !important;
+    background-color: #b1df75d0 !important;
+}
+
+:host ::ng-deep .p-paginator {
+    border-radius: 0px;
+}
+
+:host ::ng-deep .p-ripple {
+    color: vars.$verde-oscuro;
+}
+
+.th {
+    color: vars.$verde-oscuro
+}
+
+:host ::ng-deep .p-accordionpanel {
+    border-color: transparent !important;
+    background-color: transparent !important;
+}
+
+:host ::ng-deep .p-accordioncontent-content {
+    border-color: transparent !important;
+    background-color: transparent !important;
+    padding-right: 3rem;
+    padding-left: 0;
+}
+
+
+:host ::ng-deep .noti-leida .p-accordionheader {
+    background: transparent !important;
+    font-weight: 300;
+    padding-left: 0;
+}
+
+:host ::ng-deep .noti-no-leida .p-accordionheader {
+    background: transparent !important;
+    /* azul muy suave */
+    font-weight: 500;
+    padding-left: 0;
+}

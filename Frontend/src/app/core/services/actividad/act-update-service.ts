@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ActUpdateService {
   
   private updateSubject = new Subject<void>();
@@ -14,4 +15,16 @@ export class ActUpdateService {
     this.updateSubject.next();
   }
 
+  //Guardar deporte actual para carrousel home
+   private deporteActual: string | null = null;
+
+  setDeporte(deporte: string | null) {
+    this.deporteActual = deporte;
+  }
+
+  getDeporte(): string | null {
+    return this.deporteActual;
+  }
 }
+
+

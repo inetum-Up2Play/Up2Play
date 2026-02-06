@@ -28,7 +28,6 @@ public class Perfil {
     private String apellido;
     private String telefono;
 
-
     @Convert(converter = SexoAElegirConverter.class)
     @Column(name = "sexo", nullable = false)
     private SexoAElegir sexo;

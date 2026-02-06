@@ -1,9 +1,23 @@
 @use 'styles/variables' as vars;
 
+:host {
+    font-family: #{vars.$work-sans};
+}
 
-h1 {
-    font-family: vars.$montserrat;
-    color: vars.$verde-oliva;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: #{vars.$montserrat};
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: #{vars.$work-sans};
 }
 
 :host ::ng-deep #crear_actividad {
@@ -19,3 +33,17 @@ h1 {
     border: none;
     color: vars.$verde-oscuro;
 }
+
+:host ::ng-deep .p-tablist-tab-list {
+    background: transparent !important;
+
+    .p-tab-active {
+
+        border-color: vars.$verde-oliva !important;
+        border-bottom-width: 3px !important;
+        background: linear-gradient(to top, rgba(177, 223, 117, 0.2), rgba(255, 255, 255, 0));
+    }
+
+    --p-tabs-active-bar-background: vars.$verde-oscuro !important;
+}
+

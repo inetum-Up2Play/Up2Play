@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,47 +24,54 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-//Entidad Usuario que representa un usuario en la base de datos.
-
 @Entity
 @Table(name = "USUARIO")
 public class Usuario implements UserDetails {
 
-    // Campos principales de identificación y autenticación
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // autogenera el ID
-    @Column(unique = true, nullable = false) // único y no nulo
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long id;
 
     @NotBlank
     @Email
     @Column(unique = true)
-    private String email; // Email único y validado
+    private String email;
 
-    private String password; // Contraseña del usuario (debe encriptarse)
-    private String rol; // Rol del usuario (ej: ADMIN, USER)
+    private String password;
+    private String rol;
     @Column(name = "nombre_usuario", unique = true)
-    private String nombreUsuario; // Nombre de usuario único
+    private String nombreUsuario;
 
-    // Campos para verificación y estado
     @Column(name = "ENABLED", nullable = false)
-    private boolean enabled; // Indica si la cuenta está activa
+    private boolean enabled;
 
     @Column(name = "VERIFICATION_CODE")
-    private String verificationCode; // Código de verificación temporal
+    private String verificationCode;
 
     @Column(name = "VERIFICATION_EXPIRES_AT")
-    private LocalDateTime verificationCodeExpiresAt; // Fecha de expiración del código
+    private LocalDateTime verificationCodeExpiresAt;
 
-    @OneToMany(mappedBy = "usuarioCreador")
+    @OneToMany(mappedBy = "usuarioCreador", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Actividad> actividadesCreadas = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "USUARIO_ACTIVIDAD", joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_actividad", referencedColumnName = "id"))
     private Set<Actividad> actividadesUnidas = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UsuarioNotificacion> usuarioNotificaciones = new HashSet<>();
+
+    private String stripeAccountId;
+
+    @Column(name = "PAGOS_HABILITADOS", nullable = false)
+    private Boolean pagosHabilitados = false;
+
     @OneToOne(mappedBy = "usuario")
     private Perfil perfil;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    Set<Pago> pagos = new HashSet<>();
 
     public Perfil getPerfil() {
         return perfil;
@@ -117,6 +125,85 @@ public class Usuario implements UserDetails {
         this.nombreUsuario = nombreUsuario;
     }
 
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones,
+            Perfil perfil) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.perfil = perfil;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones,
+            Perfil perfil, Set<Pago> pagos) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.perfil = perfil;
+        this.pagos = pagos;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones, String stripeAccountId, Perfil perfil) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.stripeAccountId = stripeAccountId;
+        this.perfil = perfil;
+    }
+
+    public Usuario(Long id, @NotBlank @Email String email, String password, String rol, String nombreUsuario,
+            boolean enabled, String verificationCode, LocalDateTime verificationCodeExpiresAt,
+            Set<Actividad> actividadesCreadas, Set<Actividad> actividadesUnidas,
+            Set<UsuarioNotificacion> usuarioNotificaciones, String stripeAccountId, Boolean pagosHabilitados,
+            Perfil perfil) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.enabled = enabled;
+        this.verificationCode = verificationCode;
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
+        this.actividadesCreadas = actividadesCreadas;
+        this.actividadesUnidas = actividadesUnidas;
+        this.usuarioNotificaciones = usuarioNotificaciones;
+        this.stripeAccountId = stripeAccountId;
+        this.pagosHabilitados = pagosHabilitados;
+        this.perfil = perfil;
+    }
+
     public Usuario() {
     }
 
@@ -135,10 +222,6 @@ public class Usuario implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPasswordU() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -181,45 +264,36 @@ public class Usuario implements UserDetails {
         this.verificationCodeExpiresAt = verificationCodeExpiresAt;
     }
 
-    // Implementación de UserDetails para Spring Security
-
-    // Devuelve los permisos o roles del usuario
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
-    // Verifica si la cuenta no ha expirado. Siempre true por defecto.
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    // Verifica si la cuenta no está bloqueada. Siempre true por defecto.
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // Verifica si las credenciales no han expirado. Siempre true por defecto.
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    // Verifica si el usuario está habilitado.
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
-    // Retorna la password para autenticación.
     @Override
     public String getPassword() {
         return password;
     }
 
-    // Retorna el nombre de usuario (usa email).
     @Override
     public String getUsername() {
         return email;
@@ -241,4 +315,36 @@ public class Usuario implements UserDetails {
         this.actividadesUnidas = actividadesUnidas;
     }
 
+    public Set<UsuarioNotificacion> getUsuarioNotificaciones() {
+        return usuarioNotificaciones;
+    }
+
+    public void setUsuarioNotificaciones(Set<UsuarioNotificacion> usuarioNotificaciones) {
+        this.usuarioNotificaciones = usuarioNotificaciones;
+    }
+
+    public String getStripeAccountId() {
+        return stripeAccountId;
+    }
+
+    public void setStripeAccountId(String stripeAccountId) {
+        this.stripeAccountId = stripeAccountId;
+    }
+
+    public Boolean getPagosHabilitados() {
+        return pagosHabilitados;
+    }
+
+    public void setPagosHabilitados(Boolean pagosHabilitados) {
+        this.pagosHabilitados = pagosHabilitados;
+    }
+
+    public Set<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(Set<Pago> pagos) {
+        this.pagos = pagos;
+
+    }
 }

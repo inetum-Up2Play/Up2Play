@@ -18,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 
@@ -43,6 +44,7 @@ public class Actividad {
 
     @Convert(converter = NivelDificultadConverter.class)
     private NivelDificultad nivel;
+
     private int numPersInscritas;
     private int numPersTotales;
 
@@ -52,10 +54,16 @@ public class Actividad {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario_creador", nullable = false)
-    private Usuario usuarioCreador; // usuario creador de actividad
+    private Usuario usuarioCreador;
 
     @ManyToMany(mappedBy = "actividadesUnidas")
     private Set<Usuario> usuarios = new HashSet<>();
+
+    @OneToMany(mappedBy = "actividad")
+    private Set<Notificacion> notificaciones = new HashSet<>();
+
+    @OneToMany(mappedBy = "actividad")
+    private Set<Pago> pagos = new HashSet<>();
 
     public Actividad() {
     }
@@ -93,6 +101,47 @@ public class Actividad {
         this.precio = precio;
         this.usuarioCreador = usuarioCreador;
         this.usuarios = usuarios;
+    }
+
+    public Actividad(Long id, @Size(max = 64) String nombre, @Size(max = 500) String descripcion, LocalDateTime fecha,
+            String ubicacion, String deporte, NivelDificultad nivel, int numPersInscritas, int numPersTotales,
+            EstadoActividad estado, double precio, Usuario usuarioCreador, Set<Usuario> usuarios,
+            Set<Notificacion> notificaciones) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.ubicacion = ubicacion;
+        this.deporte = deporte;
+        this.nivel = nivel;
+        this.numPersInscritas = numPersInscritas;
+        this.numPersTotales = numPersTotales;
+        this.estado = estado;
+        this.precio = precio;
+        this.usuarioCreador = usuarioCreador;
+        this.usuarios = usuarios;
+        this.notificaciones = notificaciones;
+    }
+
+    public Actividad(Long id, @Size(max = 64) String nombre, @Size(max = 500) String descripcion, LocalDateTime fecha,
+            String ubicacion, String deporte, NivelDificultad nivel, int numPersInscritas, int numPersTotales,
+            EstadoActividad estado, double precio, Usuario usuarioCreador, Set<Usuario> usuarios,
+            Set<Notificacion> notificaciones, Set<Pago> pagos) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.ubicacion = ubicacion;
+        this.deporte = deporte;
+        this.nivel = nivel;
+        this.numPersInscritas = numPersInscritas;
+        this.numPersTotales = numPersTotales;
+        this.estado = estado;
+        this.precio = precio;
+        this.usuarioCreador = usuarioCreador;
+        this.usuarios = usuarios;
+        this.notificaciones = notificaciones;
+        this.pagos = pagos;
     }
 
     public Long getId() {
@@ -198,6 +247,22 @@ public class Actividad {
 
     public void setDeporte(String deporte) {
         this.deporte = deporte;
+    }
+
+    public Set<Notificacion> getNotificaciones() {
+        return notificaciones;
+    }
+
+    public void setNotificaciones(Set<Notificacion> notificaciones) {
+        this.notificaciones = notificaciones;
+    }
+
+    public Set<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(Set<Pago> pagos) {
+        this.pagos = pagos;
     }
 
 }

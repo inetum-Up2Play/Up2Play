@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -42,6 +42,7 @@ export class LoginFormComponent {
   private errorService = inject(ErrorService);
 
   showPassword: boolean = false;
+  loading = signal(false);
 
   submitted = output<{ email: string; password: string }>();
 
@@ -65,6 +66,8 @@ export class LoginFormComponent {
       this.submitted.emit(this.form.getRawValue()); // envía {email, password}
     }
 
+    this.loading.set(true);
+
     const payload = {
       email: this.f.email.value,
       password: this.f.password.value,
@@ -74,13 +77,19 @@ export class LoginFormComponent {
       next: (res) => {
         if (res === true) {
           this.userDataService.setEmail(payload.email);
-          this.router.navigate(['/my-account']);
+          this.loading.set(false);
+
+          this.router.navigate(['/']);
         } else {
+          this.loading.set(false);
+
           const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
           this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
         }
       },
       error: () => {
+        this.loading.set(false);
+
         this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
       }
     });

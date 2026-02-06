@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
-import { JoinGallery } from '../../components/join-gallery/join-gallery';
-import { Header } from '../../../../core/layout/header/header';
-import { JoinedCarousel } from '../../components/joined-carousel/joined-carousel';
-import { CreatedCarousel } from "../../components/created-carousel/created-carousel";
-import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
+
+import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
+import { CardGallery } from '../../components/card-gallery/card-gallery';
+
+import { TabsModule } from 'primeng/tabs';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-actividades',
-  imports: [JoinGallery, Header, Footer,  JoinedCarousel, CreatedCarousel, ButtonModule, RouterModule],
+  imports: [CardGallery, Header, Footer, ButtonModule, RouterModule, TabsModule],
   templateUrl: './actividades.html',
   styleUrl: './actividades.scss'
 })
+
 export class Actividades {
 
 }

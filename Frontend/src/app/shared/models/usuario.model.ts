@@ -4,4 +4,7 @@ export interface Usuario {
     contraseña: string;
     rol: string;
     nombreUsuario: string;
+    stripeAccountId?: string;
+    pagosHabilitados: boolean;
+
 }

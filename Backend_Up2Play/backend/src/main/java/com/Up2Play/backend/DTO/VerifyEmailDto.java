@@ -6,14 +6,12 @@ public class VerifyEmailDto {
     private String verificationCode;
     private String token;
 
-    // Constructor
     public VerifyEmailDto(String email, String verificationCode, String token) {
         this.email = email;
         this.verificationCode = verificationCode;
         this.token = token;
     }
 
-    // Getters y setters
     public String getEmail() {
         return email;
     }

@@ -1,42 +1,70 @@
 import { Routes } from '@angular/router';
-import { Home } from './features/home/home';
-import { AuthService } from './core/services/auth/auth-service';
 import { inject } from '@angular/core';
-import { CrearActividad } from './features/actividades/pages/crear-actividad/crear-actividad';
+import { AuthService } from './core/services/auth/auth-service';
+import { Home } from './features/home/home';
 import { Profile } from './features/profile/pages/profile/profile';
+import { Notificaciones } from './features/notificaciones/notificaciones';
+import { Historial } from './features/historial/pages/historial/historial';
+import { PoliticaDevoluciones } from './features/legal/politica-devoluciones/politica-devoluciones';
+import { TeminosCondiciones } from './features/legal/terminos-condiciones/teminos-condiciones/teminos-condiciones';
+import { PoliticaPrivacidad } from './features/legal/politica-privacidad/politica-privacidad/politica-privacidad';
 
 export const routes: Routes = [
   {
     path: 'auth',
-    loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
+    loadChildren: () =>
+      import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
-
   // Zona protegida: TODO lo demás entra por el guard
   // Cualquier otra ruta desconocida -> a home (protegida, por tanto pasará por el guard)
 
   {
     path: '',
-        canActivateChild: [
-            (route, state) => {
-                const authService = inject(AuthService);
-                return authService.canActivate(state.url);
-            }
-        ],
+    canActivateChild: [
+      (route, state) => {
+        const authService = inject(AuthService);
+        return authService.canActivate(state.url);
+      },
+    ],
     children: [
       {
         path: 'actividades',
-        loadChildren: () => import('./features/actividades/act.routes').then(m => m.ACT_ROUTES),
+        loadChildren: () =>
+          import('./features/actividades/act.routes').then((m) => m.ACT_ROUTES),
       },
       {
         path: '',
-        loadComponent: () =>
-          import('./features/home/home').then(m => m.Home),
+        component: Home,
       },
       {
-        path: 'my-account',
+        path: 'perfil',
         component: Profile,
       },
+      {
+        path: 'notificaciones',
+        component: Notificaciones,
+      },
+      {
+        path: 'pagos',
+        loadChildren: () =>
+          import('./features/pagos/pay.routes').then((m) => m.PAY_ROUTES),
+      },
+      {
+        path: 'historial',
+        component: Historial,
+      },
+      {
+        path: 'legal/devoluciones',
+        component: PoliticaDevoluciones,
+      },
+      {
+        path: 'legal/terminos-condiciones',
+        component: TeminosCondiciones,
+      },
+      {
+        path: 'legal/privacidad',
+        component: PoliticaPrivacidad,
+      },
     ],
-  }
-
+  },
 ];

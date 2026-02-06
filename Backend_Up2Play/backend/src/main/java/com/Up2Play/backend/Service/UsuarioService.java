@@ -29,9 +29,12 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioBloqueadoLoginExcepti
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException;
 import com.Up2Play.backend.Model.Actividad;
+import com.Up2Play.backend.Model.Pago;
 import com.Up2Play.backend.Model.Perfil;
 import com.Up2Play.backend.Model.Usuario;
+import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Repository.ActividadRepository;
+import com.Up2Play.backend.Repository.PagoRepository;
 import com.Up2Play.backend.Repository.PerfilRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 
@@ -53,12 +56,15 @@ public class UsuarioService {
     private PerfilRepository perfilRepository;
     private ActividadService actividadService;
     private ActividadRepository actividadRepository;
+    private NotificacionService notificacionService;
+    private PagoRepository pagoRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager, EmailService emailService,
             LoginAttemptService loginAttemptService, VerificationTokenService verificationTokenService,
             PerfilService perfilService, PerfilRepository perfilRepository, ActividadService actividadService,
-            ActividadRepository actividadRepository) {
+            ActividadRepository actividadRepository, NotificacionService notificacionService,
+            PagoRepository pagoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -69,6 +75,8 @@ public class UsuarioService {
         this.perfilRepository = perfilRepository;
         this.actividadService = actividadService;
         this.actividadRepository = actividadRepository;
+        this.notificacionService = notificacionService;
+        this.pagoRepository = pagoRepository;
     }
 
     // Obtiene todos los usuarios en una lista
@@ -83,30 +91,39 @@ public class UsuarioService {
 
     // Elimina un usuario por ID.
     @Transactional
-    public void deleteUsuario(Long id) {
-
+    public void deleteUsuario(Long id) throws MessagingException {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-        // eliminar usuario de las actividades en las que esta inscrito
-        List<Actividad> actividades = actividadRepository.findAll();
+        List<Pago> pagos = pagoRepository.findByUsuario(usuario);
+        if (!pagos.isEmpty()) {
 
+            pagoRepository.deleteAll(pagos);
+
+        }
+
+        notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
+
+        List<Actividad> actividades = actividadRepository.findAll();
         for (Actividad act : actividades) {
             if (!act.getUsuarioCreador().equals(usuario)) {
 
                 act.getUsuarios().removeIf(u -> u.getId().equals(id));
+                act.setNumPersInscritas(act.getNumPersInscritas() - 1);
                 actividadRepository.save(act);
 
             } else {
-                actividadService.deleteActividad(act.getId(), usuario.getId());
-            }
+                actividadService.deleteActividadUsu(act.getId(), usuario.getId());
 
+            }
         }
+
+        notificacionService.EliminarNotificacionesAlEliminarUsuario(id);
 
         if (usuario.getPerfil() != null) {
             Perfil perfil = usuario.getPerfil();
-            usuario.setPerfil(null); // rompe la relación en el grafo
-            perfilRepository.delete(perfil); // borra el perfil existente (managed)
+            usuario.setPerfil(null);
+            perfilRepository.delete(perfil);
         }
 
         usuarioRepository.deleteToken(usuario.getId());
@@ -189,6 +206,12 @@ public class UsuarioService {
         perfilService.crearPerfil(user);
         usuarioRepository.save(user);
 
+        try {
+            mailRegistro(user);
+        } catch (Exception e) {
+
+        }
+
     }
 
     // Autentica un usuario durante login.
@@ -253,7 +276,7 @@ public class UsuarioService {
                                 <p style="font-size: 14px; color: #777777;">Este código expira a las <strong>%s</strong>.</p>
 
                                 <p style="font-size: 13px; color: #999999; margin-top: 30px;"><u>En caso de problemas con la pagina de verificación pulsa el boton para redirigirte a la pagina de verificar</u></p>
-                                <a href="http://localhost:4200/auth/verification?token=%s"
+                                <a href="http://localhost:4201/auth/verification?token=%s"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Verificar Cuenta
                                 </a>
@@ -363,7 +386,7 @@ public class UsuarioService {
                                 <p style="font-size: 13px; color: #999999; margin-top: 30px;"><u>Si tienes problemas, también puedes hacer clic en el siguiente botón para continuar con la verificación</u></p>
 
 
-                                <a href="http://localhost:4200/auth/verification-password?token=%s"
+                                <a href="http://localhost:4201/auth/verification-password?token=%s"
                                 style="display: inline-block; background-color: #152614; color: #f7f7f7; text-decoration: none; border-radius: 5px; padding: 10px 10px 10px 10px; width: 100%%; text-align: center; font-weight: bold; font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: auto;">
                                     Verificar Identidad
                                 </a>
@@ -382,6 +405,41 @@ public class UsuarioService {
                         code,
                         user.getVerificationCodeExpiresAt(),
                         token);
+
+        emailService.enviarCorreo(user.getEmail(), subject, body);
+    }
+
+    // Envia el código de verificación para recuperar la contraseña
+    public void mailRegistro(Usuario user) throws MessagingException {
+        String subject = "Registro en UP2Play";
+
+        String body = """
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Registro en UP2Play</title>
+                </head>
+                <body style="margin: auto; padding: 0; background-color: #ffffffff; font-family: 'Segoe UI', Roboto, Arial, sans-serif;">
+                    <table width="100%%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 40px auto; background-color: #f7f7f7; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+                        <tr>
+                            <td style="padding: 30px;">
+                                <h2 style="color: #4a4a4a; font-size: 24px; margin-bottom: 10px;">😁 Te has registrado</h2>
+                                <p style="font-size: 16px; color: #333333;">Hola <strong style="color: #555555;">%s</strong>,¡Bienvenidx a <strong style="color: #555555;">UP2Play</strong>!</p>
+                                <p style="font-size: 15px; color: #555555;">Ya formas parte de nuestra comunidad, donde podrás crear tus propios planes o unirte a los que más te interesen. Explora, conecta y empieza a disfrutar del deporte con otros apasionados como tú.</p><p style="font-size: 13px; color: #999999; margin-top: 30px;">Si no fuiste tú, contacta con el servicio de soporte de nuestra aplicación.</p>
+
+                                <hr style="margin: 30px 0; border: none; border-top: 1px solid #eeeeee;">
+                                <p style="font-size: 12px; color: #cccccc; text-align: center;">Este correo fue generado automáticamente. Por favor, no respondas.</p>
+                                <p style="font-size: 12px; color: #cccccc; text-align: center;">© 2025 UP2Play. Todos los derechos reservados.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+                """
+                .formatted(
+                        user.getNombreUsuario() != null ? user.getNombreUsuario() : "usuario");
 
         emailService.enviarCorreo(user.getEmail(), subject, body);
     }
@@ -452,14 +510,23 @@ public class UsuarioService {
             if (user.getEmail().equals(input.getEmail())) {
                 user.setPassword(passwordEncoder.encode(input.getPassword()));
                 usuarioRepository.save(user);
+                // Enviar notificacion
+                notificacionService.crearNotificacionPerfil(
+                        "Tu constraseña se ha cambiado correctamente.",
+                        "Tu contraseña se ha cambiado correctamente. Si no has realizado este cambio, contacta con nuestro equipo de soporte de inmediato para proteger tu cuenta.",
+                        LocalDateTime.now(),
+                        EstadoNotificacion.fromValue("ACTUALIZADO"),
+                        null,
+                        user);
 
             }
+
         }
 
     }
 
     // Cambiar contraseña desde el perfil
-    public void cambiarPasswordPerfil(Long usuarioId, CambiarPasswordDto input) {
+    public void cambiarPasswordPerfil(Long usuarioId, CambiarPasswordDto input) throws MessagingException {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
@@ -470,7 +537,25 @@ public class UsuarioService {
 
         // Guardar la nueva contraseña encriptada
         usuario.setPassword(passwordEncoder.encode(input.getNewPassword()));
+        notificacionService.cambioDeContraseña(usuario);
         usuarioRepository.save(usuario);
+
+        // Enviar notificacion
+
+        notificacionService.crearNotificacionPerfil(
+                "Tu constraseña se ha cambiado correctamente.",
+                "Tu contraseña se ha cambiado correctamente. Si no has realizado este cambio, contacta con nuestro equipo de soporte de inmediato para proteger tu cuenta.",
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("ACTUALIZADO"),
+                null,
+                usuario);
+
+    }
+
+    // Obtiene un usuario por su ID
+    public Usuario getUsuarioById(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con id " + id + " no encontrado"));
     }
 
 }

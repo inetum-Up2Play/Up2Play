@@ -10,8 +10,7 @@ public record PerfilDtoResp(
         String telefono,
         SexoAElegir sexo,
         LocalDate fechaNacimiento,
-        String idiomas, // ajusta a List<String> si corresponde
+        String idiomas,
         String email,
-        int imagenPerfil // ajusta el tipo si corresponde
-) {
+        int imagenPerfil) {
 }

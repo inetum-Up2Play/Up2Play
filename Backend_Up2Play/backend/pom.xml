@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
+		<version>3.4.2</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.Up2Play</groupId>
@@ -58,6 +58,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>31.1.0</version>
 		</dependency>
 
 		<dependency>
@@ -129,7 +135,7 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
-		
+
 		<!-- Paquet amb serveis de testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -148,10 +154,10 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-  			<scope>test</scope>
+			<scope>test</scope>
 		</dependency>
 
-		
+
 		<!-- *** Módulo específico Oracle: imprescindible *** -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -218,7 +224,7 @@
 				<configuration>
 					<useModulePath>false</useModulePath>
 					<systemPropertyVariables>
-					<spring.profiles.active>test</spring.profiles.active>
+						<spring.profiles.active>test</spring.profiles.active>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>

@@ -1,5 +1,25 @@
 @use 'styles/variables' as vars;
 
+:host {
+  font-family: #{vars.$work-sans};
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: #{vars.$montserrat};
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: #{vars.$work-sans};
+}
+
 /* Contenedor del mapa */
 #map {
   width: 100%;
@@ -7,14 +27,13 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin-top: 20px;
   position: relative;
 }
 
 
 .error-map {
-  background-color: #faf5f5; 
-  border: 2px solid #d9534f; 
+  background-color: #faf5f5;
+  border: 2px solid #d9534f;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,15 +50,25 @@
 
 
 h1 {
-    font-family: vars.$montserrat;
+  font-family: vars.$montserrat;
 }
 
 :host ::ng-deep .p-card {
-  border: 1px solid rgb(202, 202, 202,0.3);
+  border: 1px solid rgb(202, 202, 202, 0.3);
   box-shadow: 0 4px 4px rgba(168, 168, 168, 0.2);
 }
 
+::ng-deep .p-tooltip-text {
+  background-color: vars.$verde-oliva !important;
+}
 
+::ng-deep .p-tooltip-bottom .p-tooltip-arrow {
+  border-bottom-color: vars.$verde-oliva;
+}
 
+/* En tu archivo CSS del componente */
+:host ::ng-deep .p-progressbar-value {
+        
+        background: vars.$verde-oliva;
 
-
+}

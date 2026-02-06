@@ -1,5 +1,5 @@
-import { Router, RouterModule } from '@angular/router';
-import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed } from '@angular/core';
+import { Router, RouterLink, RouterModule } from '@angular/router';
+import { Component, ElementRef, inject, ViewChild, Renderer2, OnInit, signal, computed, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { MenubarModule } from 'primeng/menubar';
@@ -10,7 +10,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { Menu } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 
 import { AuthService } from '../../services/auth/auth-service';
@@ -18,19 +17,22 @@ import { UserDataService } from '../../services/auth/user-data-service';
 import { AvatarPipe } from '../../../shared/pipes/avatar-pipe';
 import { PerfilService } from '../../services/perfil/perfil-service';
 
-
 interface MenuItemPages {
   label: string;
   icon: string;
-  route?: string;
+  route?: string;      
+  command?: () => void; 
+  styleClass?: string; 
+
   children?: MenuItem[];
 }
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule, AvatarPipe],
+  imports: [RouterModule, RouterLink, MenubarModule, RippleModule, BadgeModule, AvatarModule, InputTextModule, DrawerModule, ButtonModule, MenuModule, AvatarPipe],
   templateUrl: './header.html',
   styleUrls: ['./header.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class Header implements OnInit {
@@ -38,19 +40,30 @@ export class Header implements OnInit {
   private authService = inject(AuthService);
   private userDataService = inject(UserDataService);
   public perfilService = inject(PerfilService);
-
-  visible = false;
-
   private renderer = inject(Renderer2); // Para manipular el DOM
   private document = inject(DOCUMENT); // Referencia al Documento
 
+  // Signal que almacena el email una sola vez y no cambia más
+  private userEmailSignal = signal<string>('');
+  public userAvatar = signal<number | null>(null);
+
+  visible = false;
+
   items: MenuItemPages[] = [
-    { label: 'Inicio', icon: 'pi pi-home', route: '/' },
-    { label: 'Actividades', icon: 'pi pi-bookmark', route: '/actividades' },
-    { label: 'Pagos', icon: 'pi pi-chart-line', route: '/pagos' },
-    { label: 'Notificaciones', icon: 'pi pi-users', route: '/notificaciones' },
-    { label: 'Historial', icon: 'pi pi-calendar', route: '/historial' },
-    { label: 'Mi Cuenta', icon: 'pi pi-cog', route: '/my-account' },
+    { label: 'Inicio', icon: 'ph-fill ph-house', route: '/' },
+    { label: 'Actividades', icon: 'ph-fill ph-bookmark-simple', route: '/actividades' },
+    { label: 'Pagos', icon: 'ph-fill ph-cardholder', route: '/pagos/historial-pagos' },
+    { label: 'Notificaciones', icon: 'ph-fill ph-bell', route: '/notificaciones' },
+    { label: 'Historial', icon: 'ph-fill ph-clock-counter-clockwise', route: '/historial' },
+    { label: 'Mi Cuenta', icon: 'ph-fill ph-user', route: '/perfil' },
+{ 
+      label: 'Cerrar sesión', 
+      icon: 'ph-fill ph-sign-out', 
+      styleClass: 'logout-item', 
+      command: () => {
+        this.authService.logout(); 
+      } 
+    },
   ];
 
   trackByLabel(item: MenuItemPages) {
@@ -62,11 +75,7 @@ export class Header implements OnInit {
     return exact ? this.router.url === route : this.router.url.startsWith(route);
   }
 
-  // Signal que almacena el email una sola vez y no cambia más
-  private userEmailSignal = signal<string>('');
-  public userAvatar = signal<number | null>(null);
-
-  // avatarItems se construye usando el email almacenado en el signal
+/*    // avatarItems se construye usando el email almacenado en el signal
   public avatarItems = computed<MenuItem[]>(() => {
     const email = this.userEmailSignal();
     return [
@@ -74,7 +83,7 @@ export class Header implements OnInit {
         label: email && email.length > 0 ? email : 'Mi Cuenta',
         icon: 'pi pi-envelope',
         command: () => {
-          this.router.navigate(['/my-account']);
+          this.router.navigate(['/perfil']);
         }
       },
       {
@@ -85,7 +94,7 @@ export class Header implements OnInit {
         }
       }
     ];
-  })
+  })  */
 
   ngOnInit(): void {
     // Obtiene el email la primera vez

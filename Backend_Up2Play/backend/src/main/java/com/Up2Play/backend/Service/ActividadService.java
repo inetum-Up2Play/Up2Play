@@ -2,6 +2,8 @@ package com.Up2Play.backend.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.stereotype.Service;
 
 import com.Up2Play.backend.DTO.ActividadDto;
@@ -9,38 +11,56 @@ import com.Up2Play.backend.DTO.EditarActividadDto;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoCreadas;
 import com.Up2Play.backend.DTO.Respuestas.ActividadDtoResp;
 import com.Up2Play.backend.DTO.Respuestas.UsuarioDto;
+import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorDesapuntarse;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEditar;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
+import com.Up2Play.backend.Exception.ErroresActividad.PagosNoHabilitadosException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreador;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEliminar;
-import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoEncontradoException;
 import com.Up2Play.backend.Model.Actividad;
+import com.Up2Play.backend.Model.Notificacion;
+import com.Up2Play.backend.Model.Pago;
 import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Model.enums.EstadoActividad;
+import com.Up2Play.backend.Model.enums.EstadoNotificacion;
 import com.Up2Play.backend.Model.enums.NivelDificultad;
 import com.Up2Play.backend.Repository.ActividadRepository;
+import com.Up2Play.backend.Repository.PagoRepository;
 import com.Up2Play.backend.Repository.UsuarioRepository;
+import com.stripe.exception.StripeException;
 
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
 @Service
 public class ActividadService {
+
     private ActividadRepository actividadRepository;
     private UsuarioRepository usuarioRepository;
+    private NotificacionService notificacionService;
+    private StripeConnectService stripeConnectService;
+    private PagoRepository pagoRepository;
 
-    public ActividadService(ActividadRepository actividadRepository, UsuarioRepository usuarioRepository) {
+    public ActividadService(ActividadRepository actividadRepository,
+            UsuarioRepository usuarioRepository,
+            NotificacionService notificacionService,
+            StripeConnectService stripeConnectService,
+            PagoRepository pagoRepository) {
         this.actividadRepository = actividadRepository;
         this.usuarioRepository = usuarioRepository;
+        this.notificacionService = notificacionService;
+        this.stripeConnectService = stripeConnectService;
+        this.pagoRepository = pagoRepository;
     }
 
-    // CRUD
-
-    // Crear Actividad
     public Actividad crearActividad(ActividadDto input, Usuario usuario) {
 
         Actividad act = new Actividad();
@@ -83,6 +103,13 @@ public class ActividadService {
         act.setDeporte(input.getDeporte());
 
         double precio = Double.parseDouble(input.getPrecio());
+        if (precio > 0) {
+            if (usuario.getPagosHabilitados() == null || !usuario.getPagosHabilitados()
+                    || usuario.getStripeAccountId() == null) {
+                throw new PagosNoHabilitadosException(
+                        "No puedes crear actividades de pago sin configurar Stripe en tu perfil.");
+            }
+        }
         act.setPrecio(precio);
 
         act.setEstado(EstadoActividad.fromValue("Pendiente"));
@@ -92,17 +119,27 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         act.getUsuarios().add(usuario);
         usuarioApuntado.getActividadesUnidas().add(act);
-
         Actividad actGuardada = actividadRepository.save(act);
+
+        Set<Usuario> usuariosUnidos = act.getUsuarios();
+        notificacionService.crearNotificacion(
+                "La actividad " + act.getNombre() + " se ha creado correctamente.",
+                "La actividad " + act.getNombre()
+                        + " se ha registrado con éxito en el sistema. Ahora puedes revisar los detalles, realizar modificaciones si lo deseas y esperar a que otros participantes se unan al evento.",
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("CREADA"),
+                act,
+                usuariosUnidos,
+                usuario);
 
         return actGuardada;
     }
 
-    // Listado todas las actividades
-
-    @Transactional // (readOnly = true)
-    public List<ActividadDtoResp> getAllActividades() {
+    @Transactional
+    public List<ActividadDtoResp> getAllActividadesPendientes() {
         return actividadRepository.findAll().stream()
+                .peek(this::actualizarEstadoSiNecesario)
+                .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
                 .map(a -> new ActividadDtoResp(
                         a.getId(),
                         a.getNombre(),
@@ -121,26 +158,76 @@ public class ActividadService {
                 .toList();
     }
 
-    // Lista de actividades creadas por un usuario
-    @Transactional // (readOnly = true)
-    public List<ActividadDtoCreadas> getActividadesCreadas(Usuario usuario) {
-        return actividadRepository.findByUsuarioCreador(usuario).stream().map(a -> new ActividadDtoCreadas(
-                a.getId(),
-                a.getNombre(),
-                a.getDescripcion(),
-                a.getFecha() != null ? a.getFecha().toString() : null,
-                a.getUbicacion(),
-                a.getDeporte(),
-                a.getNivel() != null ? a.getNivel().name() : null,
-                a.getNumPersInscritas(),
-                a.getNumPersTotales(),
-                a.getEstado() != null ? a.getEstado().name() : null,
-                a.getPrecio(),
-                a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
-                a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null)).toList();
+    @Transactional
+    public List<ActividadDtoResp> getAllActividades() {
+        return actividadRepository.findAll().stream()
+                .peek(this::actualizarEstadoSiNecesario)
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
     }
 
-    // Lista de actividades a las que un usuario está apuntado
+    @Transactional
+    public List<ActividadDtoCreadas> getActividadesCreadas(Usuario usuario) {
+        return actividadRepository.findByUsuarioCreador(usuario).stream()
+                .peek(this::actualizarEstadoSiNecesario)
+                .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
+                .map(a -> new ActividadDtoCreadas(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+    }
+
+    @Transactional
+    public List<ActividadDtoResp> getActividadesApuntadasPendientes(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        return usuario.getActividadesUnidas().stream()
+                .peek(this::actualizarEstadoSiNecesario)
+                .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+
+    }
+
     @Transactional
     public List<ActividadDtoResp> getActividadesApuntadas(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -165,7 +252,6 @@ public class ActividadService {
 
     }
 
-    // Lista de actividades a las que un usuario no esta apuntado
     @Transactional
     public List<ActividadDtoResp> getActividadesNoApuntadas(Long usuarioId) {
 
@@ -173,6 +259,8 @@ public class ActividadService {
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         return actividadRepository.findAll().stream()
+                .peek(this::actualizarEstadoSiNecesario)
+                .filter(act -> act.getEstado().equals(EstadoActividad.PENDIENTE))
                 .filter(act -> !usuario.getActividadesUnidas().contains(act))
                 .map(a -> new ActividadDtoResp(
                         a.getId(),
@@ -192,35 +280,41 @@ public class ActividadService {
                 .toList();
     }
 
-    // Lista actividad por id
     @Transactional
     public ActividadDtoResp getActividad(Long id) {
-        return actividadRepository.findById(id)
-                .map(a -> new ActividadDtoResp(
-                        a.getId(),
-                        a.getNombre(),
-                        a.getDescripcion(),
-                        a.getFecha() != null ? a.getFecha().toString() : null,
-                        a.getUbicacion(),
-                        a.getDeporte(),
-                        a.getNivel() != null ? a.getNivel().name() : null,
-                        a.getNumPersInscritas(),
-                        a.getNumPersTotales(),
-                        a.getEstado() != null ? a.getEstado().name() : null,
-                        a.getPrecio(),
-                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
-                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
-                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+        Actividad act = actividadRepository.findById(id)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+
+        actualizarEstadoSiNecesario(act);
+
+        return new ActividadDtoResp(
+                act.getId(),
+                act.getNombre(),
+                act.getDescripcion(),
+                act.getFecha() != null ? act.getFecha().toString() : null,
+                act.getUbicacion(),
+                act.getDeporte(),
+                act.getNivel() != null ? act.getNivel().name() : null,
+                act.getNumPersInscritas(),
+                act.getNumPersTotales(),
+                act.getEstado() != null ? act.getEstado().name() : null,
+                act.getPrecio(),
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
+                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
     }
 
-    // Editar actividad
-    public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) {
+    @Transactional
+    public Actividad editarActividad(Long id, EditarActividadDto input, Long idUsuario) throws MessagingException {
         Actividad act = actividadRepository.findById(id)
                 .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
 
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        if (!EstadoActividad.PENDIENTE.equals(act.getEstado())) {
+            throw new ErrorEditar("Solo se pueden editar actividades pendientes");
+        }
 
         if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
             if (input.getNombre() != null && input.getNombre().length() > 64) {
@@ -255,9 +349,32 @@ public class ActividadService {
             } else
                 act.setNumPersTotales(num_personas_totales);
 
+            if (act.getEstado().equals(EstadoActividad.COMPLETADA)) {
+
+                throw new ActividadCompletadaException("No puedes editar una actividad que ya ha sido completada!");
+            }
+
             act.setDeporte(input.getDeporte());
 
             Actividad actEditada = actividadRepository.save(act);
+
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+                    "La actividad " + act.getNombre() + "  ha sido modificada.",
+                    "Se ha cambiado algún detalle de la actividad '" + act.getNombre()
+                            + "'. Revisa la información de la actividad para confirmar que sigues interesado en asistir al evento.",
+                    LocalDateTime.now(),
+                    EstadoNotificacion.fromValue("EDITADA"),
+                    act,
+                    usuariosUnidos,
+                    usuario);
+
+            List<String> emails = act.getUsuarios().stream()
+                    .map(Usuario::getEmail)
+                    .toList();
+
+            notificacionService.ActividadEditada(act, emails);
+
             return actEditada;
         } else {
 
@@ -266,28 +383,113 @@ public class ActividadService {
 
     }
 
-    public void deleteActividad(Long idActividad, Long idUsuario) {
-    Actividad act = actividadRepository.findById(idActividad)
-            .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
-    Usuario usuario = usuarioRepository.findById(idUsuario)
-            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+    @Transactional
+    public void deleteActividad(Long idActividad, Long idUsuario) throws MessagingException {
+        Actividad act = actividadRepository.findById(idActividad)
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-    if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
-
-        for (Usuario inscrito : act.getUsuarios()) {
-            inscrito.getActividadesUnidas().remove(act);
-            usuarioRepository.save(inscrito);
+        if (act.getEstado() != EstadoActividad.PENDIENTE) {
+            throw new ErrorEliminar("No se puede eliminar una actividad completada");
         }
 
-        act.getUsuarios().clear();
+        if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
 
-        actividadRepository.delete(act);
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+                    "La actividad " + act.getNombre() + " ha sido cancelada.",
+                    "La actividad " + act.getNombre()
+                            + " ha sido cancelada.  Lamentamos los inconvenientes y esperamos verte en próximas actividades.",
+                    LocalDateTime.now(),
+                    EstadoNotificacion.fromValue("CANCELADA"),
+                    act,
+                    usuariosUnidos,
+                    usuario);
 
-    } else {
-        throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
+            List<String> emails = act.getUsuarios().stream()
+                    .map(Usuario::getEmail)
+                    .toList();
+
+            List<Pago> pagos = pagoRepository.findByActividad(act);
+            if (!pagos.isEmpty()) {
+
+                pagoRepository.deleteAll(pagos);
+
+            }
+
+            notificacionService.ActividadEliminada(act, emails);
+
+            for (Notificacion n : act.getNotificaciones()) {
+                n.setActividad(null);
+            }
+            act.getNotificaciones().clear();
+
+            for (Usuario inscrito : act.getUsuarios()) {
+                inscrito.getActividadesUnidas().remove(act);
+                usuarioRepository.save(inscrito);
+            }
+
+            act.getUsuarios().clear();
+
+            actividadRepository.delete(act);
+
+        } else {
+            throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
+        }
     }
-}
 
+    @Transactional
+    public void deleteActividadUsu(Long idActividad, Long idUsuario) throws MessagingException {
+        Actividad act = actividadRepository.findById(idActividad)
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+        if (usuario.getId().equals(act.getUsuarioCreador().getId())) {
+
+            Set<Usuario> usuariosUnidos = act.getUsuarios();
+            notificacionService.crearNotificacion(
+                    "La actividad " + act.getNombre() + " ha sido cancelada.",
+                    "La actividad " + act.getNombre()
+                            + " ha sido cancelada.  Lamentamos los inconvenientes y esperamos verte en próximas actividades.",
+                    LocalDateTime.now(),
+                    EstadoNotificacion.fromValue("CANCELADA"),
+                    act,
+                    usuariosUnidos,
+                    usuario);
+
+            List<String> emails = act.getUsuarios().stream()
+                    .map(Usuario::getEmail)
+                    .toList();
+
+            List<Pago> pagos = pagoRepository.findByActividad(act);
+            if (!pagos.isEmpty()) {
+
+                pagoRepository.deleteAll(pagos);
+
+            }
+
+            notificacionService.ActividadEliminada(act, emails);
+
+            for (Notificacion n : act.getNotificaciones()) {
+                n.setActividad(null);
+            }
+            act.getNotificaciones().clear();
+
+            for (Usuario inscrito : act.getUsuarios()) {
+                inscrito.getActividadesUnidas().remove(act);
+                usuarioRepository.save(inscrito);
+            }
+
+            act.getUsuarios().clear();
+
+            actividadRepository.delete(act);
+
+        } else {
+            throw new UsuarioCreadorEliminar("Solo el usuario creador puede eliminar la actividad");
+        }
+    }
 
     // Unirse a Actividad
     @Transactional
@@ -301,16 +503,18 @@ public class ActividadService {
 
         if (!act.getUsuarios().contains(usuario)) {
 
-            act.setNumPersInscritas(act.getNumPersInscritas() + 1);
-
-            if (act.getNumPersInscritas() > act.getNumPersTotales()) {
+            if (act.getNumPersInscritas() >= act.getNumPersTotales()) {
 
                 throw new MaximosParticipantes("Se ha alcanzado el numero maximo de participantes en esta actividad");
             } else {
-                act.getUsuarios().add(usuario);
-                usuario.getActividadesUnidas().add(act);
-                act.getUsuarios().add(usuario);
 
+                if (act.getEstado() != EstadoActividad.PENDIENTE) {
+                    throw new ActividadCompletadaException("No se puede unir a una actividad completada");
+                } else {
+                    act.getUsuarios().add(usuario);
+                    usuario.getActividadesUnidas().add(act);
+                    act.setNumPersInscritas(act.getUsuarios().size());
+                }
             }
 
         } else {
@@ -319,6 +523,16 @@ public class ActividadService {
         }
 
         usuarioRepository.save(usuario);
+
+        notificacionService.crearNotificacionPerfil(
+                "¡Te has inscrito a  " + act.getNombre() + "!",
+                "¡Te has inscrito a  " + act.getNombre()
+                        + "! Revisa los detalles del evento y prepárate para disfrutar. Te notificaremos si hay cambios importantes.",
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("INSCRITO"),
+                act,
+                usuario);
+
         return new ActividadDtoResp(
                 act.getId(),
                 act.getNombre(),
@@ -378,7 +592,6 @@ public class ActividadService {
 
     }
 
-    // Desapuntarse a Actividad
     @Transactional
     public ActividadDtoResp desapuntarActividad(Long idActividad, Long idUsuario) {
 
@@ -392,20 +605,59 @@ public class ActividadService {
 
             if (!act.getUsuarioCreador().equals(usuario)) {
 
-                act.getUsuarios().remove(usuario);
-                usuario.getActividadesUnidas().remove(act);
-                act.setNumPersInscritas(act.getNumPersInscritas() - 1);
+                if (act.getEstado() != EstadoActividad.PENDIENTE) {
+                    throw new ErrorDesapuntarse("No puedes desapuntarte de una actividad en curso o completada.");
+                } else {
+                    act.getUsuarios().remove(usuario);
+                    usuario.getActividadesUnidas().remove(act);
+                    act.setNumPersInscritas(act.getUsuarios().size());
+                }
 
             } else {
                 throw new UsuarioCreador("El usuario creador no puede desapuntarse de la actividad");
             }
 
-        } else {
-
-            throw new UsuarioNoApuntadoException("El usuario no está apuntado a esta actividad");
         }
 
+        if (act.getPrecio() > 0) {
+            LocalDateTime fechaLimite = act.getFecha().minusHours(24);
+
+            if (LocalDateTime.now().isBefore(fechaLimite)) {
+
+                String paymentIntentId = obtenerPaymentIdDeInscripcion(idActividad, idUsuario);
+
+                if (paymentIntentId == null) {
+                    throw new RuntimeException("No se encontró el registro de pago para esta inscripción.");
+                }
+
+                try {
+                    stripeConnectService.crearReembolso(paymentIntentId, act.getUsuarioCreador().getStripeAccountId());
+                } catch (StripeException e) {
+                    if ("balance_insufficient".equals(e.getCode())) {
+                        throw new RuntimeException(
+                                "No se pudo procesar el reembolso: fondos insuficientes en la cuenta del organizador.");
+                    }
+                    throw new RuntimeException("Error al procesar el reembolso con Stripe: " + e.getMessage());
+                }
+            }
+        }
+
+        notificacionService.crearNotificacionPerfil(
+                "Te has desapuntado de " + act.getNombre() + ".",
+                "Has cancelado tu inscripción en la actividad " + act.getNombre()
+                        + ". Esperamos verte en otras actividades próximamente.",
+                LocalDateTime.now(),
+                EstadoNotificacion.fromValue("DESAPUNTADO"),
+                act,
+                usuario);
+
+        act.getUsuarios().remove(usuario);
+        usuario.getActividadesUnidas().remove(act);
+        act.setNumPersInscritas(act.getUsuarios().size());
+
         usuarioRepository.save(usuario);
+        actividadRepository.save(act);
+
         return new ActividadDtoResp(
                 act.getId(),
                 act.getNombre(),
@@ -418,36 +670,38 @@ public class ActividadService {
                 act.getNumPersTotales(),
                 act.getEstado() != null ? act.getEstado().name() : null,
                 act.getPrecio(),
-                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getId() : null,
-                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getNombreUsuario() : null,
-                act.getUsuarioCreador() != null ? act.getUsuarioCreador().getEmail() : null);
-
+                act.getUsuarioCreador().getId(),
+                act.getUsuarioCreador().getNombreUsuario(),
+                act.getUsuarioCreador().getEmail());
     }
 
-    // Lista usuarios apuntados a una actividad
+    private String obtenerPaymentIdDeInscripcion(Long idActividad, Long idUsuario) {
+        return pagoRepository.findStripeIdByUsuarioAndActividad(idUsuario, idActividad)
+                .orElse(null);
+    }
+
     public List<UsuarioDto> getUsuariosApuntados(Long idActividad) {
         Actividad actividad = actividadRepository.findById(idActividad)
-            .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
-        
+                .orElseThrow(() -> new ActividadNoEncontrada("Actividad no encontrada"));
+
         return actividad.getUsuarios()
-        .stream()
-        .map(u -> new UsuarioDto(
-                u.getId(),
-                u.getEmail(),
-                u.getNombreUsuario(),
-                u.getRol()
-            ))
-            .toList();
+                .stream()
+                .map(u -> new UsuarioDto(
+                        u.getId(),
+                        u.getEmail(),
+                        u.getNombreUsuario(),
+                        u.getRol()))
+                .toList();
     }
-    
-    // Lista actividades a las que un usuario está apuntad y no ha llegado la fecha ni está cancelado
+
     @Transactional
     public List<ActividadDtoResp> getActividadesApuntadasEnCurso(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         return usuario.getActividadesUnidas().stream()
-         .filter(act -> act.getEstado() == EstadoActividad.PENDIENTE
-                    && act.getFecha().isAfter(LocalDateTime.now()))
+                .peek(this::actualizarEstadoSiNecesario)
+                .filter(act -> act.getEstado() == EstadoActividad.PENDIENTE
+                        && act.getFecha().isAfter(LocalDateTime.now()))
                 .map(a -> new ActividadDtoResp(
                         a.getId(),
                         a.getNombre(),
@@ -467,31 +721,79 @@ public class ActividadService {
 
     }
 
-    // Lista actividades por deporte
     @Transactional
     public List<ActividadDtoResp> getActividadesNoApuntadasPorDeporte(Long usuarioId, String deporte) {
-    Usuario usuario = usuarioRepository.findById(usuarioId)
-            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
-    return actividadRepository.findAll().stream()
-            .filter(act -> !usuario.getActividadesUnidas().contains(act))
-            .filter(act -> act.getDeporte().equalsIgnoreCase(deporte))
-            .map(a -> new ActividadDtoResp(
-                    a.getId(),
-                    a.getNombre(),
-                    a.getDescripcion(),
-                    a.getFecha() != null ? a.getFecha().toString() : null,
-                    a.getUbicacion(),
-                    a.getDeporte(),
-                    a.getNivel() != null ? a.getNivel().name() : null,
-                    a.getNumPersInscritas(),
-                    a.getNumPersTotales(),
-                    a.getEstado() != null ? a.getEstado().name() : null,
-                    a.getPrecio(),
-                    a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
-                    a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
-                    a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null
-            ))
-            .toList();
-}
+        return actividadRepository.findAll().stream()
+                .peek(this::actualizarEstadoSiNecesario)
+                .filter(act -> !usuario.getActividadesUnidas().contains(act))
+                .filter(act -> act.getDeporte().equalsIgnoreCase(deporte))
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+    }
+
+    private EstadoActividad calcularEstado(Actividad actividad) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime inicio = actividad.getFecha();
+
+        if (ahora.isBefore(inicio)) {
+            return EstadoActividad.PENDIENTE;
+        }
+
+        if (ahora.isBefore(inicio.plusHours(12))) {
+            return EstadoActividad.EN_CURSO;
+        }
+
+        return EstadoActividad.COMPLETADA;
+    }
+
+    private void actualizarEstadoSiNecesario(Actividad actividad) {
+        EstadoActividad estadoActual = actividad.getEstado();
+        EstadoActividad estadoCalculado = calcularEstado(actividad);
+
+        if (estadoActual != estadoCalculado) {
+            actividad.setEstado(estadoCalculado);
+            actividadRepository.save(actividad);
+        }
+    }
+
+    @Transactional
+    public List<ActividadDtoResp> getActividadesPasadasPorUsuario(Long usuarioId) {
+        var now = java.time.LocalDateTime.now();
+        return actividadRepository
+                .findByUsuarios_IdAndFechaBeforeOrderByFechaDesc(usuarioId, now)
+                .stream()
+                .map(a -> new ActividadDtoResp(
+                        a.getId(),
+                        a.getNombre(),
+                        a.getDescripcion(),
+                        a.getFecha() != null ? a.getFecha().toString() : null,
+                        a.getUbicacion(),
+                        a.getDeporte(),
+                        a.getNivel() != null ? a.getNivel().name() : null,
+                        a.getNumPersInscritas(),
+                        a.getNumPersTotales(),
+                        a.getEstado() != null ? a.getEstado().name() : null,
+                        a.getPrecio(),
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getId() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getNombreUsuario() : null,
+                        a.getUsuarioCreador() != null ? a.getUsuarioCreador().getEmail() : null))
+                .toList();
+    }
 }

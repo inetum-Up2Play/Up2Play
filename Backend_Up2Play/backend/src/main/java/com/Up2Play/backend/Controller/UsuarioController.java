@@ -24,10 +24,11 @@ import com.Up2Play.backend.Model.Usuario;
 import com.Up2Play.backend.Repository.UsuarioRepository;
 import com.Up2Play.backend.Service.UsuarioService;
 
-//Controlador REST para operaciones CRUD de usuarios. Incluye endpoints que conectan con Angular en localhost:4200) pueda hacer peticiones a este backend.
+import jakarta.mail.MessagingException;
+
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4201")
 public class UsuarioController {
 
     // Servicio que contiene la lógica para trabajar con usuarios
@@ -35,9 +36,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
 
-
     // Constructor que inyecta el servicio de usuarios.
-    
     public UsuarioController(UsuarioService usuarioService, UsuarioRepository usuarioRepository) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
@@ -58,39 +57,57 @@ public class UsuarioController {
 
     // Cambiar contraseña usuario en perfil
     @PutMapping("/cambiar-password")
-    public ResponseEntity<?> cambiarPassword(@AuthenticationPrincipal UserDetails principal, @RequestBody CambiarPasswordDto cambiarPasswordDto) {
+    public ResponseEntity<?> cambiarPassword(@AuthenticationPrincipal UserDetails principal,
+            @RequestBody CambiarPasswordDto cambiarPasswordDto) throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
         usuarioService.cambiarPasswordPerfil(usuario.getId(), cambiarPasswordDto);
-        return  ResponseEntity.ok(Map.of("message", "Se ha cambiado la contraseña correctamente"));
+        return ResponseEntity.ok(Map.of("message", "Se ha cambiado la contraseña correctamente"));
     }
 
     // Elimina un usuario por ID
     @DeleteMapping("/eliminarUsuario")
-    public void deleteUsuario(@AuthenticationPrincipal UserDetails principal) {
+    public void deleteUsuario(@AuthenticationPrincipal UserDetails principal) throws MessagingException {
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
         usuarioService.deleteUsuario(usuario.getId());
     }
 
-    //Obtiene el usuario autenticado actual ("/usuarios/me")
+    // Obtiene el usuario autenticado actual ("/usuarios/me")
     @GetMapping("/me")
     public ResponseEntity<UsuarioDto> usuario(@AuthenticationPrincipal UserDetails principal) {
 
         String email = principal.getUsername();
         Usuario usuario = usuarioRepository.findByEmail(email)
-            .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
-        
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+
         UsuarioDto usuarioDto = new UsuarioDto(
-            usuario.getId(),
-            usuario.getEmail(),
-            usuario.getNombreUsuario(),
-            usuario.getRol()
-        );
+                usuario.getId(),
+                usuario.getEmail(),
+                usuario.getNombreUsuario(),
+                usuario.getRol(),
+                usuario.getPagosHabilitados());
         return ResponseEntity.ok(usuarioDto);
+    }
+
+    // Obtiene un usuario específico por ID (Público o protegido según necesites)
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioDto> getUsuarioById(@PathVariable Long id) {
+
+        Usuario usuario = usuarioService.getUsuarioById(id);
+
+        UsuarioDto dto = new UsuarioDto(
+                usuario.getId(),
+                usuario.getEmail(),
+                usuario.getNombreUsuario(),
+                usuario.getRol());
+
+        dto.setStripeAccountId(usuario.getStripeAccountId());
+
+        return ResponseEntity.ok(dto);
     }
 
 }

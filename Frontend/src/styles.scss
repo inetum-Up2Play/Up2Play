@@ -1,242 +1,173 @@
-/* 
+/*
 The styles added here would be global styles to the project.
-Here has to be imported the other style files (from the src/styles/)
 */
 
 @use "./tailwind.css";
 @use "primeicons/primeicons.css";
-
 @use 'styles/variables' as vars;
 @use 'styles/mixins' as mix;
-
 @use 'sass:color';
 
-/* Contenedor del overlay del menú (styleClass="mobile-menu") */
-.mobile-menu.p-menu {
-  /* — Apariencia del panel — */
-  background-color: color.change(vars.$verde-oscuro, $alpha: 0.90); // blanco con 15% de transparencia
-  color: vars.$verde-oscuro;
-  border: 1px solid color.change(vars.$verde-oscuro, $alpha: 0.25);
-  border-radius: 12px;
-  font-family: vars.$montserrat;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: .02em;
-  /* tracking */
-  text-align: right;
-
-  /* (Opcional) Para que el popup pueda ser más estrecho y se adapte al contenido */
-  min-width: 0 !important;
-  width: fit-content;
-  /* o max-content si lo prefieres */
-  max-width: 90vw;
-  /* evita desbordes en móvil */
+/* =========================================
+   1. VARIABLES DE MARCA (COLORES BASE)
+   ========================================= */
+:root {
+  /* Paleta de Colores Principal */
+  --brand-verde-claro: #B1DF75;
+  --brand-verde-oliva: #3D6C3F;
+  --brand-verde-oscuro: #152614;
+  --brand-blanco: #F7F7F7;
+  --brand-hover: rgb(230, 230, 230);
+  /* Colores de Estado / Auxiliares */
+  --brand-error: #8B0000;
+  /* Interpolación de SASS a CSS Var */
+  /* Variaciones con Opacidad (para fondos seleccionados) */
+  --brand-verde-claro-alpha: rgba(177, 223, 117, 0.54);
+  --brand-focus-alpha: rgba(177, 177, 177, 0.26);
+  --brand-selected-focus-alpha: rgba(128, 180, 60, 0.29);
 }
 
-/* Lista interior: un poco de aire y separación */
-.mobile-menu .p-menu-list {
-  padding: .5rem;
-  gap: .25rem;
-}
-
-/* Cada item (contenedor y link) alineado a la izquierda y con bordes suaves */
-.mobile-menu .p-menu-item-content {
-  border-radius: 8px;
-  text-align: right;
-}
-
-.mobile-menu .p-menu-item-link {
-  color: vars.$blanco;
-  justify-content: flex-end;
-  text-align: right;            /* por si hay contenido multilínea */
-}
-
-
-/* ESTILOS PARA EL HEADER GENERAL */
-.p-drawer {
-  --p-drawer-background: #3D6C3F;
-}
-
-.layout-menu {
-    background-color: vars.$verde-oscuro !important;
-}
-
-.layout-menu li:hover, a:hover {
-  color: vars.$verde-oliva !important;
-}
-
-//Pone una imagen de fondo de la app
+/* =========================================
+   2. ESTILOS GENERALES DE LA APP
+   ========================================= */
 .header-background-active {
-    background-image: url('/assets/background/fondo_ok.webp'); /* Reemplaza con la URL correcta */
-    background-size: cover; /* Cubre todo el viewport */
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* Opcional: para que el fondo no se mueva al hacer scroll */
+  background-image: url('/assets/background/fondo_ok.webp');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-//Hace que el contenido de la app aparezca luego del header
 .header-offset-active {
-    padding-top: var(--header-h); /* Usamos el valor calculado en el header.component.ts */
+  padding-top: var(--header-h);
 }
 
-/* Forzar recorte con "..." en DayGrid */
-.fc .fc-daygrid-event {
-  overflow: hidden;
+.p-toast {
+  z-index: 2000 !important;
 }
 
-.fc .fc-event-main {
-  min-width: 0; /* clave cuando hay flex/inline-flex */
+/* =========================================
+   3. BLOQUES DE COMPONENTES PRIME NG
+   ========================================= */
+
+/* --- BLOQUE: SELECT & MULTISELECT --- */
+.p-multiselect,
+.p-select {
+  /* Fondos y Estados */
+  --p-multiselect-option-selected-background: var(--brand-verde-claro-alpha) !important;
+  --p-multiselect-option-focus-background: var(--brand-focus-alpha);
+  --p-multiselect-option-selected-focus-background: var(--brand-selected-focus-alpha);
+  --p-select-option-selected-background: var(--brand-verde-claro-alpha) !important;
+  --p-select-option-focus-background: var(--brand-focus-alpha);
+  --p-select-option-selected-focus-background: var(--brand-selected-focus-alpha);
+
+  /* Textos */
+  --p-multiselect-option-selected-color: var(--brand-verde-oscuro) !important;
+  --p-multiselect-option-selected-focus-color: var(--brand-verde-oliva) !important;
+  --p-select-option-selected-color: var(--brand-verde-oscuro) !important;
+  --p-select-option-selected-focus-color: var(--brand-verde-oliva) !important;
+
+  /* Checkbox interno */
+  --p-checkbox-checked-background: var(--brand-verde-oliva) !important;
+  --p-checkbox-checked-hover-background: var(--brand-verde-oliva) !important;
+  --p-checkbox-checked-border-color: var(--brand-verde-oliva);
 }
 
-.fc .fc-event-title {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;   /* 1 línea */
-  max-width: 100%;
+/* --- BLOQUE: DATEPICKER --- */
+.p-datepicker {
+  /* Icono Input */
+  --p-datepicker-input-icon-color: var(--brand-verde-oliva);
+
+  /* Estructura Principal */
+  --p-datepicker-panel-background: var(--brand-blanco);
+  --p-datepicker-panel-color: var(--brand-verde-oscuro);
+  --p-datepicker-header-background: var(--brand-blanco);
+  --p-datepicker-header-color: var(--brand-verde-oscuro);
+
+  /* Calendario: Días */
+  --p-datepicker-week-day-color: var(--brand-verde-oscuro);
+  --p-datepicker-date-color: var(--brand-verde-oscuro);
+  --p-datepicker-date-hover-background: var(--brand-hover);
+  /* Calendario: Selección */
+  --p-datepicker-date-selected-background: var(--brand-verde-claro);
+  --p-datepicker-date-selected-color: var(--brand-verde-oscuro);
+
+  /* Selectores de Año/Mes */
+  --p-datepicker-select-month-color: var(--brand-verde-oscuro);
+  --p-datepicker-select-month-hover-background: var(--brand-hover);
+  --p-datepicker-select-year-color: var(--brand-verde-oscuro);
+  --p-datepicker-select-year-hover-background: var(--brand-hover);
+
+  /* Botonera Inferior */
+  --p-datepicker-today-background: rgb(200, 200, 200);
+  /* Mantenido gris neutro */
+  --p-datepicker-today-color: var(--brand-verde-oscuro);
+  --p-button-ghost-secondary-color: var(--brand-verde-oscuro);
 }
 
-/* (Opcional) si alguna vista de horas se usara en el futuro */
-.fc .fc-timegrid-event .fc-event-title {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* --- BLOQUE: DATATABLE (FILTROS) --- */
+/* Atacamos todas las posibles clases del overlay del filtro */
+.p-datatable,
+.p-datatable-filter-overlay,
+.p-column-filter-overlay {
+  /* 1. EL CONTENEDOR FLOTANTE (POPOVER) */
+  --p-datatable-filter-overlay-popover-background: var(--brand-blanco);
+  --p-datatable-filter-overlay-popover-color: var(--brand-verde-oscuro);
+  --p-datatable-filter-overlay-popover-border-color: var(--brand-verde-oliva);
+  --p-datatable-filter-overlay-popover-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --p-datatable-filter-overlay-popover-padding: 1rem;
+  --p-datatable-filter-overlay-popover-gap: 0.5rem;
+  --p-datatable-filter-overlay-popover-border-radius: 6px;
+
+  /* 2. LÍNEAS Y SEPARADORES */
+  --p-datatable-filter-rule-border-color: var(--brand-verde-oliva);
+  --p-datatable-filter-constraint-separator-border-color: var(--brand-verde-oliva);
+
+  /* 3. ITEMS DE LA LISTA (TEXTOS Y FONDOS) */
+  --p-datatable-filter-constraint-color: var(--brand-verde-oscuro);
+  /* Estado: Hover / Focus */
+  --p-datatable-filter-constraint-focus-background: var(--brand-hover);
+  --p-datatable-filter-constraint-focus-color: var(--brand-verde-oscuro);
+
+  /* Estado: Seleccionado */
+  --p-datatable-filter-constraint-selected-background: var(--brand-verde-claro);
+  --p-datatable-filter-constraint-selected-color: var(--brand-verde-oscuro);
+  /* Estado: Seleccionado + Focus */
+  --p-datatable-filter-constraint-selected-focus-background: var(--brand-verde-claro);
+  --p-datatable-filter-constraint-selected-focus-color: var(--brand-verde-oscuro);
+
+  /* 4. DROPDOWNS INTERNOS (SI LOS HUBIERA) */
+  --p-datatable-filter-overlay-select-background: var(--brand-blanco);
+  --p-datatable-filter-overlay-select-border-color: var(--brand-verde-oliva);
+  --p-datatable-filter-overlay-select-color: var(--brand-verde-oscuro);
 }
 
-.calendar-wrap {
-  padding: 18px;
-  border-radius: 22px;
-  background:
-    radial-gradient(800px 400px at 10% -10%, rgba(255,255,255,0.9), rgba(255,255,255,0.75)),
-    linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.6);
-  box-shadow: 0 20px 50px rgba(19, 31, 53, 0.15);
-}
-
-.fc {
-  --fc-page-bg-color: transparent;
-  --fc-border-color: rgba(16,24,40,0.08);
-  --fc-toolbar-text-color: #0f172a;
-
-  /* Botones pastel con glass */
-  --fc-button-bg-color: #3D6C3F;
-  --fc-button-border-color: #3D6C3F;
-  --fc-button-text-color: #ffffff;
-  --fc-button-hover-bg-color: #3f7a41;
-  --fc-button-hover-border-color: #3f7a41;
-  --fc-button-active-bg-color: #3f7a41;
-  --fc-button-active-border-color: #3f7a41;
-
-  --fc-event-text-color: #152614 ;
-  --fc-today-bg-color: rgba(65, 70, 66, 0.062);
-
-}
-
-.fc .fc-toolbar-title {
-  font-family: vars.$montserrat;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  font-size: 1.2rem;
-  font-weight: 800;
-}
-.fc .fc-button {
-  border-radius: 12px;
-  padding: 0.4rem 0.85rem;
-  box-shadow: 0 8px 20px rgba(52, 58, 52, 0.25);
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-.fc .fc-button:hover { transform: translateY(-1px); }
-
-.fc .fc-col-header-cell {
-  background:rgba(65, 70, 66, 0.16);
-  backdrop-filter: blur(6px);
-  color: #1d1e1f !important;
-  font-weight: 700;
-    .layout-menu li:hover, a:hover {
-      color: #1d1e1f !important;
-    }
-}
-
-.fc .fc-daygrid-day {
-  background: rgba(255,255,255,0.45);
-}
-
-.fc .fc-daygrid-day-number {
-  color: #0f172a;
-  font-weight: 700;
-}
-
-.fc .fc-daygrid-event {
-  border-radius: 5%;
-  border-left: 5px solid #3f9c44 !important;
-  border: none;
-  padding: 4px 10px;
-  font-weight: 500;
-  margin: 2px 4px;
-  background: #b1df75be;
-  backdrop-filter: blur(6px);
-}
-.fc .fc-event {
-  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-.fc .fc-event:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 30px rgba(0,0,0,0.12);
-}
-
-/* Selección glass */
-.fc .fc-highlight {
-  background: rgba(14, 165, 233, 0.18);
-  backdrop-filter: blur(4px);
-}
-
-
-
+/* =========================================
+   4. CLASES PERSONALIZADAS (DIÁLOGOS)
+   ========================================= */
 .cd-eliminar {
-
   .p-dialog {
-
     padding: 2em !important;
-
   }
 
   .p-confirmdialog-reject-button {
-
-    color: vars.$verde-oscuro;
-    background-color: vars.$blanco;
+    color: var(--brand-verde-oscuro);
+    background-color: var(--brand-blanco);
     border: none;
 
     &:hover {
-      background-color: vars.$blanco !important;
-      border: none !important;
-      color: vars.$verde-oscuro !important;
-      border-color: none !important;    
+      background-color: var(--brand-blanco) !important;
+      color: var(--brand-verde-oscuro) !important;
       transform: scale(1.05) !important;
-
     }
-    
   }
 
   .p-confirmdialog-accept-button {
-
-    background-color: vars.$msg-error-oscuro;
+    background-color: var(--brand-error);
     border: none;
 
     &:hover {
-      background-color: vars.$msg-error-oscuro !important;
-      border: none !important;
-      border-color: none !important;    
+      background-color: var(--brand-error) !important;
       transform: scale(1.05) !important;
-
     }
   }
 }
-
-
-
-
-
-
-

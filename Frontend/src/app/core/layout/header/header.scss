@@ -1,60 +1,143 @@
+@use 'sass:color';
 @use 'styles/variables' as vars;
 
-p-menubar {
-  background-color: vars.$verde-oliva;
+/* Al usar ViewEncapsulation.None, no necesitamos :host ni ::ng-deep */
+p-menubar.contenedor-menubar {
+  background-color: vars.$verde-oliva !important;
+  border-radius: 0;
+  padding: 1rem;
 }
 
 .logo {
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
+  padding: 0 0.5rem;
   cursor: pointer;
 }
 
-.menu-items a :hover {
+/* Estilos específicos dentro del contenedor del menubar */
+.contenedor-menubar {
+
+  /* Sobrescribimos el fondo del enlace para que sea transparente */
+  .p-menubar-item-link {
     background-color: transparent !important;
+
+    &:hover {
+      background-color: transparent !important;
+    }
+  }
+
+  // Hover menú del avatar
+  .menu-items .li {
+    color: vars.$blanco;
+  }
+
+  .boton-hamburguesa .pi-bars {
+    font-size: 2rem !important;
+    color: white !important;
+  }
 }
 
-.menu-items li {
+
+/* Drawer específico del header */
+.drawer-header {
+  /* Forzamos la posición top para evitar conflictos */
+  top: auto !important;
+  --p-drawer-background: #3D6C3F;
+  color: white !important;
+  letter-spacing: .03em;
   padding-right: 2rem;
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
-    
-  .active {
-    color: vars.$verde-oliva;
-    background-color: vars.$amarillo;
+  border: none !important;
+  box-shadow: inset 0px 15px 15px -10px rgba(0, 0, 0, 0.4) !important;
+
+  li {
+    margin: 0.5rem;
+    border-radius: 6px; 
+    transition: background-color 0.2s ease; 
+    border-radius: 50px !important; 
+
+    a, button {
+        border-radius: 50px !important; 
+    }
+
+    a, button:hover {
+        border-radius: 50px !important; 
+    }
+
+    .active {
+      background-color: rgba(255, 255, 255, 0.3) !important;
+      font-weight: bold;
+      i {
+          color: vars.$amarillo !important;
+        }
+    }
     
 
-    
+    &:hover {      
+      color: white !important;
+      border-radius: 50px !important; 
+
+      background-color: rgba(255, 255, 255, 0.2) !important;
+      
+
+  }
+}
+
+/* Menú del Avatar (styleClass="mobile-menu") */
+.mobile-menu.p-menu {
+  background-color: color.change(vars.$verde-oscuro, $alpha: 0.90);
+  color: vars.$verde-oscuro;
+  border: 1px solid color.change(vars.$verde-oscuro, $alpha: 0.25);
+  border-radius: 12px;
+  font-family: vars.$montserrat;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: .03em;
+  text-align: right;
+
+  min-width: 0 !important;
+  width: fit-content;
+  max-width: 90vw;
+
+  .p-menu-list {
+    padding: .5rem;
+    gap: .25rem;
   }
 
-  :hover {
-    color: vars.$verde-oliva;
-    background-color: vars.$amarillo;
-    
+  .p-menu-item-content {
+    border-radius: 8px;
+    text-align: right;
 
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .p-menu-item-link {
+    color: vars.$blanco;
+    justify-content: flex-end;
   }
 }
 
+/* Estilos adicionales */
+.layout-menu {
+  background-color: vars.$verde-oscuro !important;
 
-.menu-items h2, li {
-  color: vars.$blanco;
-
+  li:hover,
+  a:hover {
+    color: vars.$verde-oliva !important;
+  }
+}
 }
 
-.drawer-style .p-drawer {
-  top: auto !important;
-  margin-top: 4rem !important;
-}
+/* En header.scss */
 
+.logout-item {
+  font-weight: bold;
 
-:host ::ng-deep .boton-hamburguesa .pi-bars {
-  font-size: 2rem !important;
-}
+  i {
+    color: vars.$msg-error-claro !important;
+  }
 
-:host ::ng-deep .contenedor-menubar {
-  padding: 1.5rem !important;
-}
-
-:host ::ng-deep .p-drawer {
-  top: auto !important;
+  &:hover {
+    background-color: rgba(139, 0, 0, 0.1) !important;
+  }
 }

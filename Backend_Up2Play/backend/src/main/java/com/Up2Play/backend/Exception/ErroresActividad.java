@@ -50,8 +50,38 @@ public class ErroresActividad {
         }
     }
 
-        public static class LimiteCaracteres extends RuntimeException {
+    public static class LimiteCaracteres extends RuntimeException {
         public LimiteCaracteres(String message) {
+            super(message);
+        }
+    }
+
+    public static class ActividadCompletadaException extends RuntimeException {
+        public ActividadCompletadaException(String message) {
+            super(message);
+        }
+    }
+
+    public static class ErrorDesapuntarse extends RuntimeException {
+        public ErrorDesapuntarse(String message) {
+            super(message);
+        }
+    }
+
+    public static class ErrorEditar extends RuntimeException {
+        public ErrorEditar(String message) {
+        }
+    }
+
+    public static class PagosNoHabilitadosException extends RuntimeException {
+        public PagosNoHabilitadosException(String message) {
+
+            super(message);
+        }
+    }
+
+    public static class ErrorEliminar extends RuntimeException {
+        public ErrorEliminar(String message) {
             super(message);
         }
     }

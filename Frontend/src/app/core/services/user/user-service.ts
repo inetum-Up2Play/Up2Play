@@ -18,7 +18,7 @@ export class UserService {
 
   private readonly http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/usuarios';
+  private baseUrl = 'http://localhost:8082/usuarios';
   private logoutTimer: any;
 
   //Método obtener datos de usuario
@@ -31,6 +31,12 @@ export class UserService {
       })
     );
   }
+
+  getUsuarioPorId(id: number): Observable<Usuario> {
+    // Asegúrate de que tu Backend (UsuarioController) tenga un endpoint GET /usuarios/{id}
+    // y que devuelva el objeto Usuario CON el stripeAccountId
+    return this.http.get<Usuario>(`${this.baseUrl}/${id}`);
+}
 
   //Método actualizar datos del ususario (cambiar contraseña)
   cambiarContraseñaPerfil(payload: CambiarPasswordDto): Observable<any> {

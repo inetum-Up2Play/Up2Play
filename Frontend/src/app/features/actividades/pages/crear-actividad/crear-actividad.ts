@@ -1,15 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
 import { TextareaModule } from 'primeng/textarea';
@@ -23,6 +18,9 @@ import { Header } from '../../../../core/layout/header/header';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
 import { Footer } from '../../../../core/layout/footer/footer';
+import { UserService } from '../../../../core/services/user/user-service';
+import { CommonModule } from '@angular/common';
+import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
 
 @Component({
   selector: 'app-crear-actividad',
@@ -41,17 +39,22 @@ import { Footer } from '../../../../core/layout/footer/footer';
     InputIconModule,
     SelectModule,
     KeyFilterModule,
+    CommonModule,
+    IconDeportePipe
   ],
   templateUrl: './crear-actividad.html',
   styleUrl: './crear-actividad.scss',
 })
-export class CrearActividad {
+
+export class CrearActividad implements OnInit {
   private messageService = inject(MessageService);
   private actService = inject(ActService);
   private errorService = inject(ErrorService);
+  private userService = inject(UserService);
 
- actividadForm: FormGroup;
- formSubmitted = false;
+  actividadForm: FormGroup;
+  formSubmitted = false;
+  pagosHabilitados = signal(false);
 
   private pad2(n: number): string {
     return n < 10 ? `0${n}` : `${n}`;
@@ -79,13 +82,75 @@ export class CrearActividad {
       ubicacion: ['', [Validators.required, prohibidasValidator()]],
       deporte: [null, Validators.required],
       nivel: [null, Validators.required],
-      numPersTotales: [null, [Validators.required, Validators.min(1)]],
+      numPersTotales: [1, [Validators.required, Validators.min(1), Validators.max(999)]],
       precio: [0, Validators.required], // valor por defecto
     });
   }
 
+
+  private clamp(val: number, min: number, max: number): number {
+    return Math.min(Math.max(val, min), max);
+  }
+
+  private stepOf(ctrlName: string): number {
+    // en caso de querer custom step por control
+    return 1;
+  }
+
+  getCtrl(ctrlName: string) {
+    return this.actividadForm.get(ctrlName)!;
+  }
+
+  isAtMin(ctrlName: string): boolean {
+    const c = this.getCtrl(ctrlName);
+    const min = 1;
+    return (Number(c.value) || 0) <= min;
+  }
+
+  isAtMax(ctrlName: string): boolean {
+    const c = this.getCtrl(ctrlName);
+    const max = 999;
+    return (Number(c.value) || 0) >= max;
+  }
+
+  increment(ctrlName: string): void {
+    const c = this.getCtrl(ctrlName);
+    const min = 1, max = 999, step = this.stepOf(ctrlName);
+    const current = Number(c.value) || 0;
+    const next = this.clamp(current + step, min, max);
+    c.setValue(next);
+    c.markAsDirty();
+    c.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+  }
+
+  decrement(ctrlName: string): void {
+    const c = this.getCtrl(ctrlName);
+    const min = 1, max = 999, step = this.stepOf(ctrlName);
+    const current = Number(c.value) || 0;
+    const next = this.clamp(current - step, min, max);
+    c.setValue(next);
+    c.markAsDirty();
+    c.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+  }
+
+  get descripcionLength(): number {
+    return (this.actividadForm.get('descripcion')?.value?.length ?? 0);
+  }
+
+
   onSubmit(): void {
     this.formSubmitted = true;
+    const raw = this.actividadForm.value;
+    const precio = Number(raw.precio ?? 0);
+
+    if (precio > 0 && !this.pagosHabilitados()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Pagos no configurados',
+        detail: 'Debes habilitar los pagos en tu perfil para crear actividades con coste.',
+      });
+      return; // Detenemos la ejecución aquí
+    }
 
     if (this.actividadForm.invalid) {
       // Marca todos los controles como tocados → dispara validaciones en la vista
@@ -102,8 +167,6 @@ export class CrearActividad {
       });
       return;
     }
-
-    const raw = this.actividadForm.value;
 
     // Defensive: asegura que son Date
     const fechaDate: Date =
@@ -122,7 +185,6 @@ export class CrearActividad {
       precio: Number(raw.precio ?? 0),
     };
 
-    console.log('Payload listo para API:', payload);
 
     // Llamada a servicio
     this.actService.crearActividad(payload).subscribe({
@@ -157,6 +219,10 @@ export class CrearActividad {
     });
   }
 
+  cancelar() {
+    this.actService['router'].navigate(['/actividades']);
+  }
+
   isInvalid(controlName: string): boolean {
     const control = this.actividadForm.get(controlName);
     return !!(control && control.invalid && control.touched);
@@ -172,55 +238,63 @@ export class CrearActividad {
   nivelEscogido: string | undefined;
 
   ngOnInit() {
+    // Cargamos el estado del usuario
+    this.userService.getUsuario().subscribe({
+      next: (user) => {
+        this.pagosHabilitados.set(user?.pagosHabilitados ?? false);
+      }
+    });
+
     // Inicializar deportes
     this.deportes = [
+      { name: 'Ajedrez' },
+      { name: 'Artes Marciales' },
       { name: 'Atletismo' },
+      { name: 'Badminton' },
       { name: 'Balonmano' },
       { name: 'Basquet' },
       { name: 'Béisbol' },
       { name: 'Billar' },
       { name: 'Boxeo' },
-      { name: 'Críquet' },
       { name: 'Ciclismo' },
-      { name: 'Escalada' },
-      { name: 'Esgrima' },
-      { name: 'Esquí' },
-      { name: 'Futbol' },
-      { name: 'Gimnasia' },
-      { name: 'Golf' },
-      { name: 'Hockey' },
-      { name: 'Artes Marciales' },
-      { name: 'Natación' },
-      { name: 'Patinaje' },
-      { name: 'Ping Pong' },
-      { name: 'Piragüismo' },
-      { name: 'Rugby' },
-      { name: 'Remo' },
-      { name: 'Snowboard' },
-      { name: 'Surf' },
-      { name: 'Tenis' },
-      { name: 'Triatlón' },
-      { name: 'Voleibol' },
-      { name: 'Waterpolo' },
-      { name: 'Ajedrez' },
-      { name: 'Badminton' },
       { name: 'Crossfit' },
+      { name: 'Críquet' },
       { name: 'Danza Deportiva' },
       { name: 'Entrenamiento de fuerza' },
       { name: 'Equitación' },
+      { name: 'Escalada' },
+      { name: 'Esgrima' },
+      { name: 'Esquí' },
       { name: 'Fútbol Americano' },
+      { name: 'Futbol' },
+      { name: 'Frisbee' },
+      { name: 'Gimnasia' },
+      { name: 'Golf' },
+      { name: 'Hockey' },
       { name: 'Lucha Libre' },
       { name: 'Motocross' },
+      { name: 'Natación' },
       { name: 'Padel' },
       { name: 'Parkour' },
-      { name: 'Skateboarding' },
-      { name: 'Squash' },
-      { name: 'Tiro con Arco' },
-      { name: 'Frisbee' },
-      { name: 'Senderismo' },
-      { name: 'Running' },
+      { name: 'Patinaje' },
       { name: 'Petanca' },
+      { name: 'Ping Pong' },
+      { name: 'Piragüismo' },
+      { name: 'Remo' },
+      { name: 'Rugby' },
+      { name: 'Running' },
+      { name: 'Senderismo' },
+      { name: 'Skateboarding' },
+      { name: 'Snowboard' },
+      { name: 'Squash' },
+      { name: 'Surf' },
+      { name: 'Tenis' },
+      { name: 'Tiro con Arco' },
+      { name: 'Triatlón' },
+      { name: 'Voleibol' },
+      { name: 'Waterpolo' }
     ];
+
     this.niveles = [
       { name: 'Iniciado' },
       { name: 'Principiante' },

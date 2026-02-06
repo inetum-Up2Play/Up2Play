@@ -1,0 +1,58 @@
+@use 'styles/variables' as vars;
+
+h1 {
+    font-family: vars.$montserrat;
+    color: vars.$verde-oscuro;
+}
+
+i{
+   color: vars.$verde-oliva; 
+}
+
+.icon-plus {
+    color: vars.$blanco;
+}
+
+span {
+    font-family: vars.$montserrat;
+}
+
+:host ::ng-deep #crear_actividad {
+    background-color: vars.$verde-oliva !important;
+    color: vars.$blanco !important;
+    width: fit-content;
+    border: none;
+    border-radius: 20px;
+}
+
+:host ::ng-deep .btn-editar:hover {
+    background-color: #80b43c;
+    border: none;
+    color: vars.$verde-oscuro;
+}
+
+:host ::ng-deep .card {
+    max-width: 22rem;
+    overflow: hidden;
+    font-family: vars.$work-sans;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2),
+                0 4px 6px -4px rgba(0, 0, 0, 0.2);
+}
+
+:host ::ng-deep .p-carousel-indicator-active button {
+    background-color: #3D6C3F !important;
+    opacity: 1; /* Asegura que se vea sólido */
+}
+
+:host ::ng-deep .boton-ver-mas p-button {
+    border-radius: 20px !important;
+    border-color: vars.$verde-oliva !important;
+}
+
+:host ::ng-deep .boton-ver-mas {
+    border-color: vars.$verde-oliva; 
+    border-radius: 20px;
+    color: vars.$verde-oliva;
+}
+
+

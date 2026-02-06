@@ -1,10 +1,9 @@
 package com.Up2Play.backend.DTO;
 
-
 //DTO para guardar la nueva contraseña
- 
+
 public class CambiarPasswordDto {
-    
+
     private String oldPassword;
     private String newPassword;
 
@@ -32,6 +31,3 @@ public class CambiarPasswordDto {
         this.newPassword = newPassword;
     }
 }
-    
-    
-   

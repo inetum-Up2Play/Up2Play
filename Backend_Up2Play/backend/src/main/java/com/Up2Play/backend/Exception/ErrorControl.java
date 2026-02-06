@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.Up2Play.backend.DTO.ErrorResponseDto;
+import com.Up2Play.backend.Exception.ErroresActividad.ActividadCompletadaException;
 import com.Up2Play.backend.Exception.ErroresActividad.ActividadNoEncontrada;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorDesapuntarse;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEditar;
+import com.Up2Play.backend.Exception.ErroresActividad.ErrorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.FechaYHora;
 import com.Up2Play.backend.Exception.ErroresActividad.LimiteCaracteres;
 import com.Up2Play.backend.Exception.ErroresActividad.MaximosParticipantes;
@@ -17,6 +21,7 @@ import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEditar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioCreadorEliminar;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioNoApuntadoException;
 import com.Up2Play.backend.Exception.ErroresActividad.UsuarioYaApuntadoException;
+import com.Up2Play.backend.Exception.ErroresNotificacion.NotificacionNoEncontrada;
 import com.Up2Play.backend.Exception.ErroresPerfil.EditarPerfilDenegadoException;
 import com.Up2Play.backend.Exception.ErroresPerfil.PerfilNoEncontradoException;
 import com.Up2Play.backend.Exception.ErroresUsuario.CodigoExpiradoException;
@@ -33,29 +38,25 @@ import com.Up2Play.backend.Exception.ErroresUsuario.UsuarioNoVerificadoException
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@RestControllerAdvice // hace que escuche excepciones de controller y vevuelva un JSON
+@RestControllerAdvice
 public class ErrorControl {
 
-        // Mail ya registrado
-        @ExceptionHandler(CorreoRegistradoException.class) // para que el metodo se ejecute automáticamente si ocurre
-                                                           // una
-                                                           // excepción del tipo especificado
+        @ExceptionHandler(CorreoRegistradoException.class)
+
         public ResponseEntity<ErrorResponseDto> handleCorreoRegistrado(
-                        CorreoRegistradoException ex, // spring recoge el error ocurrido
-                        HttpServletRequest request // recoge la petición http que ha hecho el usuario, en este caso un
-                                                   // POST a
-                                                   // /register
+                        CorreoRegistradoException ex,
+                        HttpServletRequest request
+
         ) {
                 ErrorResponseDto body = new ErrorResponseDto(
-                                "CORREO_REGISTRADO", // código de error que he decidido definir
-                                ex.getMessage(), // el mensaje que vendrá en la excepción
-                                HttpStatus.CONFLICT.value(), // código del error - ERROR 409
-                                request.getRequestURI(), // la URL que el usuario estaba intentando acceder
-                                Instant.now() // fecha y hora actual
-                );
-                return ResponseEntity // devuelve la respuesta http
-                                .status(HttpStatus.CONFLICT) // con estado del error
-                                .body(body); // y el cuepo del error creado arriba
+                                "CORREO_REGISTRADO",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
         }
 
         // Nombre usuario ya registrado
@@ -267,6 +268,22 @@ public class ErrorControl {
                                 .body(body);
         }
 
+        // Sin permiso para editar perfil
+        @ExceptionHandler(ActividadCompletadaException.class)
+        public ResponseEntity<ErrorResponseDto> handleActividadCompletada(
+                        ActividadCompletadaException ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ACTIVIDAD_COMPLETADA",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
         @ExceptionHandler(UsuarioNoApuntadoException.class)
         public ResponseEntity<ErrorResponseDto> handleUsuarioNoApuntado(
                         UsuarioNoApuntadoException ex,
@@ -299,7 +316,7 @@ public class ErrorControl {
         }
 
         @ExceptionHandler(UsuarioCreador.class)
-        public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorDesapuntar(
+        public ResponseEntity<ErrorResponseDto> handleUsuarioCreador(
                         UsuarioCreador ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
@@ -315,7 +332,7 @@ public class ErrorControl {
 
         @ExceptionHandler(UsuarioCreadorEliminar.class)
         public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorEliminar(
-                        UsuarioCreador ex,
+                        UsuarioCreadorEliminar ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
                                 "CREADOR_NO_ELIMINAR",
@@ -330,7 +347,7 @@ public class ErrorControl {
 
         @ExceptionHandler(UsuarioCreadorEditar.class)
         public ResponseEntity<ErrorResponseDto> handleUsuarioCreadorEditar(
-                        UsuarioCreador ex,
+                        UsuarioCreadorEditar ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
                                 "CREADOR_NO_EDITAR",
@@ -377,7 +394,7 @@ public class ErrorControl {
         // Sin permiso para editar perfil
         @ExceptionHandler(EditarPerfilDenegadoException.class)
         public ResponseEntity<ErrorResponseDto> handleEditarPerfilDenegado(
-                       EditarPerfilDenegadoException ex,
+                        EditarPerfilDenegadoException ex,
                         HttpServletRequest request) {
                 ErrorResponseDto body = new ErrorResponseDto(
                                 "EDITAR_PERFIL_DENEGADO",
@@ -387,6 +404,67 @@ public class ErrorControl {
                                 Instant.now());
                 return ResponseEntity
                                 .status(HttpStatus.FORBIDDEN)
+                                .body(body);
+        }
+
+        @ExceptionHandler(NotificacionNoEncontrada.class)
+        public ResponseEntity<ErrorResponseDto> handleNotificacionNoEncontrada(
+                        NotificacionNoEncontrada ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "NOTIFICACION_NO_ENCONTRADA",
+                                ex.getMessage(),
+                                HttpStatus.NOT_FOUND.value(), // ERROR 404
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.NOT_FOUND)
+                                .body(body);
+        }
+
+        // Error al desapuntarse despues de completada
+        @ExceptionHandler(ErrorDesapuntarse.class)
+        public ResponseEntity<ErrorResponseDto> handleErrorDesapuntarse(
+                        ErrorDesapuntarse ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ERROR_DESAPUNTARSE",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        @ExceptionHandler(ErrorEliminar.class)
+        public ResponseEntity<ErrorResponseDto> handleErrorEliminar(
+                        ErrorEliminar ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ERROR_ELIMINAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body(body);
+        }
+
+        @ExceptionHandler(ErrorEditar.class)
+        public ResponseEntity<ErrorResponseDto> handleErrorEditar(
+                        ErrorEditar ex,
+                        HttpServletRequest request) {
+                ErrorResponseDto body = new ErrorResponseDto(
+                                "ERROR_EDITAR",
+                                ex.getMessage(),
+                                HttpStatus.CONFLICT.value(), // ERROR 409
+                                request.getRequestURI(),
+                                Instant.now());
+                return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
                                 .body(body);
         }
 

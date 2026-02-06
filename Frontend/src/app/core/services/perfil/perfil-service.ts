@@ -1,24 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
-import { Perfil } from '../../../shared/models/Perfil';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { Perfil } from '../../../shared/models/Perfil';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class PerfilService {
   private readonly http = inject(HttpClient);
-  private router = inject(Router);
-  private baseUrl = 'http://localhost:8080/perfil';
-  private logoutTimer: any;
+  private baseUrl = 'http://localhost:8082/perfil';
 
+  // Signal para saber el avatar que usa el usuario
   public avatarGlobal = signal<number>(0);
 
   //Método obtener datos de perfil
@@ -31,7 +25,7 @@ export class PerfilService {
     );
   }
     
-  //Método actualizar datos del perfil
+  // Enviando un idUsuario, actualiza datos del perfil
   editarPerfil(id: number, payload: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/editarPerfil/${id}`, payload).pipe(
       map(() => true),
@@ -42,6 +36,7 @@ export class PerfilService {
     );
   }
 
+  // Enviando un idUsuario, devuelve su perfil
   getPerfilByUserId(id: number): Observable<Perfil>{
     return this.http.get<Perfil>(`${this.baseUrl}`+`/obtenerPerfil/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -50,9 +45,4 @@ export class PerfilService {
       })
     );
   }
-
-
-
-
-
 }

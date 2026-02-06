@@ -10,25 +10,21 @@ import org.springframework.stereotype.Repository;
 
 import com.Up2Play.backend.Model.Usuario;
 
-//Repositorio JPA para operaciones CRUD en la entidad Usuario.
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    //Busca un usuario por su email.
     Optional<Usuario> findByEmail(String email);
 
-    //Busca usuario por nombre
     Optional<Usuario> findByNombreUsuario(String nombreUsuario);
 
-    //Verifica si existe un usuario con el email dado.
     boolean existsByEmail(String email);
 
-    // Busca un usuario por su código de verificación.
     Optional<Usuario> findByVerificationCode(String verificationCode);
+
+    Optional<Usuario> findByStripeAccountId(String stripeAccountId);
 
     @Modifying
     @Query("DELETE FROM VerificationToken t WHERE t.usuario.id = :usuarioId")
     int deleteToken(@Param("usuarioId") Long usuarioId);
-
 
 }

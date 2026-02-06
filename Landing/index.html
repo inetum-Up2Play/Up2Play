@@ -17,46 +17,50 @@
 </head>
 
 <body>
-    <header id="header" class="text-white w-full xl:min-h-[90vh] xl:supports-[height:100svh]:min-h-[100svh]">
-        <section id="header-section" class="header-section flex justify-between items-center fixed top-0 right-0 w-full py-4 xl:px-8 xl:py-8 z-60">
+    <!-- ===== HEADER ===== -->
+    <header id="header" class="text-white w-full xl:min-h-[90vh] xl:supports-[height:100svh]:min-h-svh">
+        <section id="header-section"
+            class="header-section flex justify-between items-center fixed top-0 right-0 w-full xl:px-8 z-60">
             <div class="shrink-0 px-4">
-                <a href="#"><img class="w-36 md:w-[220px] (y h-auto)" src="assets/images/logos/logo.png" alt="Logo de Up2Play">
+                <a href="#"><img class="w-36 md:w-[220px] (y h-auto)" src="assets/images/logos/logo.png"
+                        alt="Logo de Up2Play">
                 </a>
             </div>
-            
+
+            <!-- ===== Navbar ===== -->
             <nav id="menu" class="hidden xl:flex relative">
-                <ul class="flex xl:flex-row flex-col items-center justify-center font-extrabold
-                            gap-4 md:gap-8 lg:gap-14
-                            text-sm md:text-[1.1rem] lg:text-[1.2rem] 
-                            p-4 xl:p-2 pr-7 lx:pr-0
-                            items-end xl:items-center
-                            whitespace-nowrap">
+                <ul class="flex xl:flex-row flex-col justify-center font-extrabold gap-4 md:gap-8 lg:gap-14
+                            text-sm md:text-[1.1rem] lg:text-[1.2rem] px-4 xl:px-2 pr-7 lx:pr-0
+                            items-end xl:items-center whitespace-nowrap">
                     <li><a href="#section-UP2Play" class="md:hover:underline">¿Qué es UP2Play?</a></li>
                     <li><a href="#section-carousel" class="md:hover:underline">Actividades</a></li>
                     <li><a href="#section-sobre_nosotros" class="md:hover:underline">Sobre Nosotros</a></li>
                     <li><a href="#section-nuestro_equipo" class="md:hover:underline">Equipo</a></li>
                 </ul>
                 <div class="xl:hidden fixed bottom-4 right-0 z-40">
-                    <img src="Assets/images/logos/logo_footer.png" alt="Favicon UP2Play" class="block max-w-full h-auto">
+                    <img src="Assets/images/logos/logo_footer.png" alt="Favicon UP2Play"
+                        class="block max-w-full h-auto">
                 </div>
             </nav>
 
+            <!-- ===== Inicio de sesión ===== -->
             <div class="hidden xl:flex items-center gap-4 pr-6 shrink-0 font-bold">
-                <a href="http://localhost:4200/auth/login">
-                    <button class="iniciar-sesion px-4 py-2 text-sm">
+                <a href="http://localhost:4201/auth/login">
+                    <button class="iniciar-sesion rounded-full px-4 py-2 text-sm">
                         Iniciar Sesión
                     </button>
                 </a>
-                <a href="http://localhost:4200/auth/register">
-                    <button class="registrarse px-4 py-2 text-sm">
+                <a href="http://localhost:4201/auth/register">
+                    <button class="registrarse rounded-full px-4 py-2 text-sm">
                         Registrarse
                     </button>
-                </a>            
+                </a>
             </div>
 
+            <!-- ===== Menú para mobile ===== -->
             <div class="xl:hidden flex space-x-4 items-center px-4 relative z-20">
                 <button class="xl:hidden avatar">
-                    <a href="http://localhost:4200/auth/login">
+                    <a href="http://localhost:4201/auth/login">
                         <img src="assets/images/header/avatarIcon.png" alt="Avatar de usuario"
                             class="w-10 h-10 rounded-full overflow-hidden object-cover" stroke="currentColor">
                     </a>
@@ -73,46 +77,32 @@
         </section>
         <div id="header-spacer" aria-hidden="true"></div>
 
-        <section id="Activa" class="flex flex-col 
-        py-[clamp(2rem,7vh,8rem)]
-        md:py-[clamp(1.5rem,2vh,2rem)]
-        xl:py-[clamp(4rem,12vh,14rem)]
-        2xl:py-[clamp(4rem,18vh,20rem)]
-        items-center bg-center md:bg-top 
-        bg-no-repeat bg-cover h-96">
+        <!-- ===== HERO SECTION ===== -->
+        <section id="Activa" class="flex flex-col py-[clamp(2rem,7vh,8rem)] md:py-[clamp(1.5rem,2vh,2rem)] xl:py-[clamp(4rem,12vh,14rem)] 
+            2xl:py-[clamp(4rem,18vh,20rem)] items-center bg-center md:bg-top bg-no-repeat bg-cover h-96">
             <div class="text-center py-4 px-1 md:py-0">
                 <h1
-                    class="italic leading-tight text-center text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl">
+                    class="mt-8 italic leading-tight text-center text-white font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl">
                     Activa tu vida, <br> conecta con gente
                 </h1>
-                <div class="activa-button p-6 ">
-                    <a href="http://localhost:4200/auth/register">
-                        <button class="md:text-2xl md:hover:scale-105 sahdow-lg transition duration-300">
+                <div class="activa-button p-6">
+                    <a href="http://localhost:4201/auth/register">
+                        <button class="btn-up2 md:text-2xl md:hover:scale-105 sahdow-lg transition duration-300">
                             <i>Únete ahora</i>
-                        </button>                    
+                        </button>
                     </a>
                 </div>
             </div>
         </section>
     </header>
 
-    <section id="section-UP2Play" class=" py-16 lg:py-20 lg:py-16 scroll-mt-22 xl:scroll-mt-38">
-        <div class="
-        container mx-auto max-w-7xl
-        px-4 sm:px-6 lg:px-8
-        grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr]
-        gap-8 lg:gap-10
-        ">
+    <!-- ===== QUÉ ES UP2PLAY ===== -->
+    <section id="section-UP2Play" class=" py-16 lg:py-16 scroll-mt-22 xl:scroll-mt-38">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 
+        lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-8 lg:gap-10">
             <!-- TÍTULO (móvil 1º) | lg: col 2, fila 1 -->
-            <h2 id="up2play-title" class="
-
-        lg:col-start-2 lg:row-start-1
-        text-2xl sm:text-3xl lg:text-4xl lg:text-5xl xl:text-6xl
-        font-extrabold tracking-tight leading-tight
-        text-gray-900 dark:text-black
-        text-center lg:text-left
-
-        ">
+            <h2 id="up2play-title" class="lg:col-start-2 lg:row-start-1 text-2xl sm:text-3xl lg:text-5xl xl:text-6xl
+            font-extrabold tracking-tight leading-tight text-gray-900 dark:text-black text-center lg:text-left">
                 ¿Qué es UP2Play?
             </h2>
 
@@ -124,126 +114,76 @@
             </div>
 
             <!-- CONTENIDO -->
-            <div class="
-                lg:col-start-2 lg:row-start-2
-                flex flex-col lg:grid lg:grid-rows-[1fr_auto]
-                gap-6 lg:gap-8
-                items-center lg:items-start
-            ">
-                <div class="space-y-4 max-w-xl mx-auto lg:mx-0 px-4 lg:px-0 text-justify lg:text-left sm:text-xl break-words">
-                    <p class="font-bold text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">
+            <div class="lg:col-start-2 lg:row-start-2 flex flex-col lg:grid lg:grid-rows-[1fr_auto]
+                gap-6 lg:gap-8 items-center lg:items-start">
+                <div
+                    class="space-y-4 max-w-xl mx-auto lg:mx-0 px-4 lg:px-0 text-justify lg:text-left sm:text-xl wrap-break-word">
+                    <p class="font-bold text-base sm:text-lg lg:text-xl leading-relaxed antialiased wrap-break-words">
                         UP2Play es una aplicación que te conecta con otros deportistas para organizar y
                         disfrutar actividades como fútbol, senderismo y más.
                     </p>
 
-                    <ul class="list-disc pl-5 space-y-2 lg:text-justify break-words">
-                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">Crea o únete a planes
-                            fácilmente.</li>
-                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">Gestiona tus eventos
-                            desde un calendario personalizado.</li>
-                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased break-words">Coordina todo con mapas,
-                            notificaciones y pagos integrados.</li>
+                    <ul class="list-disc pl-5 space-y-2 lg:text-justify wrap-break-words">
+                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased wrap-break-words">
+                            Crea o únete a planes fácilmente.</li>
+                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased wrap-break-words">
+                            Gestiona tus eventos desde un calendario personalizado.</li>
+                        <li class="text-base sm:text-lg lg:text-xl leading-relaxed antialiased wrap-break-words">
+                            Coordina todo con mapas, notificaciones y pagos integrados.</li>
                     </ul>
-                    <a href="http://localhost:4200/auth/register">
+                    <a href="http://localhost:4201/auth/register">
                         <button type="button"
-                            class="lg:text-xl p-4 flex items-center justify-center w-auto lg:w-max mx-auto lg:mx-0 mt-6 lg:mt-12">
+                            class="btn-up2 lg:text-xl p-4 flex items-center justify-center w-auto lg:w-max mx-auto lg:mx-0 mt-6 lg:mt-12">
                             ¡Haz deporte, conoce gente y diviértete!
-                        </button> 
+                        </button>
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-
-    <section id="section-carousel" class="relative scroll-mt-22 xl:scroll-mt-38 py-12 md:py-16 lg:py-20">
+    <!-- ===== CARROUSEL ===== -->
+    <section id="section-carousel" class="relative py-12 md:py-16 lg:py-20">
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 class="
-            text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
+            
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl
             font-extrabold text-white mb-6 tracking-tight text-center">
                 ACTIVIDADES
             </h2>
 
-            <style>
-                [x-cloak] {
-                    display: none !important;
-                }
-
-                .slide-transition {
-                    transition: transform 0.5s ease-in-out;
-                }
-            </style>
-
-            <body class="bg-gray-100">
-                <div class="container mx-auto px-4 py-12">
-                    <div x-data="carousel()" x-init="init()" x-cloak class="relative">
-                        <div class="relative overflow-hidden rounded-lg shadow-xl">
-                            <!-- Track -->
-                            <div class="flex slide-transition"
-                                :style="`transform: translateX(-${currentSlide * slidePercentage}%); transition: transform .4s ease;`">
-                                <template x-for="(slide, index) in slides" :key="slide.id">
-                                    <!-- 1 por fila en sm, 3 por fila en md+ -->
-                                    <div class="w-full md:w-1/3 flex-shrink-0 px-2 py-4">
-                                        <div class="cards overflow-hidden shadow-md h-full bg-white">
-                                            <div class="bg-gray-200 h-48 md:h-64 flex items-center justify-center">
-                                                <img :src="slide.image" :alt="slide.title"
-                                                    class="w-full h-full object-cover" @error="handleImageError(slide)">
-                                            </div>
-                                            <div class="p-4">
-                                                <h3 x-text="slide.title" class="text-xl font-semibold"></h3>
-                                                <p x-text="slide.description" class="text-gray-600 mt-2"></p>
-                                                <a href="http://localhost:4200/auth/login">
-                                                    <button x-text="slide.button"
-                                                        class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg">
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-
-                        <!-- Botón Previous -->
-                        <button @click="prev()"
-                            class="botones-carusel absolute top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md z-10"
-                            style="left: -8%;" :disabled="isAtStart"
-                            :class="{ 'opacity-50 cursor-not-allowed': isAtStart }" aria-label="Anterior">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-
-                        <!-- Botón Next -->
-                        <button @click="next()"
-                            class="botones-carusel absolute top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md z-10"
-                            style="right: -8%;" :disabled="isAtEnd"
-                            :class="{ 'opacity-50 cursor-not-allowed': isAtEnd }" aria-label="Siguiente">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-
-                        <!-- Dots (se agrupan por bloque visible) -->
-                        <div class="flex justify-center mt-4 space-x-3 hidden md:flex">
-                            <template x-for="index in totalPages" :key="index">
-                                <button @click="goTo((index - 1) * visibleSlides)"
-                                    class="botones-carusel-abajo w-2.5 h-2.5 rounded-full transition-transform"
-                                    :class="currentSlide === (index - 1) * visibleSlides ? 'bg-green-500 scale-125' : 'bg-gray-400'"
-                                    :aria-label="`Ir al bloque ${index}`">
-                                </button>
-                            </template>
-                        </div>
+            <div class="carrousel container mx-auto px-4 py-12 relative md:flex-col flex justify-center">
+                
+                <div class="relative overflow-hidden rounded-lg w-[85%] md:w-full">
+                    <!-- TRACK (Se mueve con JS) -->
+                    <div id="carousel-track" class="flex slide-transition">
+                        <!-- LAS CARDS SE GENERAN AQUÍ CON JS -->
                     </div>
                 </div>
-            </body>
+
+                <!-- Botón Previous -->
+                <button id="btn-prev" class="absolute! top-1/2! -translate-y-1/2! bg-white/90! hover:bg-white! rounded-full! w-10! h-10! flex! items-center! justify-center! shadow-lg! z-10! -left-2! md:-left-6! cursor-pointer! transition-all! duration-200! disabled:opacity-50! disabled:cursor-not-allowed!" aria-label="Anterior">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5! w-5! text-gray-700!" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+
+                <!-- Botón Next -->
+                <button id="btn-next" class="absolute! top-1/2! -translate-y-1/2! bg-white/90! hover:bg-white! rounded-full! w-10! h-10! flex! items-center! justify-center! shadow-lg! z-10! -right-2! md:-right-6! cursor-pointer! transition-all! duration-200! disabled:opacity-50! disabled:cursor-not-allowed!" aria-label="Siguiente">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5! w-5! text-gray-700!" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <!-- Dots de navegación -->
+                <div id="carousel-dots" class="justify-center mt-8 space-x-3 hidden md:flex">
+                    <!-- DOTS GENERADOS CON JS -->
+                </div>
+
+            </div>
         </div>
     </section>
 
+    <!-- ===== MISIÓN, VISIÓN Y VALORES ===== -->
     <section class="filosofia-coor py-16 md:bg-[#f7f7f7]">
         <div class="max-w-5xl mx-auto md:rounded-4xl" style="background-color: white;">
             <!-- Rectángulo principal -->
@@ -252,22 +192,13 @@
                 <!-- ===== Fila 1 ===== -->
                 <div class="grid grid-cols-1 md:grid-cols-2 py-4 md:py-0 px-12 md:px-0">
                     <!-- Texto -->
-                    <div id="mision-content" class="
-                    relative overflow-hidden rounded-2xl md:rounded-none ring-1 ring-neutral-200/60
-                    p-8 flex flex-col justify-center min-h-56 md:min-h-72
-                    md:bg-none
-                    before:content-[''] before:absolute before:inset-y-0
-                    before:right-[-8%]         
-                    before:w-[60%]             
-                    before:bg-[url('assets/images/mision-vision-valores/icono_mision_responsivo.webp')]
-                    before:bg-no-repeat before:bg-right
-                    before:bg-[length:100%_auto] /* la imagen llena la capa */
-                    before:opacity-[.26] before:pointer-events-none
-                    md:before:hidden           
-                    ">
-                        <h1 class="
-                        text-4xl xl:text-5xl
-                        font-semibold md:pb-8">Misión</h1>
+                    <div id="mision-content" class="relative overflow-hidden rounded-2xl md:rounded-none ring-1 ring-neutral-200/60
+                    p-8 flex flex-col justify-center min-h-56 md:min-h-72 md:bg-none
+                    before:content-[''] before:absolute before:inset-y-0 before:right-[-8%]         
+                    before:w-[60%] before:bg-[url('assets/images/mision-vision-valores/icono_mision_responsivo.webp')]
+                    before:bg-no-repeat before:bg-right before:bg-size-[100%_auto] 
+                    before:opacity-[.26] before:pointer-events-none md:before:hidden">
+                        <h1 class="text-4xl xl:text-5xl font-semibold md:pb-8">Misión</h1>
                         <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased md:pl-4">
                             Conectar personas a través del deporte, fomentando un estilo de vida activo, accesible y
                             social.
@@ -286,19 +217,12 @@
                     <div class="min-h-56 md:min-h-72 hidden md:flex items-center justify-center">
                         <img src="assets/images/mision-vision-valores/icono vision.svg" alt="Icono de visión">
                     </div>
-                    <div id="vision-content" class="
-                    relative overflow-hidden rounded-2xl md:rounded-none ring-1 ring-neutral-200/60
-                    p-8 flex flex-col justify-center min-h-56 md:min-h-72
-                    md:bg-none
-                    before:content-[''] before:absolute before:inset-y-0
-                    before:right-[-8%]         
-                    before:w-[60%]             
-                    before:bg-[url('assets/images/mision-vision-valores/icono_vision_responsivo.webp')]
-                    before:bg-no-repeat before:bg-right
-                    before:bg-[length:100%_auto] /* la imagen llena la capa */
-                    before:opacity-[.12] before:pointer-events-none
-                    md:before:hidden
-                    ">
+                    <div id="vision-content" class="relative overflow-hidden rounded-2xl md:rounded-none ring-1 ring-neutral-200/60
+                    p-8 flex flex-col justify-center min-h-56 md:min-h-72 md:bg-none
+                    before:content-[''] before:absolute before:inset-y-0 before:right-[-8%]         
+                    before:w-[60%] before:bg-[url('assets/images/mision-vision-valores/icono_vision_responsivo.webp')]
+                    before:bg-no-repeat before:bg-right before:bg-size-[100%_auto] 
+                    before:opacity-[.12] before:pointer-events-none md:before:hidden">
                         <h1 class="text-4xl xl:text-5xl font-semibold text-white md:pb-8">
                             Visión</h1>
                         <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased md:pl-4">
@@ -311,19 +235,12 @@
                 <!-- ===== Fila 3 ===== -->
                 <div class="grid grid-cols-1 md:grid-cols-2 py-4 md:py-0 px-12 md:px-0">
                     <!-- Texto -->
-                    <div id="valores-content" class="
-                    relative overflow-hidden rounded-2xl md:rounded-none ring-1 ring-neutral-200/60
-                    p-8 flex flex-col justify-center min-h-56 md:min-h-72
-                    md:bg-none
-                    before:content-[''] before:absolute before:inset-y-0
-                    before:right-[-8%]         
-                    before:w-[60%]             
-                    before:bg-[url('assets/images/mision-vision-valores/icono_valores_responsivo.webp')]
-                    before:bg-no-repeat before:bg-right
-                    before:bg-[length:100%_auto] /* la imagen llena la capa */
-                    before:opacity-[.12] before:pointer-events-none
-                    md:before:hidden
-                    ">
+                    <div id="valores-content" class="relative overflow-hidden rounded-2xl md:rounded-none ring-1 ring-neutral-200/60
+                    p-8 flex flex-col justify-center min-h-56 md:min-h-72 md:bg-none
+                    before:content-[''] before:absolute before:inset-y-0 before:right-[-8%]         
+                    before:w-[60%] before:bg-[url('assets/images/mision-vision-valores/icono_valores_responsivo.webp')]
+                    before:bg-no-repeat before:bg-right before:bg-size-[100%_auto]
+                    before:opacity-[.12] before:pointer-events-none md:before:hidden">
                         <h1 class="text-4xl xl:text-5xl font-semibold md:pb-8">Valores</h1>
 
                         <ul class="list-disc grid grid-cols-2 gap-x-6 gap-y-2 p-4 
@@ -336,43 +253,46 @@
                             <li>Colaboración</li>
                         </ul>
                     </div>
-
                     <!-- Imagen -->
                     <div class="min-h-56 md:min-h-72 hidden md:flex items-center justify-center">
                         <img src="assets/images/mision-vision-valores/icono valores.svg" alt="Icono de valores">
                     </div>
-
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="section-sobre_nosotros" class="
-        bg-[url('Assets/images/sobreNosotros/Fondo_Sobre_Nosotros.webp')] min-h-screen md:h-screen h-96 
-        bg-cover bg-no-repeat bg-[position:60%center]
-        flex flex-col items-center p-6 sm:p-8 justify-end">
-        <div class="max-w-[150ch] text-white py-9 p-4  sm:p-8 rounded-lg">
-            <h2 class="text-4xl md:text-3xl lg:text-6xl xl:text-7xl font-bold py-6 ">SOBRE <br> NOSOTROS</h2>
-            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased text-justify">En
-                <strong>UP2Play</strong> creemos que el deporte tiene el poder de unir a las personas. Por eso creamos
+    <!-- ===== SOBRE NOSOTROS ===== -->
+    <section id="section-sobre_nosotros"
+        class="bg-[url('Assets/images/sobreNosotros/Fondo_Sobre_Nosotros.webp')] 
+    min-h-screen md:h-screen h-96 bg-cover bg-no-repeat bg-position-[60%center] flex flex-col items-center p-6 sm:p-8 justify-end">
+        <div class="max-w-[150ch] text-white py-9 p-4 sm:p-8 rounded-lg">
+            <h2 class="text-4xl md:text-3xl lg:text-6xl xl:text-7xl font-bold py-6">SOBRE <br> NOSOTROS</h2>
+            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased text-justify">
+                En <strong>UP2Play</strong> creemos que el deporte tiene el poder de unir a las personas. Por eso
+                creamos
                 una plataforma que facilita encontrar con quién jugar, entrenar o simplemente compartir una actividad
                 física. Ya seas principiante o experto, aquí tienes un espacio para moverte, conectar y disfrutar.
             </p>
             <br>
-            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased text-justify">Somos un punto de
-                encuentro para quienes viven el deporte como una forma de bienestar, diversión y
-                conexión. En UP2Play, <strong>ganar es compartir.</strong></p>
+            <p class="text-base sm:text-lg md:text-xl leading-relaxed antialiased text-justify">
+                Somos un punto de encuentro para quienes viven el deporte como una forma de bienestar, diversión y
+                conexión. En UP2Play, <strong>ganar es compartir.</strong>
+            </p>
         </div>
     </section>
 
-    <section id="section-nuestro_equipo" class="py-16 lg:py-20 lg:py-16 scroll-mt-23 xl:scroll-mt-38 ">
+    <!-- ===== NUESTRO EQUIPO ===== -->
+    <section id="section-nuestro_equipo" class="py-16 lg:py-16 scroll-mt-23 xl:scroll-mt-38 ">
         <h2 id="titulo_nuestro_equipo"
             class="text-2xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white tracking-tight text-center mb-12">
             NUESTRO EQUIPO
         </h2>
         <div class="mx-auto max-w-7xl px-12 py-">
             <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-16">
-                <li id="Daniel_Villalba" class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
+                <!-- DANI -->
+                <li id="Daniel_Villalba"
+                    class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
                             <img src="Assets/images/nuestroEquipo/Daniel.webp" alt=""
@@ -388,6 +308,7 @@
                         </div>
                     </article>
                 </li>
+                <!-- MARC -->
                 <li id="Marc_Balague" class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
@@ -396,8 +317,8 @@
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-end p-6 md:px-14">
                             <div class="max-w-md text-left md:text-right">
-                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">Marc
-                                    Balague Torrens</h3>
+                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">
+                                    Marc Balague Torrens</h3>
                                 <p class="text-xl md:text-2xl font-semibold text-[#152614]">Frontend Developer | Tester
                                 </p>
                                 <p class="text-[#152614]">INETUM ESPAÑA S.A</p>
@@ -405,7 +326,9 @@
                         </div>
                     </article>
                 </li>
-                <li id="Alexandre_Vilchez" class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
+                <!-- ALEX -->
+                <li id="Alexandre_Vilchez"
+                    class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
                         <div class="w-full md:w-1/2 flex  items-center justify-center p-6">
                             <img src="Assets/images/nuestroEquipo/Alex.webp" alt=""
@@ -421,23 +344,26 @@
                         </div>
                     </article>
                 </li>
+                <!-- JOAN -->
                 <li id="Joan_Juncosa" class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
                             <img src="Assets/images/nuestroEquipo/Joan.webp" alt=""
-                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-center object-top">
+                                class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover object-top">
                         </div>
                         <div class="w-full md:w-1/2 flex items-center justify-center md:justify-end p-6 md:px-14">
                             <div class="max-w-md text-left md:text-right">
-                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">Joan
-                                    Juncosa Vilaplana</h3>
+                                <h3 class="text-xl md:text-4xl lg:whitespace-nowrap font-extrabold text-[#152614]">
+                                    Joan Juncosa Vilaplana</h3>
                                 <p class="text-xl md:text-2xl font-semibold text-[#152614]">DB Developer</p>
                                 <p class="text-[#152614]">INETUM ESPAÑA S.A</p>
                             </div>
                         </div>
                     </article>
                 </li>
-                <li id="Africa_Rodriguez" class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
+                <!-- AFRICA -->
+                <li id="Africa_Rodriguez"
+                    class="rounded-3xl shadow-[8px_8px_20px_rgba(0,0,0,0.5)] overflow-hidden h-full">
                     <article class="flex flex-col md:flex-row-reverse h-full py-4">
                         <div class="w-full md:w-1/2 flex items-center justify-center p-6">
                             <img src="Assets/images/nuestroEquipo/Africa.webp" alt=""
@@ -457,16 +383,17 @@
             </ul>
         </div>
     </section>
+
+    <!-- ===== FOOTER ===== -->
     <footer class="bg-[#152614] text-[#F7F7F7] w-full leading-relaxed antialiased mt-4">
-        <section
-            class="container mx-auto py-8 md:px-12 grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4">
+        <section class="container mx-auto py-8 md:px-12 grid gap-8 text-center sm:grid-cols-2 md:grid-cols-4">
             <nav aria-labelledby="footer-company">
                 <h2 id="footer-company" class="text-2xl font-extrabold mb-3">Compañía</h2>
                 <ul class="space-y-1">
                     <li>
                         <address class="not-italic">INETUM ESPAÑA S.A</address>
                     </li>
-                    <li><a href="mailto:Up2Play@gmail.com" class="hover:underline">{{Up2Play@gmail.com}}</a></li>
+                    <li><a href="mailto:Up2Play@gmail.com" class="hover:underline">Up2Play@gmail.com</a></li>
                     <li>+34 677 92 31 15</li>
                     <li>Moll de Lleida, 43004, Tarragona</li>
                 </ul>
@@ -490,8 +417,10 @@
             <nav aria-labelledby="footer-legal">
                 <h2 id="footer-community" class="text-2xl font-extrabold mb-3">Legal</h2>
                 <ul class="space-y-1">
-                    <li><a href="Assets/legal/politica-privacidad.html" class="hover:underline">Política de Privacidad</a></li>
-                    <li><a href="Assets/legal/terminos-y-condiciones.html" class="hover:underline">Términos y Condiciones</a></li>
+                    <li><a href="Assets/legal/politica-privacidad.html" class="hover:underline">
+                            Política de Privacidad</a></li>
+                    <li><a href="Assets/legal/terminos-y-condiciones.html" class="hover:underline">
+                            Términos y Condiciones</a></li>
                 </ul>
             </nav>
         </section>
@@ -500,12 +429,13 @@
                 Copyright © 2025 Up2Play.
                 <span class="block md:inline">Todos los derechos reservados.</span>
             </p>
-            <img class="w-32 pr-8 pb-2 justify-self-center md:justify-self-end" src="Assets/images/logos/Logo_Footer.svg"
-                alt="Logo de Up2Play">
+            <img class="w-32 pr-8 pb-2 justify-self-center md:justify-self-end"
+                src="Assets/images/logos/Logo_Footer.svg" alt="Logo de Up2Play">
         </section>
     </footer>
     <script src="assets/js/header.js"></script>
     <script src="assets/js/carousel.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
+
 </html>

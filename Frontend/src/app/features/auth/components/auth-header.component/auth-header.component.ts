@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
@@ -18,8 +18,7 @@ export class AuthHeaderComponent {
   RegistrarseUrl = '/auth/register'
   VerificarUrl = '/auth/verification'
 
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) { }
 
   items: MenuItem[] | undefined;
 
