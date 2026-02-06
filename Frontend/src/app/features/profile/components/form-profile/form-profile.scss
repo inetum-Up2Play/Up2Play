@@ -1,26 +1,43 @@
-@use 'styles/variables' as vars;
-@use 'sass:color';
+@use "styles/variables" as vars;
+@use "sass:color";
 
 :host ::ng-deep .btn-guardarCambios {
-    background-color: vars.$verde-oliva;
-    border: none;
-    border-radius: 15px;
-    transition: transform 0.2s ease-in-out;
-    padding-left: 3rem;
-    padding-right: 3rem;
+  background-color: vars.$verde-oliva;
+  border: none;
+  border-radius: 15px;
+  transition: transform 0.2s ease-in-out;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
-
 :host ::ng-deep .btn-guardarCambios:hover {
-    background-color: vars.$verde-oliva !important;
-    border: none !important;
-    transform: scale(1.05) !important;
+  background-color: vars.$verde-oliva !important;
+  border: none !important;
+  transform: scale(1.05) !important;
 }
 
 .p-dialog {
-    z-index: 1100;
+  z-index: 1100;
 }
 
 .p-dialog-mask {
-    z-index: 1000;
+  z-index: 1000;
+}
+
+:host ::ng-deep .p-inputtext {
+  --p-inputtext-hover-border-color: #B1DF75;
+  --p-inputtext-focus-border-color: #B1DF75;
+}
+
+:host ::ng-deep .p-select{
+
+    --p-select-hover-border-color: #B1DF75;
+    --p-select-focus-border-color: #B1DF75;
+
+}
+
+:host ::ng-deep .p-multiselect{
+
+    --p-multiselect-hover-border-color: #B1DF75;
+    --p-multiselect-focus-border-color: #B1DF75;    
 }
