@@ -100,7 +100,8 @@
 
                     <div class="md:w-40 relative shrink-0">
                         <img class="block mx-auto rounded w-full object-cover" [src]="activity.deporte | deporteImg"
-                            [alt]="activity.nombre" style="max-width: 150px; aspect-ratio: 16/9;" alt=" {{ activity.nombre }}" />
+                            [alt]="activity.nombre" style="max-width: 150px; aspect-ratio: 16/9;"
+                            alt=" {{ activity.nombre }}" />
                     </div>
 
                     <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -128,7 +129,7 @@
                                     class="p-button-secondary p-button-outlined p-button-sm"
                                     (click)="redirigirInfoActividad(activity.id)">
                                 </button>
-                                <button pButton icon="pi pi-trash"
+                                <button pButton icon="pi pi-trash" [loading]="loading()"
                                     class="p-button-danger p-button-outlined p-button-sm min-w-32"
                                     [label]="activity.precio != '0.00' ? 'Reembolsar' : 'Eliminar'"
                                     (click)="eliminar($event, activity.id)">

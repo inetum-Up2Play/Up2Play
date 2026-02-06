@@ -85,6 +85,8 @@ export class CardGallery {
 
   userId: number | null = null;
 
+  loading = signal(false);
+
   ngOnInit() {
     this.calcularPageSize();
     this.obtenerUsuarioActual();
@@ -221,6 +223,7 @@ export class CardGallery {
         severity: 'danger',
       },
       accept: () => {
+        this.loading.set(true);
         this.actService.deleteActividad(id).subscribe({
           next: () => {
             this.messageService.add({
@@ -229,11 +232,17 @@ export class CardGallery {
               detail: 'Actividad eliminada correctamente',
             });
             this.actUpdateService.notifyUpdate();
+            this.loading.set(false);
           },
-          error: (codigo) => this.manejarError(codigo),
+
+          error: (codigo) => {
+            this.loading.set(false);
+            this.manejarError(codigo)
+          },
         });
       },
       reject: () => {
+        this.loading.set(false);
         this.messageService.add({
           severity: 'warn',
           summary: 'Rechazado',
