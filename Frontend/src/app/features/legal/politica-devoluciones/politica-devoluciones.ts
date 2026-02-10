@@ -15,7 +15,7 @@ import { Footer } from '../../../core/layout/footer/footer';
 })
 
 export class PoliticaDevoluciones {
-private readonly viewportScroller = inject(ViewportScroller);
+  private readonly viewportScroller = inject(ViewportScroller);
 
   lastUpdate = signal('Enero, 2026');
   activeAccordionValue = 'conditions';
@@ -38,7 +38,7 @@ private readonly viewportScroller = inject(ViewportScroller);
     {
       icon: 'shield_lock',
       bgClass: 'bg-soft-brand',
-      textClass: 'text-brand-dark dark:text-white', // dark:text-white es tailwind nativo
+      textClass: 'text-brand-dark dark:text-white',
       title: 'Cancelación del Organizador',
       desc: 'Si el creador elimina la actividad, recibes el reembolso completo automáticamente.'
     },

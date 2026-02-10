@@ -5,35 +5,25 @@
       <!-- BOTÓN VOLVER ATRÁS -->
       <p-button
         label="Volver atrás"
-        icon="pi pi-arrow-left"
         (onClick)="goBack()"
-        styleClass="p-button-text p-button-secondary text-brand hover:bg-brand-light/10 
-          hover:transition-transform pl-0 transition-all duration-300"
-      >
+        styleClass="btn-volverAtras">
       </p-button>
     </nav>
 
     <div class="flex flex-col gap-12 relative">
-      <section
-        class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center"
-      >
+      <section class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center">
         <div class="flex flex-col gap-4">
-          <h1
-            class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark"
-          >
+          <h1 class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark">
             Política de Cancelación y Reembolsos
           </h1>
-          <p
-            class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto"
-          >
+          <p class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto">
             En UP2Play, queremos que tu experiencia sea justa y transparente.
             Consulta nuestras normas actualizadas.
           </p>
         </div>
 
-        <div
-          class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit px-4 py-1.5 rounded-full font-medium border border-brand-light/50"
-        >
+        <div class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit 
+          px-4 py-1.5 rounded-full font-medium border border-brand-light/50">
           <span class="material-symbols-outlined text-base">update</span>
           <span>Última actualización: {{ lastUpdate() }}</span>
         </div>
@@ -46,20 +36,13 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           @for (card of summaryCards; track card.title) {
-            <div
-              class="flex flex-col gap-4 rounded-xl border border-brand-light bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div
-                [class]="
-                  'w-12 h-12 rounded-full flex items-center justify-center ' +
-                  card.bgClass +
-                  ' ' +
-                  card.textClass
-                "
-              >
-                <span class="material-symbols-outlined text-2xl">{{
-                  card.icon
-                }}</span>
+            <div class="flex flex-col gap-4 rounded-xl border border-brand-light bg-white p-6 
+              shadow-sm hover:shadow-md transition-shadow">
+              <div [class]="'w-12 h-12 rounded-full flex items-center justify-center ' +
+                  card.bgClass + ' ' + card.textClass">
+                <span class="material-symbols-outlined text-2xl">
+                  {{ card.icon }}
+                </span>
               </div>
               <div class="flex flex-col gap-2">
                 <h3 class="text-lg font-bold text-brand-dark">
@@ -76,47 +59,28 @@
 
       <section class="flex flex-col gap-8">
         <div>
-          <h2
-            class="text-2xl flex items-center gap-3 font-semibold text-brand-dark"
-          >
+          <h2 class="text-2xl flex items-center gap-3 font-semibold text-brand-dark">
             Detalles de la Política
           </h2>
           <p class="text-brand opacity-80 mt-2 mb-6">
             Desglose completo de los términos que aceptas al inscribirte.
           </p>
 
-          <p-accordion
-            [value]="activeAccordionValue"
-            [multiple]="true"
-            styleClass="flex flex-col gap-4"
-          >
-            <p-accordion-panel
-              value="conditions"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white"
-            >
-              <p-accordion-header
-                styleClass="hover:bg-gray-50 transition-colors p-5"
-              >
+          <p-accordion [value]="activeAccordionValue" [multiple]="true"
+            styleClass="flex flex-col gap-4">
+            <p-accordion-panel value="conditions"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white">
+              <p-accordion-header styleClass="hover:bg-gray-50 transition-colors p-5">
                 <div class="flex items-center gap-4">
-                  <span class="material-symbols-outlined text-brand"
-                    >gavel</span
-                  >
-                  <span class="text-lg font-bold text-brand-dark"
-                    >Normas de Cancelación</span
-                  >
+                  <span class="material-symbols-outlined text-brand">gavel</span>
+                  <span class="text-lg font-bold text-brand-dark">Normas de Cancelación</span>
                 </div>
               </p-accordion-header>
               <p-accordion-content>
-                <div
-                  class="text-base leading-relaxed p-1 flex flex-col gap-6 text-brand"
-                >
+                <div class="text-base leading-relaxed p-1 flex flex-col gap-6 text-brand">
                   <div>
-                    <h4
-                      class="text-brand-dark font-medium mb-2 flex items-center gap-2"
-                    >
-                      <span class="material-symbols-outlined text-sm"
-                        >person</span
-                      >
+                    <h4 class="text-brand-dark font-medium mb-2 flex items-center gap-2">
+                      <span class="material-symbols-outlined text-sm">person</span>
                       Por parte del Participante
                     </h4>
                     <p class="mb-3">
@@ -125,92 +89,61 @@
                     </p>
                     <ul class="list-disc pl-5 space-y-2 marker:text-brand">
                       <li>
-                        <strong>Más de 24 horas antes:</strong> Reembolso
-                        completo (100%).
+                        <strong>Más de 24 horas antes:</strong> Reembolso completo (100%).
                       </li>
                       <li>
-                        <strong>Menos de 24 horas antes:</strong> Sin reembolso
-                        (0%).
+                        <strong>Menos de 24 horas antes:</strong> Sin reembolso (0%).
                       </li>
                     </ul>
                   </div>
                   <hr class="border-brand-light" />
                   <div>
-                    <h4
-                      class="text-brand-dark font-medium mb-2 flex items-center gap-2"
-                    >
-                      <span class="material-symbols-outlined text-sm"
-                        >supervised_user_circle</span
-                      >
+                    <h4 class="text-brand-dark font-medium mb-2 flex items-center gap-2">
+                      <span class="material-symbols-outlined text-sm">supervised_user_circle</span>
                       Por parte del Organizador
                     </h4>
                     <p>
                       Si el creador elimina la actividad, recibirás un
-                      <strong>reembolso completo (100%)</strong>
-                      automáticamente.
+                      <strong>reembolso completo (100%)</strong> automáticamente.
                     </p>
                   </div>
                 </div>
               </p-accordion-content>
             </p-accordion-panel>
 
-            <p-accordion-panel
-              value="deadlines"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white"
-            >
+            <p-accordion-panel value="deadlines"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white">
               <p-accordion-header
-                styleClass="hover:bg-gray-50 transition-colors p-5"
-              >
+                styleClass="hover:bg-gray-50 transition-colors p-5">
                 <div class="flex items-center gap-4">
-                  <span class="material-symbols-outlined text-brand"
-                    >schedule</span
-                  >
-                  <span class="text-lg font-bold text-brand-dark"
-                    >Plazos de Reembolso</span
-                  >
+                  <span class="material-symbols-outlined text-brand">schedule</span>
+                  <span class="text-lg font-bold text-brand-dark">Plazos de Reembolso</span>
                 </div>
               </p-accordion-header>
               <p-accordion-content>
                 <div class="text-base leading-relaxed p-1 text-brand">
                   <p>La orden se emite de inmediato tras la aprobación.</p>
-                  <div
-                    class="mt-4 p-4 bg-light-green/50 rounded-lg border border-brand-light flex flex-col gap-2"
-                  >
-                    <p
-                      class="text-sm text-brand-dark font-bold flex items-center gap-2"
-                    >
-                      <span class="material-symbols-outlined text-base"
-                        >account_balance</span
-                      >
+                  <div class="mt-4 p-4 bg-light-green/50 rounded-lg border border-brand-light flex flex-col gap-2">
+                    <p class="text-sm text-brand-dark font-bold flex items-center gap-2">
+                      <span class="material-symbols-outlined text-base">account_balance</span>
                       Tiempo bancario: hasta 10 días hábiles.
                     </p>
                     <p class="text-xs text-brand opacity-80 ml-6">
                       Si no llega, contáctanos en
-                      <a
-                        href="mailto:up2play1@gmail.com"
-                        class="underline hover:text-brand-dark"
-                        >up2play1@gmail.com</a
-                      >.
+                      <a href="mailto:up2play1@gmail.com" class="underline hover:text-brand-dark"
+                        >up2play1@gmail.com</a>.
                     </p>
                   </div>
                 </div>
               </p-accordion-content>
             </p-accordion-panel>
 
-            <p-accordion-panel
-              value="process"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white"
-            >
-              <p-accordion-header
-                styleClass="hover:bg-gray-50  transition-colors p-5"
-              >
+            <p-accordion-panel value="process"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white">
+              <p-accordion-header styleClass="hover:bg-gray-50  transition-colors p-5">
                 <div class="flex items-center gap-4">
-                  <span class="material-symbols-outlined text-brand"
-                    >credit_card</span
-                  >
-                  <span class="text-lg font-bold text-brand-dark"
-                    >Seguridad de Pagos</span
-                  >
+                  <span class="material-symbols-outlined text-brand">credit_card</span>
+                  <span class="text-lg font-bold text-brand-dark">Seguridad de Pagos</span>
                 </div>
               </p-accordion-header>
               <p-accordion-content>
@@ -227,20 +160,12 @@
               </p-accordion-content>
             </p-accordion-panel>
 
-            <p-accordion-panel
-              value="exceptions"
-              class="border border-brand-light rounded-xl overflow-hidden bg-white"
-            >
-              <p-accordion-header
-                styleClass="hover:bg-gray-50 transition-colors p-5"
-              >
+            <p-accordion-panel value="exceptions"
+              class="border border-brand-light rounded-xl overflow-hidden bg-white">
+              <p-accordion-header styleClass="hover:bg-gray-50 transition-colors p-5">
                 <div class="flex items-center gap-4">
-                  <span class="material-symbols-outlined text-brand"
-                    >warning</span
-                  >
-                  <span class="text-lg font-bold text-brand-dark"
-                    >Fuerza Mayor</span
-                  >
+                  <span class="material-symbols-outlined text-brand">warning</span>
+                  <span class="text-lg font-bold text-brand-dark">Fuerza Mayor</span>
                 </div>
               </p-accordion-header>
               <p-accordion-content>
@@ -251,26 +176,15 @@
                   </p>
                   <div class="grid gap-3 mb-4">
                     @for (item of exceptions; track item) {
-                      <div
-                        class="flex gap-3 items-start p-3 bg-gray-50 rounded-lg border border-brand-light"
-                      >
-                        <span
-                          class="material-symbols-outlined text-brand text-sm mt-0.5"
-                          >check_circle</span
-                        >
+                      <div class="flex gap-3 items-start p-3 bg-gray-50 rounded-lg border border-brand-light">
+                        <span class="material-symbols-outlined text-brand text-sm mt-0.5">check_circle</span>
                         <span class="text-sm font-medium">{{ item }}</span>
                       </div>
                     }
                   </div>
-                  <p
-                    class="text-sm bg-soft-accent text-brand-dark p-3 rounded border border-brand-light"
-                  >
+                  <p class="text-sm bg-soft-accent text-brand-dark p-3 rounded border border-brand-light">
                     <strong>¿Cómo proceder?</strong> Envía un correo a
-                    <a
-                      href="mailto:up2play1@gmail.com"
-                      class="font-bold hover:underline"
-                      >up2play1@gmail.com</a
-                    >.
+                    <a href="mailto:up2play1@gmail.com" class="font-bold hover:underline">up2play1@gmail.com</a>.
                   </p>
                 </div>
               </p-accordion-content>
@@ -280,19 +194,17 @@
       </section>
 
       <section class="mt-4">
-        <div
-          class="bg-brand rounded-2xl p-8 lg:p-12 relative overflow-hidden group shadow-xl transition-transform hover:scale-[1.01]"
-        >
-          <div
-            class="absolute top-0 right-0 w-64 h-64 bg-light-green rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 opacity-30"
-          ></div>
-          <div
-            class="absolute bottom-0 left-0 w-48 h-48 bg-black/30 rounded-full blur-2xl transform -translate-x-1/3 translate-y-1/3"
-          ></div>
+        <div class="bg-brand rounded-2xl p-8 lg:p-12 relative overflow-hidden group shadow-xl 
+          transition-transform hover:scale-[1.01]">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-light-green rounded-full blur-3xl 
+            transform translate-x-1/2 -translate-y-1/2 opacity-30">
+          </div>
+          <div class="absolute bottom-0 left-0 w-48 h-48 bg-black/30 rounded-full blur-2xl 
+            transform -translate-x-1/3 translate-y-1/3">
+          </div>
 
-          <div
-            class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left"
-          >
+          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between 
+            gap-8 text-center md:text-left">
             <div class="flex flex-col gap-3 max-w-xl">
               <h3 class="text-white text-2xl lg:text-3xl font-black">
                 ¿Tienes dudas o problemas?
@@ -302,26 +214,22 @@
                 fuerza mayor.
               </p>
             </div>
-            <a
-              href="mailto:up2play1@gmail.com"
-              class="no-underline w-full md:w-auto"
-            >
-              <p-button
-                label="CONTACTAR SOPORTE"
-                icon="pi pi-envelope"
+            <a href="mailto:up2play1@gmail.com" class="no-underline w-full md:w-auto">
+              <p-button label="CONTACTAR SOPORTE" icon="pi pi-envelope"
                 styleClass="whitespace-nowrap font-bold shadow-lg px-8 py-3 w-full md:w-auto"
                 [style]="{
                   background: '#FFEE59',
                   color: '#152614',
                   border: 'none',
                   'border-radius': '0.75rem',
-                }"
-              >
+                }">
               </p-button>
             </a>
+
           </div>
         </div>
       </section>
+
     </div>
   </main>
 </div>
