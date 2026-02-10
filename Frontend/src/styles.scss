@@ -105,11 +105,10 @@ The styles added here would be global styles to the project.
 }
 
 /* --- BLOQUE: DATATABLE (FILTROS) --- */
-/* Atacamos todas las posibles clases del overlay del filtro */
 .p-datatable,
 .p-datatable-filter-overlay,
 .p-column-filter-overlay {
-  /* 1. EL CONTENEDOR FLOTANTE (POPOVER) */
+  /* CONTENEDOR FLOTANTE (POPOVER) */
   --p-datatable-filter-overlay-popover-background: var(--brand-blanco);
   --p-datatable-filter-overlay-popover-color: var(--brand-verde-oscuro);
   --p-datatable-filter-overlay-popover-border-color: var(--brand-verde-oliva);
@@ -118,11 +117,11 @@ The styles added here would be global styles to the project.
   --p-datatable-filter-overlay-popover-gap: 0.5rem;
   --p-datatable-filter-overlay-popover-border-radius: 6px;
 
-  /* 2. LÍNEAS Y SEPARADORES */
+  /* LÍNEAS Y SEPARADORES */
   --p-datatable-filter-rule-border-color: var(--brand-verde-oliva);
   --p-datatable-filter-constraint-separator-border-color: var(--brand-verde-oliva);
 
-  /* 3. ITEMS DE LA LISTA (TEXTOS Y FONDOS) */
+  /* ITEMS DE LA LISTA (TEXTOS Y FONDOS) */
   --p-datatable-filter-constraint-color: var(--brand-verde-oscuro);
   /* Estado: Hover / Focus */
   --p-datatable-filter-constraint-focus-background: var(--brand-hover);
@@ -135,7 +134,7 @@ The styles added here would be global styles to the project.
   --p-datatable-filter-constraint-selected-focus-background: var(--brand-verde-claro);
   --p-datatable-filter-constraint-selected-focus-color: var(--brand-verde-oscuro);
 
-  /* 4. DROPDOWNS INTERNOS (SI LOS HUBIERA) */
+  /* DROPDOWNS INTERNOS  */
   --p-datatable-filter-overlay-select-background: var(--brand-blanco);
   --p-datatable-filter-overlay-select-border-color: var(--brand-verde-oliva);
   --p-datatable-filter-overlay-select-color: var(--brand-verde-oscuro);
