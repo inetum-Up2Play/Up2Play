@@ -62,11 +62,13 @@
 
         <!-- Botón Crear actividad -->
         <div class="pt-4 flex justify-center">
-            <button type="button"
-                class="cursor-pointer block w-[80%] rounded-2xl bg-[#3D6C3F] px-auto py-3 text-center text-lg xl:text-xl font-semibold
-                text-white shadow-md transition hover:bg-[#3d6c3fe8] active:translate-y-px whitespace-nowrap"
-                [routerLink]="['/actividades', 'crear-actividad']">
-                Crear actividad
+            <button id="crear_actividad" type="button" [routerLink]="['/actividades', 'crear-actividad']"
+                aria-label="Crear nueva actividad" class="btn-nueva-actividad whitespace-nowrap">
+                <span class="btn-shine"></span>
+                <div class="icon-container">
+                    <i class="pi pi-plus"></i>
+                </div>
+                <span class="btn-text">Nueva Actividad</span>
             </button>
         </div>
 
