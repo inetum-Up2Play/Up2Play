@@ -67,8 +67,8 @@ jobs:
           # Forzamos el perfil de test que usa H2
           SPRING_PROFILES_ACTIVE: test
           # Estas variables sobrescriben el yml si fuera necesario
-          TEST_EMAIL: ${{ secrets.MAIL_USERNAME }}
-          TEST_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           # Al usar H2 en memoria, no necesitamos un servicio externo de base de datos
         run: mvn -B clean verify
 
