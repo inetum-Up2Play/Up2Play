@@ -20,7 +20,7 @@ import java.util.Random;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class BaseApiTest {
 
-    protected String BASE = System.getProperty("baseUrl", "http://localhost:8080");
+    protected String BASE = System.getProperty("baseUrl", "http://localhost:8082");
     protected String AUTH;
     protected long SEED = Long.getLong("seed", 12345L);
 
