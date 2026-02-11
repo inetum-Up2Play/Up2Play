@@ -7,16 +7,13 @@ import { environment } from '../../../environments/environment';
 export class MonkeyTest {
   private horde: any;
 
-  // Hacemos la función asíncrona para poder importar gremlins bajo demanda
   async start(duration: number, containerSelector?: string) {
     
-    // Verificamos el flag del environment
     if (!environment.enableMonkeyTesting) {
       console.warn('Monkey testing está deshabilitado en este entorno.');
       return;
     }
 
-    // CARGA DINÁMICA: Importamos la librería solo en este momento
     const gremlins = await import('gremlins.js');
 
     const target = containerSelector
