@@ -28,3 +28,40 @@
         }
     }
 }
+
+::ng-deep .p-menu {
+    --p-menu-background: #152614f1;           /* Verde oscuro */
+    --p-menu-color: #F7F7F7;                /* Blanco */
+    --p-menu-border-color: #152614;
+    --p-menu-border-radius: 12px;
+    --p-menu-list-padding: 0.5rem;
+    --p-menu-list-gap: 0.25rem;
+    --p-menu-item-border-radius: 8px;
+    --p-menu-item-color: #F7F7F7;
+    --p-menu-item-focus-background: rgba(177, 223, 117, 0.2); /* Verde claro con opacidad */
+    --p-menu-item-focus-color: #B1DF75;
+    --p-menu-submenu-label-padding: 0;
+    --p-menu-item-icon-color: #B1DF75;          
+
+    /* --- AJUSTES DE ESTRUCTURA --- */
+    font-family: vars.$montserrat !important;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    text-align: left;
+    
+    min-width: 0 !important;
+    width: fit-content !important;
+    max-width: 90vw;
+
+    /* Alineación de los links internos */
+    .p-menu-item-link {
+        justify-content: flex-start !important;
+        text-align: left !important;
+        color: var(--p-menu-item-color) !important;
+    }
+
+    .p-menu-item-content {
+        text-align: left !important;
+    }
+}

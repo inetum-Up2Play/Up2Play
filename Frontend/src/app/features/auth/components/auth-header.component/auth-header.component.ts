@@ -25,11 +25,10 @@ export class AuthHeaderComponent {
   ngOnInit() {
     this.items = [
       {
-        label: 'MENÚ',
         items: [
           { label: 'Inicio', url: this.landingUrl, icon: 'pi pi-home' },
           { label: 'Registrarse', routerLink: [this.RegistrarseUrl], icon: 'pi pi-user-plus' },
-          { label: 'Iniciar sesión', routerLink: [this.IniciarSesionUrl], icon: 'pi pi-sign-in' },
+          { label: 'Iniciar sesión', routerLink: [this.IniciarSesionUrl], icon: 'pi pi-key' },
         ]
       }
     ];

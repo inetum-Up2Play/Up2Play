@@ -8,7 +8,7 @@
             </div>
             <!-- MENÚ MÓVIL -->
             <div class="card flex w-full justify-end pr-6 md:hidden">
-                <p-menu #menu [model]="items" [popup]="true" appendTo="body" styleClass="mobile-menu"></p-menu>
+                <p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
 
                 <p-button (click)="menu.toggle($event)" icon="pi pi-bars" [rounded]="true" [raised]="true"
                     aria-label="Abrir menú" styleClass="menu-btn !bg-emerald-700/0 !border-emerald-700/0 
