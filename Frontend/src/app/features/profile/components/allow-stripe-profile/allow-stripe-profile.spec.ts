@@ -23,6 +23,9 @@ describe('AllowStripeProfile', () => {
 
     fixture = TestBed.createComponent(AllowStripeProfile);
     component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('pagosHabilitados', false); 
+
     fixture.detectChanges();
   });
 

@@ -3,7 +3,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 import { HistorialPagos } from './historial-pagos';
+
+registerLocaleData(localeEs);
 
 describe('HistorialPagos', () => {
   let component: HistorialPagos;
@@ -15,6 +20,7 @@ describe('HistorialPagos', () => {
       providers: [
         provideHttpClient(),
         MessageService,
+        provideNoopAnimations(),
         provideHttpClientTesting(),
         provideRouter([]),
       ],
