@@ -41,7 +41,6 @@ main {
 
 :host {
 
-    // Placeholders estándar
     ::placeholder {
         color: #7e887e !important;
         opacity: 1 !important;
@@ -57,10 +56,10 @@ main {
     }
 }
 
-
+/* === P-SELECT ===*/
 :host ::ng-deep .p-select {
     background-color: vars.$blanco !important; // fondo igual que input
-    color: vars.$verde-oliva !important; // color del texto
+    color: vars.$verde-oliva !important; 
     transition: all 0.3s ease !important;
 
     &:hover {
@@ -69,12 +68,12 @@ main {
     }
 
     &.p-focus {
-        border-color: vars.$verde-oscuro !important; // color al hacer click
+        border-color: vars.$verde-oscuro !important; 
     }
 }
 
 :host ::ng-deep .p-select-label {
-    color: vars.$verde-oliva !important; // asegura que el texto interno tenga el color correcto
+    color: vars.$verde-oliva !important;
 }
 
 :host ::ng-deep .p-select-overlay {
@@ -119,6 +118,7 @@ main {
     box-shadow: none !important;
 }
 
+/* === P-DATAPICKER ===*/
 :host ::ng-deep .p-datepicker-input-icon {
     color: vars.$verde-oliva;
 }

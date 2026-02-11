@@ -41,7 +41,7 @@ span {
 
 :host ::ng-deep .p-carousel-indicator-active button {
     background-color: #3D6C3F !important;
-    opacity: 1; /* Asegura que se vea sólido */
+    opacity: 1;  
 }
 
 :host ::ng-deep .boton-ver-mas p-button {

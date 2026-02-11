@@ -1,19 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { RouterModule } from '@angular/router';
+
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
 import { ErrorService } from '../../../../core/services/error/error-service';
 import { ActivityCard } from '../../../actividades/components/activity-card/activity-card';
 import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
 import { EmptyActivities } from '../../../actividades/components/empty-activities/empty-activities';
-import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../core/services/user/user-service';
 import { PagosService } from '../../../../core/services/pagos/pagos-service';
 
@@ -77,8 +78,6 @@ export class CarrouselDeportes {
     });
   }
 
-
-
   cargarPorDeporte(deporte: string) {
     this.deporteActual = deporte;
     this.actUpdateService.setDeporte(deporte);
@@ -95,47 +94,45 @@ export class CarrouselDeportes {
     });
   }
 
-    pagar(id: number) {
+  pagar(id: number) {
     const act = this.activities.find(a => a.id === id);
 
     if (!act) return;
 
-      this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
-        next: (creador) => {
-          // Ya tenemos al usuario creador, verificamos su Stripe ID
-          if (creador && creador.stripeAccountId) {
+    this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
+      next: (creador) => {
+        if (creador && creador.stripeAccountId) {
 
-            // Todo correcto: Guardamos y navegamos
-            this.pagosService.setActivity({
-              actividadId: act.id,
-              nombre: act.nombre,
-              precio: act.precio,
-              organizadorStripeId: creador.stripeAccountId,
-              deporte: act.deporte,
-              fecha: act.fecha,
-              ubicacion: act.ubicacion
-            });
+          this.pagosService.setActivity({
+            actividadId: act.id,
+            nombre: act.nombre,
+            precio: act.precio,
+            organizadorStripeId: creador.stripeAccountId,
+            deporte: act.deporte,
+            fecha: act.fecha,
+            ubicacion: act.ubicacion
+          });
 
-            this.router.navigate(['/pagos/pago']);
+          this.router.navigate(['/pagos/pago']);
 
-          } else {
-            // El creador existe, pero no tiene pagos configurados
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error de Pago',
-              detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
-            });
-          }
-        },
-        error: (err) => {
-          console.error(err);
+        } else {
+          // El creador existe, pero no tiene pagos configurados
           this.messageService.add({
             severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo contactar con el servidor para verificar al organizador.'
+            summary: 'Error de Pago',
+            detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
           });
         }
-      });
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo contactar con el servidor para verificar al organizador.'
+        });
+      }
+    });
   }
 
   apuntarse(id: number) {
@@ -143,21 +140,20 @@ export class CarrouselDeportes {
 
     if (!act) return;
 
-      this.actService.unirteActividad(id).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: '¡Enhorabuena!',
-            detail: 'Te has unido a la actividad'
-          });
-          // Bus de recarga de actividaedes
-          this.actUpdateService.notifyUpdate();
-        },
-        error: (codigo) => {
-          const mensaje = this.errorService.getMensajeError(codigo);
-          this.errorService.showError(mensaje);
-        }
-      });
+    this.actService.unirteActividad(id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: '¡Enhorabuena!',
+          detail: 'Te has unido a la actividad'
+        });
+        this.actUpdateService.notifyUpdate();
+      },
+      error: (codigo) => {
+        const mensaje = this.errorService.getMensajeError(codigo);
+        this.errorService.showError(mensaje);
+      }
+    });
   }
 
   extraerHora(fecha: string): string {
@@ -193,7 +189,7 @@ export class CarrouselDeportes {
     }
   ];
 
-  actCompleta() : void {
+  actCompleta(): void {
     this.messageService.add({
       severity: 'warn',
       summary: 'Atención',

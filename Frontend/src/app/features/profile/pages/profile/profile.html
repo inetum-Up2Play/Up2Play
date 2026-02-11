@@ -5,22 +5,27 @@
         class="lg:mx-[clamp(3rem,3vw,20rem)] xl:mx-[clamp(4rem,4vw,25rem)] 2xl:mx-[clamp(6rem,8vw,25rem)] pt-5 md:pt-10">
         <h1 class="font-bold text-2xl text-center md:text-left md:text-5xl">Edita tu perfil</h1>
         <div class="flex flex-col full-w">
+
             <div id="avatar">
                 <app-avatar-profile [usuario]="usuario()" [perfil]="perfil()" (cambiosAvatar)="onCambiosAvatar($event)">
                 </app-avatar-profile>
             </div>
-            <div>
+
+            <div id="stripe">
                 @if (usuario()) {
                 <app-allow-stripe-profile [pagosHabilitados]="usuario()?.pagosHabilitados ?? false">
                 </app-allow-stripe-profile>
                 }
             </div>
+
             <div id="profile">
                 <app-form-profile [usuario]="usuario()" [perfil]="perfil()" (changePassword)="onChangePassword($event)"
                     [(passwordDialogVisible)]="pwdVisible" (cambiosPerfil)="onCambiosPerfil($event)">
                     >
                 </app-form-profile>
             </div>
+            
+            <!-- POP-UP Eliminar cuenta-->
             <div class="card flex justify-center md:justify-end p-10">
                 <p-confirmdialog styleClass="cd-eliminar m-5">
                     <ng-template #message let-message>

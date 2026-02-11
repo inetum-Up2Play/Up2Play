@@ -94,13 +94,14 @@
                     </app-empty-activities>
                 </div>
                 }
+                <!-- ACTIVIDADES EN FORMATO LISTA -->
                 @for (activity of items; track activity.id; let first = $first) {
                 <div class="flex flex-col sm:flex-row sm:items-center py-6 gap-4"
                     [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
 
                     <div class="md:w-40 relative shrink-0">
-                        <img class="block mx-auto rounded w-full object-cover" [src]="activity.deporte | deporteImg"
-                            [alt]="activity.nombre" style="max-width: 150px; aspect-ratio: 16/9;"
+                        <img class="block mx-auto rounded w-full object-cover sm:max-w-[250px]"
+                            [src]="activity.deporte | deporteImg" [alt]="activity.nombre" style="aspect-ratio: 16/9;"
                             alt=" {{ activity.nombre }}" />
                     </div>
 
@@ -121,8 +122,15 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col md:items-end gap-4">
-                            <span class="text-xl font-bold">{{ activity.precio | currency:'EUR' }}</span>
+                        <div class="flex flex-col w-fit md:items-end gap-4">
+                            <div class="w-fit">
+                                @if (activity.precio === 0) {
+                                <span
+                                    class="text-lg font-bold text-[#3D6C3F] bg-[#B1DF75]/30 rounded-lg p-2">Gratuita</span>
+                                } @else {
+                                <span class="text-lg font-bold">{{ activity.precio | currency:'EUR' }}</span>
+                                }
+                            </div>
                             <div class="flex flex-row gap-2">
                                 @if (esCreador(activity)) {
                                 <button pButton icon="pi pi-cog" label="Gestionar"
@@ -132,7 +140,7 @@
                                 <button pButton icon="pi pi-trash" [loading]="loading()"
                                     class="p-button-danger p-button-outlined p-button-sm min-w-32"
                                     [label]="activity.precio != '0.00' ? 'Reembolsar' : 'Eliminar'"
-                                    (click)="eliminar($event, activity.id)">
+                                    (click)="eliminar(activity.id)">
                                 </button>
                                 } @else {
                                 <p-button label="Ver detalles" (onClick)="redirigirInfoActividad(activity.id)"
@@ -145,6 +153,7 @@
                 </div>
                 }
 
+                <!-- BOTÓN CARGAR MÁS ACTIVIDADES -->
                 <div class="flex justify-center mt-6">
                     @if (visibleActivities.length < filteredActivities.length) { <p-button styleClass="boton-ver-mas"
                         label="Mostrar más actividades" variant="outlined" icon="pi pi-refresh" severity="contrast"
@@ -153,6 +162,8 @@
                         }
                 </div>
             </div>
+
+            <!-- ACTIVIDADES EN FORMATO GRID -->
         </ng-template> <ng-template #grid let-items>
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                 @for (activity of items; track activity.id) {
@@ -176,6 +187,7 @@
             </div>
             }
 
+            <!-- BOTÓN CARGAR MÁS ACTIVIDADES -->
             <div class="flex justify-center md:justify-end ver-mas-container md:px-0 mt-6">
                 @if (visibleActivities.length < filteredActivities.length) { <p-button styleClass="boton-ver-mas"
                     label="Mostrar más actividades" variant="outlined" icon="pi pi-refresh" severity="contrast"

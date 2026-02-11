@@ -192,10 +192,19 @@
                                 </span>
                             </td>
 
+
                             <td class="py-4 px-12 text-right">
-                                <span class="text-base font-bold text-[#152614]">- {{ pago.importe | number:'1.2-2' }}
-                                    €</span>
+                                @if (pago.estado === 'REEMBOLSADO') {
+                                <span class="text-base font-bold">
+                                    + {{ pago.importe | currency:'EUR':'symbol':'1.2-2':'es-ES' }}
+                                </span>
+                                } @else {
+                                <span class="text-base font-bold">
+                                    - {{ pago.importe | currency:'EUR':'symbol':'1.2-2':'es-ES' }}
+                                </span>
+                                }
                             </td>
+
                         </tr>
                         } @empty {
                         <tr>

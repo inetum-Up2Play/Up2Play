@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, Input, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, Input, input, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
@@ -10,10 +10,11 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { TagModule } from 'primeng/tag';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-activity-card',
-  imports: [CardModule, ButtonModule, MessageModule, TagModule, CurrencyPipe],
+  imports: [CardModule, ButtonModule, MessageModule, TagModule, CurrencyPipe, DatePipe],
   providers: [],
   templateUrl: './activity-card.html',
   styleUrl: './activity-card.scss',
@@ -39,7 +40,7 @@ export class ActivityCard implements OnInit{
       .subscribe((flag) => this.isCreador.set(flag));
   }
 
-  // --- Inputs (Decoradores - Manteniendo consistencia con tu código) ---
+  // --- Inputs ---
   @Input() botonLabel!: string;
   @Input() botonStyle!: string;
 

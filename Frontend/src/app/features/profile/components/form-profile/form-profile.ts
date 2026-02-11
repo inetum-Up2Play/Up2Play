@@ -1,25 +1,29 @@
-import { Component, effect, input, output, inject, model } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { MessageService, SelectItemGroup } from 'primeng/api';
-import { DatePicker } from 'primeng/datepicker';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { MessageModule } from 'primeng/message';
-import { InputIconModule } from 'primeng/inputicon';
-import { IconFieldModule } from 'primeng/iconfield';
-import { MultiSelectModule } from 'primeng/multiselect';
+// Angular
 import { CommonModule } from '@angular/common';
+import { Component, effect, inject, input, model, output } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// PrimeNG
+import { MessageService, SelectItemGroup } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { DatePicker } from 'primeng/datepicker';
+import { DialogModule } from 'primeng/dialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectModule } from 'primeng/select';
+import { ToastModule } from 'primeng/toast';
+
+// App (modelos, validadores, utilidades)
 import { Usuario } from '../../../../shared/models/usuario.model';
 import { Perfil } from '../../../../shared/models/Perfil';
-import { Profile } from '../../pages/profile/profile';
-import { ToastModule } from 'primeng/toast';
-import { DialogModule } from 'primeng/dialog';
 import { prohibidasValidator } from '../../../../core/validators/palabras-proh.validator';
+import { LANGUAGE_GROUPS } from '../../../../core/utils/languages.constant';
 
-
-type SexoEnum = 'MASCULINO' | 'FEMENINO' | 'OTRO'; // ajusta a tu enum real
+type SexoEnum = 'MASCULINO' | 'FEMENINO' | 'OTRO';
 
 interface SexoOption { label: string; value: SexoEnum; }
 
@@ -28,130 +32,41 @@ export interface CambiarPasswordDto {
   newPassword: string;
 }
 
-
 @Component({
   selector: 'app-form-profile',
   imports: [DialogModule, ToastModule, MultiSelectModule, ReactiveFormsModule, InputTextModule, ButtonModule, FormsModule, SelectModule, DatePicker, InputNumberModule, MessageModule, InputIconModule, IconFieldModule, CommonModule],
   templateUrl: './form-profile.html',
   styleUrl: './form-profile.scss'
 })
+
 export class FormProfile {
-  /** Visibilidad del diálogo (two-way con model()) */
   passwordDialogVisible = model<boolean>(false);
 
-  /** Evento para que el padre llame al servicio de cambiar contraseña */
   changePassword = output<CambiarPasswordDto>();
 
-  /** Datos que vienen del padre (signals) */
   usuario = input<Usuario | null>(null);
   perfil = input<Perfil | null>(null);
 
-  /** Evento de cambios de perfil hacia el padre */
   cambiosPerfil = output<Perfil>();
 
-  // ====== Estado local ======
   loading = false;
 
-  // ====== Formularios ======
   formulario!: FormGroup;
   pwdForm!: FormGroup;
 
-  // ====== Inyecciones ======
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
 
-  // ====== Datos auxiliares ======
   readonly sexos: SexoOption[] = [
     { label: 'Masculino', value: 'MASCULINO' },
     { label: 'Femenino', value: 'FEMENINO' },
     { label: 'Otro', value: 'OTRO' },
   ];
 
-  groupedCities: SelectItemGroup[] = [
-    {
-      label: 'Alemania',
-      value: 'de',
-      items: [
-        { label: 'Alemán', value: 'German' },
-      ]
-    },
-    {
-      label: 'USA',
-      value: 'us',
-      items: [
-        { label: 'Inglés', value: 'English' },
-        { label: 'Español', value: 'Spanish' }
-      ]
-    },
-    {
-      label: 'Japón',
-      value: 'jp',
-      items: [
-        { label: 'Japonés', value: 'Japanese' }
-      ]
-    },
-    {
-      label: 'España',
-      value: 'es',
-      items: [
-        { label: 'Español', value: 'Spanish' },
-        { label: 'Catalán', value: 'Catalan' },
-        { label: 'Gallego', value: 'Galician' },
-        { label: 'Basco', value: 'Basque' }
-      ]
-    },
-    {
-      label: 'Francia',
-      value: 'fr',
-      items: [
-        { label: 'Francés', value: 'French' }
-      ]
-    },
-    {
-      label: 'Canadá',
-      value: 'ca',
-      items: [
-        { label: 'Inglés', value: 'English' },
-        { label: 'Francés', value: 'French' }
-      ]
-    },
-    {
-      label: 'India',
-      value: 'in',
-      items: [
-        { label: 'Hindi', value: 'Hindi' },
-        { label: 'Bengalí', value: 'Bengali' },
-        { label: 'Tamil', value: 'Tamil' }
-      ]
-    },
-    {
-      label: 'Brazil',
-      value: 'br',
-      items: [
-        { label: 'Portugués', value: 'Portuguese' }
-      ]
-    },
-    {
-      label: 'China',
-      value: 'cn',
-      items: [
-        { label: 'Mandarin', value: 'Mandarin' },
-        { label: 'Cantonés', value: 'Cantonese' }
-      ]
-    },
-    {
-      label: 'Rusia',
-      value: 'ru',
-      items: [
-        { label: 'Ruso', value: 'Russian' }
-      ]
-    }
-  ];
+  // ===== Json con idiomas =====
+  groupedLanguages = LANGUAGE_GROUPS;
 
-
-  // ====== Ciclo de vida ======
   ngOnInit(): void {
-    // Form principal
     this.formulario = this.fb.group({
       nombre: ['', [Validators.required, prohibidasValidator()]],
       apellidos: ['', [Validators.required, prohibidasValidator()]],
@@ -173,14 +88,13 @@ export class FormProfile {
 
   }
 
-  // ====== Efecto de sincronización con inputs signal ======
   private readonly syncInputsEffect = effect(() => {
     const u = this.usuario();
     const p = this.perfil();
     if (!this.formulario || !p) return;
 
     const fechaUI: Date | null = p.fechaNacimiento
-      ? new Date(p.fechaNacimiento as any) // ajusta si backend envía string
+      ? new Date(p.fechaNacimiento as any)
       : null;
 
     const idiomas = Array.isArray(p.idiomas)
@@ -231,11 +145,9 @@ export class FormProfile {
       newPassword: this.pwdForm.value.newPassword
     };
     this.loading = true;
-    // Emitimos al padre; él hace la llamada HTTP
     this.changePassword.emit(payload);
   }
 
-  /** Llamado por el padre cuando terminó la petición */
   onRequestFinished(success: boolean) {
     this.loading = false;
     if (success) {
@@ -256,7 +168,7 @@ export class FormProfile {
       return;
     }
 
-    const raw = this.formulario.getRawValue(); // incluye disabled
+    const raw = this.formulario.getRawValue();
     const original = this.perfil();
     const u = this.usuario();
     if (!original) return;
@@ -269,7 +181,7 @@ export class FormProfile {
       sexo: (raw.sexo ?? null) as SexoEnum | null,
       fechaNacimiento:
         raw.fechaNacimiento
-          ? this.toLocalDateString(raw.fechaNacimiento)   // "yyyy-MM-dd"
+          ? this.toLocalDateString(raw.fechaNacimiento)
           : null,
 
       idiomas: Array.isArray(raw.idiomas) ? raw.idiomas.join(',') : '',
@@ -279,7 +191,7 @@ export class FormProfile {
     this.cambiosPerfil.emit(actualizado);
   }
 
-  // Utilidad opcional si necesitas formatear fechas a 'yyyy-MM-dd'
+  // Utilidad formatear fechas a 'yyyy-MM-dd'
   private toLocalDateString(d: Date): string {
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');

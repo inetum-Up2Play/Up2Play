@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-
 import { catchError, forkJoin, map, of } from 'rxjs';
 
 // --- PrimeNG ---
@@ -81,10 +80,7 @@ interface ParticipanteView {
   styleUrls: ['./info-actividad.scss'],
 })
 
-export class InfoActividad implements OnInit, AfterViewInit {
-  // =============================================================
-  // INYECCIÓN DE DEPENDENCIAS
-  // =============================================================
+export class InfoActividad implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private http = inject(HttpClient);
@@ -98,17 +94,11 @@ export class InfoActividad implements OnInit, AfterViewInit {
   private pagosService = inject(PagosService);
   private userService = inject(UserService);
 
-  // =============================================================
-  // ESTADO (SIGNALS & PROPIEDADES)
-  // =============================================================
-  // Datos principales
   actividad = signal<Actividad | null>(null);
   usuario = signal<Usuario | null>(null);
   perfil = signal<Perfil | null>(null);
   apuntado = signal<boolean>(false);
   loading = signal(false);
-
-  // UI & Participantes
   isCreador = signal<boolean>(false);
   avatarIdCreador = signal<number>(0);
   avataresUsuarios = signal<ParticipanteView[]>([]);
@@ -119,7 +109,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
   act = { ubicacion: '' };
   idsUsuarios: number[] = [];
 
-  // Formularios
   formRating = new FormGroup({
     rating: new FormControl(0),
   });
@@ -127,10 +116,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
   constructor() {
     this.actividadId = Number(this.route.snapshot.paramMap.get('id'));
   }
-
-  // =============================================================
-  // CICLO DE VIDA
-  // =============================================================
 
   ngOnInit(): void {
     if (!this.actividadId || Number.isNaN(this.actividadId)) {
@@ -158,21 +143,12 @@ export class InfoActividad implements OnInit, AfterViewInit {
     this.comprobarEstadoUsuario();
   }
 
-  ngAfterViewInit(): void {
-    // El mapa se inicializa bajo demanda al recibir coordenadas
-  }
-
-  // =============================================================
-  // CARGA DE DATOS
-  // =============================================================
-
   cargarDatosActividad(): void {
     this.actService.getActividad(this.actividadId).subscribe({
       next: (act) => {
         this.actividad.set(act);
         this.act.ubicacion = act.ubicacion;
 
-        // Actualizar UI
         this.formRating.get('rating')?.setValue(this.getNivelValue(act.nivel));
 
         // Iniciar mapa
@@ -191,89 +167,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
       },
     });
   }
-
-  comprobarEstadoUsuario(): void {
-    this.actService
-      .estoyApuntado(this.actividadId)
-      .subscribe((flag) => this.apuntado.set(flag));
-
-    this.actService
-      .comprobarCreador(this.actividadId)
-      .subscribe((flag) => this.isCreador.set(flag));
-  }
-
-  getAvatarCreador(idCreador: number) {
-    this.perfilService.getPerfilByUserId(idCreador).subscribe({
-      next: (perfil) => {
-        this.avatarIdCreador.set(perfil?.imagenPerfil ?? 0);
-      },
-      error: (err) => {
-        console.error('Error cargando avatar del creador', err);
-        this.avatarIdCreador.set(0);
-      },
-    });
-  }
-
-  cargarInscritos(): void {
-    this.actService
-      .usuariosInscritosActividad(this.actividadId)
-      .pipe(
-        map((participantes: any) =>
-          (participantes ?? [])
-            .map((p: any) => ({
-              id: p?.id,
-              nombre: p?.nombreUsuario ?? 'Usuario',
-            }))
-            .filter((p: any) => p.id != null)
-        )
-      )
-      .subscribe({
-        next: (participantes: { id: number; nombre: string }[]) => {
-          if (participantes.length > 0) {
-            this.cargarAvataresMasivos(participantes);
-          } else {
-            this.avataresUsuarios.set([]);
-          }
-        },
-        error: (err) => console.error('Error cargando participantes', err),
-      });
-  }
-
-  cargarAvataresMasivos(participantes: { id: number; nombre: string }[]) {
-    const peticiones = participantes.map((p) =>
-      this.perfilService.getPerfilByUserId(p.id).pipe(
-        map((perfil) => {
-          return {
-            nombre: p.nombre,
-            avatarId:
-              (perfil as any)?.imagen ?? (perfil as any)?.imagenPerfil ?? 0,
-          };
-        }),
-        catchError(() => of({ nombre: p.nombre, avatarId: 0 }))
-      )
-    );
-
-    forkJoin(peticiones).subscribe((resultado) => {
-      this.avataresUsuarios.set(resultado);
-    });
-  }
-
-  calcularPorcentajeParticipacion(): number {
-    const actividad = this.actividad();
-    const numPersTotales = actividad?.numPersTotales;
-    
-    if (!numPersTotales || numPersTotales === 0) {
-      return 0;
-    }
-    
-    const porcentaje = (this.avataresUsuarios().length / numPersTotales) * 100;
-    
-    // Redondeamos a 2 decimales
-    return Math.round(porcentaje * 100) / 100;
-  }
-  // =============================================================
-  // ACCIONES DE USUARIO (Botones)
-  // =============================================================
 
   apuntarse(): void {
     const act = this.actividad();
@@ -407,12 +300,9 @@ export class InfoActividad implements OnInit, AfterViewInit {
     ]);
   }
 
-  reembolsoATodos() {}
-
   // =============================================================
   // LÓGICA DEL MAPA (OpenLayers)
   // =============================================================
-
   resolverCoordenadas(direccion: string): void {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       direccion
@@ -432,9 +322,6 @@ export class InfoActividad implements OnInit, AfterViewInit {
   }
 
   initMap(lat: number, lon: number): void {
-    // Si necesitas limpiar el mapa anterior, hazlo aquí:
-    // document.getElementById('map')!.innerHTML = '';
-
     const marker = new Feature({
       geometry: new Point(fromLonLat([lon, lat])),
     });
@@ -475,9 +362,85 @@ export class InfoActividad implements OnInit, AfterViewInit {
     });
   }
 
-  // =============================================================
-  // HELPERS / UTILS
-  // =============================================================
+    /* =========================================== 
+    MÉTODOS AUXILIARES 
+  ============================================== */
+  comprobarEstadoUsuario(): void {
+    this.actService
+      .estoyApuntado(this.actividadId)
+      .subscribe((flag) => this.apuntado.set(flag));
+
+    this.actService
+      .comprobarCreador(this.actividadId)
+      .subscribe((flag) => this.isCreador.set(flag));
+  }
+
+  getAvatarCreador(idCreador: number) {
+    this.perfilService.getPerfilByUserId(idCreador).subscribe({
+      next: (perfil) => {
+        this.avatarIdCreador.set(perfil?.imagenPerfil ?? 0);
+      },
+      error: (err) => {
+        console.error('Error cargando avatar del creador', err);
+        this.avatarIdCreador.set(0);
+      },
+    });
+  }
+
+  cargarInscritos(): void {
+    this.actService
+      .usuariosInscritosActividad(this.actividadId).pipe(
+        map((participantes: any) =>
+          (participantes ?? [])
+            .map((p: any) => ({
+              id: p?.id,
+              nombre: p?.nombreUsuario ?? 'Usuario',
+            }))
+            .filter((p: any) => p.id != null)
+        )
+      ).subscribe({
+        next: (participantes: { id: number; nombre: string }[]) => {
+          if (participantes.length > 0) {
+            this.cargarAvataresMasivos(participantes);
+          } else {
+            this.avataresUsuarios.set([]);
+          }
+        },
+        error: (err) => console.error('Error cargando participantes', err),
+      });
+  }
+
+  cargarAvataresMasivos(participantes: { id: number; nombre: string }[]) {
+    const peticiones = participantes.map((p) =>
+      this.perfilService.getPerfilByUserId(p.id).pipe(
+        map((perfil) => {
+          return {
+            nombre: p.nombre,
+            avatarId:
+              (perfil as any)?.imagen ?? (perfil as any)?.imagenPerfil ?? 0,
+          };
+        }),
+        catchError(() => of({ nombre: p.nombre, avatarId: 0 }))
+      )
+    );
+
+    forkJoin(peticiones).subscribe((resultado) => {
+      this.avataresUsuarios.set(resultado);
+    });
+  }
+
+  calcularPorcentajeParticipacion(): number {
+    const actividad = this.actividad();
+    const numPersTotales = actividad?.numPersTotales;
+    
+    if (!numPersTotales || numPersTotales === 0) {
+      return 0;
+    }
+    
+    const porcentaje = (this.avataresUsuarios().length / numPersTotales) * 100;
+    
+    return Math.round(porcentaje * 100) / 100;
+  }
 
   getNivelValue(nivel: string): number {
     const map: Record<string, number> = {
@@ -519,9 +482,7 @@ export class InfoActividad implements OnInit, AfterViewInit {
     
     // Calculamos 24h en milisegundos: 24h * 60min * 60seg * 1000ms
     const unDiaEnMs = 24 * 60 * 60 * 1000; 
-    
     const diferencia = fechaActividad - ahora;
-
     return diferencia <= unDiaEnMs;
   }
 

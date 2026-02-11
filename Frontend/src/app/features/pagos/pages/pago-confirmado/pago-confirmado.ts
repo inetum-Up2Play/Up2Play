@@ -1,10 +1,11 @@
 import { Component, inject, Input, input, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+
 import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { PagosService } from '../../../../core/services/pagos/pagos-service';
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
 
 @Component({
@@ -13,6 +14,7 @@ import { DeporteImgPipe } from '../../../actividades/pipes/deporte-img-pipe';
   templateUrl: './pago-confirmado.html',
   styleUrl: './pago-confirmado.scss',
 })
+
 export class PagoConfirmado implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);

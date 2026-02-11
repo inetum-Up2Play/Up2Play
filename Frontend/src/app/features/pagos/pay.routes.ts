@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { PagoConfirmado } from './pages/pago-confirmado/pago-confirmado';
 import { PagoDenegado } from './pages/pago-denegado/pago-denegado';
 import { StripeCallback } from './pages/stripe-callback/stripe-callback';

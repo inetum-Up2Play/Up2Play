@@ -1,11 +1,13 @@
-import { Component, computed, signal, OnInit, inject, untracked } from '@angular/core';
-import { Header } from '../../../../core/layout/header/header';
-import { Footer } from '../../../../core/layout/footer/footer';
+import { Component, computed, signal, inject, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
-import { DatePickerModule } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
 import { catchError, finalize, forkJoin, map, of, switchMap, tap } from 'rxjs';
+
+import { DatePickerModule } from 'primeng/datepicker';
+
+import { Header } from '../../../../core/layout/header/header';
+import { Footer } from '../../../../core/layout/footer/footer';
+import { IconDeportePipe } from '../../../../shared/pipes/icon-deporte-pipe';
 import { PagosService, PagoDtoResp, ActividadCreadaDto } from '../../../../core/services/pagos/pagos-service';
 import { Actividad } from '../../../../shared/models/Actividad';
 import { ActService } from '../../../../core/services/actividad/act-service';
@@ -27,6 +29,7 @@ interface Pago {
   templateUrl: './historial-pagos.html',
   styleUrl: './historial-pagos.scss',
 })
+
 export class HistorialPagos {
 
   private pagosService = inject(PagosService);
@@ -38,7 +41,6 @@ export class HistorialPagos {
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
 
-  // ---------- Caché para no repetir llamadas por actividad ----------
   private actividadCache = new Map<number, Actividad>();
 
   // ====== Filtros ======
@@ -48,72 +50,7 @@ export class HistorialPagos {
   amountMin = signal<string>('');
   amountMax = signal<string>('');
 
-  // ====== Helpers ======
-  private normalize(text: string): string {
-    return (text ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-  }
-
-  private readonly monthMap: Record<string, number> = {
-    ene: 0, enero: 0, feb: 1, febrero: 1, mar: 2, marzo: 2, abr: 3, abril: 3,
-    may: 4, mayo: 4, jun: 5, junio: 5, jul: 6, julio: 6, ago: 7, agosto: 7,
-    sep: 8, set: 8, septiembre: 8, oct: 9, octubre: 9, nov: 10, noviembre: 10,
-    dic: 11, diciembre: 11,
-  };
-
-  private parseFechaToDate(fecha: string): Date | null {
-    if (!fecha) return null;
-    const parts = fecha.trim().split(/\s+/); // ['14','Oct','2026']
-    if (parts.length < 3) return null;
-    const day = Number(parts[0]);
-    const monthKey = this.normalize(parts[1]).slice(0, 3);
-    const year = Number(parts[2]);
-    const monthIndex = this.monthMap[monthKey];
-    if (Number.isNaN(day) || Number.isNaN(year) || monthIndex === undefined) return null;
-    const d = new Date(year, monthIndex, day);
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }
-
-  private parseAmount(value: string): number | undefined {
-    if (!value) return undefined;
-    const n = Number(String(value).replace(',', '.'));
-    return Number.isFinite(n) ? n : undefined;
-  }
-
-  private formatFechaEs(d: Date): string {
-    const fmt = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
-    return fmt.replace(/\b([a-záéíóúñü])/, (m) => m.toUpperCase());
-  }
-  private formatHora(d: Date): string {
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mm = String(d.getMinutes()).padStart(2, '0');
-    return `${hh}:${mm}`;
-  }
-
-  // ---------- Mapper DTO + Actividad -> Pago ----------
-  private toPago(dto: PagoDtoResp, act?: Actividad): Pago {
-    const d = dto.fecha ? new Date(dto.fecha) : null;
-    const ok = d && !isNaN(d.getTime()) ? d : null;
-
-    const actividadTitulo = dto.nombreActividad ?? '';
-
-    // Usamos datos de la actividad si existen; si no, dejamos vacío
-    const actividadLugar = act?.ubicacion ?? '';
-    const deporte = act?.deporte ?? '';
-
-    return {
-      fecha: ok ? this.formatFechaEs(ok) : '',
-      hora: ok ? this.formatHora(ok) : '',
-      actividadTitulo,
-      actividadLugar,
-      estado: (dto.estado as Pago['estado']) ?? 'Completado',
-      importe: Number(dto.total ?? 0),
-      deporte
-    };
-  }
-
-
-  // ====== Cargar del servicio ======
+  // ====== Carga del servicio ======
   ngOnInit(): void {
     this.loadPagosUsuarioActual();
     this.loadCreadas();
@@ -181,7 +118,7 @@ export class HistorialPagos {
     });
   });
 
-  /** conteo de actividades del mes actual */
+  /** Conteo de actividades del mes actual */
   totalActividadesMes = computed(() => this.actividadesMesActual().length);
 
   /** Ingresos del mes actual = sum(precio * inscritos) */
@@ -271,7 +208,6 @@ export class HistorialPagos {
 
   }
 
-
   setThisMonth() {
     const now = new Date();
     const from = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -293,13 +229,11 @@ export class HistorialPagos {
   onAmountMaxInput(value: string) { this.amountMax.set(value); }
 
   // ====== Filtrado combinado ======
-
   filteredPagos = computed(() => {
     const term = this.normalize(this.search());
 
     const from = this.dateFrom();
     const toRaw = this.dateTo();
-    // aseguramos inclusión del día final
     const to = toRaw ? new Date(toRaw.getFullYear(), toRaw.getMonth(), toRaw.getDate(), 23, 59, 59, 999) : null;
 
     return this.pagos().filter(p => {
@@ -334,7 +268,7 @@ export class HistorialPagos {
     return { from, to, total };
   }
 
-    // ---- Variables de paginación ----
+  // ---- Variables de paginación ----
   currentPage = signal<number>(1);
   pageSize = 5;
   paginatedPagos = computed(() => {
@@ -354,6 +288,69 @@ export class HistorialPagos {
     if (this.currentPage() > 1) {
       this.currentPage.update(p => p - 1);
     }
+  }
+
+  // ====== Helpers ======
+  private normalize(text: string): string {
+    return (text ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  }
+
+  private readonly monthMap: Record<string, number> = {
+    ene: 0, enero: 0, feb: 1, febrero: 1, mar: 2, marzo: 2, abr: 3, abril: 3,
+    may: 4, mayo: 4, jun: 5, junio: 5, jul: 6, julio: 6, ago: 7, agosto: 7,
+    sep: 8, set: 8, septiembre: 8, oct: 9, octubre: 9, nov: 10, noviembre: 10,
+    dic: 11, diciembre: 11,
+  };
+
+  private parseFechaToDate(fecha: string): Date | null {
+    if (!fecha) return null;
+    const parts = fecha.trim().split(/\s+/); // ['14','Oct','2026']
+    if (parts.length < 3) return null;
+    const day = Number(parts[0]);
+    const monthKey = this.normalize(parts[1]).slice(0, 3);
+    const year = Number(parts[2]);
+    const monthIndex = this.monthMap[monthKey];
+    if (Number.isNaN(day) || Number.isNaN(year) || monthIndex === undefined) return null;
+    const d = new Date(year, monthIndex, day);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  private parseAmount(value: string): number | undefined {
+    if (!value) return undefined;
+    const n = Number(String(value).replace(',', '.'));
+    return Number.isFinite(n) ? n : undefined;
+  }
+
+  private formatFechaEs(d: Date): string {
+    const fmt = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+    return fmt.replace(/\b([a-záéíóúñü])/, (m) => m.toUpperCase());
+  }
+  private formatHora(d: Date): string {
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    return `${hh}:${mm}`;
+  }
+
+  // ---------- Mapper DTO + Actividad -> Pago ----------
+  private toPago(dto: PagoDtoResp, act?: Actividad): Pago {
+    const d = dto.fecha ? new Date(dto.fecha) : null;
+    const ok = d && !isNaN(d.getTime()) ? d : null;
+
+    const actividadTitulo = dto.nombreActividad ?? '';
+
+    const actividadLugar = act?.ubicacion ?? '';
+    const deporte = act?.deporte ?? '';
+
+    return {
+      fecha: ok ? this.formatFechaEs(ok) : '',
+      hora: ok ? this.formatHora(ok) : '',
+      actividadTitulo,
+      actividadLugar,
+      estado: (dto.estado as Pago['estado']) ?? 'Completado',
+      importe: Number(dto.total ?? 0),
+      deporte
+    };
   }
 }
 

@@ -1,7 +1,6 @@
 @use 'sass:color';
 @use 'styles/variables' as vars;
 
-/* Al usar ViewEncapsulation.None, no necesitamos :host ni ::ng-deep */
 p-menubar.contenedor-menubar {
   background-color: vars.$verde-oliva !important;
   border-radius: 0;
@@ -129,7 +128,6 @@ p-menubar.contenedor-menubar {
 }
 
 /* En header.scss */
-
 .logout-item {
   font-weight: bold;
 

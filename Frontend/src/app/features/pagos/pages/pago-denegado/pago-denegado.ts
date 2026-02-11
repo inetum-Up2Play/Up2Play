@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Header } from '../../../../core/layout/header/header';
 import { Footer } from '../../../../core/layout/footer/footer';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pago-denegado',

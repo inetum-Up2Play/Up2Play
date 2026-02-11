@@ -48,11 +48,11 @@ export class HolidaysService {
           return <EventInput>{
             id: `nager-${h.date}-${title}`,
             title,
-            start: h.date,      // formato ISO YYYY-MM-DD
+            start: h.date,      // Formato ISO YYYY-MM-DD
             allDay: true,
             className: isCatalonia ? ['festivo', 'festivo-cat'] : ['festivo'],
             extendedProps: {
-              nager: h,         // por si luego quieres ver detalles
+              nager: h,         
             },
           };
         });

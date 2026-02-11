@@ -1,5 +1,6 @@
 import { Actividad } from './Actividad';
 import { Usuario } from './usuario.model';
+
 export interface Notificacion {
   id: number;
   titulo: string;
@@ -19,7 +20,6 @@ export interface Notificacion {
     | 'PAGO_RECIBIDO'
     | 'PAGO_FALLIDO';
 
-  // Relaciones (opcionales por si el backend manda null en alguna)
   actividad?: Actividad;
   usuarios?: Usuario;
   usuarioCreador?: Usuario;

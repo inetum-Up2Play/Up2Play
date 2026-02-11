@@ -1,7 +1,8 @@
 import { Component, inject, input, signal } from '@angular/core';
-import { PagosService } from '../../../../core/services/pagos/pagos-service';
-import { StripeService } from '../../../../core/services/pagos/stripe-service';
+
 import { MessageModule } from 'primeng/message';
+
+import { StripeService } from '../../../../core/services/pagos/stripe-service';
 
 @Component({
   selector: 'app-allow-stripe-profile',
@@ -12,7 +13,6 @@ import { MessageModule } from 'primeng/message';
 export class AllowStripeProfile {
   private stripeService = inject(StripeService);
 
-  // Recibimos el estado desde el padre (Perfil) usando signal inputs
   pagosHabilitados = input.required<boolean>();
 
   loading = signal(false);

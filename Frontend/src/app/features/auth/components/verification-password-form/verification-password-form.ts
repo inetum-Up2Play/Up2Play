@@ -108,7 +108,6 @@ validateToken(token: string): void {
       this.loading = false;
       this.email = typeof res === 'string' ? res : res.email;
 
-      // 🔹 GUARDA el email en el servicio compartido
       this.userDataService.setEmail(this.email);
     },
     error: (err) => {
@@ -137,8 +136,7 @@ validateToken(token: string): void {
         this.userDataService.setEmail(this.email);
         this.router.navigate(['/auth/new-password']);
       },
-      error: (err) => {
-        // No redirige. Muestra el mensaje de error
+      error: (err) => {        // No redirige. Muestra el mensaje de error
         this.loading = false;
         this.errorMessage =
           err.error?.message ||

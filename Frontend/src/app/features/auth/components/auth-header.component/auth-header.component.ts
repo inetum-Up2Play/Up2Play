@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
@@ -17,6 +17,7 @@ export class AuthHeaderComponent {
   IniciarSesionUrl = '/auth/login'
   RegistrarseUrl = '/auth/register'
   VerificarUrl = '/auth/verification'
+  isMenuOpen: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -25,11 +26,10 @@ export class AuthHeaderComponent {
   ngOnInit() {
     this.items = [
       {
-        label: 'MENÚ',
         items: [
-          { label: 'Inicio', url: this.landingUrl },
-          { label: 'Registrarse', routerLink: [this.RegistrarseUrl] },
-          { label: 'Iniciar sesión', routerLink: [this.IniciarSesionUrl] },
+          { label: 'Inicio', url: this.landingUrl, icon: 'pi pi-home' },
+          { label: 'Registrarse', routerLink: [this.RegistrarseUrl], icon: 'pi pi-user-plus' },
+          { label: 'Iniciar sesión', routerLink: [this.IniciarSesionUrl], icon: 'pi pi-key' },
         ]
       }
     ];

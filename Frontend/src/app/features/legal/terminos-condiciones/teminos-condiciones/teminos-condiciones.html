@@ -4,38 +4,27 @@
   <main class="w-full max-w-4xl mx-auto px-6 lg:px-8 py-12 lg:py-20">
     <nav class="flex justify-start animate-fade-in-down mb-8">
       <!-- BOTÓN VOLVER ATRÁS -->
-      <p-button
-        label="Volver atrás"
-        icon="pi pi-arrow-left"
+      <p-button label="Volver atrás"
         (onClick)="goBack()"
-        styleClass="p-button-text p-button-secondary text-brand hover:bg-brand-light/10 
-          hover:transition-transform pl-0 transition-all duration-300"
-      >
+        styleClass="btn-volverAtras">
       </p-button>
     </nav>
 
     <div class="flex flex-col gap-12 relative">
-      <section
-        class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center"
-      >
+      <section class="flex flex-col gap-6 border-b border-brand-light pb-8 text-center items-center">
         <div class="flex flex-col gap-4">
-          <h1
-            class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark"
-          >
+          <h1 class="text-4xl lg:text-5xl leading-tight tracking-tight font-bold text-brand-dark">
             Términos y Condiciones
           </h1>
-          <p
-            class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto"
-          >
+          <p class="text-brand opacity-90 text-lg font-normal leading-relaxed max-w-2xl mx-auto">
             Bienvenido a UP2Play. Por favor, lee atentamente las siguientes
             normas antes de utilizar nuestros servicios para garantizar una
             experiencia justa.
           </p>
         </div>
 
-        <div
-          class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit px-4 py-1.5 rounded-full font-medium border border-brand-light/50"
-        >
+        <div class="flex items-center gap-2 text-sm text-brand-dark bg-light-green w-fit px-4 py-1.5 
+          rounded-full font-medium border border-brand-light/50">
           <span class="material-symbols-outlined text-base">update</span>
           <span>Última actualización: {{ lastUpdate() }}</span>
         </div>
@@ -43,13 +32,9 @@
 
       <section class="flex flex-col gap-12">
         <div class="scroll-mt-32" id="section-1">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >1</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+              text-brand-dark text-sm font-bold border border-brand-light">1</span>
             Información General
           </h2>
           <p class="text-brand opacity-90 leading-relaxed text-lg">
@@ -60,18 +45,12 @@
         </div>
 
         <div class="scroll-mt-32" id="section-2">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >2</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+              text-brand-dark text-sm font-bold border border-brand-light">2</span>
             Registro de Usuarios
           </h2>
-          <div
-            class="rounded-xl border border-brand-light bg-white p-6 shadow-sm"
-          >
+          <div class="rounded-xl border border-brand-light bg-white p-6 shadow-sm">
             <p class="text-brand opacity-90 leading-relaxed">
               Para acceder a ciertas funcionalidades, es necesario registrarse
               proporcionando información veraz y actualizada. El usuario es
@@ -81,13 +60,9 @@
         </div>
 
         <div class="scroll-mt-32" id="section-3">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >3</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+              text-brand-dark text-sm font-bold border border-brand-light">3</span>
             Uso del Sitio
           </h2>
           <p class="text-brand opacity-90 leading-relaxed text-lg">
@@ -98,13 +73,9 @@
         </div>
 
         <div class="scroll-mt-32" id="section-4">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >4</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+            text-brand-dark text-sm font-bold border border-brand-light">4</span>
             Propiedad Intelectual
           </h2>
           <p class="text-brand opacity-90 leading-relaxed text-lg">
@@ -114,13 +85,9 @@
         </div>
 
         <div class="scroll-mt-32" id="section-5">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >5</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+              text-brand-dark text-sm font-bold border border-brand-light">5</span>
             Protección de Datos
           </h2>
           <p class="text-brand opacity-90 leading-relaxed text-lg">
@@ -130,13 +97,9 @@
         </div>
 
         <div class="scroll-mt-32" id="section-6">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >6</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+            text-brand-dark text-sm font-bold border border-brand-light">6</span>
             Cookies
           </h2>
           <p class="text-brand opacity-90 leading-relaxed text-lg">
@@ -146,33 +109,23 @@
         </div>
 
         <div class="scroll-mt-32" id="section-7">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >7</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+              text-brand-dark text-sm font-bold border border-brand-light">7</span>
             Servicios y Pagos
           </h2>
           <p class="text-brand opacity-90 leading-relaxed text-lg">
             UP2Play ofrece servicios de pago. Las condiciones de compra,
             cancelación y reembolso las puede consultar en el el siguiente
             enlace:
-            <a class="cursor-pointer font-bold" routerLink="/legal/devoluciones"
-              >Política de devoluciones</a
-            >
+            <a class="cursor-pointer font-bold" routerLink="/legal/devoluciones">Política de devoluciones</a>
           </p>
         </div>
 
         <div class="scroll-mt-32" id="section-8">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >8</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+            text-brand-dark text-sm font-bold border border-brand-light">8</span>
             Limitación de Responsabilidad
           </h2>
 
@@ -189,13 +142,9 @@
         </div>
 
         <div class="scroll-mt-32" id="section-9">
-          <h2
-            class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3"
-          >
-            <span
-              class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green text-brand-dark text-sm font-bold border border-brand-light"
-              >9</span
-            >
+          <h2 class="text-2xl font-semibold text-brand-dark mb-4 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-light-green 
+            text-brand-dark text-sm font-bold border border-brand-light">9</span>
             Modificaciones
           </h2>
           <p class="text-brand opacity-90 leading-relaxed text-lg">
@@ -207,56 +156,43 @@
       </section>
 
       <section class="mt-4 mb-8" id="section-10">
-        <div
-          class="bg-brand rounded-2xl p-8 lg:p-12 relative overflow-hidden group shadow-xl transition-transform hover:scale-[1.01]"
-        >
-          <div
-            class="absolute top-0 right-0 w-64 h-64 bg-light-green rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2 opacity-30"
-          ></div>
-          <div
-            class="absolute bottom-0 left-0 w-48 h-48 bg-black/30 rounded-full blur-2xl transform -translate-x-1/3 translate-y-1/3"
-          ></div>
+        <div class="bg-brand rounded-2xl p-8 lg:p-12 relative overflow-hidden group shadow-xl 
+          transition-transform hover:scale-[1.01]">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-light-green rounded-full blur-3xl   
+            transform translate-x-1/2 -translate-y-1/2 opacity-30">
+          </div>
+          <div class="absolute bottom-0 left-0 w-48 h-48 bg-black/30 rounded-full blur-2xl 
+          transform -translate-x-1/3 translate-y-1/3">
+          </div>
 
           <div class="relative z-10 flex flex-col items-start gap-6">
             <h2 class="text-white text-3xl font-black flex items-center gap-3">
-              <span class="material-symbols-outlined text-4xl text-accent"
-                >gavel</span
-              >
+              <span class="material-symbols-outlined text-4xl text-accent">gavel</span>
               10. Legislación Aplicable
             </h2>
 
-            <p
-              class="text-brand-light text-base lg:text-lg max-w-2xl leading-relaxed"
-            >
+            <p class="text-brand-light text-base lg:text-lg max-w-2xl leading-relaxed">
               Estos términos se rigen por la legislación española. En caso de
               conflicto, se someterán a los tribunales competentes de la
               jurisdicción especificada.
             </p>
 
-            <div
-              class="flex items-center gap-4 bg-white/10 p-4 rounded-xl border border-white/10 w-full md:w-auto"
-            >
-              <div
-                class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-brand-dark"
-              >
-                <span class="material-symbols-outlined text-xl"
-                  >location_on</span
-                >
+            <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl border border-white/10 w-full md:w-auto">
+              <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-brand-dark">
+                <span class="material-symbols-outlined text-xl">location_on</span>
               </div>
               <div class="flex flex-col">
-                <span
-                  class="text-xs text-brand-light uppercase tracking-wider font-bold"
-                  >Jurisdicción</span
-                >
-                <span class="font-bold text-lg text-white"
-                  >Tarragona, España</span
-                >
+                <span class="text-xs text-brand-light uppercase tracking-wider font-bold">Jurisdicción</span>
+                <span class="font-bold text-lg text-white">Tarragona, España</span>
               </div>
             </div>
+
           </div>
         </div>
+
       </section>
     </div>
+    
   </main>
 </div>
 <app-footer></app-footer>

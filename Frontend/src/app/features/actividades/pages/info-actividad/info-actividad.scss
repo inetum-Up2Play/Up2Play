@@ -47,8 +47,6 @@ select {
   margin-bottom: 10px;
 }
 
-
-
 h1 {
   font-family: vars.$montserrat;
 }
@@ -66,9 +64,6 @@ h1 {
   border-bottom-color: vars.$verde-oliva;
 }
 
-/* En tu archivo CSS del componente */
 :host ::ng-deep .p-progressbar-value {
-        
-        background: vars.$verde-oliva;
-
+  background: vars.$verde-oliva;
 }

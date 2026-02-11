@@ -1,0 +1,82 @@
+@use 'styles/variables' as vars;
+
+.btn-nueva-actividad {
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 14px;
+    padding: 0.75rem 1.25rem;
+    color: #fff;
+    border: none;
+    overflow: hidden; // Necesario para el brillo
+    background: linear-gradient(135deg, vars.$verde-oliva 0%, #2c5230 100%);
+    box-shadow: 0 6px 16px rgba(21, 38, 20, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.2s ease;
+    will-change: transform;
+    outline: none;
+
+    // Efecto Hover y Active
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(21, 38, 20, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+
+        .btn-shine {
+            transform: translateX(0);
+        }
+
+        .pi-plus {
+            transform: rotate(90deg) scale(1.05);
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 4px rgba(177, 223, 117, 0.35);
+    }
+
+    // El Brillo (Shine effect)
+    .btn-shine {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        border-radius: 14px;
+        background: linear-gradient(115deg, 
+            transparent 0%, 
+            rgba(255, 255, 255, 0.12) 40%, 
+            rgba(255, 255, 255, 0.18) 50%, 
+            rgba(255, 255, 255, 0.12) 60%, 
+            transparent 100%
+        );
+        transform: translateX(-120%);
+        transition: transform 0.5s ease;
+    }
+
+    // Contenedor del Icono
+    .icon-container {
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+
+        .pi-plus {
+            font-size: 0.9rem !important;
+            color: #f7f7f7;
+            transition: transform 0.2s ease-out;
+            font-weight: bold;
+        }
+    }
+
+    .btn-text {
+        font-weight: bold;
+        font-size: 1rem; // text-lg
+        position: relative;
+        
+        @media (min-width: 768px) {
+            font-size: 1.125rem; // text-xl
+        }
+    }
+}
