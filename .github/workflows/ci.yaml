@@ -8,7 +8,7 @@ on:
       - main      # Rama principal
       - develop   # Rama de desarrollo
       #- feature/* # Cualquier rama que empiece por feature/
-      - feature/testing      
+      - feature/testing-prova      
 
 # Definición de los jobs (tareas) que se ejecutarán
 jobs:
@@ -35,52 +35,48 @@ jobs:
 
       - name: Build Angular          # Compila el proyecto Angular en modo producción
         run: npm run build -- --configuration production
+      
+      - name: Tests Unitarios
+        run: npm run test
 
-  # --- JOB 2: BACKEND ---
+# --- JOB 2: BACKEND (Ya activado y configurado) ---
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend_Up2Play/backend
+    steps:
+      - uses: actions/checkout@v3
 
-  # backend:
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: Backend_Up2Play/backend
-  #   steps:
-  #     - uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-  #     - name: Setup Java
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         java-version: '17'
-  #         distribution: 'temurin'
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-  #     - name: Cache Maven
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ~/.m2
-  #         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-maven-
+      - name: Build and Run Tests
+        env:
+          # Forzamos el perfil de test que usa H2
+          SPRING_PROFILES_ACTIVE: test
+          # Estas variables sobrescriben el yml si fuera necesario
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          # Al usar H2 en memoria, no necesitamos un servicio externo de base de datos
+        run: mvn -B clean verify
 
-  #     - name: Build backend (skip tests)
-  #       run: mvn -B -DskipTests clean package
-
-  #     - name: Run tests (H2, perfil test)
-  #       env:
-  #         SPRING_PROFILES_ACTIVE: test
-  #         SPRING_DATASOURCE_URL: jdbc:h2:mem:Up2Play;MODE=Oracle;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
-  #         SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
-  #         SPRING_DATASOURCE_USERNAME: sa
-  #         SPRING_DATASOURCE_PASSWORD: ""
-  #         TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
-  #         TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-  #       run: mvn -B verify -DtrimStackTrace=false
-
-  #     - name: Upload surefire reports
-  #       if: always()
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: surefire-reports
-  #         path: Backend_Up2Play/backend/target/surefire-reports     
-
-
+      - name: Upload Test Reports
+        if: always() # Se ejecuta aunque los tests fallen para que puedas ver qué pasó
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-reports
+          path: Backend_Up2Play/backend/target/surefire-reports
 
 
