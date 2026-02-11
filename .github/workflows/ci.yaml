@@ -8,7 +8,7 @@ on:
       - main      # Rama principal
       - develop   # Rama de desarrollo
       #- feature/* # Cualquier rama que empiece por feature/
-      #- feature/testing-prova      
+      - feature/testing-prova      
 
 # Definición de los jobs (tareas) que se ejecutarán
 jobs:
