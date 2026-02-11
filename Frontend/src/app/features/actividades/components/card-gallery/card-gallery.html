@@ -123,12 +123,14 @@
                         </div>
 
                         <div class="flex flex-col w-fit md:items-end gap-4">
-                            @if (activity.precio === 0) {
-                            <span
-                                class="text-lg font-bold text-[#3D6C3F] bg-[#B1DF75]/30 rounded-lg px-2">Gratuita</span>
-                            } @else {
-                            <span class="text-lg font-bold">{{ activity.precio | currency:'EUR' }}</span>
-                            }
+                            <div class="w-fit">
+                                @if (activity.precio === 0) {
+                                <span
+                                    class="text-lg font-bold text-[#3D6C3F] bg-[#B1DF75]/30 rounded-lg p-2">Gratuita</span>
+                                } @else {
+                                <span class="text-lg font-bold">{{ activity.precio | currency:'EUR' }}</span>
+                                }
+                            </div>
                             <div class="flex flex-row gap-2">
                                 @if (esCreador(activity)) {
                                 <button pButton icon="pi pi-cog" label="Gestionar"
