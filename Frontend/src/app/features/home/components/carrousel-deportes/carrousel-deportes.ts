@@ -16,6 +16,7 @@ import { EmptyActivities } from '../../../actividades/components/empty-activitie
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../core/services/user/user-service';
 import { PagosService } from '../../../../core/services/pagos/pagos-service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -25,6 +26,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './carrousel-deportes.scss',
 })
 export class CarrouselDeportes {
+  private breakpointObserver = inject(BreakpointObserver);
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
   private messageService = inject(MessageService);
@@ -34,10 +36,13 @@ export class CarrouselDeportes {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
+  mostrarIndicadores = true;
   activities: any[] = [];
   deporteActual: string | null = null;
-   private deporteSubscription: Subscription | undefined;
+  private deporteSubscription: Subscription | undefined;
   isLoading = false;
+
+
 
   ngOnInit() {
 
@@ -57,6 +62,12 @@ export class CarrouselDeportes {
       }
     });
 
+    this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.TabletPortrait])
+      .subscribe(result => {
+        this.mostrarIndicadores = !result.matches;
+      });
+
   }
 
   private mezclarYLimitar(activities: any[], limite: number = 10): any[] {
@@ -72,7 +83,7 @@ export class CarrouselDeportes {
     this.actService.listarActividadesNoApuntadas().subscribe({
       next: data => {
         this.activities = this.mezclarYLimitar(data, 10);
-         this.isLoading = false;
+        this.isLoading = false;
         this.cdr.detectChanges();
 
       },
@@ -86,7 +97,7 @@ export class CarrouselDeportes {
 
 
 
- cargarPorDeporte(deporte: string) {
+  cargarPorDeporte(deporte: string) {
     this.deporteActual = deporte;
     this.actUpdateService.setDeporte(deporte);
     this.isLoading = true;
@@ -101,7 +112,7 @@ export class CarrouselDeportes {
         this.activities = data;
         this.isLoading = false;
         this.cdr.detectChanges(); // Forzar detección de cambios
-        
+
         // Si no hay datos, mostrar mensaje
         if (data.length === 0) {
           this.messageService.add({
@@ -116,7 +127,7 @@ export class CarrouselDeportes {
         this.activities = [];
         this.isLoading = false;
         this.cdr.detectChanges();
-        
+
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
