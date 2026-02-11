@@ -17,6 +17,7 @@ export class AuthHeaderComponent {
   IniciarSesionUrl = '/auth/login'
   RegistrarseUrl = '/auth/register'
   VerificarUrl = '/auth/verification'
+  isMenuOpen: boolean = false;
 
   constructor(private router: Router) { }
 

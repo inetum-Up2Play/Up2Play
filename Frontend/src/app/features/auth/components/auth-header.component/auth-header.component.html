@@ -8,11 +8,13 @@
             </div>
             <!-- MENÚ MÓVIL -->
             <div class="card flex w-full justify-end pr-6 md:hidden">
-                <p-menu #menu [model]="items" [popup]="true" appendTo="body"></p-menu>
+                <p-menu #menu [model]="items" [popup]="true" appendTo="body"
+                    (onShow)="isMenuOpen = true" (onHide)="isMenuOpen = false">
+                </p-menu>
 
-                <p-button (click)="menu.toggle($event)" icon="pi pi-bars" [rounded]="true" [raised]="true"
-                    aria-label="Abrir menú" styleClass="menu-btn !bg-emerald-700/0 !border-emerald-700/0 
-                    !shadow-none !text-white !w-11 !h-11 !p-0 !flex !items-center !justify-center">
+                <p-button (click)="menu.toggle($event)" [icon]="isMenuOpen ? 'ph ph-text-indent' : 'ph ph-list'"
+                    [rounded]="true" [raised]="true" aria-label="Abrir menú"
+                    styleClass="menu-btn !bg-transparent !border-none !shadow-none !text-white !w-11 !h-11 text-2xl! !p-0 !flex !items-center !justify-center">
                 </p-button>
             </div>
 
