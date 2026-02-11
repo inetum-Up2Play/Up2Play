@@ -4,7 +4,7 @@ package com.Up2Play.backend.Model.enums;
 public enum SexoAElegir {
     MASCULINO("Masculino"),
     FEMENINO("Femenino"),
-    OTROS("Otro");
+    OTRO("Otro");
 
     private final String valorBD;
 
@@ -27,7 +27,7 @@ public enum SexoAElegir {
         return switch (value.trim().toLowerCase()) {
             case "masculino", "m" -> MASCULINO;
             case "femenino", "f" -> FEMENINO;
-            case "otro", "otros", "o" -> OTROS;
+            case "otro", "otros", "o" -> OTRO;
             default -> throw new IllegalArgumentException("Sexo no válido: " + value);
         };
     }

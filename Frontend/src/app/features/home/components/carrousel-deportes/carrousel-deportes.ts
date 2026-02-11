@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MessageModule } from 'primeng/message';
@@ -16,6 +16,7 @@ import { EmptyActivities } from '../../../actividades/components/empty-activitie
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../core/services/user/user-service';
 import { PagosService } from '../../../../core/services/pagos/pagos-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-carrousel-deportes',
@@ -31,9 +32,12 @@ export class CarrouselDeportes {
   private userService = inject(UserService);
   private pagosService = inject(PagosService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   activities: any[] = [];
   deporteActual: string | null = null;
+   private deporteSubscription: Subscription | undefined;
+  isLoading = false;
 
   ngOnInit() {
 
@@ -68,31 +72,64 @@ export class CarrouselDeportes {
     this.actService.listarActividadesNoApuntadas().subscribe({
       next: data => {
         this.activities = this.mezclarYLimitar(data, 10);
+         this.isLoading = false;
+        this.cdr.detectChanges();
 
       },
       error: err => {
         console.error('Error cargando actividades', err);
         this.activities = [];
+        this.cdr.detectChanges();
       }
     });
   }
 
 
 
-  cargarPorDeporte(deporte: string) {
+ cargarPorDeporte(deporte: string) {
     this.deporteActual = deporte;
     this.actUpdateService.setDeporte(deporte);
+    this.isLoading = true;
 
-    this.actService.listarActividadesPorDeporte(deporte).subscribe({
+    // Cancela la suscripción anterior si existe
+    if (this.deporteSubscription) {
+      this.deporteSubscription.unsubscribe();
+    }
+
+    this.deporteSubscription = this.actService.listarActividadesPorDeporte(deporte).subscribe({
       next: data => {
         this.activities = data;
-
+        this.isLoading = false;
+        this.cdr.detectChanges(); // Forzar detección de cambios
+        
+        // Si no hay datos, mostrar mensaje
+        if (data.length === 0) {
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Sin resultados',
+            detail: `No hay actividades disponibles para ${deporte}`
+          });
+        }
       },
       error: err => {
+        console.error(`Error cargando actividades de ${deporte}`, err);
         this.activities = [];
-
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Error al cargar actividades de ${deporte}`
+        });
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.deporteSubscription) {
+      this.deporteSubscription.unsubscribe();
+    }
   }
 
   get carouselClasses(): any {
