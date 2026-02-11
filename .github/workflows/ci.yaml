@@ -69,6 +69,12 @@ jobs:
           # Estas variables sobrescriben el yml si fuera necesario
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_WEBHOOK_KEY: ${{ secrets.STRIPE_WEBHOOK_KEY }}
+
+
+
           # Al usar H2 en memoria, no necesitamos un servicio externo de base de datos
         run: mvn -B clean verify
 
