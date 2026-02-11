@@ -33,8 +33,8 @@ jobs:
       - name: Lint boundaries        # Ejecuta ESLint con el plugin boundaries para validar arquitectura
         run: npm run lint:boundaries
 
-      - name: Build Angular          # Compila el proyecto Angular en modo producción
-        run: npm run build -- --configuration production
+      - name: Build Angular         
+        run: npm run build 
       
       - name: Tests Unitarios
         run: npm run test
