@@ -1,3 +1,4 @@
+
 @use 'styles/variables' as vars;
 
 .btn-nueva-actividad {
@@ -79,4 +80,22 @@
             font-size: 1.125rem; // text-xl
         }
     }
+
+
+@keyframes clockMove {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-clock {
+  animation: clockMove 2s infinite;
+}
+
+.animate-clock:nth-child(1) {
+  animation-delay: 1s;
+
 }
