@@ -1,10 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 
 import { Actividad } from '../../../shared/models/Actividad';
 import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
+import { AuthService } from '../auth/auth-service';
+import { UserService } from '../user/user-service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +14,9 @@ import { ErrorResponseDto } from '../../../shared/models/ErrorResponseDto';
 export class ActService {
   private readonly http = inject(HttpClient);
   private router = inject(Router);
+  private userService = inject(UserService);
   private baseUrl = 'http://localhost:8082/actividades';
+  
 
   // Crear actividad
   crearActividad(payload: any): Observable<any> {
@@ -178,12 +182,19 @@ export class ActService {
 
   // Método listar actividades por deporte
   listarActividadesPorDeporte(deporte: string): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl + '/getNoApuntadasPorDeporte', {
-      params: { deporte: deporte }
-    }).pipe(
+    return this.userService.getUsuario().pipe(
+      switchMap(usuario => {
+        const usuarioId = usuario.id;
+        return this.http.get<any[]>(`${this.baseUrl}/getNoApuntadasPorDeporte`, {
+          params: {
+            usuarioId: usuarioId.toString(),
+            deporte: deporte
+          }
+        });
+      }),
       catchError((error) => {
-        console.error('Error al obtener actividades', error);
-        return of([]); // Devuelve array vacío si falla
+        console.error('Error al obtener actividades por deporte', error);
+        return of([]);
       })
     );
   }
@@ -193,7 +204,7 @@ export class ActService {
     return this.http.get<any[]>(this.baseUrl + '/getPasadasPorUsuario').pipe(
       catchError((error) => {
         console.error('Error al obtener actividades', error);
-        return of([]); // Devuelve array vacío si falla
+        return of([]); 
       })
     );
   }
