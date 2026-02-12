@@ -93,7 +93,7 @@ export class VerificationFormComponent implements OnInit {
         if (!this.email) {
           this.errorMessageToken =
             'No se encontró token ni email. Redirigiendo...';
-          this.router.navigate(['/auth/signup']);
+          this.router.navigate(['/auth/register']);
         }
       }
     });

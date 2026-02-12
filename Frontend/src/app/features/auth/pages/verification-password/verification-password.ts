@@ -12,5 +12,5 @@ import { AuthHeaderComponent } from '../../components/auth-header.component/auth
 })
 
 export class VerificationPassword {
-
+  
 }

@@ -52,7 +52,12 @@ export class NewPasswordForm implements OnInit {
   }
 
   ngOnInit(): void {
-    this.email = this.userDataService.getEmail() ?? '';
+     this.email = this.userDataService.getEmail();
+    if (!this.email) {
+
+      this.router.navigate(['/auth/register']);
+    }
+    
   }
 
   passwordValidator(control: AbstractControl): ValidationErrors | null {

@@ -15,6 +15,7 @@ import { MessageModule } from 'primeng/message';
 // Services
 import { AuthService } from '../../../../core/services/auth/auth-service';
 import { UserDataService } from '../../../../core/services/auth/user-data-service';
+import { ErrorService } from '../../../../core/services/error/error-service';
 
 interface ResendVerificationDto {
   email: string;
@@ -46,10 +47,12 @@ export class VerificationPasswordForm {
   private userDataService = inject(UserDataService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private errorService = inject(ErrorService);
   private fb = inject(FormBuilder);
   private activatedRoute = inject(ActivatedRoute);
 
   errorMessage: string | null = null;
+  
 
   resendMessageVisible = false;
 
@@ -95,7 +98,7 @@ export class VerificationPasswordForm {
         if (!this.email) {
           this.errorMessageToken =
             'No se encontró token ni email. Redirigiendo...';
-          this.router.navigate(['/auth/signup']);
+          this.router.navigate(['/auth/register']);
         }
       }
     });
@@ -106,7 +109,12 @@ validateToken(token: string): void {
   this.authService.validateToken(token).subscribe({
     next: (res: string | { email: string }) => {
       this.loading = false;
-      this.email = typeof res === 'string' ? res : res.email;
+
+        if (typeof res === 'string') {
+          this.errorMessageToken = res;  //Muestra respuesta con string
+        } else {
+          this.email = res.email;  //Muestra respuesta con payload
+        }
 
       this.userDataService.setEmail(this.email);
     },
@@ -132,17 +140,21 @@ validateToken(token: string): void {
 
     this.authService.verifyNewPasswordCode(payload).subscribe({
       next: (res) => {
-        this.loading = false;
-        this.userDataService.setEmail(this.email);
-        this.router.navigate(['/auth/new-password']);
+        if (res === true) {
+          this.loading = false;
+          console.log('hollaaaaa');
+          this.userDataService.setEmail(this.email);
+          this.router.navigate(['/auth/new-password']);
+        } else {
+          this.loading = false;
+          const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
+        }
       },
-      error: (err) => {        // No redirige. Muestra el mensaje de error
+      error: () => {
         this.loading = false;
-        this.errorMessage =
-          err.error?.message ||
-          'El código de verificación es incorrecto o ha expirado.';
-        console.error('Error de verificación:', err);
-      },
+        this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
+      }
     });
   }
 }
