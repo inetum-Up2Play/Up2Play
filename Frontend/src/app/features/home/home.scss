@@ -1,0 +1,30 @@
+@use 'styles/variables' as vars;
+
+h1 {
+    font-family: vars.$montserrat;
+}
+
+.hero {
+    height: fit-content;
+}
+
+.text-card {
+    font-family: vars.$work-sans;
+}
+
+.p-creados {
+    background-image: url('../../../assets/home/fondo_creados.svg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-color: white;
+}
+
+.p-unidos {
+    justify-items: baseline;
+    background-image: url('../../../assets/home/fondo_unidos.svg');
+    background-size: 101%;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-color: white;
+}

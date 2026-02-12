@@ -1,0 +1,96 @@
+<div class="content">
+    <app-header></app-header>
+
+    <main class="px-4 md:px-8 lg:px-16 py-6 gap-6">
+        <p-tabs value="0">
+            <p-tabpanels class="bg-transparent! border-none!">
+
+                <p-tabpanel value="0">
+                    <div class="flex flex-col gap-4">
+                        <div
+                            class="text-center items-center flex flex-col xl:flex-row lg:justify-between xl:text-left w-full md:pt-5 2xl:max-w-screen-2xl 2xl:mx-auto">
+                            <h1 class="font-bold text-5xl leading-tight tracking-[-0.033em] text-[#152614]">
+                                Explora & Apúntate</h1>
+                            <button id="crear_actividad" type="button"
+                                [routerLink]="['/actividades', 'crear-actividad']" aria-label="Crear nueva actividad"
+                                class="btn-nueva-actividad">
+                                <span class="btn-shine"></span>
+                                <div class="icon-container">
+                                    <i class="pi pi-plus"></i>
+                                </div>
+                                <span class="btn-text">Nueva Actividad</span>
+                            </button>
+                        </div>
+                    </div>
+                </p-tabpanel>
+
+                <p-tabpanel value="1">
+                    <div class="flex flex-col gap-4">
+                        <div
+                            class="text-center items-center flex flex-col xl:flex-row lg:justify-between xl:text-left w-full md:pt-5 2xl:max-w-screen-2xl 2xl:mx-auto">
+                            <h1 class="font-bold text-5xl leading-tight tracking-[-0.033em] text-[#152614]">Mis
+                                Actividades</h1>
+                            <button id="crear_actividad" type="button" [routerLink]="['/actividades', 'crear-actividad']" 
+                                aria-label="Crear nueva actividad" class="btn-nueva-actividad">
+                                <span class="btn-shine"></span>
+                                <div class="icon-container">
+                                    <i class="pi pi-plus"></i>
+                                </div>
+                                <span class="btn-text">Nueva Actividad</span>
+                            </button>
+                        </div>
+                    </div>
+                </p-tabpanel>
+
+                <p-tabpanel value="2">
+                    <div class="flex flex-col gap-4">
+                        <div
+                            class="text-center items-center flex flex-col xl:flex-row lg:justify-between xl:text-left w-full md:pt-5 2xl:max-w-screen-2xl 2xl:mx-auto">
+                            <h1 class="font-bold text-5xl leading-tight tracking-[-0.033em] text-[#152614]">Próximos
+                                Planes</h1>
+                            <button id="crear_actividad" type="button" [routerLink]="['/actividades', 'crear-actividad']" 
+                                aria-label="Crear nueva actividad" class="btn-nueva-actividad">
+                                <span class="btn-shine"></span>
+                                <div class="icon-container">
+                                    <i class="pi pi-plus"></i>
+                                </div>
+                                <span class="btn-text">Nueva Actividad</span>
+                            </button>
+                        </div>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+
+            <p-tablist class="flex w-full 2xl:max-w-screen-2xl 2xl:mx-auto">
+                <p-tab value="0" class="cursor-pointer pb-3 pt-2 px-2 text-[#3D6C3F]! hover:text-[#111814]!">
+                    <p class="font-bold">Explora y apúntate</p>
+                </p-tab>
+
+                <p-tab value="1" class="cursor-pointer pb-3 pt-2 px-2 text-[#3D6C3F]! hover:text-[#111814]!">
+                    <p class="font-bold">Mis actividades</p>
+                </p-tab>
+
+                <p-tab value="2" class="cursor-pointer pb-3 pt-2 px-2 text-[#3D6C3F]! hover:text-[#111814]!">
+                    <p class="font-bold">Próximos planes</p>
+                </p-tab>
+            </p-tablist>
+
+            <!-- ARRAY DE ACTIVIDADES PARA CADA PANEL-->
+            <p-tabpanels class="bg-transparent! border-none!">
+                <p-tabpanel value="0">
+                    <app-card-gallery [tipo]="'explora-apuntate'"></app-card-gallery>
+                </p-tabpanel>
+
+                <p-tabpanel value="1">
+                    <app-card-gallery [tipo]="'mis-actividades'"></app-card-gallery>
+                </p-tabpanel>
+
+                <p-tabpanel value="2">
+                    <app-card-gallery [tipo]="'proximos-planes'"></app-card-gallery>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </main>
+
+    <app-footer></app-footer>
+</div>

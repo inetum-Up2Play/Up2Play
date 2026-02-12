@@ -1,0 +1,121 @@
+@use 'styles/variables' as vars;
+@use 'sass:color';
+
+.title {
+    font-weight: bold;
+    font-size: larger;
+    white-space: normal; // Permite saltos de línea
+    word-wrap: break-word; // Rompe palabras largas
+    overflow-wrap: break-word; // Compatibilidad moderna
+}
+
+.infoActividad:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+// CARD
+:host ::ng-deep .p-card-body {
+    height: 100% !important;
+    padding: 0 !important;
+}
+
+:host ::ng-deep .p-card-footer {
+    height: 100% !important;
+}
+
+//BTN VER-DETALLES
+:host ::ng-deep .btn-verDetalles {
+    background: transparent !important;
+    border: solid 1px transparent !important;
+    box-shadow: none !important;
+    color: #374151 !important;
+    padding: 0 !important; // Sin relleno para que la línea quede pegada al texto
+    font-weight: 600;
+    transition: color 0.3s ease;
+    overflow: visible !important;
+
+    // Línea Inferior (animación)
+    .p-button-label:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 1px; // Grosor de la línea
+        bottom: 2px; // Distancia respecto al texto
+        left: 0;
+        background-color: vars.$verde-oliva;
+
+        transform: scaleX(0); // Estado inicial invisible (ancho 0)
+        transform-origin: bottom left; // Al salir, se va hacia la izquierda
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    // Creamos nuestra propia flecha
+    &::after {
+        font-family: 'PrimeIcons'; // Usamos la fuente de iconos
+        content: '\e901'; // Código de '>' 
+        font-size: 0.8rem;
+        transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    &:hover {
+        color: vars.$verde-oliva !important; // Texto más negro 
+
+        // Animación de la línea: de izquierda a derecha
+        .p-button-label::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        // Cambia de forma y se desliza
+        &::after {
+            content: '\e91b'; // Cambio a '->' (pi-arrow-right)
+            transform: translateX(5px); // Deslizar a la derecha
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+    }
+
+    &:active {
+        transform: scale(0.95); // Pequeña pulsación al hacer click
+    }
+}
+
+//BTN GESTIONAR
+:host ::ng-deep .btn-gestionar {
+    background-color: #757575;
+    border: none;
+    border-radius: 20px;
+
+    //ANIMACIÓN DEL ICONO
+    .p-button-icon {
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        display: inline-block; // Para que rote sobre su eje
+    }
+
+    &:hover {
+        background-color: #5c5c5c;
+        border: none;
+        
+        .p-button-icon {
+            transform: rotate(180deg);
+        }
+    }
+
+    &:active {
+        transform: scale(0.95); // Pequeña pulsación al hacer click
+    }
+}
+
+:host ::ng-deep .p-tag {
+    opacity: 0.90;
+    --p-tag-primary-background: #FFEE59 !important;
+    --p-tag-primary-color: #152614 !important;
+
+    --p-tag-success-background: #B1DF75 !important;
+    --p-tag-success-color: #3D6C3F !important;
+}
+
+:host ::ng-deep .p-tag-info {
+    opacity: 0.80;
+    color: rgb(37, 81, 224);
+}

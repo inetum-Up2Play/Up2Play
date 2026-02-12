@@ -1,0 +1,7 @@
+@use 'styles/variables' as vars;
+
+.text {
+    color: vars.$verde-oscuro;
+    font-family: vars.$work-sans;
+    font-weight: bold;
+}

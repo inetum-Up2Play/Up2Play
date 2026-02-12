@@ -1,0 +1,104 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule, } from '@angular/forms';
+import { Router } from '@angular/router';
+
+// PrimeNG
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { MessageModule } from 'primeng/message';
+
+// Services
+import { AuthService } from '../../../../core/services/auth/auth-service';
+import { UserDataService } from '../../../../core/services/auth/user-data-service';
+import { ErrorService } from '../../../../core/services/error/error-service';
+
+interface NewPassword {
+  email: string;
+  password: string;
+}
+
+@Component({
+  selector: 'app-new-password-form',
+  imports: [CommonModule, ReactiveFormsModule, IconFieldModule, InputIconModule, MessageModule],
+  templateUrl: './new-password-form.html',
+  styleUrls: ['./new-password-form.scss'],
+})
+export class NewPasswordForm implements OnInit {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private userDataService = inject(UserDataService);
+  private errorService = inject(ErrorService);
+
+  errorMessage: string | null = null;
+
+  email = '';
+  password = '';
+
+  form = this.fb.group(
+    {
+      newPassword: ['', [Validators.required, this.passwordValidator]],
+      confirmPassword: ['', Validators.required],
+    },
+    { validators: this.passwordsMatchValidator }
+  );
+
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
+
+  get f() {
+    return this.form.controls;
+  }
+
+  ngOnInit(): void {
+    this.email = this.userDataService.getEmail() ?? '';
+  }
+
+  passwordValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return null;
+
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasNumber = /\d/.test(value);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+    const hasMinLength = value.length >= 8;
+
+    const valid =
+      hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && hasMinLength;
+    return valid ? null : { passwordStrength: true };
+  }
+
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('newPassword')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+    return password === confirm ? null : { passwordsMismatch: true };
+  }
+
+  onSubmit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    const payload: NewPassword = {
+      email: this.email,
+      password: this.f.newPassword.value!,
+    };
+
+
+    this.authService.saveNewPassword(payload).subscribe({
+      next: (res) => {
+        if (res === true) {
+          this.router.navigate(['/auth/login']);
+        } else {
+          const mensaje = this.errorService.getMensajeError(res);  // Se traduce el mensaje con el controlErrores.ts
+          this.errorService.showError(mensaje);                    // Se muestra con PrimeNG
+        }
+      },
+      error: () => {
+        this.errorService.showError('Error de red o del servidor. Intenta más tarde.');
+      }
+    });
+  }
+}

@@ -10,7 +10,7 @@
 Añadimos 10 actividades que hemos extraido haciendo WebScraping para trabajar en el proyecto.
 
 ## Descripción Técnica
-- Script ejecutado: `Actividades.sql`
+- Script ejecutado: `Añadir_Actividades.sql`
 - Ubicación: `Up2PlayDB\DataBase\Scripts sql\Añadir_Actividades.sql`
 - Afecta a: `UP2PlayDB`
 

@@ -1,0 +1,125 @@
+@use 'styles/variables' as vars;
+
+h1 {
+    font-family: vars.$montserrat;
+    color: vars.$blanco;
+    margin: 0;
+    font-weight: 600;
+}
+
+p, h1 {
+    text-align: center;
+}
+
+.Imgicono{
+    display: flex;
+    justify-content: center;
+}
+
+.mail-recover-form {
+    align-content: space-between;
+    background-color: #15261423;
+    border-radius: 15px;
+}
+
+.input {
+    font-family: vars.$work-sans;
+    font-weight: 600;
+    width: 100%;
+    background-color: rgba(lightgray, 0.2); // porque 1 - 0.8 = 0.2
+    color: vars.$blanco;
+    border-color: vars.$blanco;
+    border-radius: 1rem;
+    box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
+    padding-left: 3%;
+
+    &::placeholder {
+        color: vars.$blanco;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    &:hover {
+        border-color: rgb(184, 184, 184);
+    }
+
+    &:focus {
+        border-color: rgb(184, 184, 184) !important;
+        outline: none; // Elimina el borde azul por defecto del navegador
+
+        &::placeholder {
+            opacity: 0.5;
+            transition: ease 0.3s;
+        }
+    }
+}
+
+.form-introduccion {
+    font-family: vars.$work-sans;
+    color: vars.$blanco;
+}
+
+.form-field {
+    font-weight: 600;
+}
+
+.p-inputtext.ng-invalid.ng-touched {
+    border-color: vars.$msg-error-oscuro !important;
+
+    &::placeholder {
+        color: #cacaca !important;
+    }
+}
+
+:host ::ng-deep .p-message-error {
+  background-color: #971919 !important;
+  border-color: #971919 !important;
+  color: #facccc !important;
+  height: fit-content;
+}
+
+.error {
+    font-family: vars.$work-sans;
+    color: vars.$msg-error-oscuro;
+    margin-top: 0.3rem;
+    display: flex;
+}
+
+.correo-no-recibido {
+    font-family: vars.$work-sans;
+    color: vars.$verde-oscuro;
+}
+
+.btn-verify {
+    color: vars.$blanco;
+    font-family: vars.$work-sans;
+    width: 100%;
+    border-radius: 1rem;
+    border: none;
+    background-color: vars.$verde-oscuro;
+    opacity: 0.9;
+    margin-top: 0.8rem;
+
+    &:enabled {
+        cursor: pointer;
+
+        &:hover {
+            background-color: vars.$verde-oscuro !important;
+            opacity: 1 !important;
+            font-weight: 500 !important;
+            color: vars.$blanco !important;
+            border: none !important;
+            transition: 0.2s ease;
+        }
+    }
+
+    &:disabled {
+        background-color: vars.$verde-oscuro;
+        opacity: 0.7;
+    }
+}
+
+//Fixing inputicons position
+::ng-deep .p-inputicon {
+  margin-top: 0 !important;
+}

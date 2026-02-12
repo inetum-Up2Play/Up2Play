@@ -1,0 +1,242 @@
+import { Component, inject, OnInit, signal} from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { ButtonModule } from 'primeng/button';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+
+import { CambiarPasswordDto, FormProfile } from '../../components/form-profile/form-profile';
+import { AvatarProfile } from '../../components/avatar-profile/avatar-profile';
+import { AllowStripeProfile } from '../../components/allow-stripe-profile/allow-stripe-profile';
+import { Usuario } from '../../../../shared/models/usuario.model';
+import { Perfil } from '../../../../shared/models/Perfil';
+import { Header } from '../../../../core/layout/header/header';
+import { Footer } from '../../../../core/layout/footer/footer';
+import { PerfilService } from '../../../../core/services/perfil/perfil-service';
+import { UserService } from '../../../../core/services/user/user-service';
+import { AuthService } from '../../../../core/services/auth/auth-service';
+import { ErrorService } from '../../../../core/services/error/error-service';
+import { StripeService } from '../../../../core/services/pagos/stripe-service';
+
+@Component({
+  selector: 'app-profile',
+  imports: [
+    Header,
+    Footer,
+    FormProfile,
+    AllowStripeProfile,
+    AvatarProfile,
+    ButtonModule,
+    ToastModule,
+    MessageModule,
+    ConfirmDialog,
+  ],
+  templateUrl: './profile.html',
+  styleUrl: './profile.scss',
+  providers: [MessageService, ConfirmationService],
+})
+
+export class Profile implements OnInit {
+  private userService = inject(UserService);
+  private perfilService = inject(PerfilService);
+  private authService = inject(AuthService);
+  private errorService = inject(ErrorService);
+  private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
+  private stripeService = inject(StripeService);
+
+  usuario = signal<Usuario | null>(null);
+  perfil = signal<Perfil | null>(null);
+  avatarPendiente = signal<number | null>(null); //Es el avatar recibido del avatar-component. Si no se pulsa en "guardar cambios" no se aplicará
+
+  loadingPerfil = signal(false);
+  loading = signal(false);
+  pagosHabilitados = signal(false);
+
+  pwdVisible = false;
+
+  ngOnInit(): void {
+    this.cargarDatos();
+    this.verificarEstadoStripe();
+  }
+
+  // Rellena los datos del usuario correspondiente
+  private cargarDatos(): void {
+    this.userService.getUsuario().subscribe({
+      next: (datosUsuario) => {
+        this.usuario.set(datosUsuario || null);
+      },
+      error: (err) => {
+        console.error('Error cargando el usuario', err);
+        this.errorService.showError(err);
+      },
+    });
+
+    this.perfilService.getPerfil().subscribe({
+      next: (datosPerfil) => {
+        this.perfil.set(datosPerfil);
+        const imagenActual = (datosPerfil as any).imagenPerfil ?? 0;
+        this.avatarPendiente.set(imagenActual);
+      },
+      error: (err) => {
+        console.error('Error cargando el perfil', err);
+        this.errorService.showError(err);
+      },
+    });
+  }
+
+  // Escucha si el usuario edita algo de su perfil
+  onCambiosPerfil(datosFormulario: Perfil) {
+    const perfilActual = this.perfil();
+
+    const perfilModificado = {
+      ...perfilActual,
+      ...datosFormulario,
+      imagenPerfil: this.avatarPendiente() ?? undefined,
+    };
+
+    this.perfilService
+      .editarPerfil(perfilModificado.id, perfilModificado)
+      .subscribe({
+        next: () => {
+          this.perfil.set(perfilModificado);
+
+          this.perfilService.avatarGlobal.set(
+            this.avatarPendiente() ?? perfilActual?.imagenPerfil ?? 0
+          ); //Cambia el avatar del header
+
+          this.loadingPerfil.set(false);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Perfil actualizado correctamente',
+          });
+        },
+        error: (err) => {
+          console.error('Error editando el perfil', err);
+          this.loadingPerfil.set(false);
+          this.errorService.showError(err);
+        },
+      });
+  }
+
+  // Escucha solo cambios de avatar
+  onCambiosAvatar(numAvatar: number) {
+    const perfilActual = this.perfil();
+
+    if (!perfilActual) {
+      console.error('❌ ERROR: Intentando cambiar avatar sin perfil cargado.');
+      return;
+    }
+    
+    this.avatarPendiente.set(numAvatar);
+  }
+
+  eliminarCuenta() {
+    this.loading.set(true);
+    this.userService.eliminarUsuario().subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Cuenta eliminada correctamente',
+        });
+      },
+      error: (err) => {
+        this.loading.set(false);
+        console.error('Error eliminando la cuenta', err);
+        this.errorService.showError(err);
+      },
+    });
+
+    setTimeout(() => {
+      this.authService.logout();
+    }, 2500);
+  }
+
+  // Pop-up de confirmación para eliminar cuenta
+  confirm() {
+    this.confirmationService.confirm({
+      header: 'Confirmación',
+      message: '¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.',
+      icon: 'pi pi-exclamation-circle',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        icon: 'pi pi-times',
+        variant: 'outlined',
+        size: 'small',
+      },
+      acceptButtonProps: {
+        label: 'Eliminar cuenta',
+        icon: 'pi pi-check',
+        size: 'small',
+      },
+      accept: () => {
+        this.eliminarCuenta();
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Cancelado',
+          detail: 'Has cancelado la eliminación de la cuenta',
+          life: 3000,
+        });
+      },
+    });
+  }
+
+  // Recibe el payload del hijo y llama al servicio
+  onChangePassword(payload: CambiarPasswordDto, child?: any) {
+    this.userService.cambiarContraseñaPerfil(payload)
+      .subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Contraseña actualizada', detail: 'Se ha cambiado correctamente' });
+          this.pwdVisible = false;
+
+          // Avisar al hijo que terminó, para que quite loading y cierre
+          child?.onRequestFinished?.(true);
+        },
+        error: (err: HttpErrorResponse) => {
+          const errorMsg = (err.error?.error ?? err.error?.message ?? 'Error desconocido');
+          this.messageService.add({ severity: 'error', summary: 'Error al actualizar', detail: errorMsg });
+          child?.onRequestFinished?.(false);
+        }
+      });
+  }
+
+  habilitarPagos() {
+    this.loading.set(true);
+    this.stripeService.getOnboardingLink().subscribe({
+      next: (res) => {
+        if (res.onboardingUrl) {
+          // Redirección externa a Stripe
+          window.location.href = res.onboardingUrl;
+        }
+      },
+      error: (err) => {
+        console.error('Error al obtener el link', err);
+        this.loading.set(false);
+      }
+    });
+  }
+
+  verificarEstadoStripe() {
+    this.stripeService.checkStatus().subscribe({
+    next: (res) => {
+      this.pagosHabilitados.set(res.pagosHabilitados);
+
+      const usuarioActual = this.usuario();
+      if (usuarioActual) {
+        this.usuario.set({
+          ...usuarioActual,
+          pagosHabilitados: res.pagosHabilitados
+        });
+      }
+    }
+  });
+  }
+
+}

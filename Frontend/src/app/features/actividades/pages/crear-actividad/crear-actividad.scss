@@ -1,0 +1,122 @@
+@use 'styles/variables' as vars;
+@use 'sass:color';
+
+:host {
+    font-family: #{vars.$work-sans};
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: #{vars.$montserrat};
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: #{vars.$work-sans};
+}
+
+main {
+    background-color: none;
+    display: flex;
+    justify-content: center;
+    min-height: 100dvh;
+}
+
+:host ::ng-deep .p-inputnumber-input::placeholder {
+    color: #7e887e !important;
+    opacity: 1 !important;
+}
+
+:host ::ng-deep .p-select-label.p-placeholder {
+    color: #7e887e !important;
+    opacity: 1 !important;
+}
+
+
+:host {
+
+    ::placeholder {
+        color: #7e887e !important;
+        opacity: 1 !important;
+    }
+
+    // Placeholders específicos de PrimeNG dentro del componente
+    ::ng-deep .p-inputtext::placeholder,
+    ::ng-deep .p-inputtextarea::placeholder,
+    ::ng-deep .p-dropdown-label.p-placeholder,
+    ::ng-deep .p-inputnumber-input::placeholder {
+        color: #7e887e !important;
+        opacity: 1 !important;
+    }
+}
+
+:host ::ng-deep .p-inputtext {
+    background-color: rgba(255, 0, 0, 0) !important;
+    color: vars.$verde-oliva !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* === SELECT DEPORTES ===*/
+:host ::ng-deep .p-select {
+    background-color: vars.$blanco !important; // fondo igual que input
+    color: vars.$verde-oliva !important; 
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        background-color: color.adjust(vars.$blanco, $lightness: 5%) !important;
+        border-color: color.adjust(vars.$verde-oscuro, $lightness: -10%) !important;
+    }
+
+    &.p-focus {
+        border-color: vars.$verde-oscuro !important; 
+    }
+}
+
+:host ::ng-deep .p-select-label {
+    color: vars.$verde-oliva !important; 
+}
+
+:host ::ng-deep .p-select-overlay {
+    background-color: vars.$blanco !important; // fondo igual que input
+
+    &:hover {
+        background-color: color.adjust(vars.$blanco, $lightness: 5%) !important;
+        border-color: color.adjust(vars.$verde-oscuro, $lightness: -10%) !important;
+    }
+}
+
+:host ::ng-deep .p-select-filter {
+    background-color: vars.$blanco !important; // fondo igual que input
+    color: vars.$verde-oscuro !important;
+
+    &:hover {
+        background-color: color.adjust(vars.$blanco, $lightness: 5%) !important;
+    }
+}
+
+:host ::ng-deep .p-select-option {
+    color: vars.$verde-oscuro !important;
+
+    &.p-focus {
+        background-color: rgb(230, 230, 230) !important;
+    }
+}
+
+:host ::ng-deep .p-select-option-selected {
+    background-color: vars.$verde-claro !important;
+    color: vars.$verde-oscuro !important;
+
+    &.p-focus {
+        background-color: rgb(200, 200, 200) !important;
+    }
+}
+
+
+

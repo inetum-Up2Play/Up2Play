@@ -1,0 +1,109 @@
+<footer class="footer" role="contentinfo" aria-label="Pie de página de Up2Play">
+    <div class="py-4 mx-8 md:mx-20 flex flex-col ">
+        <!-- Row 1: 3 columnas (en móvil 1 columna) -->
+        <div class="c-row1 grid grid-cols-1 md:grid-cols-3 px-2">
+            <!-- Columna 1: dividida en 3 filas -->
+            <div class="c-row1-col1 grid gap-3 ">
+                <div class="c-row1-col1-row1 mt-4 flex justify-start items-center">
+                    <a class="logo-enlace " (click)="scrollToTop()" aria-label="Ir al inicio">
+                        <img src="assets/logo/fondo-oscuro/verdeClaro-FondoOscuro-Corto.png" alt="logo" class="logo">
+                    </a>
+                </div>
+                <div class="c-row1-col1-row2 md:text-left text-justify text-sm leading-relaxed">
+                    <p>La plataforma donde las experiencias cobran vida. Descubre, crea y comparte actividades únicas
+                        con personas increíbles.</p>
+                </div>
+                <div class="c-row1-col1-row3 py-3">
+                    <ul class="flex gap-3 justify-center md:justify-start">
+                        <li>
+                            <a href="https://x.com/x">
+                                <i class="ph ph-x-logo  text-2xl"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/">
+                                <i class="ph ph-instagram-logo text-2xl"></i>
+                            </a>
+                        </li>
+                        <li>
+                             <a href="https://www.youtube.com/">
+                                <i class="ph ph-youtube-logo  text-2xl"></i>
+                            </a>
+                        </li>
+                        <li> 
+                            <a href="https://es.linkedin.com/">
+                               <i class="ph ph-linkedin-logo text-2xl"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- Columna 2: dividida en 2 columnas con separador -->
+            <div class="flex flex-col w-full gap-3 md:items-center md:justify-center md:h-full">
+                <div>
+                    <div class="flex pl-2 justify-center md:justify-start">
+                        <h3 class="font-extrabold text-md">Explorar</h3>
+                    </div>
+                    <div class="c-row1-col2 grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] p-4 md:p-2">
+                        <!-- Columna 1 -->
+                        <div class="c-row1-col2-col1 mb-2.5 md:mb-0" aria-label="Enlaces de navegación en el pie">
+                            <ul class="gap-5 md:gap-2 flex md:flex-col justify-center md:justify-start text-sm">
+                                <li><a routerLink="/">Inicio</a></li>
+                                <li><a routerLink="/actividades">Actividades</a></li>
+                                <li><a routerLink="/pagos/historial-pagos">Pagos</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Barra separadora -->
+                        <div class="separador" aria-hidden="true"></div>
+
+                        <!-- Columna 2 -->
+                        <div class="c-row1-col2 my-2.5 md:mt-0">
+                            <ul class="gap-3.5 md:gap-2 flex md:flex-col justify-center md:justify-start md:ml-5 text-sm">
+                                <li><a routerLink="/notificaciones" class="">Notificaciones</a></li>
+                                <li><a routerLink="/historial" class="">Historial</a></li>
+                                <li><a routerLink="/perfil" class="">Mi cuenta</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Columna 3 -->
+            <div class="c-row1-col3 w-full flex flex-col md:items-center md:justify-center gap-3 md:h-full">
+                <div class="flex flex-col text-center ">
+                    <div class="flex pl-2 justify-center md:justify-start">
+                        <h3 class="font-extrabold text-md">Contacto</h3>
+                    </div>
+                    <div class="p-2 sm:p-2 md:p-2 text-sm ">
+                        <ul class="text-center md:text-left ">
+                            <li><i class="pi pi-envelope px-2 pb-2" aria-hidden="true"></i>up2play1@gmail.com</li>
+                            <li><i class="pi pi-phone px-2 py-2" aria-hidden="true"></i>+34 600 123 456</li>
+                            <li><i class="pi pi-map-marker px-2 py-2" aria-hidden="true"></i>Tarragona, Catalunya</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Separador entre Row 1 y Row 2 -->
+        <div class="separador my-4" aria-hidden="true"></div>
+
+        <!-- Row 2: 2 columnas (en móvil 1 columna) -->
+        <div class="c-row2 grid grid-cols-1 md:grid-cols-2 gap-4 py-4 px-2 text-xs">
+            <div class="c-row2-col1 na">
+                <ul class="flex gap-3 justify-center md:justify-start">
+                    <li><a routerLink="/legal/terminos-condiciones">Términos y condiciones</a></li>
+                    <li><a routerLink="/legal/privacidad">Política de privacidad</a></li>
+                    <li><a routerLink="/legal/devoluciones">Política de devoluciones</a></li>
+                </ul>
+            </div>
+            <div class="c-row2-col2 text-center md:text-end text-xs">
+                <p>Copyright © 2025 Up2Play. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,18 @@
+@use 'styles/variables' as vars;
+
+:host ::ng-deep .btn-eliminar {
+    background-color: vars.$msg-error-oscuro;
+    border: none;
+    border-radius: 15px;
+}
+
+:host ::ng-deep .btn-eliminar:hover {
+    background-color: vars.$msg-error-oscuro !important;
+    border: none !important;
+    border-radius: 20px !important;
+    transform: scale(1.05) !important;
+}
+
+h1 {
+    font-family: vars.$montserrat;
+}

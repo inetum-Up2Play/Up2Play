@@ -1,0 +1,39 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="mail-recover-form max-w-xl mr-6 ml-6 p-4 md:p-8 xl:p-12 xl:mt-6 xl:mb-6" novalidate>
+
+    <!-- ICONO -->
+    <div class="Imgicono pb-6 h-28 md:h-32 xl:h-38">
+        <img src="../../../../../assets/auth/mail-recover.svg" alt="icon">
+    </div>
+
+    <!-- TÍTULO -->
+    <h1 class="text-3xl pb-2 md:text-4xl xl:text-5xl">CONTRASEÑA OLVIDADA</h1>
+    <p class="form-introduccion text-sm pb-6 xl:text-base">
+        Escriba su email y le enviaremos un código de verificación.
+    </p>
+
+    <!-- CAMPO MAIL -->
+    <div class="form-field md:max-w-160 xl:max-w-175 pb-6">
+        <p-iconfield class="relative">
+            <input pInputText type="email" placeholder="Email" id="email" formControlName="email" autocomplete="email"
+                [ngClass]="{'ng-invalid': f.email.invalid && (f.email.dirty || f.email.touched)}"
+                class="input h-13 md:h-15" />
+            <p-inputicon class="pi pi-envelope absolute -translate-y-1/2" style="color: black" />
+        </p-iconfield>
+
+        @if (f.email.hasError('required') && (f.email.dirty || f.email.touched)) {
+        <p-message size="small" severity="error" variant="outlined" class="error">
+            Escribe un email para poder enviarte el código.
+        </p-message>
+        }
+
+        @if (f.email.hasError('email') && (f.email.dirty || f.email.touched)) {
+        <p-message size="small" severity="error" variant="outlined" class="error">
+            Formato de email no válido.
+        </p-message>
+        }
+    </div>
+
+    <!-- BOTÓN -->
+    <button pButton type="submit" class="btn-verify h-13 md:h-15" size="large" [disabled]="form.invalid">
+        Enviar código</button>
+</form>

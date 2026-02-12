@@ -1,0 +1,50 @@
+@use 'styles/variables' as vars;
+@use 'styles/mixins' as mix;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  border-color: red;
+}
+
+//Todo el div que implica la vista login
+.fondo-register {
+  position: relative;
+  height: fit-content; //Altura
+  min-height: 100dvh;
+  width: 100%; //Ancho
+  display: flex; //Para que separe, header, form y footer
+  flex-direction: column; //Organiza header, login y footer en columna
+  justify-content: space-between; //Header arriba, form al centro, footer abajo
+  padding-bottom: 2%;
+  padding-top: 1.75%;
+  overflow: hidden;
+
+  @include mix.fondo-gradiente-verde;
+
+  //Indica que todos los hijos de .fondo-register, se encuentren en la 'capa: 1'
+  >* {
+    position: relative;
+    z-index: 1;
+  }
+
+  >.div-form {
+    display: flex;
+    height: fit-content;
+    flex-grow: 1; //Ocupa el espacio entre header y footer
+  }
+}
+
+//Sería como la capa del fondo, aquí está la imagen
+@media (min-width: 768px) {
+  .img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../../../../../assets/auth/reverse-fondo-register_login.webp') center/cover no-repeat; //Center y cover definen el tamaño de la imagen
+    opacity: 0.2;
+    z-index: 0; //Indica la posición de la 'capa'
+  }
+}

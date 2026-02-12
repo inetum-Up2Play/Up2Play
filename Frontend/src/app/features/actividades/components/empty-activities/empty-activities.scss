@@ -1,0 +1,10 @@
+@use 'styles/variables' as vars;
+
+h2 , p{
+    font-family: vars.$montserrat;
+}
+
+i {
+   color: vars.$verde-oliva;
+   opacity: (0.75); 
+}

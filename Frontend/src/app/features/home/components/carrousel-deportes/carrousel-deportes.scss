@@ -1,0 +1,128 @@
+@use 'styles/variables' as vars;
+
+h1 {
+    font-family: vars.$montserrat;
+    color: vars.$verde-oscuro;
+}
+
+i{
+   color: vars.$verde-oliva; 
+}
+
+.icon-plus {
+    color: vars.$blanco;
+}
+
+span {
+    font-family: vars.$montserrat;
+}
+
+:host ::ng-deep #crear_actividad {
+    background-color: vars.$verde-oliva !important;
+    color: vars.$blanco !important;
+    width: fit-content;
+    border: none;
+    border-radius: 20px;
+}
+
+:host ::ng-deep .btn-editar:hover {
+    background-color: #80b43c;
+    border: none;
+    color: vars.$verde-oscuro;
+}
+
+
+:host ::ng-deep .card {
+    width: 100%;
+    max-width: none;
+    overflow: hidden;
+    font-family: vars.$work-sans;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2),
+                0 4px 6px -4px rgba(0, 0, 0, 0.2);
+}
+
+:host ::ng-deep .p-carousel-indicator-active button {
+    background-color:vars.$verde-oliva !important;
+    opacity: 1;  
+}
+
+:host ::ng-deep .boton-ver-mas p-button {
+    border-radius: 20px !important;
+    border-color: vars.$verde-oliva !important;
+}
+
+:host ::ng-deep .boton-ver-mas {
+    border-color: vars.$verde-oliva  !important;  
+    border-radius: 20px;
+    color: vars.$verde-oliva  !important;
+}
+
+:host ::ng-deep .boton-ver-mas:hover {
+    border-color: vars.$verde-oliva !important;
+    background-color: vars.$verde-oliva !important; 
+    color: vars.$blanco !important;
+}
+
+/* Estilos base del carrusel */
+:host ::ng-deep p-carousel .p-carousel-container {
+  transition: max-width 0.3s ease;
+}
+
+/* Cuando hay 1 actividad - carrusel más estrecho */
+:host ::ng-deep p-carousel.single-item .p-carousel-container {
+  max-width: 400px !important;
+  margin: 0 auto;
+}
+
+/* Cuando hay 2 actividades - carrusel mediano */
+:host ::ng-deep p-carousel.two-items .p-carousel-container {
+  max-width: 800px !important;
+  margin: 0 auto;
+}
+
+/* Cuando hay 3 o más - carrusel ancho (default) */
+:host ::ng-deep p-carousel.three-or-more .p-carousel-container {
+  max-width: 100% !important;
+}
+
+/* Centrar las cards individuales dentro del carrusel */
+:host ::ng-deep p-carousel.single-item .p-carousel-item,
+:host ::ng-deep p-carousel.two-items .p-carousel-item {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Ajustar ancho máximo de cada card */
+:host ::ng-deep p-carousel.single-item .card {
+  width: 100% !important;
+  max-width: 350px !important;
+}
+
+:host ::ng-deep p-carousel.two-items .card {
+  width: 100% !important;
+  max-width: 350px !important;
+}
+
+:host ::ng-deep p-carousel.three-or-more .card {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.custom-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #4D834F; 
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+
+

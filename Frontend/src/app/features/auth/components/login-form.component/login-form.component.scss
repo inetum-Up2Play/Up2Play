@@ -1,0 +1,151 @@
+@use 'styles/variables' as vars;
+
+/* Ocultar el icono de mostrar/ocultar contraseña predeterminado en Edge / IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* WebKit (Chrome, Safari) */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    display: none;
+    pointer-events: none;
+}
+
+input[type="password"]::-webkit-textfield-decoration-container {
+    display: none;
+}
+
+h1 {
+    font-family: vars.$montserrat;
+    color: vars.$blanco;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.login-form {
+    align-content: space-between;
+}
+
+.input {
+    color: vars.$blanco;
+    font-family: vars.$work-sans;
+    font-weight: 600;
+    width: 100%;
+    background-color: rgba(lightgray, 0.2);
+    border-color: vars.$blanco;
+    border-radius: 1rem;
+    padding: 0.8rem;
+    box-shadow: 0.5rem 0.5rem 6px rgba(0, 0, 0, 0.2);
+
+    &::placeholder {
+        color: vars.$blanco;
+    }
+
+    &:hover {
+        border-color: rgb(184, 184, 184) !important;
+    }
+
+    &:focus {
+        border-color: rgb(184, 184, 184) !important;
+        outline: none; // Elimina el borde azul por defecto del navegador
+
+        &::placeholder {
+            opacity: 0.5;
+            transition: ease 0.3s;
+        }
+    }
+}
+
+
+.form-introduccion {
+    font-family: vars.$work-sans;
+    font-size: 1rem;
+    color: vars.$blanco;
+    font-weight: 600;
+
+    .form-link-register {
+        color: vars.$verde-claro !important;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover {
+            color: vars.$verde-oliva !important;
+            transition: 0.3s ease;
+        }
+    }
+}
+
+.form-field {
+    font-weight: 600;
+}
+
+
+.p-inputtext.ng-invalid.ng-touched {
+    border-color: vars.$msg-error-oscuro !important;
+
+    &::placeholder {
+        color: #cacaca !important;
+    }
+}
+
+:host ::ng-deep .p-message-error {
+    background-color: #971919 !important;
+    border-color: #971919 !important;
+    color: #facccc !important;
+    height: fit-content;
+}
+
+.error {
+    font-family: vars.$work-sans;
+    color: vars.$msg-error-oscuro;
+    margin-top: 0.3rem;
+    display: flex;
+}
+
+.forgot-password-text {
+    font-family: vars.$work-sans;
+    text-decoration: underline;
+    color: vars.$verde-oscuro;
+    cursor: pointer;
+
+    &:hover {
+        font-weight: 500;
+        color: vars.$verde-oscuro !important;
+    }
+}
+
+.btn-login {
+    color: vars.$blanco;
+    font-family: vars.$work-sans;
+    width: 100%;
+    border-radius: 1rem;
+    border: none;
+    background-color: vars.$verde-oscuro;
+    opacity: 0.9;
+    margin-top: 0.8rem;
+
+    &:enabled {
+        cursor: pointer;
+
+        &:hover {
+            background-color: vars.$verde-oscuro !important;
+            opacity: 1 !important;
+            font-weight: 500 !important;
+            color: vars.$blanco !important;
+            border: none !important;
+            transition: 0.2s ease;
+        }
+    }
+
+    &:disabled {
+        background-color: vars.$verde-oscuro;
+        opacity: 0.7;
+    }
+}
+
+//Fixing inputicons position
+::ng-deep .p-inputicon {
+    margin-top: 0 !important;
+}

@@ -1,0 +1,89 @@
+package com.Up2Play.backend.Exception;
+
+public class ErroresActividad {
+
+    public static class FechaYHora extends RuntimeException {
+        public FechaYHora(String message) {
+            super(message);
+        }
+    }
+
+    public static class ActividadNoEncontrada extends RuntimeException {
+        public ActividadNoEncontrada(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioYaApuntadoException extends RuntimeException {
+        public UsuarioYaApuntadoException(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioNoApuntadoException extends RuntimeException {
+        public UsuarioNoApuntadoException(String message) {
+            super(message);
+        }
+    }
+
+    public static class MaximosParticipantes extends RuntimeException {
+        public MaximosParticipantes(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioCreador extends RuntimeException {
+        public UsuarioCreador(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioCreadorEliminar extends RuntimeException {
+        public UsuarioCreadorEliminar(String message) {
+            super(message);
+        }
+    }
+
+    public static class UsuarioCreadorEditar extends RuntimeException {
+        public UsuarioCreadorEditar(String message) {
+            super(message);
+        }
+    }
+
+    public static class LimiteCaracteres extends RuntimeException {
+        public LimiteCaracteres(String message) {
+            super(message);
+        }
+    }
+
+    public static class ActividadCompletadaException extends RuntimeException {
+        public ActividadCompletadaException(String message) {
+            super(message);
+        }
+    }
+
+    public static class ErrorDesapuntarse extends RuntimeException {
+        public ErrorDesapuntarse(String message) {
+            super(message);
+        }
+    }
+
+    public static class ErrorEditar extends RuntimeException {
+        public ErrorEditar(String message) {
+        }
+    }
+
+    public static class PagosNoHabilitadosException extends RuntimeException {
+        public PagosNoHabilitadosException(String message) {
+
+            super(message);
+        }
+    }
+
+    public static class ErrorEliminar extends RuntimeException {
+        public ErrorEliminar(String message) {
+            super(message);
+        }
+    }
+
+}

@@ -1,0 +1,35 @@
+<header>
+    <div class="inline-block w-full">
+        <nav class="navBar p-2 md:pl-10">
+            <!-- LOGO -->
+            <div class="logo aspect-3/1v min-w-36">
+                <img src="assets/logo/fondo-oscuro/verdeClaro-FondoOscuro.png" routerLink="/" alt="logo"
+                    class="logo h-6 md:h-8 xl:h-10">
+            </div>
+            <!-- MENÚ MÓVIL -->
+            <div class="card flex w-full justify-end pr-6 md:hidden">
+                <p-menu #menu [model]="items" [popup]="true" appendTo="body"
+                    (onShow)="isMenuOpen = true" (onHide)="isMenuOpen = false">
+                </p-menu>
+
+                <p-button (click)="menu.toggle($event)" [icon]="isMenuOpen ? 'ph ph-text-indent' : 'ph ph-list'"
+                    [rounded]="true" [raised]="true" aria-label="Abrir menú"
+                    styleClass="menu-btn !bg-transparent !border-none !shadow-none !text-white !w-11 !h-11 text-2xl! !p-0 !flex !items-center !justify-center">
+                </p-button>
+            </div>
+
+            <!-- LINKS PC/ TABLET -->
+            <ul class="nav-links hidden md:flex gap-6 md:p-6 md:gap-12">
+                <li><a [href]="landingUrl">Inicio</a></li>
+                @if (isRegister()) {
+                <li><a [routerLink]="IniciarSesionUrl" class="whitespace-nowrap">Iniciar sesión</a></li>
+                } @else if (isLogin()||(isVerification())){
+                <li><a [routerLink]="RegistrarseUrl">Registrarse</a></li>
+                } @else {
+                <li><a [routerLink]="IniciarSesionUrl" class="whitespace-nowrap">Iniciar sesión</a></li>
+                <li><a [routerLink]="RegistrarseUrl">Registrarse</a></li>
+                }
+            </ul>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,43 @@
+@use 'styles/variables' as vars;
+
+.footer {
+  background-color: vars.$verde-oliva;
+  color: vars.$blanco;
+}
+
+.separador {
+  border: solid 1px vars.$blanco;
+}
+
+.logo {
+  height: 50px;
+}
+
+
+a:hover {
+  color: vars.$verde-claro !important;
+}
+
+.logo-enlace {
+  cursor: pointer;
+}
+
+// Mejorar contraste en modo oscuro / dark:
+@media (prefers-color-scheme: dark) {
+  .c-footer,
+  .c-row1,
+  .na,
+  .c-row1-col1,
+  .c-row1-col1-row1,
+  .c-row1-col1-row2,
+  .c-row1-col1-row3,
+  .c-row1-col2,
+  .c-row1-col2-col1,
+  .c-row1-col2-col2,
+  .c-row1-col3,
+  .c-row2,
+  .c-row2-col1,
+  .c-row2-col2 {
+    border-color: #6b7280; // gray-500 aprox
+  }
+}

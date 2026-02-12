@@ -1,0 +1,43 @@
+@use 'styles/variables' as vars;
+
+:host {
+  font-family: #{vars.$work-sans};
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: #{vars.$montserrat};
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: #{vars.$work-sans};
+}
+
+:host {
+  --p-inputtext-padding-y: 0;
+  --p-inputtext-padding-x: 0;
+  --p-inputtext-sm-padding-y: 0;
+  --p-inputtext-sm-padding-x: 0;
+  --p-inputtext-lg-padding-y: 0;
+  --p-inputtext-lg-padding-x: 0;
+
+  --p-inputtext-placeholder-color: rgba(61,108,63,0.60);
+  --p-inputtext-color: #3D6C3F; 
+
+  --p-inputtext-border-color: transparent;
+  --p-inputtext-hover-border-color: transparent;
+  --p-inputtext-focus-border-color: transparent;
+
+  --p-inputtext-shadow: none;
+  --p-inputtext-focus-ring-shadow: none;
+  --p-inputtext-focus-ring-width: 0;
+  --p-inputtext-focus-ring-style: solid;
+  --p-inputtext-focus-ring-color: transparent;
+}

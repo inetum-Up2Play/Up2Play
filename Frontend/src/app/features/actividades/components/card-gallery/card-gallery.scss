@@ -1,0 +1,137 @@
+@use 'styles/variables' as vars;
+
+/* Quitar estilos del DataView */
+:host {
+    --p-dataview-content-background: transparent !important;
+    --p-dataview-header-background: transparent !important;
+    --p-dataview-header-border-bottom: none !important;
+}
+
+:host ::ng-deep .p-dataview .p-dataview-header {
+    border: none !important;
+    background: transparent !important;
+    padding-bottom: 0;
+}
+
+/* Selector de vista (grid/list) */
+:host ::ng-deep .p-togglebutton {
+    --p-togglebutton-border-color: #94a3b87a !important;
+    --p-togglebutton-checked-border-color: #94a3b87a !important;
+    --p-togglebutton-content-checked-background: none !important;
+    --p-togglebutton-checked-background: #b1df7550 !important;
+    --p-togglebutton-background: none !important;
+    --p-togglebutton-hover-background: #b1df7517 !important;
+    --p-togglebutton-content-checked-shadow: none !important;
+}
+
+/* Configuración de botones Outlined (Danger, Primary, Secondary) */
+:host ::ng-deep .p-button {
+    --p-button-outlined-danger-hover-background: #8b000011 !important;
+    --p-button-outlined-danger-border-color: #8B0000 !important;
+    --p-button-outlined-danger-color: #8B0000 !important;
+}
+
+:host ::ng-deep .p-button {
+    --p-button-outlined-primary-hover-background: #8b000011 !important;
+    --p-button-outlined-primary-border-color: #8B0000 !important;
+    --p-button-outlined-primary-color: #8B0000 !important;
+}
+
+:host ::ng-deep .p-button {
+    --p-button-outlined-secondary-hover-background: rgba(128, 128, 128, 0.103) !important;
+    --p-button-outlined-secondary-border-color: gray !important;
+}
+
+/* Botón "Ver más" con rotación de icono */
+.ver-mas-container {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+:host ::ng-deep .boton-ver-mas .p-button {
+    border-radius: 20px !important;
+    border-color: vars.$verde-oliva !important;
+    color: vars.$verde-oliva !important;
+
+    &:hover {
+        border-radius: 20px !important;
+        border-color: vars.$verde-oliva !important;
+        color: vars.$verde-oliva !important;
+        background-color: vars.$verde-claro !important;
+    }
+}
+
+:host ::ng-deep .boton-ver-mas {
+    border-color: vars.$verde-oliva;
+    border-radius: 20px;
+    color: vars.$verde-oliva;
+
+    &:hover {
+        border-radius: 20px !important;
+        border-color: vars.$verde-oliva !important;
+        color: vars.$verde-oliva !important;
+        background-color: #b1df7525 !important;
+    }
+}
+
+/* Hace que el icono rote 180° al hacer hover/focus sobre el botón */
+:host ::ng-deep .boton-ver-mas .p-button-icon,
+:host ::ng-deep .boton-ver-mas .pi {
+    transition: transform 300ms ease;
+    transform-origin: center;
+    will-change: transform;
+}
+
+:host ::ng-deep .boton-ver-mas:hover .p-button-icon,
+:host ::ng-deep .boton-ver-mas:hover .pi,
+:host ::ng-deep .boton-ver-mas:focus-visible .p-button-icon,
+:host ::ng-deep .boton-ver-mas:focus-visible .pi {
+    transform: rotate(180deg);
+}
+
+/* Botón "Ver detalles" con animación de subrayado y cambio de icono */
+:host ::ng-deep .btn-verDetalles {
+    background: transparent !important;
+    border: solid 1px transparent !important;
+    color: #374151 !important;
+    font-weight: 600;
+    overflow: visible !important;
+    padding-left: 0 !important;
+
+    // Animación de la línea inferior
+    .p-button-label:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        bottom: 2px;
+        left: 0;
+        background-color: vars.$verde-oliva;
+        transform: scaleX(0);
+        transform-origin: bottom left;
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    // Icono dinámico (cambia de '>' a '->' en hover)
+    &::after {
+        font-family: 'PrimeIcons';
+        content: '\e901';
+        font-size: 0.8rem;
+        transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    &:hover {
+        color: vars.$verde-oliva !important;
+
+        .p-button-label::after {
+            transform: scaleX(1);
+        }
+
+        &::after {
+            content: '\e91b'; // pi-arrow-right
+            transform: translateX(5px);
+        }
+    }
+}

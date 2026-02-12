@@ -1,0 +1,13 @@
+@use 'styles/variables' as vars;
+
+
+@mixin fondo-gradiente-verde {
+  background: linear-gradient(
+    135deg,
+    vars.$verde-oscuro 0%,
+    vars.$verde-oliva 25%,
+    vars.$verde-claro 75%,
+    vars.$verde-claro 100%
+  );
+}
+
