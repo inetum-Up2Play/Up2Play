@@ -1,13 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
-import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
 import { Carousel } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { ActService } from '../../../../core/services/actividad/act-service';
 import { ActUpdateService } from '../../../../core/services/actividad/act-update-service';
@@ -20,140 +21,133 @@ import { PagosService } from '../../../../core/services/pagos/pagos-service';
 
 @Component({
   selector: 'app-carrousel-deportes',
-  imports: [MessageModule, Carousel, ButtonModule, ActivityCard, ToastModule, DeporteImgPipe, EmptyActivities, CommonModule, RouterModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    Carousel,
+    ButtonModule,
+    ActivityCard,
+    ToastModule,
+    DeporteImgPipe,
+    EmptyActivities,
+    RouterModule,
+  ],
   templateUrl: './carrousel-deportes.html',
   styleUrl: './carrousel-deportes.scss',
 })
-export class CarrouselDeportes {
+export class CarrouselDeportes implements OnInit, OnDestroy {
+  // Servicios
   private actService = inject(ActService);
   private actUpdateService = inject(ActUpdateService);
   private messageService = inject(MessageService);
-  private errorService = inject(ErrorService);
   private userService = inject(UserService);
-  private pagosService = inject(PagosService);
   private router = inject(Router);
+  private breakpointObserver = inject(BreakpointObserver);
+  private cdr = inject(ChangeDetectorRef);
 
   activities: any[] = [];
-  deporteActual: string | null = null;
+
+  private currentRequestId = 0;
+  loading = false;
+  private breakpointSubscription!: Subscription;
+  mostrarIndicadores = true;
+
+
+  responsiveOptions = [
+    { breakpoint: '1840px', numVisible: 3, numScroll: 1 },
+    { breakpoint: '1200px', numVisible: 2, numScroll: 1 },
+    { breakpoint: '992px', numVisible: 2, numScroll: 1 },
+    { breakpoint: '768px', numVisible: 1, numScroll: 1 },
+  ];
 
   ngOnInit() {
 
-    const deporte = this.actUpdateService.getDeporte();
+    this.cargarActividades();
 
-    if (this.deporteActual) {
-      this.cargarPorDeporte(this.deporteActual);
+
+    this.breakpointSubscription = this.breakpointObserver
+      .observe([Breakpoints.Handset, Breakpoints.TabletPortrait])
+      .subscribe(result => {
+        this.mostrarIndicadores = !result.matches;
+      });
+  }
+
+  ngOnDestroy() {
+    this.breakpointSubscription?.unsubscribe();
+  }
+
+
+  deporteActual: string | null = null;
+
+
+  cargarActividades(deporte?: string | null): void {
+
+    this.loading = true;
+    this.cdr.detectChanges();
+
+    if (!deporte) {
+      this.deporteActual = null;
     } else {
-      this.cargarActividades();
+      this.deporteActual = deporte;
+      this.actUpdateService.setDeporte(deporte);
     }
 
-    this.actUpdateService.update$.subscribe(() => {
-      if (this.deporteActual) {
-        this.cargarPorDeporte(this.deporteActual);
-      } else {
-        this.cargarActividades();
-      }
-    });
+    const requestId = ++this.currentRequestId;
+    const observable = deporte
+      ? this.actService.listarActividadesPorDeporte(deporte)
+      : this.actService.listarActividadesNoApuntadas();
 
-  }
+    observable.subscribe({
+      next: (data) => {
+        if (requestId === this.currentRequestId) {
 
-  private mezclarYLimitar(activities: any[], limite: number = 10): any[] {
-    return activities
-      .sort(() => Math.random() - 0.5)
-      .slice(0, limite);
-  }
+          if (deporte) {
+            this.activities = data;
+            if (data.length === 0) {
+              this.messageService.add({
+                severity: 'info',
+                summary: 'Sin resultados',
+                detail: `No hay actividades disponibles para ${deporte}`,
+              });
+            }
+          } else {
+            this.activities = this.mezclarYLimitar(data, 10);
+          }
 
-  cargarActividades() {
-    this.deporteActual = null;
-    this.actUpdateService.setDeporte(null);
 
-    this.actService.listarActividadesNoApuntadas().subscribe({
-      next: data => {
-        this.activities = this.mezclarYLimitar(data, 10);
-
-      },
-      error: err => {
-        console.error('Error cargando actividades', err);
-        this.activities = [];
-      }
-    });
-  }
-
-  cargarPorDeporte(deporte: string) {
-    this.deporteActual = deporte;
-    this.actUpdateService.setDeporte(deporte);
-
-    this.actService.listarActividadesPorDeporte(deporte).subscribe({
-      next: data => {
-        this.activities = data;
-
-      },
-      error: err => {
-        this.activities = [];
-
-      }
-    });
-  }
-
-  pagar(id: number) {
-    const act = this.activities.find(a => a.id === id);
-
-    if (!act) return;
-
-    this.userService.getUsuarioPorId(act.usuarioCreadorId).subscribe({
-      next: (creador) => {
-        if (creador && creador.stripeAccountId) {
-
-          this.pagosService.setActivity({
-            actividadId: act.id,
-            nombre: act.nombre,
-            precio: act.precio,
-            organizadorStripeId: creador.stripeAccountId,
-            deporte: act.deporte,
-            fecha: act.fecha,
-            ubicacion: act.ubicacion
-          });
-
-          this.router.navigate(['/pagos/pago']);
-
-        } else {
-          // El creador existe, pero no tiene pagos configurados
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error de Pago',
-            detail: 'El organizador no tiene configurada su cuenta para recibir pagos.'
-          });
+          this.loading = false;
+          this.cdr.detectChanges();
         }
       },
       error: (err) => {
-        console.error(err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo contactar con el servidor para verificar al organizador.'
-        });
+        if (requestId === this.currentRequestId) {
+          this.activities = [];
+          this.loading = false;
+          this.cdr.detectChanges();
+
+          if (deporte) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: `Error al cargar actividades de ${deporte}`,
+            });
+          }
+        }
       }
     });
   }
 
-  apuntarse(id: number) {
-    const act = this.activities.find(a => a.id === id);
+  private mezclarYLimitar(activities: any[], limite: number = 10): any[] {
+    if (!activities || activities.length === 0) return [];
+    return [...activities].sort(() => Math.random() - 0.5).slice(0, limite);
+  }
 
-    if (!act) return;
-
-    this.actService.unirteActividad(id).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: '¡Enhorabuena!',
-          detail: 'Te has unido a la actividad'
-        });
-        this.actUpdateService.notifyUpdate();
-      },
-      error: (codigo) => {
-        const mensaje = this.errorService.getMensajeError(codigo);
-        this.errorService.showError(mensaje);
-      }
-    });
+  get carouselClasses(): any {
+    return {
+      'single-item': this.activities.length === 1,
+      'two-items': this.activities.length === 2,
+      'three-or-more': this.activities.length >= 3,
+    };
   }
 
   extraerHora(fecha: string): string {
@@ -166,34 +160,4 @@ export class CarrouselDeportes {
     return fecha.includes('T') ? fecha.split('T')[0] : '';
   }
 
-  responsiveOptions = [
-    {
-      breakpoint: '1840px',
-      numVisible: 3,
-      numScroll: 1
-    },
-    {
-      breakpoint: '1200px',
-      numVisible: 2,
-      numScroll: 1
-    },
-    {
-      breakpoint: '992px',
-      numVisible: 2,
-      numScroll: 1
-    },
-    {
-      breakpoint: '768px',
-      numVisible: 1,
-      numScroll: 1
-    }
-  ];
-
-  actCompleta(): void {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Atención',
-      detail: 'La actividad ya ha alcanzado el número máximo de inscritos.',
-    });
-  }
 }

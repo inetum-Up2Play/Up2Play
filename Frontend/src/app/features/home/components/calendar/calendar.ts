@@ -83,6 +83,9 @@ export class Calendar {
     firstDay: 1,
     dayHeaderFormat: { weekday: 'narrow' },
 
+    height: '687px', // Ocupa el 100% del contenedor
+    
+
     loading: (isLoading) => console.log('Loading events?', isLoading),
 
     datesSet: (arg) => {
